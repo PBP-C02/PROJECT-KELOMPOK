@@ -43,6 +43,10 @@ Referensi:
 </ul>
 
 <h2>LINK PWS</h2>
+<a>ari-darrell-movebuddy.pbp.cs.ui.ac.id</a>
+
+<p>Github and PWS Handler: Ari Darrell Muljono</a>
+
 <h2>LINK FIGMA</h2>
 <a>https://www.figma.com/design/IvY0N5XmemDW1rAUwoshHD/Kelompok-C02-%7C-Proyek-Pemrograman-Berbasis-Platform?node-id=0-1&t=3Ftorz7IS6mhbIm6-1</a>
 

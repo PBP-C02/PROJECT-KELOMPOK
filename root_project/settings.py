@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-eo7&#itvh9^p$an(l9vuy0!jbc&2y*l^athh0iwh-k$2a1geul
 
 # SECURITY WARNING: don't run with debug turned on in production!
 PRODUCTION = os.getenv('PRODUCTION', 'False').lower() == 'true'
+DEBUG = True
 if PRODUCTION:
     # Production: gunakan PostgreSQL dengan kredensial dari environment variables
     DATABASES = {
