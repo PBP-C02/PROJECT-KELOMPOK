@@ -29,7 +29,7 @@
 
 <h2>Sumber <i>Initial Dataset</i></h2>
 <p>
-Sumber <i>initial dataset</i> yang kami gunakan akan di<i>generated</i> oleh ChatGPT
+Sumber <i>initial dataset</i> yang kami gunakan mengambil <i>initial data</i> dari referensi di bawah yang akan kami manipulasi sesuai kebutuhan.
 
 Referensi:
 <a>https://www.datablist.com/learn/csv/download-sample-csv-files#download-people-sample-csv-files</a>
