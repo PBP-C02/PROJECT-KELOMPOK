@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CaritemanConfig(AppConfig):
+class CoachConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'CariTeman'
+    name = 'Coach'

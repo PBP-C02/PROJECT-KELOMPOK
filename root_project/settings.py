@@ -64,11 +64,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'Authentication',
-    'Homepage',
-    'CariCoach',
-    'CariTeman',
-    'CariEvent',
+    'Auth_Profile',
+    'Coach',
+    'Court',
+    'Event',
+    'Sport_Partner',
 ]
 
 MIDDLEWARE = [

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CaricoachConfig(AppConfig):
+class AuthProfileConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'CariCoach'
+    name = 'Auth_Profile'
