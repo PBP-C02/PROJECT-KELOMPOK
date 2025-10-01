@@ -52,7 +52,7 @@ else:
         }
     }
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["localhost", "127.0.0.1", "ari-darrell-movebuddy.pbp.cs.ui.ac.id"]
 
 
 # Application definition
