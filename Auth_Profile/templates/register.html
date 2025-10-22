@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% block meta %}
+<title>Register</title>
+{% endblock meta %}
+
+{% block content %}
+<h1>REGISTER</h1>
+
+<div id="error-message" style="color: red; margin-bottom: 10px;"></div>
+<div id="success-message" style="color: green; margin-bottom: 10px;"></div>
+
+<form id="registerForm" method="POST">
+    {% csrf_token %}
+    <div>
+        <label for="nama">Nama:</label><br>
+        <input type="text" id="nama" name="nama" required>
+    </div>
+    <br>
+    <div>
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required>
+    </div>
+    <br>
+    <div>
+        <label for="kelamin">Kelamin:</label><br>
+        <select id="kelamin" name="kelamin" required>
+            <option value="">Pilih Kelamin</option>
+            <option value="L">Laki-laki</option>
+            <option value="P">Perempuan</option>
+        </select>
+    </div>
+    <br>
+    <div>
+        <label for="tanggal_lahir">Tanggal Lahir:</label><br>
+        <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
+    </div>
+    <br>
+    <div>
+        <label for="nomor_handphone">Nomor Handphone:</label><br>
+        <input type="text" id="nomor_handphone" name="nomor_handphone" required>
+    </div>
+    <br>
+    <div>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password" name="password" required>
+    </div>
+    <br>
+    <div>
+        <label for="password2">Konfirmasi Password:</label><br>
+        <input type="password" id="password2" name="password2" required>
+    </div>
+    <br>
+    <button type="submit">Register</button>
+</form>
+
+<p>Sudah punya akun? <a href="/login/">Login di sini</a></p>
+
+<script>
+    document.getElementById('registerForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const nama = document.getElementById('nama').value;
+        const email = document.getElementById('email').value;
+        const kelamin = document.getElementById('kelamin').value;
+        const tanggal_lahir = document.getElementById('tanggal_lahir').value;
+        const nomor_handphone = document.getElementById('nomor_handphone').value;
+        const password = document.getElementById('password').value;
+        const password2 = document.getElementById('password2').value;
+        const errorDiv = document.getElementById('error-message');
+        const successDiv = document.getElementById('success-message');
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        errorDiv.textContent = '';
+        successDiv.textContent = '';
+        
+        try {
+            const response = await fetch('/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    nama: nama,
+                    email: email,
+                    kelamin: kelamin,
+                    tanggal_lahir: tanggal_lahir,
+                    nomor_handphone: nomor_handphone,
+                    password: password,
+                    password2: password2
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                successDiv.textContent = data.message;
+                setTimeout(function() {
+                    window.location.href = data.redirect_url;
+                }, 1500);
+            } else {
+                errorDiv.textContent = data.message;
+            }
+        } catch (error) {
+            errorDiv.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
+        }
+    });
+</script>
+{% endblock content %}
