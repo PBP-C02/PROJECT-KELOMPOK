@@ -1,0 +1,114 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}All Events - MoveBuddy{% endblock %}
+
+{% block content %}
+<div class="event-container">
+    <!-- Header Section -->
+    <div class="event-header">
+        <div class="header-content">
+            <h1>🏃 Upcoming Sports Events</h1>
+            <p>Find and join exciting sports events in your area</p>
+        </div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'event:create_event' %}" class="btn-create">
+            <span>+</span> Create Event
+        </a>
+        {% endif %}
+    </div>
+    
+    <!-- Filter Section -->
+    <div class="filter-section">
+        <form method="get" class="filter-form">
+            <div class="filter-group">
+                <label for="category">Filter by Sport:</label>
+                <select name="category" id="category" onchange="this.form.submit()">
+                    <option value="">All Sports</option>
+                    {% for value, label in categories %}
+                    <option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>
+                        {{ label }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+        
+        <div class="results-count">
+            <p>{{ events.count }} event(s) found</p>
+        </div>
+    </div>
+    
+    <!-- Event Cards Grid -->
+    <div class="event-grid">
+        {% for event in events %}
+        <div class="event-card">
+            <!-- Event Image -->
+            <div class="event-image">
+                {% if event.image %}
+                <img src="{{ event.image.url }}" alt="{{ event.title }}">
+                {% else %}
+                <div class="event-placeholder">
+                    <span class="sport-icon">🏃‍♂️</span>
+                </div>
+                {% endif %}
+                
+                <!-- Category Badge -->
+                <span class="category-badge {{ event.category }}">
+                    {{ event.get_category_display }}
+                </span>
+                
+                <!-- Full Badge (if full) -->
+                {% if event.is_full %}
+                <span class="full-badge">FULL</span>
+                {% endif %}
+            </div>
+            
+            <!-- Event Content -->
+            <div class="event-content">
+                <h3>{{ event.title }}</h3>
+                <p class="event-description">
+                    {{ event.description|truncatewords:15 }}
+                </p>
+                
+                <div class="event-details">
+                    <div class="detail-item">
+                        <span class="icon">📅</span>
+                        <span>{{ event.date|date:"d M Y" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="icon">⏰</span>
+                        <span>{{ event.time|time:"H:i" }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="icon">📍</span>
+                        <span>{{ event.location|truncatewords:3 }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="icon">👥</span>
+                        <span class="participants-count">
+                            {{ event.registrations.count }}/{{ event.max_participants }}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <a href="{% url 'event:event_detail' event.pk %}" class="btn-view">
+                        View Details →
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <div class="empty-icon">📭</div>
+            <h3>No Events Found</h3>
+            <p>Be the first to create an event!</p>
+            {% if user.is_authenticated %}
+            <a href="{% url 'event:create_event' %}" class="btn-primary">Create Event</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

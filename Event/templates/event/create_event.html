@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Event - MoveBuddy{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="form-header">
+        <h1>Create New Event</h1>
+        <p>Fill in the details to create your sports event</p>
+    </div>
+    
+    <form method="post" enctype="multipart/form-data" class="event-form">
+        {% csrf_token %}
+        
+        <div class="form-grid">
+            <!-- Title -->
+            <div class="form-group full-width">
+                <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <span class="error">{{ form.title.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Description -->
+            <div class="form-group full-width">
+                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <span class="error">{{ form.description.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Category -->
+            <div class="form-group">
+                <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <span class="error">{{ form.category.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Max Participants -->
+            <div class="form-group">
+                <label for="{{ form.max_participants.id_for_label }}">{{ form.max_participants.label }}</label>
+                {{ form.max_participants }}
+                {% if form.max_participants.errors %}
+                    <span class="error">{{ form.max_participants.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Date -->
+            <div class="form-group">
+                <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
+                {{ form.date }}
+                {% if form.date.errors %}
+                    <span class="error">{{ form.date.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Time -->
+            <div class="form-group">
+                <label for="{{ form.time.id_for_label }}">{{ form.time.label }}</label>
+                {{ form.time }}
+                {% if form.time.errors %}
+                    <span class="error">{{ form.time.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Location -->
+            <div class="form-group full-width">
+                <label for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
+                {{ form.location }}
+                {% if form.location.errors %}
+                    <span class="error">{{ form.location.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <!-- Image Upload -->
+            <div class="form-group full-width">
+                <label for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
+                {{ form.image }}
+                {% if form.image.errors %}
+                    <span class="error">{{ form.image.errors.0 }}</span>
+                {% endif %}
+                <small class="form-hint">Upload an image for your event (optional)</small>
+            </div>
+        </div>
+        
+        <!-- Form Actions -->
+        <div class="form-actions">
+            <a href="{% url 'event:event_list' %}" class="btn-secondary">Cancel</a>
+            <button type="submit" class="btn-primary">Create Event</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

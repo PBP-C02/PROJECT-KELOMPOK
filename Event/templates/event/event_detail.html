@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ event.title }} - MoveBuddy{% endblock %}
+
+{% block content %}
+<div class="event-detail-container">
+    <!-- Back Button -->
+    <a href="{% url 'event:event_list' %}" class="btn-back">
+        ← Back to Events
+    </a>
+    
+    <!-- Event Detail Card -->
+    <div class="event-detail-card">
+        <!-- Left Side: Image -->
+        <div class="event-detail-image">
+            {% if event.image %}
+            <img src="{{ event.image.url }}" alt="{{ event.title }}">
+            {% else %}
+            <div class="event-placeholder-large">
+                <span class="sport-icon-large">🏃‍♂️</span>
+            </div>
+            {% endif %}
+            
+            <span class="category-badge-large {{ event.category }}">
+                {{ event.get_category_display }}
+            </span>
+        </div>
+        
+        <!-- Right Side: Info -->
+        <div class="event-detail-info">
+            <h1>{{ event.title }}</h1>
+            
+            <div class="organizer-info">
+                <span class="icon">👤</span>
+                <p>Organized by <strong>{{ event.organizer.username }}</strong></p>
+            </div>
+            
+            <div class="event-meta">
+                <div class="meta-item">
+                    <span class="icon">📅</span>
+                    <div>
+                        <p class="meta-label">Date</p>
+                        <p class="meta-value">{{ event.date|date:"l, d F Y" }}</p>
+                    </div>
+                </div>
+                
+                <div class="meta-item">
+                    <span class="icon">⏰</span>
+                    <div>
+                        <p class="meta-label">Time</p>
+                        <p class="meta-value">{{ event.time|time:"H:i" }}</p>
+                    </div>
+                </div>
+                
+                <div class="meta-item">
+                    <span class="icon">📍</span>
+                    <div>
+                        <p class="meta-label">Location</p>
+                        <p class="meta-value">{{ event.location }}</p>
+                    </div>
+                </div>
+                
+                <div class="meta-item">
+                    <span class="icon">👥</span>
+                    <div>
+                        <p class="meta-label">Participants</p>
+                        <p class="meta-value">
+                            {{ participants_count }}/{{ event.max_participants }}
+                            {% if available_slots > 0 %}
+                            <span class="available-slots">({{ available_slots }} slots left)</span>
+                            {% else %}
+                            <span class="full-text">FULL</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                {% if user.is_authenticated %}
+                    {% if user == event.organizer %}
+                        <!-- Organizer can Edit/Delete -->
+                        <a href="{% url 'event:edit_event' event.pk %}" class="btn-edit">
+                            ✏️ Edit Event
+                        </a>
+                        <a href="{% url 'event:delete_event' event.pk %}" class="btn-delete">
+                            🗑️ Delete Event
+                        </a>
+                    {% else %}
+                        <!-- Other users can Join/Cancel -->
+                        {% if is_registered %}
+                            <form method="post" action="{% url 'event:cancel_registration' event.pk %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-cancel">
+                                    ❌ Cancel Registration
+                                </button>
+                            </form>
+                        {% else %}
+                            {% if event.is_full %}
+                                <button class="btn-disabled" disabled>
+                                    Event Full
+                                </button>
+                            {% else %}
+                                <form method="post" action="{% url 'event:register_event' event.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-register">
+                                        ✅ Join Event
+                                    </button>
+                                </form>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    <a href="/auth/login/?next={{ request.path }}" class="btn-login">
+                        Login to Join
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Description Section -->
+    <div class="event-description-section">
+        <h2>About This Event</h2>
+        <p>{{ event.description }}</p>
+    </div>
+    
+    <!-- Participants Section -->
+    <div class="participants-section">
+        <h2>Participants ({{ participants_count }})</h2>
+        {% if participants %}
+        <div class="participants-grid">
+            {% for registration in participants %}
+            <div class="participant-card">
+                <div class="participant-avatar">
+                    {{ registration.user.username|first|upper }}
+                </div>
+                <div class="participant-info">
+                    <p class="participant-name">{{ registration.user.username }}</p>
+                    <p class="participant-joined">
+                        Joined {{ registration.registered_at|date:"d M Y" }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="no-participants">No participants yet. Be the first to join! 🎉</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

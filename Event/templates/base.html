@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MoveBuddy{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/event.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="logo">MoveBuddy</a>
+            <ul class="nav-menu">
+                <li><a href="{% url 'event:event_list' %}">Events</a></li>
+                <li><a href="/coach/">Coaches</a></li>
+                <li><a href="/court/">Courts</a></li>
+                <li><a href="/partner/">Find Partner</a></li>
+                
+                {% if user.is_authenticated %}
+                <li><a href="/profile/">{{ user.username }}</a></li>
+                <li><a href="/auth/logout/">Logout</a></li>
+                {% else %}
+                <li><a href="/auth/login/">Login</a></li>
+                <li><a href="/auth/register/">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Messages (Toast Notification) -->
+    {% if messages %}
+    <div class="messages-container">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 MoveBuddy - Find Your Sport Buddy</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
