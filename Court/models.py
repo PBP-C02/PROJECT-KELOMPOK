@@ -32,6 +32,13 @@ class Court(models.Model):
     # Contact owner untuk WhatsApp
     owner_name = models.CharField(max_length=100)
     owner_phone = models.CharField(max_length=20, help_text="Format: 628123456789 (tanpa +)")
+    created_by = models.ForeignKey(
+        'Auth_Profile.User',
+        on_delete=models.SET_NULL,
+        related_name='courts',
+        null=True,
+        blank=True
+    )
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -44,12 +51,12 @@ class Court(models.Model):
         return [f.strip() for f in self.facilities.split(',') if f.strip()]
     
     def is_available(self):
-        """Check if court has available slots"""
+        """Check if court is available today or upcoming (default available unless marked otherwise)."""
         from datetime import date
-        return TimeSlot.objects.filter(
+        return not TimeSlot.objects.filter(
             court=self,
             date__gte=date.today(),
-            is_available=True
+            is_available=False
         ).exists()
     
     def get_whatsapp_link(self, date=None, time=None):

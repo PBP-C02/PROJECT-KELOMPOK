@@ -187,6 +187,12 @@
             color: #c62828;
         }
 
+        .court-badge.owner {
+            background: #fff3cd;
+            color: #856404;
+            margin-left: 8px;
+        }
+
         .court-info {
             display: flex;
             flex-direction: column;
@@ -343,10 +349,47 @@
             userLng: null
         };
 
+        let cachedCourts = [];
+        let dataLoaded = false;
+
         // Initialize
         window.onload = function() {
-            loadCourt();
+            initPage();
         };
+
+        function initPage() {
+            if (!navigator.geolocation) {
+                loadCourt(true);
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    currentFilters.userLat = position.coords.latitude;
+                    currentFilters.userLng = position.coords.longitude;
+                    const checkbox = document.getElementById('useLocation');
+                    if (checkbox) {
+                        checkbox.checked = true;
+                    }
+                    loadCourt(true);
+                },
+                function(error) {
+                    console.warn('Geolocation denied or unavailable:', error);
+                    currentFilters.userLat = null;
+                    currentFilters.userLng = null;
+                    const checkbox = document.getElementById('useLocation');
+                    if (checkbox) {
+                        checkbox.checked = false;
+                    }
+                    loadCourt(true);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 300000
+                }
+            );
+        }
 
         // Search Court dengan AJAX
         function searchCourt() {
@@ -396,40 +439,100 @@
         }
 
         // Load Court dengan AJAX
-        function loadCourt() {
+        function authFetch(url, options) {
+            return fetch(url, options).then(response => {
+                if (response.status === 401) {
+                    window.location.href = '/login/';
+                    throw new Error('Unauthenticated');
+                }
+                return response;
+            });
+        }
+
+        function ensureDataLoaded(forceRefresh = false) {
+            if (!forceRefresh && dataLoaded) {
+                return Promise.resolve(cachedCourts);
+            }
+            return authFetch('/court/api/court/')
+                .then(response => response.json())
+                .then(data => {
+                    cachedCourts = (data && data.Court) ? data.Court : [];
+                    dataLoaded = true;
+                    return cachedCourts;
+                });
+        }
+
+        function loadCourt(forceRefresh = false) {
             showLoading(true);
             currentFilters.availableOnly = document.getElementById('availableOnly').checked;
 
-            // Build URL with parameters
-            let url = '/court/api/court/search/?q=' + encodeURIComponent(currentFilters.query) + 
-                      '&sport=' + encodeURIComponent(currentFilters.sport) + 
-                      '&location=' + encodeURIComponent(currentFilters.location) +
-                      '&available_only=' + (currentFilters.availableOnly ? 'true' : 'false');
-
-            // Add location parameters if available
-            if (currentFilters.userLat && currentFilters.userLng) {
-                url += '&user_lat=' + currentFilters.userLat + '&user_lng=' + currentFilters.userLng;
-            }
-
-            // AJAX call ke Django backend
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    displayCourt(data.court);
+            ensureDataLoaded(forceRefresh)
+                .then(() => {
+                    const filtered = applyFilters();
+                    displayCourt(filtered);
                     showLoading(false);
                 })
                 .catch(error => {
+                    if (error && error.message === 'Unauthenticated') {
+                        return;
+                    }
                     console.error('Error:', error);
                     showLoading(false);
                     alert('Gagal memuat data lapangan');
                 });
         }
 
+        function applyFilters() {
+            let result = cachedCourts.slice();
+
+            const query = (currentFilters.query || '').trim().toLowerCase();
+            if (query) {
+                result = result.filter(c => (
+                    (c.name || '').toLowerCase().includes(query) ||
+                    (c.address || '').toLowerCase().includes(query) ||
+                    (c.location || '').toLowerCase().includes(query)
+                ));
+            }
+
+            if (currentFilters.sport) {
+                result = result.filter(c => c.sport_type === currentFilters.sport);
+            }
+
+            if (currentFilters.location) {
+                result = result.filter(c => (c.location || '').toLowerCase() === currentFilters.location.toLowerCase());
+            }
+
+            if (currentFilters.availableOnly) {
+                result = result.filter(c => c.is_available);
+            }
+
+            if (currentFilters.userLat !== null && currentFilters.userLng !== null) {
+                result = result
+                    .map(c => {
+                        const lat = c.latitude !== null ? parseFloat(c.latitude) : null;
+                        const lng = c.longitude !== null ? parseFloat(c.longitude) : null;
+                        if (isFinite(lat) && isFinite(lng)) {
+                            const distance = calculateDistance(currentFilters.userLat, currentFilters.userLng, lat, lng);
+                            return { ...c, distance: distance !== null ? distance.toFixed(1) : null };
+                        }
+                        return { ...c, distance: null };
+                    })
+                    .sort((a, b) => {
+                        if (a.distance === null) return 1;
+                        if (b.distance === null) return -1;
+                        return parseFloat(a.distance) - parseFloat(b.distance);
+                    });
+            } else {
+                result = result.map(c => ({ ...c, distance: null }));
+            }
+
+            return result;
+        }
+
         // Display Court
         function displayCourt(Court) {
             const grid = document.getElementById('CourtGrid');
-            
-            if (Court.length === 0) {
+            if (!Array.isArray(Court) || Court.length === 0) {
                 grid.innerHTML = `
                     <div class="no-results">
                         <p>😔</p>
@@ -449,6 +552,7 @@
                         <span class="court-badge ${court.is_available ? 'available' : 'full'}">
                             ${court.is_available ? '✓ Tersedia' : '✗ Penuh'}
                         </span>
+                        ${court.owned_by_user ? '<span class="court-badge owner">Lapangan Anda</span>' : ''}
                         <h3>${escapeHtml(court.name)}</h3>
                         
                         <div class="court-info">
@@ -504,6 +608,21 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            if (![lat1, lon1, lat2, lon2].every(Number.isFinite)) {
+                return null;
+            }
+            const toRad = value => value * Math.PI / 180;
+            const R = 6371; // km
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return Math.round((R * c) * 10) / 10;
         }
 
         // Enter key untuk search

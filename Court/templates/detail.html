@@ -189,42 +189,6 @@
             font-size: 14px;
         }
 
-        .time-slots-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .slot-btn {
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .slot-btn:hover:not(:disabled) {
-            border-color: #667eea;
-            background: #f5f7ff;
-        }
-
-        .slot-btn.selected {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        .slot-btn:disabled {
-            background: #f5f5f5;
-            color: #999;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
         .btn-whatsapp {
             width: 100%;
             padding: 15px;
@@ -250,6 +214,82 @@
         .btn-whatsapp:disabled {
             background: #ccc;
             cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .availability-card {
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .availability-status {
+            font-size: 1.1em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .availability-status.available {
+            color: #2e7d32;
+        }
+
+        .availability-status.unavailable {
+            color: #c62828;
+        }
+
+        .availability-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .owner-info {
@@ -304,9 +344,6 @@
                 padding: 20px;
             }
 
-            .time-slots-grid {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            }
         }
     </style>
 </head>
@@ -386,7 +423,17 @@
                         <p>⏳ Memuat ketersediaan...</p>
                     </div>
 
-                    <div id="timeSlotsContainer"></div>
+                    <div class="availability-card">
+                        <div id="availabilityStatus" class="availability-status">Memuat status...</div>
+                        {% if can_manage_slots %}
+                        <div class="availability-actions">
+                            <button type="button" class="btn-primary" id="markAvailable" onclick="setAvailability(true)">Tandai Tersedia</button>
+                            <button type="button" class="btn-danger" id="markUnavailable" onclick="setAvailability(false)">Tandai Tidak Tersedia</button>
+                            <button type="button" class="btn-secondary" onclick="deleteCourt()">Hapus Lapangan</button>
+                            <button type="button" class="btn-primary" onclick="window.location.href='{% url 'Court:edit_court' court.id %}'">Edit Lapangan</button>
+                        </div>
+                        {% endif %}
+                    </div>
 
                     <button class="btn-whatsapp" id="btnWhatsApp" onclick="bookViaWhatsApp()" disabled>
                         <span style="font-size: 1.5em;">📱</span>
@@ -399,111 +446,148 @@
 
     <script>
         const courtId = {{ court.id }};
-        let selectedSlot = null;
+        const canManageInitial = {{ can_manage_slots|yesno:"true,false" }};
+        const btnWhatsApp = document.getElementById('btnWhatsApp');
         let selectedDate = null;
+        let currentAvailability = true;
 
-        // Initialize
         window.onload = function() {
             setMinDate();
         };
+
+        function authFetch(url, options) {
+            return fetch(url, options).then(response => {
+                if (response.status === 401) {
+                    window.location.href = '/login/';
+                    throw new Error('Unauthenticated');
+                }
+                return response;
+            });
+        }
 
         function setMinDate() {
             const today = new Date().toISOString().split('T')[0];
             const dateInput = document.getElementById('bookingDate');
             dateInput.min = today;
             dateInput.value = today;
+            selectedDate = today;
             loadAvailability();
         }
 
-        // Load availability dengan AJAX
         function loadAvailability() {
             const date = document.getElementById('bookingDate').value;
-            if (!date) return;
+            if (!date) {
+                return;
+            }
 
             selectedDate = date;
-            selectedSlot = null;
-            document.getElementById('btnWhatsApp').disabled = true;
+            showLoading(true);
+            if (btnWhatsApp) {
+                btnWhatsApp.disabled = true;
+            }
 
-            showLoadingSlots(true);
-
-            fetch(`/court/api/court/${courtId}/availability/?date=${encodeURIComponent(date)}`)
+            authFetch(`/court/api/court/${courtId}/availability/?date=${encodeURIComponent(date)}`)
                 .then(response => response.json())
                 .then(data => {
-                    displayTimeSlots(data.slots);
-                    showLoadingSlots(false);
+                    currentAvailability = data ? !!data.available : true;
+                    updateAvailabilityStatus(currentAvailability);
+                    updateManagementButtons(data && data.can_manage ? true : canManageInitial);
+                    showLoading(false);
                 })
                 .catch(error => {
+                    if (error && error.message === 'Unauthenticated') {
+                        return;
+                    }
                     console.error('Error:', error);
-                    showLoadingSlots(false);
+                    showLoading(false);
                     alert('Gagal memuat ketersediaan');
                 });
         }
 
-        // Display time slots
-        function displayTimeSlots(slots) {
-            const container = document.getElementById('timeSlotsContainer');
-            
-            if (slots.length === 0) {
-                container.innerHTML = `
-                    <div class="no-slots">
-                        <p style="font-size: 2em; margin-bottom: 10px;">😔</p>
-                        <p>Tidak ada jadwal tersedia untuk tanggal ini</p>
-                    </div>
-                `;
+        function updateAvailabilityStatus(isAvailable) {
+            const statusEl = document.getElementById('availabilityStatus');
+            if (!statusEl) return;
+
+            statusEl.classList.remove('available', 'unavailable');
+            const dateLabel = formatDateForLabel(selectedDate);
+
+            if (isAvailable) {
+                statusEl.classList.add('available');
+                statusEl.innerHTML = `✅ Lapangan tersedia pada ${dateLabel}.`;
+                if (btnWhatsApp) {
+                    btnWhatsApp.disabled = false;
+                }
+            } else {
+                statusEl.classList.add('unavailable');
+                statusEl.innerHTML = `❌ Lapangan tidak tersedia pada ${dateLabel}.`;
+                if (btnWhatsApp) {
+                    btnWhatsApp.disabled = true;
+                }
+            }
+        }
+
+        function updateManagementButtons(canManage) {
+            const availableBtn = document.getElementById('markAvailable');
+            const unavailableBtn = document.getElementById('markUnavailable');
+            if (!availableBtn || !unavailableBtn) {
                 return;
             }
 
-            const availableCount = slots.filter(s => s.is_available).length;
-            
-            container.innerHTML = `
-                <h3 style="margin-top: 20px; margin-bottom: 15px; color: #333;">
-                    Pilih Jam (${availableCount} slot tersedia):
-                </h3>
-                <div class="time-slots-grid">
-                    ${slots.map(slot => {
-                        const label = slot.time_label || `${slot.start_time} - ${slot.end_time}`;
-                        return `
-                        <button class="slot-btn ${!slot.is_available ? 'unavailable' : ''}" 
-                                onclick="selectSlot(this, ${slot.id}, '${label}')"
-                                ${!slot.is_available ? 'disabled' : ''}>
-                            ${label}
-                            ${!slot.is_available ? '<br><small>(Booked)</small>' : ''}
-                        </button>
-                    `;
-                    }).join('')}
-                </div>
-            `;
+            availableBtn.disabled = !canManage || currentAvailability;
+            unavailableBtn.disabled = !canManage || !currentAvailability;
         }
 
-        // Select time slot
-        function selectSlot(button, slotId, timeLabel) {
-            document.querySelectorAll('.slot-btn').forEach(btn => {
-                btn.classList.remove('selected');
+        function setAvailability(isAvailable) {
+            if (!selectedDate) {
+                alert('Pilih tanggal terlebih dahulu.');
+                return;
+            }
+
+            authFetch(`/court/api/court/${courtId}/availability/set/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    date: selectedDate,
+                    is_available: isAvailable
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.success) {
+                    currentAvailability = data.available;
+                    updateAvailabilityStatus(currentAvailability);
+                    updateManagementButtons(true);
+                } else {
+                    alert((data && data.error) || 'Gagal memperbarui ketersediaan');
+                }
+            })
+            .catch(error => {
+                if (error && error.message === 'Unauthenticated') {
+                    return;
+                }
+                console.error('Error:', error);
+                alert('Gagal memperbarui ketersediaan');
             });
-            button.classList.add('selected');
-
-            selectedSlot = {
-                id: slotId,
-                label: timeLabel
-            };
-
-            document.getElementById('btnWhatsApp').disabled = false;
         }
 
-        // Book via WhatsApp
         function bookViaWhatsApp() {
-            if (!selectedSlot) {
-                alert('Silakan pilih jam terlebih dahulu!');
+            if (!selectedDate) {
+                alert('Pilih tanggal terlebih dahulu!');
+                return;
+            }
+            if (!currentAvailability) {
+                alert('Lapangan tidak tersedia pada tanggal tersebut.');
                 return;
             }
 
-            // Format tanggal ke Indonesia
             const dateObj = new Date(selectedDate);
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const formattedDate = dateObj.toLocaleDateString('id-ID', options);
 
-            // AJAX request untuk generate WhatsApp link
-            fetch('/court/api/court/whatsapp/', {
+            authFetch('/court/api/court/whatsapp/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -512,27 +596,36 @@
                 body: JSON.stringify({
                     court_id: courtId,
                     date: formattedDate,
-                    time: selectedSlot.label
+                    time: null
                 })
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    // Open WhatsApp in new tab
+                if (data && data.success) {
                     window.open(data.whatsapp_link, '_blank');
                 } else {
-                    alert('Gagal membuat link WhatsApp: ' + (data.error || 'Unknown error'));
+                    alert('Gagal membuat link WhatsApp: ' + ((data && data.error) || 'Unknown error'));
                 }
             })
             .catch(error => {
+                if (error && error.message === 'Unauthenticated') {
+                    return;
+                }
                 console.error('Error:', error);
                 alert('Gagal membuat link WhatsApp');
             });
         }
 
-        // Helper functions
-        function showLoadingSlots(show) {
-            document.getElementById('loadingSlots').style.display = show ? 'block' : 'none';
+        function showLoading(show) {
+            const loadingEl = document.getElementById('loadingSlots');
+            if (loadingEl) {
+                loadingEl.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        function formatDateForLabel(dateStr) {
+            const dateObj = new Date(dateStr);
+            return dateObj.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
         }
 
         function getCookie(name) {
@@ -548,6 +641,36 @@
                 }
             }
             return cookieValue;
+        }
+
+        function deleteCourt() {
+            if (!confirm('Hapus lapangan ini beserta seluruh jadwalnya?')) {
+                return;
+            }
+
+            authFetch(`/court/api/court/${courtId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.success) {
+                    alert('Lapangan berhasil dihapus.');
+                    window.location.href = '/court/';
+                } else {
+                    alert((data && data.error) || 'Gagal menghapus lapangan');
+                }
+            })
+            .catch(error => {
+                if (error && error.message === 'Unauthenticated') {
+                    return;
+                }
+                console.error('Error:', error);
+                alert('Gagal menghapus lapangan');
+            });
         }
     </script>
 </body>

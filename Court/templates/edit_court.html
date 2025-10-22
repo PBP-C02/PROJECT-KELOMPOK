@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Lapangan</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; padding: 40px; }
+        form { background: white; max-width: 640px; margin: auto; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; margin-bottom: 20px; color: #333; }
+        label { display: block; font-weight: 600; margin-top: 15px; color: #444; }
+        input, select, textarea { width: 100%; margin-top: 6px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        textarea { resize: vertical; min-height: 90px; }
+        button { background: #667eea; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 20px; }
+        button:hover { background: #5568d3; }
+        .actions { display: flex; gap: 10px; margin-top: 20px; }
+        .actions a { flex: 1; text-align: center; background: #f0f0f5; color: #444; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: background 0.3s; }
+        .actions a:hover { background: #e0e0eb; }
+        .current-image { margin-top: 15px; text-align: center; }
+        .current-image img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .note { font-size: 12px; color: #666; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h2>Edit Lapangan</h2>
+
+        <label>Nama Lapangan
+            <input type="text" name="name" value="{{ court.name }}" required>
+        </label>
+
+        <label>Jenis Olahraga
+            <select name="sport_type" required>
+                {% for value,label in sport_choices %}
+                    <option value="{{ value }}" {% if court.sport_type == value %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
+        <label>Kota
+            <input type="text" name="location" value="{{ court.location }}" required>
+        </label>
+
+        <label>Alamat Lengkap
+            <textarea name="address" required>{{ court.address }}</textarea>
+        </label>
+
+        <label>Harga per Jam (Rp)
+            <input type="number" step="0.01" name="price_per_hour" value="{{ court.price_per_hour }}" required>
+        </label>
+
+        <label>Fasilitas (pisahkan dengan koma)
+            <input type="text" name="facilities" value="{{ court.facilities }}">
+        </label>
+
+        <label>Rating
+            <input type="number" step="0.1" min="0" max="5" name="rating" value="{{ court.rating }}">
+        </label>
+
+        <label>Deskripsi
+            <textarea name="description">{{ court.description }}</textarea>
+        </label>
+
+        <label>Link Google Maps
+            <input type="url" name="maps_link" placeholder="Tempel link Google Maps untuk memperbarui titik lokasi">
+            <div class="note">Biarkan kosong jika tidak ingin mengubah posisi.</div>
+        </label>
+
+        <label>Foto Lapangan (opsional)
+            <input type="file" name="image" accept="image/*">
+            <div class="note">Unggah untuk mengganti foto. Biarkan kosong untuk memakai foto saat ini.</div>
+        </label>
+
+        {% if court.image %}
+        <div class="current-image">
+            <p>Foto saat ini:</p>
+            <img src="{{ court.image.url }}" alt="{{ court.name }}">
+        </div>
+        {% endif %}
+
+        <button type="submit">Simpan Perubahan</button>
+
+        <div class="actions">
+            <a href="{% url 'Court:court_detail' court.id %}">Kembali ke Detail</a>
+            <a href="{% url 'Court:show_main' %}">Daftar Lapangan</a>
+        </div>
+    </form>
+</body>
+</html>
