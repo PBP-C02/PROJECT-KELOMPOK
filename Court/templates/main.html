@@ -1,0 +1,517 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cari Lapangan - AYO.com</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-bar input,
+        .search-bar select {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        .search-bar input:focus,
+        .search-bar select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-bar button {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .search-bar button:hover {
+            background: #5568d3;
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 15px;
+        }
+
+        .filter-chip {
+            padding: 8px 16px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .filter-chip:hover {
+            border-color: #667eea;
+            background: #f5f7ff;
+        }
+
+        .filter-chip.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .filter-options {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .filter-options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        #loading {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 1.2em;
+        }
+
+        #CourtGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .court-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .court-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .court-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .court-card-content {
+            padding: 20px;
+        }
+
+        .court-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .court-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #f0f0f0;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-bottom: 10px;
+        }
+
+        .court-badge.available {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .court-badge.full {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .court-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 15px 0;
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        .court-info span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .court-price {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .court-distance {
+            color: #2e7d32;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .btn-detail {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-detail:hover {
+            background: #5568d3;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 15px;
+            color: #666;
+        }
+
+        .no-results p:first-child {
+            font-size: 4em;
+            margin-bottom: 15px;
+        }
+
+        .no-results h3 {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .search-bar {
+                flex-direction: column;
+            }
+
+            .search-bar input,
+            .search-bar select,
+            .search-bar button {
+                min-width: 100%;
+            }
+
+            #CourtGrid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🏟️ Cari Lapangan</h1>
+        <p>Temukan lapangan olahraga terdekat dan booking langsung via WhatsApp!</p>
+    </header>
+
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Cari lapangan atau lokasi...">
+                <select id="locationFilter">
+                    <option value="">Semua Lokasi</option>
+                    <option value="Jakarta">Jakarta</option>
+                    <option value="Bandung">Bandung</option>
+                    <option value="Surabaya">Surabaya</option>
+                    <option value="Depok">Depok</option>
+                    <option value="Tangerang">Tangerang</option>
+                    <option value="Bekasi">Bekasi</option>
+                </select>
+                <button onclick="searchCourt()">🔍 Cari</button>
+            </div>
+
+            <div class="filters">
+                <button class="filter-chip active" data-sport="" onclick="filterSport(this, '')">Semua</button>
+                <button class="filter-chip" data-sport="tennis" onclick="filterSport(this, 'tennis')">🎾 Tennis</button>
+                <button class="filter-chip" data-sport="basketball" onclick="filterSport(this, 'basketball')">🏀 Basketball</button>
+                <button class="filter-chip" data-sport="soccer" onclick="filterSport(this, 'soccer')">⚽ Soccer</button>
+                <button class="filter-chip" data-sport="badminton" onclick="filterSport(this, 'badminton')">🏸 Badminton</button>
+                <button class="filter-chip" data-sport="volleyball" onclick="filterSport(this, 'volleyball')">🏐 Volleyball</button>
+                <button class="filter-chip" data-sport="futsal" onclick="filterSport(this, 'futsal')">⚽ Futsal</button>
+            </div>
+            <div style="text-align:right; margin-bottom: 20px;">
+                <a href="{% url 'Court:add_court' %}"
+                style="background:#667eea; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
+                + Tambah Lapangan
+                </a>
+            </div>
+
+            <div class="filter-options">
+                <label>
+                    <input type="checkbox" id="availableOnly" onchange="loadCourt()">
+                    <span>Tampilkan hanya yang tersedia</span>
+                </label>
+                <label>
+                    <input type="checkbox" id="useLocation" onchange="handleLocationToggle()">
+                    <span>Urutkan berdasarkan jarak terdekat</span>
+                </label>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div id="loading" style="display:none;">
+            <p>⏳ Memuat lapangan...</p>
+        </div>
+
+        <!-- Court Grid -->
+        <div id="CourtGrid"></div>
+    </div>
+
+    <script>
+        // State management
+        let currentFilters = {
+            query: '',
+            sport: '',
+            location: '',
+            availableOnly: false,
+            userLat: null,
+            userLng: null
+        };
+
+        // Initialize
+        window.onload = function() {
+            loadCourt();
+        };
+
+        // Search Court dengan AJAX
+        function searchCourt() {
+            currentFilters.query = document.getElementById('searchInput').value;
+            currentFilters.location = document.getElementById('locationFilter').value;
+            loadCourt();
+        }
+
+        // Filter by sport
+        function filterSport(element, sport) {
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            element.classList.add('active');
+            currentFilters.sport = sport;
+            loadCourt();
+        }
+
+        // Handle location toggle
+        function handleLocationToggle() {
+            const useLocation = document.getElementById('useLocation').checked;
+            
+            if (useLocation) {
+                if (navigator.geolocation) {
+                    showLoading(true);
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            currentFilters.userLat = position.coords.latitude;
+                            currentFilters.userLng = position.coords.longitude;
+                            loadCourt();
+                        },
+                        function(error) {
+                            alert('Tidak dapat mengakses lokasi Anda. Pastikan izin lokasi diaktifkan.');
+                            document.getElementById('useLocation').checked = false;
+                            showLoading(false);
+                        }
+                    );
+                } else {
+                    alert('Browser Anda tidak mendukung geolocation.');
+                    document.getElementById('useLocation').checked = false;
+                }
+            } else {
+                currentFilters.userLat = null;
+                currentFilters.userLng = null;
+                loadCourt();
+            }
+        }
+
+        // Load Court dengan AJAX
+        function loadCourt() {
+            showLoading(true);
+            currentFilters.availableOnly = document.getElementById('availableOnly').checked;
+
+            // Build URL with parameters
+            let url = '/court/api/court/search/?q=' + encodeURIComponent(currentFilters.query) + 
+                      '&sport=' + encodeURIComponent(currentFilters.sport) + 
+                      '&location=' + encodeURIComponent(currentFilters.location) +
+                      '&available_only=' + (currentFilters.availableOnly ? 'true' : 'false');
+
+            // Add location parameters if available
+            if (currentFilters.userLat && currentFilters.userLng) {
+                url += '&user_lat=' + currentFilters.userLat + '&user_lng=' + currentFilters.userLng;
+            }
+
+            // AJAX call ke Django backend
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    displayCourt(data.court);
+                    showLoading(false);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showLoading(false);
+                    alert('Gagal memuat data lapangan');
+                });
+        }
+
+        // Display Court
+        function displayCourt(Court) {
+            const grid = document.getElementById('CourtGrid');
+            
+            if (Court.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results">
+                        <p>😔</p>
+                        <h3>Lapangan tidak ditemukan</h3>
+                        <p>Coba ubah filter pencarian Anda</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = Court.map(court => `
+                <div class="court-card" onclick="goToDetail(${court.id})">
+                    <img src="${court.image || '/static/placeholder-court.jpg'}" 
+                         alt="${escapeHtml(court.name)}" 
+                         onerror="this.src='/static/placeholder-court.jpg'">
+                    <div class="court-card-content">
+                        <span class="court-badge ${court.is_available ? 'available' : 'full'}">
+                            ${court.is_available ? '✓ Tersedia' : '✗ Penuh'}
+                        </span>
+                        <h3>${escapeHtml(court.name)}</h3>
+                        
+                        <div class="court-info">
+                            <span>${getSportIcon(court.sport_type)} ${formatSportName(court.sport_type)}</span>
+                            <span>⭐ ${court.rating}</span>
+                            <span>📍 ${escapeHtml(court.location)}</span>
+                            ${court.distance ? `<span class="court-distance">📏 ${court.distance} km dari Anda</span>` : ''}
+                        </div>
+                        
+                        <div class="court-price">Rp ${formatPrice(court.price)} <small>/jam</small></div>
+                        
+                        <button class="btn-detail" onclick="event.stopPropagation(); goToDetail(${court.id})">
+                            Lihat Detail & Booking
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Navigate to detail page
+        function goToDetail(courtId) {
+            window.location.href = `/court/${courtId}/`;
+        }
+
+        // Helper functions
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function formatPrice(price) {
+            return parseFloat(price).toLocaleString('id-ID');
+        }
+
+        function formatSportName(sport) {
+            return sport.charAt(0).toUpperCase() + sport.slice(1).replace('_', ' ');
+        }
+
+        function getSportIcon(sport) {
+            const icons = {
+                'tennis': '🎾',
+                'basketball': '🏀',
+                'soccer': '⚽',
+                'badminton': '🏸',
+                'volleyball': '🏐',
+                'paddle': '🎾',
+                'futsal': '⚽',
+                'table_tennis': '🏓'
+            };
+            return icons[sport] || '🏟️';
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Enter key untuk search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchCourt();
+            }
+        });
+    </script>
+</body>
+</html>
