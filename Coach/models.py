@@ -18,11 +18,13 @@ CATEGORY_CHOICES = [
 # Create your models here.
 class Coach(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True) 
+    isBooked = models.BooleanField()
     coach_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=255)
     description = description = models.TextField()
     price = models.PositiveIntegerField(default=1)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES) 
+    location = models.CharField(max_length=255) 
     
     def __str__(self):
         return self.name 
