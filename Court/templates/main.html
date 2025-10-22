@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cari Lapangan - AYO.com</title>
+    <title>MoveBuddy - Cari Lapangan</title>
     <style>
         * {
             margin: 0;
@@ -109,19 +109,6 @@
             background: #667eea;
             color: white;
             border-color: #667eea;
-        }
-
-        .filter-options {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .filter-options label {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            cursor: pointer;
         }
 
         #loading {
@@ -280,8 +267,8 @@
 </head>
 <body>
     <header>
-        <h1>🏟️ Cari Lapangan</h1>
-        <p>Temukan lapangan olahraga terdekat dan booking langsung via WhatsApp!</p>
+        <h1>MoveBuddy</h1>
+        <p>Temukan lapangan olahraga terdekat dan lakukan pemesanan dengan mudah.</p>
     </header>
 
     <div class="container">
@@ -303,12 +290,12 @@
 
             <div class="filters">
                 <button class="filter-chip active" data-sport="" onclick="filterSport(this, '')">Semua</button>
-                <button class="filter-chip" data-sport="tennis" onclick="filterSport(this, 'tennis')">🎾 Tennis</button>
-                <button class="filter-chip" data-sport="basketball" onclick="filterSport(this, 'basketball')">🏀 Basketball</button>
-                <button class="filter-chip" data-sport="soccer" onclick="filterSport(this, 'soccer')">⚽ Soccer</button>
-                <button class="filter-chip" data-sport="badminton" onclick="filterSport(this, 'badminton')">🏸 Badminton</button>
-                <button class="filter-chip" data-sport="volleyball" onclick="filterSport(this, 'volleyball')">🏐 Volleyball</button>
-                <button class="filter-chip" data-sport="futsal" onclick="filterSport(this, 'futsal')">⚽ Futsal</button>
+                <button class="filter-chip" data-sport="tennis" onclick="filterSport(this, 'tennis')">Tennis</button>
+                <button class="filter-chip" data-sport="basketball" onclick="filterSport(this, 'basketball')">Basketball</button>
+                <button class="filter-chip" data-sport="soccer" onclick="filterSport(this, 'soccer')">Soccer</button>
+                <button class="filter-chip" data-sport="badminton" onclick="filterSport(this, 'badminton')">Badminton</button>
+                <button class="filter-chip" data-sport="volleyball" onclick="filterSport(this, 'volleyball')">Volleyball</button>
+                <button class="filter-chip" data-sport="futsal" onclick="filterSport(this, 'futsal')">Futsal</button>
             </div>
             <div style="text-align:right; margin-bottom: 20px;">
                 <a href="{% url 'Court:add_court' %}"
@@ -316,22 +303,17 @@
                 + Tambah Lapangan
                 </a>
             </div>
-
-            <div class="filter-options">
-                <label>
+            <div style="margin-bottom: 10px; display:flex; gap:10px; align-items:center;">
+                <label style="display:flex; align-items:center; gap:6px;">
                     <input type="checkbox" id="availableOnly" onchange="loadCourt()">
-                    <span>Tampilkan hanya yang tersedia</span>
-                </label>
-                <label>
-                    <input type="checkbox" id="useLocation" onchange="handleLocationToggle()">
-                    <span>Urutkan berdasarkan jarak terdekat</span>
+                    <span>Tampilkan hanya lapangan yang tersedia</span>
                 </label>
             </div>
         </div>
 
         <!-- Loading -->
         <div id="loading" style="display:none;">
-            <p>⏳ Memuat lapangan...</p>
+            <p>Memuat lapangan...</p>
         </div>
 
         <!-- Court Grid -->
@@ -367,20 +349,12 @@
                 function(position) {
                     currentFilters.userLat = position.coords.latitude;
                     currentFilters.userLng = position.coords.longitude;
-                    const checkbox = document.getElementById('useLocation');
-                    if (checkbox) {
-                        checkbox.checked = true;
-                    }
                     loadCourt(true);
                 },
                 function(error) {
                     console.warn('Geolocation denied or unavailable:', error);
                     currentFilters.userLat = null;
                     currentFilters.userLng = null;
-                    const checkbox = document.getElementById('useLocation');
-                    if (checkbox) {
-                        checkbox.checked = false;
-                    }
                     loadCourt(true);
                 },
                 {
@@ -406,36 +380,6 @@
             element.classList.add('active');
             currentFilters.sport = sport;
             loadCourt();
-        }
-
-        // Handle location toggle
-        function handleLocationToggle() {
-            const useLocation = document.getElementById('useLocation').checked;
-            
-            if (useLocation) {
-                if (navigator.geolocation) {
-                    showLoading(true);
-                    navigator.geolocation.getCurrentPosition(
-                        function(position) {
-                            currentFilters.userLat = position.coords.latitude;
-                            currentFilters.userLng = position.coords.longitude;
-                            loadCourt();
-                        },
-                        function(error) {
-                            alert('Tidak dapat mengakses lokasi Anda. Pastikan izin lokasi diaktifkan.');
-                            document.getElementById('useLocation').checked = false;
-                            showLoading(false);
-                        }
-                    );
-                } else {
-                    alert('Browser Anda tidak mendukung geolocation.');
-                    document.getElementById('useLocation').checked = false;
-                }
-            } else {
-                currentFilters.userLat = null;
-                currentFilters.userLng = null;
-                loadCourt();
-            }
         }
 
         // Load Court dengan AJAX
@@ -535,7 +479,6 @@
             if (!Array.isArray(Court) || Court.length === 0) {
                 grid.innerHTML = `
                     <div class="no-results">
-                        <p>😔</p>
                         <h3>Lapangan tidak ditemukan</h3>
                         <p>Coba ubah filter pencarian Anda</p>
                     </div>
@@ -550,16 +493,16 @@
                          onerror="this.src='/static/placeholder-court.jpg'">
                     <div class="court-card-content">
                         <span class="court-badge ${court.is_available ? 'available' : 'full'}">
-                            ${court.is_available ? '✓ Tersedia' : '✗ Penuh'}
+                            ${court.is_available ? 'Tersedia' : 'Tidak tersedia'}
                         </span>
                         ${court.owned_by_user ? '<span class="court-badge owner">Lapangan Anda</span>' : ''}
                         <h3>${escapeHtml(court.name)}</h3>
                         
                         <div class="court-info">
-                            <span>${getSportIcon(court.sport_type)} ${formatSportName(court.sport_type)}</span>
-                            <span>⭐ ${court.rating}</span>
-                            <span>📍 ${escapeHtml(court.location)}</span>
-                            ${court.distance ? `<span class="court-distance">📏 ${court.distance} km dari Anda</span>` : ''}
+                            <span>Jenis olahraga: ${formatSportName(court.sport_type)}</span>
+                            <span>Rating: ${court.rating}</span>
+                            <span>Lokasi: ${escapeHtml(court.location)}</span>
+                            <span class="court-distance">Jarak: ${court.distance ? `${court.distance} km` : 'Tidak diketahui'}</span>
                         </div>
                         
                         <div class="court-price">Rp ${formatPrice(court.price)} <small>/jam</small></div>
@@ -587,21 +530,8 @@
         }
 
         function formatSportName(sport) {
-            return sport.charAt(0).toUpperCase() + sport.slice(1).replace('_', ' ');
-        }
-
-        function getSportIcon(sport) {
-            const icons = {
-                'tennis': '🎾',
-                'basketball': '🏀',
-                'soccer': '⚽',
-                'badminton': '🏸',
-                'volleyball': '🏐',
-                'paddle': '🎾',
-                'futsal': '⚽',
-                'table_tennis': '🏓'
-            };
-            return icons[sport] || '🏟️';
+            const formatted = sport.replace(/_/g, ' ');
+            return formatted.charAt(0).toUpperCase() + formatted.slice(1);
         }
 
         function escapeHtml(text) {

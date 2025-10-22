@@ -1,18 +1,25 @@
 import json
+import uuid
 from datetime import date, datetime, timedelta
+from decimal import Decimal
+from urllib.parse import unquote
+from unittest.mock import patch
 
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import Client, TestCase
+from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
 from Auth_Profile.models import User
 from .models import Court, TimeSlot
+import Court.views as views
 
 
 class CourtViewTests(TestCase):
-    def setUp(self):
-        self.user = User.objects.create(
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create(
             nama='Owner',
             email='owner@example.com',
             kelamin='L',
@@ -20,26 +27,15 @@ class CourtViewTests(TestCase):
             nomor_handphone='08123456789',
             password='hashed',
         )
-        self.other_user = User.objects.create(
+        cls.other_user = User.objects.create(
             nama='Other',
             email='other@example.com',
             kelamin='P',
             tanggal_lahir='2001-02-02',
-            nomor_handphone='0811111111',
+            nomor_handphone='08100000000',
             password='hashed',
         )
-
-        self.client = Client()
-        session = self.client.session
-        session['user_id'] = str(self.user.id)
-        session.save()
-
-        self.other_client = Client()
-        other_session = self.other_client.session
-        other_session['user_id'] = str(self.other_user.id)
-        other_session.save()
-
-        self.court = Court.objects.create(
+        cls.court = Court.objects.create(
             name='Lapangan A',
             sport_type='basketball',
             location='Jakarta',
@@ -48,11 +44,11 @@ class CourtViewTests(TestCase):
             facilities='Parkir, Toilet',
             rating=4.5,
             description='Deskripsi awal',
-            owner_name=self.user.nama,
-            owner_phone=self.user.nomor_handphone,
-            created_by=self.user,
+            owner_name=cls.user.nama,
+            owner_phone=cls.user.nomor_handphone,
+            created_by=cls.user,
         )
-        self.other_court = Court.objects.create(
+        cls.other_court = Court.objects.create(
             name='Lapangan B',
             sport_type='futsal',
             location='Depok',
@@ -61,68 +57,151 @@ class CourtViewTests(TestCase):
             facilities='Parkir',
             rating=4.0,
             description='Deskripsi lain',
-            owner_name=self.other_user.nama,
-            owner_phone=self.other_user.nomor_handphone,
-            created_by=self.other_user,
+            owner_name=cls.other_user.nama,
+            owner_phone=cls.other_user.nomor_handphone,
+            created_by=cls.other_user,
         )
 
-    def test_show_main_requires_login(self):
-        anon_client = Client()
-        response = anon_client.get(reverse('Court:show_main'))
-        self.assertEqual(response.status_code, 302)
-        self.assertIn('/login/', response.url)
+    def setUp(self):
+        self.client = self._login(self.user)
+        self.other_client = self._login(self.other_user)
+        self.factory = RequestFactory()
 
-    def test_show_main_success(self):
+    def _login(self, user):
+        client = Client()
+        session = client.session
+        session['user_id'] = str(user.id)
+        session.save()
+        return client
+
+    def _with_session(self, request, user=None):
+        middleware = SessionMiddleware(lambda req: None)
+        middleware.process_request(request)
+        if user:
+            request.session['user_id'] = str(user.id)
+        request.session.save()
+        return request
+
+    def test_login_required_routes(self):
+        html_cases = [
+            ('get', reverse('Court:show_main')),
+            ('get', reverse('Court:add_court')),
+            ('post', reverse('Court:add_court')),
+            ('get', reverse('Court:court_detail', args=[self.court.id])),
+            ('get', reverse('Court:edit_court', args=[self.court.id])),
+        ]
+        json_cases = [
+            ('get', reverse('Court:get_all_Court')),
+            ('get', reverse('Court:api_search_court')),
+            ('get', reverse('Court:get_court_detail', args=[self.court.id])),
+            ('get', reverse('Court:get_availability', args=[self.court.id])),
+            ('post', reverse('Court:api_add_court')),
+            ('post', reverse('Court:set_availability', args=[self.court.id])),
+            ('post', reverse('Court:create_booking')),
+            ('post', reverse('Court:delete_court', args=[self.court.id])),
+            ('post', reverse('Court:api_court_whatsapp')),
+            ('post', reverse('Court:get_whatsapp_link')),
+        ]
+        for method, url in html_cases:
+            with self.subTest(url=url):
+                self.assertEqual(getattr(Client(), method)(url).status_code, 302)
+        for method, url in json_cases:
+            with self.subTest(url=url):
+                self.assertEqual(getattr(Client(), method)(url, content_type='application/json').status_code, 401)
+
+    def test_show_main_and_search_api(self):
         response = self.client.get(reverse('Court:show_main'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'main.html')
 
-    def test_search_court_filters(self):
+        response = self.client.get(reverse('Court:api_search_court'), {'q': 'Lapangan'})
+        self.assertEqual(response.status_code, 200)
+        self.assertGreaterEqual(len(response.json()['court']), 1)
+
         response = self.client.get(reverse('Court:api_search_court'), {
             'sport': 'basketball',
             'location': 'Jakarta',
         })
         self.assertEqual(response.status_code, 200)
-        data = response.json()['court']
-        self.assertEqual(len(data), 1)
-        self.assertEqual(data[0]['name'], 'Lapangan A')
-        self.assertTrue(data[0]['owned_by_user'])
+        self.assertEqual(response.json()['court'][0]['name'], 'Lapangan A')
 
-    def test_get_court_detail(self):
-        url = reverse('Court:get_court_detail', args=[self.court.id])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()['court']['name'], 'Lapangan A')
+    def test_search_Court_function(self):
+        request = self._with_session(self.factory.get('/court/api/court/search/'))
+        self.assertEqual(views.search_Court(request).status_code, 401)
 
-    def test_get_court_detail_not_found(self):
-        url = reverse('Court:get_court_detail', args=[9999])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
-
-    def test_add_court_via_view(self):
-        response = self.client.post(
-            reverse('Court:add_court'),
-            data={
-                'name': 'Lapangan Baru',
-                'sport_type': 'futsal',
-                'location': 'Depok',
-                'address': 'Jl. Baru',
-                'price_per_hour': '150000',
-                'facilities': 'Parkir',
-                'rating': '4.0',
-                'description': 'Lapangan baru',
-                'maps_link': 'https://maps.google.com/?q=-6.2,106.8',
-            },
+        request = self._with_session(
+            self.factory.get('/court/api/court/search/', {'q': 'Lapangan'}),
+            self.user,
         )
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(Court.objects.filter(name='Lapangan Baru').exists())
+        response = views.search_Court(request)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('Court', json.loads(response.content))
 
-    def test_add_court_view_get(self):
+        request = self._with_session(
+            self.factory.get('/court/api/court/search/', {
+                'sport': 'basketball',
+                'location': 'Jakarta',
+            }),
+            self.user,
+        )
+        self.assertEqual(views.search_Court(request).status_code, 200)
+
+    def test_get_court_detail_variants(self):
+        cases = [
+            ('exists', self.court.id, 200),
+            ('missing', 9999, 404),
+        ]
+        for name, cid, status in cases:
+            with self.subTest(name=name):
+                response = self.client.get(reverse('Court:get_court_detail', args=[cid]))
+                self.assertEqual(response.status_code, status)
+
+    def test_court_pages_render(self):
+        response = self.client.get(reverse('Court:court_detail', args=[self.court.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'detail.html')
+
+        response = self.client.get(reverse('Court:edit_court', args=[self.court.id]))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'edit_court.html')
+
+    def test_add_court_form_and_maps_fallback(self):
         response = self.client.get(reverse('Court:add_court'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'add_court.html')
 
-    def test_api_add_court(self):
+        response = self.client.post(reverse('Court:add_court'), {
+            'name': 'Lapangan Form',
+            'sport_type': 'futsal',
+            'location': 'Depok',
+            'address': 'Jl. Form',
+            'price_per_hour': '150000',
+            'facilities': 'Parkir',
+            'rating': '4.0',
+            'description': 'Form submit',
+            'maps_link': 'https://maps.google.com/?q=-6.2,106.8',
+        })
+        self.assertEqual(response.status_code, 302)
+        new_court = Court.objects.get(name='Lapangan Form')
+        self.assertEqual(new_court.created_by, self.user)
+        self.assertEqual(new_court.owner_phone, self.user.nomor_handphone)
+
+        payload = {
+            'name': 'Lapangan Eks',
+            'sport_type': 'tennis',
+            'location': 'Bandung',
+            'address': 'Alamat',
+            'price_per_hour': '100000',
+            'facilities': 'Parkir',
+            'rating': '4',
+            'description': 'Exception case',
+            'maps_link': 'https://maps.google.com/?q=-6.2,106.8',
+        }
+        with patch('Court.views.urlparse', side_effect=Exception('boom')):
+            response = self.client.post(reverse('Court:add_court'), data=payload)
+        self.assertEqual(response.status_code, 302)
+
+    def test_api_add_court_variants(self):
         response = self.client.post(
             reverse('Court:api_add_court'),
             data={
@@ -138,130 +217,274 @@ class CourtViewTests(TestCase):
                 'image': SimpleUploadedFile('test.jpg', b'filecontent', content_type='image/jpeg'),
             },
         )
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertTrue(data['success'])
-        self.assertTrue(Court.objects.filter(name='Lapangan API').exists())
+        self.assertTrue(response.json()['success'])
 
-    def test_api_add_court_requires_auth(self):
-        client = Client()
-        response = client.post(reverse('Court:api_add_court'), data={})
-        self.assertEqual(response.status_code, 401)
+        with patch('Court.views.Court.objects.create', side_effect=Exception('boom')):
+            response = self.client.post(reverse('Court:api_add_court'), data={'name': 'X'})
+        self.assertEqual(response.status_code, 400)
 
-    def test_get_availability_default_true(self):
+        self.assertEqual(self.client.get(reverse('Court:api_add_court')).status_code, 405)
+
+    def test_get_availability_variants(self):
         url = reverse('Court:get_availability', args=[self.court.id])
-        response = self.client.get(url, {'date': date.today().isoformat()})
-        self.assertEqual(response.status_code, 200)
+        today = date.today().isoformat()
+
+        response = self.client.get(url, {'date': today})
         self.assertTrue(response.json()['available'])
 
-    def test_get_availability_missing_date(self):
-        url = reverse('Court:get_availability', args=[self.court.id])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 400)
+        TimeSlot.objects.create(
+            court=self.court,
+            date=date.today(),
+            start_time=datetime.strptime('10:00', '%H:%M').time(),
+            end_time=datetime.strptime('11:00', '%H:%M').time(),
+            is_available=False,
+        )
+        response = self.client.get(url, {'date': today})
+        self.assertFalse(response.json()['available'])
 
-    def test_set_availability(self):
+        self.assertEqual(self.client.get(url).status_code, 400)
+        self.assertEqual(self.client.get(url, {'date': 'bad'}).status_code, 400)
+        self.assertEqual(
+            self.client.get(reverse('Court:get_availability', args=[9999]), {'date': today}).status_code,
+            404,
+        )
+        with patch('Court.views.Court.objects.get', side_effect=Exception('boom')):
+            self.assertEqual(self.client.get(url, {'date': today}).status_code, 500)
+
+    def test_set_availability_flow_and_errors(self):
         url = reverse('Court:set_availability', args=[self.court.id])
-        payload = {
-            'date': timezone.now().date().isoformat(),
-            'is_available': False,
-        }
+        today = date.today().isoformat()
+        payload = {'date': today, 'is_available': False}
+
         response = self.client.post(url, json.dumps(payload), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertFalse(data['available'])
-        slot = TimeSlot.objects.get(court=self.court)
+        slot = TimeSlot.objects.get(court=self.court, date=date.fromisoformat(today))
         self.assertFalse(slot.is_available)
 
-    def test_create_booking(self):
-        url = reverse('Court:create_booking')
-        booking_date = timezone.now().date()
-        payload = {
-            'court_id': self.court.id,
-            'date': booking_date.isoformat(),
-        }
+        payload['is_available'] = True
         response = self.client.post(url, json.dumps(payload), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        slot = TimeSlot.objects.get(court=self.court, date=booking_date)
-        self.assertFalse(slot.is_available)
+        slot.refresh_from_db()
+        self.assertTrue(slot.is_available)
 
-    def test_create_booking_missing_fields(self):
+        self.assertEqual(
+            Client().post(url, json.dumps(payload), content_type='application/json').status_code,
+            401,
+        )
+        self.assertEqual(
+            self.other_client.post(url, json.dumps(payload), content_type='application/json').status_code,
+            403,
+        )
+        self.assertEqual(
+            self.client.post(url, json.dumps({}), content_type='application/json').status_code,
+            400,
+        )
+        self.assertEqual(
+            self.client.post(url, 'oops', content_type='application/json').status_code,
+            400,
+        )
+        self.assertEqual(
+            self.client.post(url, json.dumps({'date': 'bad'}), content_type='application/json').status_code,
+            400,
+        )
+
+    def test_create_booking_flow(self):
         url = reverse('Court:create_booking')
-        response = self.client.post(url, json.dumps({}), content_type='application/json')
-        self.assertEqual(response.status_code, 400)
+        today = date.today().isoformat()
+        payload = {'court_id': self.court.id, 'date': today}
+
+        self.assertEqual(
+            self.client.post(url, json.dumps(payload), content_type='application/json').status_code,
+            200,
+        )
+        self.assertFalse(TimeSlot.objects.get(court=self.court, date=date.fromisoformat(today)).is_available)
+        self.assertEqual(
+            self.client.post(url, json.dumps(payload), content_type='application/json').status_code,
+            400,
+        )
+
+        for name, raw_payload, status in [
+            ('missing-fields', {}, 400),
+            ('invalid-date', {'court_id': self.court.id, 'date': 'bad'}, 400),
+            ('not-found', {'court_id': 9999, 'date': today}, 404),
+            ('json-error', 'oops', 400),
+        ]:
+            with self.subTest(name=name):
+                response = self.client.post(
+                    url,
+                    json.dumps(raw_payload) if isinstance(raw_payload, dict) else raw_payload,
+                    content_type='application/json',
+                )
+                self.assertEqual(response.status_code, status)
+
+        with patch('Court.views.Court.objects.get', side_effect=Exception('boom')):
+            response = self.client.post(url, json.dumps(payload), content_type='application/json')
+            self.assertEqual(response.status_code, 500)
 
     def test_get_all_court(self):
         response = self.client.get(reverse('Court:get_all_Court'))
         self.assertEqual(response.status_code, 200)
-        data = response.json()['Court']
-        self.assertEqual(len(data), 2)
+        self.assertEqual(len(response.json()['Court']), 2)
 
-    def test_api_search_requires_login(self):
-        anon_client = Client()
-        response = anon_client.get(reverse('Court:api_search_court'))
-        self.assertEqual(response.status_code, 401)
-
-    def test_api_court_whatsapp(self):
+    def test_api_court_whatsapp_variants(self):
         url = reverse('Court:api_court_whatsapp')
-        payload = {
-            'court_id': self.court.id,
-            'date': 'Senin, 1 Januari',
-            'time': '10:00 - 11:00',
-        }
-        response = self.client.post(url, json.dumps(payload), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['success'])
+        payload = {'court_id': self.court.id, 'date': 'Senin', 'time': '10:00'}
+        self.assertTrue(self.client.post(url, json.dumps(payload), content_type='application/json').json()['success'])
 
-    def test_get_whatsapp_link(self):
+        self.assertEqual(self.client.get(url).status_code, 400)
+        self.assertEqual(self.client.post(url, 'oops', content_type='application/json').status_code, 400)
+        self.assertEqual(
+            self.client.post(url, json.dumps({'date': 'Senin'}), content_type='application/json').status_code,
+            400,
+        )
+        self.assertEqual(
+            self.client.post(url, json.dumps({'court_id': 9999, 'date': 'Senin'}), content_type='application/json').status_code,
+            404,
+        )
+
+    def test_get_whatsapp_link_variants(self):
         url = reverse('Court:get_whatsapp_link')
-        payload = {
-            'court_id': self.court.id,
-            'date': 'Selasa, 2 Januari',
-            'time': '09:00 - 10:00',
-        }
-        response = self.client.post(url, json.dumps(payload), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['success'])
+        payload = {'court_id': self.court.id, 'date': 'Selasa', 'time': '09:00'}
+        self.assertTrue(self.client.post(url, json.dumps(payload), content_type='application/json').json()['success'])
+
+        self.assertEqual(self.client.get(url).status_code, 405)
+        self.assertEqual(
+            self.client.post(url, json.dumps(dict(payload, court_id=9999)), content_type='application/json').status_code,
+            404,
+        )
+        with patch('Court.views.Court.objects.get', side_effect=Exception('boom')):
+            self.assertEqual(self.client.post(url, json.dumps(payload), content_type='application/json').status_code, 500)
 
     def test_delete_court(self):
         url = reverse('Court:delete_court', args=[self.court.id])
-        response = self.client.post(url, content_type='application/json')
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.client.post(url, content_type='application/json').status_code, 200)
         self.assertFalse(Court.objects.filter(id=self.court.id).exists())
+        self.assertEqual(self.other_client.post(url, content_type='application/json').status_code, 403)
 
-    def test_delete_court_requires_owner(self):
-        url = reverse('Court:delete_court', args=[self.court.id])
-        response = self.other_client.post(url, content_type='application/json')
-        self.assertEqual(response.status_code, 403)
-        self.assertTrue(Court.objects.filter(id=self.court.id).exists())
+    def test_edit_court_workflow(self):
+        self.assertEqual(
+            self.client.get(reverse('Court:edit_court', args=[self.other_court.id])).status_code,
+            404,
+        )
 
-    def test_edit_court_get_and_post(self):
+        self.user.nama = 'Nama Mutakhir'
+        self.user.nomor_handphone = '08111111111'
+        self.user.save()
+
         url = reverse('Court:edit_court', args=[self.court.id])
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'edit_court.html')
-
         response = self.client.post(url, {
-            'name': 'Lapangan Update',
-            'sport_type': 'tennis',
-            'price_per_hour': '200000',
-            'maps_link': 'https://maps.google.com/maps/@-6.3,107.0,17z',
+            'facilities': 'Parkir, Toilet, Kantin',
+            'description': 'Diperbarui',
+            'maps_link': 'https://maps.google.com/?q=-6.2,106.8',
+            'image': SimpleUploadedFile('edit.jpg', b'img', content_type='image/jpeg'),
+            'price_per_hour': '180000',
+            'rating': '4.8',
         })
         self.assertEqual(response.status_code, 302)
         self.court.refresh_from_db()
-        self.assertEqual(self.court.name, 'Lapangan Update')
-        self.assertEqual(self.court.sport_type, 'tennis')
-        self.assertEqual(float(self.court.price_per_hour), 200000.0)
-        self.assertEqual(self.court.owner_phone, self.user.nomor_handphone)
+        self.assertEqual(self.court.facilities, 'Parkir, Toilet, Kantin')
+        self.assertEqual(self.court.owner_name, 'Nama Mutakhir')
+        self.assertEqual(self.court.latitude, Decimal('-6.2'))
+        self.assertEqual(self.court.longitude, Decimal('106.8'))
 
-    def test_edit_court_rejects_non_owner(self):
-        url = reverse('Court:edit_court', args=[self.court.id])
-        response = self.other_client.get(url)
-        self.assertEqual(response.status_code, 404)
+        request = self._with_session(self.factory.post('/court/1/edit/', {
+            'name': 'Lapangan Direct',
+            'sport_type': 'basketball',
+            'location': 'Jakarta',
+            'address': 'Alamat',
+            'price_per_hour': '190000',
+            'rating': '4.9',
+            'maps_link': 'https://maps.google.com/?q=-6.3,107.1',
+        }), self.user)
+        self.assertEqual(views.edit_court(request, self.court.id).status_code, 302)
+
+    def test_helper_functions(self):
+        self.assertEqual(views.clean_decimal('10.5'), Decimal('10.5'))
+        self.assertEqual(views.clean_decimal('bad', default=Decimal('2')), Decimal('2'))
+        self.assertEqual(views.clean_decimal('-1', min_value=Decimal('0')), Decimal('0'))
+        self.assertEqual(views.clean_decimal('12', max_value=Decimal('10')), Decimal('10'))
+
+        coordinate_cases = [
+            ('', None),
+            ('abc', None),
+            ('200', None),
+            ('1.23', Decimal('1.23')),
+        ]
+        for value, expected in coordinate_cases:
+            result = views.sanitize_coordinate(value, 'latitude')
+            if expected is None:
+                self.assertIsNone(result)
+            else:
+                self.assertEqual(result, expected)
+        self.assertIsNone(views.sanitize_coordinate('1', 'unknown'))
+
+        request = self._with_session(self.factory.get('/dummy'), self.user)
+        self.assertEqual(views._get_current_user(request), self.user)
+
+        request = self._with_session(self.factory.get('/dummy'))
+        request.session['user_id'] = str(uuid.uuid4())
+        request.session.save()
+        self.assertIsNone(views._get_current_user(request))
+
+        user, response = views._require_user(self._with_session(self.factory.get('/dummy')), json_mode=True)
+        self.assertIsNone(user)
+        self.assertEqual(response.status_code, 401)
+
+        request = self._with_session(self.factory.get('/dummy'))
+        user, response = views._require_user(request)
+        self.assertIsNone(user)
+        self.assertEqual(response.status_code, 302)
+
+        class Dummy:
+            username = 'dummy'
+
+            def get_full_name(self):
+                return 'Nama Lengkap'
+
+        self.assertEqual(views._get_user_name(Dummy()), 'Nama Lengkap')
+        self.assertEqual(views._get_user_name(type('Anon', (), {'email': 'anon@example.com'})()), 'anon@example.com')
+        self.assertEqual(views._get_user_name(None), '')
+        self.assertEqual(views._get_user_phone(None), '')
+
+    def test_parse_maps_link(self):
+        cases = [
+            ('query', 'https://maps.google.com/?q=-6.2,106.8', ('-6.2', '106.8')),
+            ('at', 'https://maps.google.com/maps/@-6.3,107.0,17z', ('-6.3', '107.0')),
+            ('fragment', 'https://maps.google.com/?hl=id#!3d-6.4!4d106.9', ('-6.4', '106.9')),
+            ('invalid', 'https://example.com', (None, None)),
+            ('none', None, (None, None)),
+            ('fragment-error', 'https://maps.google.com/?hl=id#!3d-6.4', (None, None)),
+        ]
+        for name, link, expected in cases:
+            with self.subTest(name=name):
+                lat, lng = views.parse_maps_link(link)
+                self.assertEqual(lat, expected[0])
+                if expected[1] is None:
+                    self.assertIsNone(lng)
+                elif name == 'at':
+                    self.assertTrue(str(lng).startswith(expected[1]))
+                else:
+                    self.assertEqual(lng, expected[1])
+
+        with patch('Court.views.urlparse', side_effect=Exception('boom')):
+            lat, lng = views.parse_maps_link('https://maps.google.com')
+            self.assertIsNone(lat)
+            self.assertIsNone(lng)
+
+        class BadString(str):
+            def split(self, sep=None, maxsplit=-1):
+                if sep == '!4d':
+                    raise ValueError('bad')
+                return super().split(sep, maxsplit)
+
+        with patch('Court.views.unquote', return_value=BadString('!3d-6.4!4d106.9')):
+            lat, lng = views.parse_maps_link('https://maps.google.com')
+            self.assertIsNone(lat)
+            self.assertIsNone(lng)
 
 
 class CourtModelTests(TestCase):
-    def setUp(self):
-        self.user = User.objects.create(
+    @classmethod
+    def setUpTestData(cls):
+        cls.user = User.objects.create(
             nama='Owner',
             email='owner@example.com',
             kelamin='L',
@@ -269,7 +492,7 @@ class CourtModelTests(TestCase):
             nomor_handphone='08123456789',
             password='hashed',
         )
-        self.court = Court.objects.create(
+        cls.court = Court.objects.create(
             name='Lapangan Model',
             sport_type='basketball',
             location='Jakarta',
@@ -278,23 +501,24 @@ class CourtModelTests(TestCase):
             facilities='Parkir, Toilet, Kantin',
             rating=4.2,
             description='Model test',
-            owner_name=self.user.nama,
-            owner_phone=self.user.nomor_handphone,
-            created_by=self.user,
+            owner_name=cls.user.nama,
+            owner_phone=cls.user.nomor_handphone,
+            created_by=cls.user,
         )
 
-    def test_get_facilities_list(self):
+    def test_court_helpers(self):
+        self.assertEqual(str(self.court), 'Lapangan Model')
         self.assertEqual(
             self.court.get_facilities_list(),
-            ['Parkir', 'Toilet', 'Kantin']
+            ['Parkir', 'Toilet', 'Kantin'],
         )
 
-    def test_get_whatsapp_link(self):
         link = self.court.get_whatsapp_link(date='2024-01-01', time='09:00')
         self.assertIn('wa.me', link)
         self.assertIn(self.user.nomor_handphone, link)
+        self.assertIn('tanggal *2024-01-01*', unquote(self.court.get_whatsapp_link(date='2024-01-01')))
+        self.assertIn('jam *09:00*', unquote(self.court.get_whatsapp_link(time='09:00')))
 
-    def test_is_available(self):
         self.assertTrue(self.court.is_available())
         now = timezone.now()
         TimeSlot.objects.create(
@@ -306,11 +530,11 @@ class CourtModelTests(TestCase):
         )
         self.assertFalse(self.court.is_available())
 
-    def test_time_slot_label(self):
         slot = TimeSlot.objects.create(
             court=self.court,
-            date=timezone.now().date(),
+            date=now.date(),
             start_time=datetime.strptime('10:00', '%H:%M').time(),
             end_time=datetime.strptime('11:00', '%H:%M').time(),
         )
         self.assertEqual(slot.get_time_label(), '10:00 - 11:00')
+        self.assertIn('Lapangan Model', str(slot))

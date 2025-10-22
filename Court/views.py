@@ -54,10 +54,11 @@ def sanitize_coordinate(value, coordinate_type):
     except (InvalidOperation, TypeError, ValueError):
         return None
 
-    min_limit, max_limit = limits.get(coordinate_type, (None, None))
-    if min_limit is None:
+    limits_pair = limits.get(coordinate_type)
+    if not limits_pair:
         return None
 
+    min_limit, max_limit = limits_pair
     if coordinate < min_limit or coordinate > max_limit:
         return None
 
@@ -103,7 +104,7 @@ def parse_maps_link(link):
                 except (IndexError, ValueError):
                     continue
     except Exception:
-        pass
+        return None, None
 
     return None, None
 
@@ -350,7 +351,6 @@ def edit_court(request, court_id):
         'sport_choices': Court.SPORT_CHOICES,
     }
     return render(request, 'edit_court.html', context)
-# API Endpoints
 @require_http_methods(["GET"])
 def search_Court(request):
     """
@@ -366,11 +366,11 @@ def search_Court(request):
     location = request.GET.get('location', '')
     
     # Start with all Court
-    Court = Court.objects.all()
+    courts_qs = Court.objects.all()
     
     # Filter by search query (nama atau alamat)
     if query:
-        Court = Court.filter(
+        courts_qs = courts_qs.filter(
             Q(name__icontains=query) | 
             Q(address__icontains=query) |
             Q(location__icontains=query)
@@ -378,11 +378,11 @@ def search_Court(request):
     
     # Filter by sport type
     if sport:
-        Court = Court.filter(sport_type=sport)
+        courts_qs = courts_qs.filter(sport_type=sport)
     
     # Filter by location
     if location:
-        Court = Court.filter(location__icontains=location)
+        courts_qs = courts_qs.filter(location__icontains=location)
     
     # Serialize data
     data = [{
@@ -396,7 +396,7 @@ def search_Court(request):
         'image': court.image.url if court.image else None,
         'facilities': court.facilities,
         'owned_by_user': court.created_by_id == getattr(current_user, 'id', None),
-    } for court in Court]
+    } for court in courts_qs]
     
     return JsonResponse({'Court': data})
 

@@ -350,7 +350,7 @@
 <body>
     <div class="container">
         <a href="{% url 'Court:show_main' %}" class="back-btn">
-            ← Kembali ke Daftar Lapangan
+            Kembali ke Daftar Lapangan
         </a>
 
         <div class="detail-card">
@@ -363,7 +363,7 @@
                 <div class="court-header">
                     <div class="court-title">
                         <span class="status-badge {% if court.is_available %}available{% else %}full{% endif %}">
-                            {% if court.is_available %}✓ Tersedia{% else %}✗ Penuh{% endif %}
+                            {% if court.is_available %}Tersedia{% else %}Tidak tersedia{% endif %}
                         </span>
                         <h1>{{ court.name }}</h1>
                         <div class="court-meta">
@@ -391,7 +391,7 @@
                 </div>
 
                 <div class="section">
-                    <h2>✨ Fasilitas</h2>
+                    <h2>Fasilitas</h2>
                     <div class="facilities">
                         {% for facility in court.get_facilities_list %}
                         <div class="facility-item">
@@ -407,7 +407,6 @@
                     <h2>📅 Booking Lapangan</h2>
                     
                     <div class="owner-info">
-                        <div style="font-size: 2.5em;">👤</div>
                         <div class="owner-info-text">
                             <h3>{{ court.owner_name }}</h3>
                             <p>Pemilik Lapangan</p>
@@ -420,7 +419,7 @@
                     </div>
 
                     <div id="loadingSlots" class="loading-slots" style="display:none;">
-                        <p>⏳ Memuat ketersediaan...</p>
+                        <p>Memuat ketersediaan...</p>
                     </div>
 
                     <div class="availability-card">
@@ -436,7 +435,6 @@
                     </div>
 
                     <button class="btn-whatsapp" id="btnWhatsApp" onclick="bookViaWhatsApp()" disabled>
-                        <span style="font-size: 1.5em;">📱</span>
                         <span>Booking via WhatsApp</span>
                     </button>
                 </div>
@@ -513,13 +511,13 @@
 
             if (isAvailable) {
                 statusEl.classList.add('available');
-                statusEl.innerHTML = `✅ Lapangan tersedia pada ${dateLabel}.`;
+                statusEl.innerHTML = `Lapangan tersedia pada ${dateLabel}.`;
                 if (btnWhatsApp) {
                     btnWhatsApp.disabled = false;
                 }
             } else {
                 statusEl.classList.add('unavailable');
-                statusEl.innerHTML = `❌ Lapangan tidak tersedia pada ${dateLabel}.`;
+                statusEl.innerHTML = `Lapangan tidak tersedia pada ${dateLabel}.`;
                 if (btnWhatsApp) {
                     btnWhatsApp.disabled = true;
                 }
