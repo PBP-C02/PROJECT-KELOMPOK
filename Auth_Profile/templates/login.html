@@ -7,12 +7,12 @@
 
 <div id="error-message" style="color: red; margin-bottom: 10px;"></div>
 <div>
-    <h1 class="font-raleway font-bold text-5xl">Log In</h1>
-    <p class="font-raleway font-regular text-2xl">Welcome back to <span class="text-lime font-bold"><i>MOVE BUDDY</i></span></p>
+    <h1 class="font-raleway font-bold text-5xl text-grey">Log In</h1>
+    <p class="font-raleway font-regular text-2xl text-grey">Welcome back to <span class="text-lime font-bold"><i>MOVE BUDDY</i></span></p>
     <form id="loginForm" method="POST">
         {% csrf_token %}
         <div>
-            <label for="email">Email:</label><br>
+            <label for="email" class="font-raleway font-medium text-2xl text-grey">Email:</label><br>
             <input type="email" id="email" name="email" required>
         </div>
         <br>
