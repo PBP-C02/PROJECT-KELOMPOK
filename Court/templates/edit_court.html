@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Court - MoveBuddy</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f4f9; padding: 40px; }
+        form { background: white; max-width: 640px; margin: auto; padding: 30px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        h2 { text-align: center; margin-bottom: 20px; color: #333; }
+        label { display: block; font-weight: 600; margin-top: 15px; color: #444; }
+        input, select, textarea { width: 100%; margin-top: 6px; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        input[type="number"] { -moz-appearance: textfield; }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        textarea { resize: vertical; min-height: 90px; }
+        .note { font-size: 12px; color: #666; margin-top: 4px; }
+        .error-text { font-size: 12px; color: #c62828; margin-top: 4px; }
+        button { background: #667eea; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 20px; }
+        button:hover { background: #5568d3; }
+        .actions { display: flex; gap: 10px; margin-top: 20px; }
+        .actions a { flex: 1; text-align: center; background: #f0f0f5; color: #444; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: background 0.3s; }
+        .actions a:hover { background: #e0e0eb; }
+        .current-image { margin-top: 15px; text-align: center; }
+        .current-image img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+        .note { font-size: 12px; color: #666; margin-top: 4px; }
+    </style>
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="error-text">{{ form.non_field_errors }}</div>
+        {% endif %}
+        <h2>Edit Court</h2>
+
+        <label>Court Name
+            {{ form.name }}
+            {% for error in form.name.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        <label>Sport Type
+            {{ form.sport_type }}
+            {% for error in form.sport_type.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        <label>City
+            {{ form.location }}
+            {% for error in form.location.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        <label>Full Address
+            {{ form.address }}
+            {% for error in form.address.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        <label>Price per Hour (IDR)
+            {{ form.price_per_hour }}
+            {% for error in form.price_per_hour.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        <label>Facilities (comma separated)
+            {{ form.facilities }}
+            {% for error in form.facilities.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        <label>Rating (optional)
+            {{ form.rating }}
+            {% for error in form.rating.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        <label>Description (optional)
+            {{ form.description }}
+            {% for error in form.description.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        <label>Google Maps link
+            {{ form.maps_link }}
+            <div class="note">Leave empty to keep the current location.</div>
+            {% for error in form.maps_link.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        <label>Court Photo (optional)
+            {{ form.image }}
+            <div class="note">Upload to replace the current photo. Leave empty to keep it.</div>
+            {% for error in form.image.errors %}<div class="error-text">{{ error }}</div>{% endfor %}
+        </label>
+
+        {% if court.image %}
+        <div class="current-image">
+            <p>Current photo:</p>
+            <img src="{{ court.image.url }}" alt="{{ court.name }}">
+        </div>
+        {% endif %}
+
+        <button type="submit">Save Changes</button>
+
+        <div class="actions">
+            <a href="{% url 'Court:court_detail' court.id %}">Back to Detail</a>
+            <a href="{% url 'Court:show_main' %}">All Courts</a>
+        </div>
+    </form>
+</body>
+</html>

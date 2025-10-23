@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>MoveBuddy - Edit Coach</title>
+<link rel="stylesheet" href="{% static 'coach/create_coach.css' %}">
+{% endblock meta %}
+
+{% block content %}
+<div class="form-container">
+  <div class="form-header">
+    <h1>Edit Coach</h1>
+    <p>Update your coach information</p>
+  </div>
+
+  <form action="{% url 'coach:update_coach' coach.pk %}" method="post" enctype="multipart/form-data" class="coach-form">
+    {% csrf_token %}
+
+    <div class="form-grid">
+      <!-- Title -->
+      <div class="form-group full-width">
+        <label for="id_title">Title</label>
+        <input id="id_title" name="title" type="text" value="{{ coach.title }}" required>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group full-width">
+        <label for="id_description">Description</label>
+        <textarea id="id_description" name="description" rows="4" required>{{ coach.description }}</textarea>
+      </div>
+
+      <!-- Category -->
+      <div class="form-group">
+        <label for="id_category">Category</label>
+        <select id="id_category" name="category" required>
+          <option value="">-- Choose --</option>
+          <option value="tennis"       {% if coach.category == 'tennis' %}selected{% endif %}>Tennis</option>
+          <option value="basketball"   {% if coach.category == 'basketball' %}selected{% endif %}>Basketball</option>
+          <option value="soccer"       {% if coach.category == 'soccer' %}selected{% endif %}>Soccer</option>
+          <option value="badminton"    {% if coach.category == 'badminton' %}selected{% endif %}>Badminton</option>
+          <option value="volleyball"   {% if coach.category == 'volleyball' %}selected{% endif %}>Volleyball</option>
+          <option value="paddle"       {% if coach.category == 'paddle' %}selected{% endif %}>Paddle</option>
+          <option value="futsal"       {% if coach.category == 'futsal' %}selected{% endif %}>Futsal</option>
+          <option value="table_tennis" {% if coach.category == 'table_tennis' %}selected{% endif %}>Table Tennis</option>
+          <option value="swimming"     {% if coach.category == 'swimming' %}selected{% endif %}>Swimming</option>
+        </select>
+      </div>
+
+      <!-- Location -->
+      <div class="form-group">
+        <label for="id_location">Location (City/Area)</label>
+        <input id="id_location" name="location" type="text" value="{{ coach.location }}" required>
+      </div>
+
+      <!-- Address -->
+      <div class="form-group full-width">
+        <label for="id_address">Address</label>
+        <textarea id="id_address" name="address" rows="3" required>{{ coach.address }}</textarea>
+      </div>
+
+      <!-- Date -->
+      <div class="form-group">
+        <label for="id_date">Tanggal</label>
+        <input id="id_date" name="date" type="date" value="{{ coach.date|date:'Y-m-d' }}" required>
+      </div>
+
+      <!-- Start Time (NEW) -->
+      <div class="form-group">
+        <label for="id_startTime">Waktu Mulai</label>
+        <input id="id_startTime" name="startTime" type="time" value="{{ coach.startTime|time:'H:i' }}" required>
+      </div>
+
+      <!-- End Time (NEW) -->
+      <div class="form-group">
+        <label for="id_endTime">Waktu Selesai</label>
+        <input id="id_endTime" name="endTime" type="time" value="{{ coach.endTime|time:'H:i' }}" required>
+      </div>
+
+      <!-- Price -->
+      <div class="form-group">
+        <label for="id_price">Price (Rp)</label>
+        <input id="id_price" name="price" type="number" min="0" step="1" value="{{ coach.price }}" required>
+      </div>
+
+      <!-- Rating (NEW) -->
+      <div class="form-group">
+        <label for="id_rating">Rating (0-5)</label>
+        <input id="id_rating" name="rating" type="number" min="0" max="5" step="0.1" value="{{ coach.rating }}">
+      </div>
+
+      <!-- Instagram Link (NEW) -->
+      <div class="form-group full-width">
+        <label for="id_instagram_link">Instagram Link (optional)</label>
+        <input id="id_instagram_link" name="instagram_link" type="url" value="{{ coach.instagram_link|default:'' }}" placeholder="https://instagram.com/username">
+      </div>
+
+      <!-- Image -->
+      <div class="form-group full-width">
+        <label for="id_image">Image (optional)</label>
+        {% if coach.image %}
+          <div style="margin-bottom:8px">
+            <img src="{{ coach.image.url }}" alt="current image" style="max-width:240px;border-radius:8px;">
+          </div>
+        {% endif %}
+        <input id="id_image" name="image" type="file" accept="image/*">
+        <small class="form-hint">Biarkan kosong jika tidak ingin mengganti gambar.</small>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="{% url 'coach:coach_detail' coach.pk %}" class="btn-secondary">Cancel</a>
+      <button type="submit" class="btn-primary">Save Changes</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -36,6 +36,15 @@
     </div>
     <br>
     <div>
+        <label for="role">Role:</label><br>
+        <select id="role" name="role" required>
+            <option value="">Pilih Role</option>
+            <option value="COACH">COACH</option>
+            <option value="OWNER">OWNER</option>
+            <option value="BIASA">BIASA</option>
+        </select>    </div>
+    <br>
+    <div>
         <label for="nomor_handphone">Nomor Handphone:</label><br>
         <input type="text" id="nomor_handphone" name="nomor_handphone" required>
     </div>
@@ -60,6 +69,7 @@
         e.preventDefault();
         
         const nama = document.getElementById('nama').value;
+        const role = document.getElementById('role').value;
         const email = document.getElementById('email').value;
         const kelamin = document.getElementById('kelamin').value;
         const tanggal_lahir = document.getElementById('tanggal_lahir').value;
@@ -87,7 +97,8 @@
                     tanggal_lahir: tanggal_lahir,
                     nomor_handphone: nomor_handphone,
                     password: password,
-                    password2: password2
+                    password2: password2,
+                    role : role,
                 })
             });
             

@@ -1,0 +1,388 @@
+
+/* ========== Reset & Base ========== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+header {
+  background: transparent;
+  padding: 2rem;
+  text-align: center;
+  position: relative;
+  color: #fff;
+}
+
+header h1 { font-size: 2.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+header p  { color: rgba(255,255,255,0.95); font-size: 1.1rem; }
+
+header a {
+  position: absolute; right: 2rem; top: 2rem;
+  background: rgba(255,255,255,0.2);
+  color: #fff; padding: .5rem 1.5rem; border-radius: 6px;
+  text-decoration: none; border: 1px solid rgba(255,255,255,.3);
+  transition: background .3s ease;
+}
+header a:hover { background: rgba(255,255,255,0.3); }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+
+/* SEARCH BAR */
+.search-bar {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  flex-wrap: wrap;              
+}
+
+.filter-footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+}
+
+.filter-left {
+  display: flex;
+  align-items: center;
+}
+
+.avail-check{ 
+  display:flex; 
+  align-items:center; 
+  gap:8px; 
+  font-size:14px; 
+}
+
+.view-mode-container {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.1);
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* View Mode Buttons */
+.view-mode-group {
+  display: inline-flex;
+  gap: 0.5rem;
+  background: #f5f5f5;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.view-mode-btn {
+  padding: 0.6rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.view-mode-btn:hover {
+  background: #e0e0e0;
+}
+
+.view-mode-btn.active {
+  background: #667eea;
+  color: white;
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
+}
+
+.search-bar input[type="text"] {
+  flex: 1.5; min-width: 200px; height: 44px;
+  padding: .75rem 1rem; border: 1px solid #ddd; border-radius: 8px;
+  font-size: .95rem; background: #fff; transition: border-color .3s ease;
+}
+
+.search-bar select {
+  flex: 1; min-width: 150px; height: 44px;
+  padding: .75rem 2.5rem .75rem 1rem; border: 1px solid #ddd; border-radius: 8px;
+  font-size: .95rem; background: #fff; cursor: pointer; appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right .75rem center;
+  transition: border-color .3s ease;
+}
+
+.search-bar input:focus,
+.search-bar select:focus {
+  outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102,126,234,.1);
+}
+
+.price-group { display: flex; gap: 8px; align-items: center; }
+
+/* ========== Buttons (unified) ========== */
+.btn-outline{
+  background:#fff; border:1px solid #d9d9d9; color:#333;
+  border-radius:10px; padding:10px 16px; height:44px;
+  display:inline-flex; align-items:center; gap:.5rem; white-space:nowrap; cursor:pointer;
+}
+
+.btn-primary{
+  background:#c8f08b; color:#2b2b2b;
+  border:1px solid rgba(0,0,0,.08);
+  border-radius:10px; padding:10px 16px; height:44px;
+  font-weight:600; display:inline-flex; align-items:center; justify-content:center;
+  white-space:nowrap; cursor:pointer; transition: all .2s ease;
+}
+.btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 4px 12px rgba(200,240,139,.35); }
+
+.btn-secondary-modal{
+  padding:.75rem 1.25rem; border-radius:8px; border:none; background:#eee; color:#333;
+  font-size:.95rem; font-weight:500; cursor:pointer; transition: background .3s ease;
+}
+.btn-secondary-modal:hover{ background:#ddd; }
+
+.btn-light{
+  padding:.75rem 1.25rem; border-radius:8px; border:none; background:#f7f7f7; color:#333;
+  cursor:pointer; font-size:.95rem;
+}
+.btn-light:hover{ background:#e8e8e8; }
+
+/* Add Coach (green capsule) */
+.btn-add, .btn-add-coach{
+  background:#c8f08b; color:#2b2b2b;
+  padding:10px 16px; border-radius:10px; text-decoration:none; font-weight:600;
+  display:inline-flex; align-items:center; gap:6px; border:1px solid rgba(0,0,0,.08);
+}
+
+/* ========== Modal (Centered) ========== */
+.mb-modal{ border:0; border-radius:12px; padding:0; box-shadow:0 8px 32px rgba(0,0,0,.2); max-width:420px; width:calc(100vw - 32px); }
+.mb-modal::backdrop{ background:rgba(0,0,0,.5); }
+.mb-modal[open]{ position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); margin:0; }
+.mb-modal-body{ padding:1.5rem; }
+.mb-modal-body h3{ font-size:1.25rem; margin-bottom:1rem; color:#333; }
+.mb-field{ display:flex; flex-direction:column; gap:.5rem; margin:1rem 0; }
+.mb-field span{ font-size:.9rem; font-weight:500; color:#333; }
+.mb-field input{
+  padding:.75rem; border:1px solid #ddd; border-radius:8px; font-size:1rem; transition:border-color .3s ease;
+}
+.mb-field input:focus{ outline:none; border-color:#667eea; box-shadow:0 0 0 3px rgba(102,126,234,.1); }
+.mb-actions{ display:flex; gap:.5rem; margin-top:1.5rem; align-items:center; }
+
+/* ========== Meta Bar ========== */
+.meta-wrap{
+  background:#fff; padding:1rem 1.5rem; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,.1);
+  margin-bottom:1.5rem; display:flex; justify-content:space-between; align-items:center; gap:1rem;
+}
+.meta-left{ display:flex; align-items:center; gap:1.5rem; flex:1; }
+.count-text{ font-size:.95rem; color:#333; font-weight:500; white-space:nowrap; }
+.meta-right{ display:flex; align-items:center; }
+
+.sort-inline{ display:flex; align-items:center; gap:.5rem; font-size:.9rem; color:#666; }
+.sort-inline span{ white-space:nowrap; font-weight:500; }
+.sort-inline select{
+  padding:.5rem 2rem .5rem .75rem; border:1px solid #ddd; border-radius:6px; font-size:.9rem; cursor:pointer;
+  background:#fff; appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right .5rem center; min-width:160px;
+}
+.sort-inline select:focus{ outline:none; border-color:#667eea; }
+
+.cards{
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.coach-card{
+  background:#fff; border-radius:12px; overflow:hidden;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+  transition: transform .3s ease, box-shadow .3s ease;
+  position: relative;  /* NEW: untuk positioning tombol edit */
+}
+.coach-card:hover{ transform: translateY(-5px); box-shadow:0 8px 20px rgba(0,0,0,.15); }
+
+/* Card Link (seluruh card clickable) */
+.card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.coach-thumb{ 
+  width:100%; 
+  height:200px; 
+  overflow:hidden; 
+  background:#f5f5f5;
+  position: relative;
+}
+.coach-thumb img{ width:100%; height:100%; object-fit:cover; }
+
+.coach-card-content{ 
+  padding:1.5rem; 
+}
+
+.coach-badge{
+  display:inline-block; background:#667eea; color:#fff; padding:.25rem .75rem;
+  border-radius:20px; font-size:.85rem; font-weight:600; margin-bottom:.75rem;
+}
+
+.coach-card h3{ 
+  font-size:1.5rem; 
+  color:#333; 
+  margin-bottom:1rem; 
+}
+
+.coach-info{ 
+  display:flex; 
+  flex-direction:column; 
+  gap:.5rem; 
+  color:#666; 
+  font-size:.9rem; 
+  margin-bottom:1rem; 
+}
+
+.coach-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.coach-price{ 
+  font-size:1.75rem; 
+  font-weight:700; 
+  color:#667eea; 
+  margin-bottom:.5rem;
+}
+.coach-price small{ font-size:1rem; font-weight:400; color:#999; }
+
+/* Tombol Edit Kecil (pojok kanan bawah) */
+.btn-edit-small {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  background: #48bb78;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.btn-edit-small:hover {
+  background: #38a169;
+}
+
+/* Ribbon untuk card booked */
+.ribbon-wrapper-small {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  z-index: 5;
+}
+
+.ribbon-small {
+  position: absolute;
+  top: 20px;
+  right: -25px;
+  width: 120px;
+  background: #dc3545;
+  color: white;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 6px 0;
+  transform: rotate(45deg);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  text-transform: uppercase;
+}
+
+.booked-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: #dc3545;
+  color: white;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ========== Responsive ========== */
+@media (max-width: 1024px){
+  .search-bar{ flex-wrap: wrap; }
+  .search-bar input[type="text"]{ flex: 1 1 100%; }
+  .search-bar select{ flex: 1 1 calc(50% - .375rem); }
+  .cards{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 768px){
+  header h1{ font-size:2rem; }
+  header a{ position: static; display:inline-block; margin-top:1rem; }
+
+  .search-bar{ flex-direction: column; flex-wrap: nowrap; }
+  .search-bar input[type="text"],
+  .search-bar select,
+  .search-bar button { width:100%; flex:none; }
+
+  .meta-wrap{ flex-direction: column; align-items: flex-start; gap:1rem; }
+  .meta-left{ width:100%; flex-direction: column; align-items:flex-start; gap:.75rem; }
+  .meta-right, .btn-add-coach, .sort-inline{ width:100%; }
+  .sort-inline select{ flex:1; }
+
+  .cards{ grid-template-columns: 1fr; }
+
+  .filter-footer {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+  }
+  
+  .filter-left {
+    justify-content: center;
+  }
+  
+  .view-mode-container {
+    padding: 0.75rem;
+  }
+  
+  .view-mode-group {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .view-mode-btn {
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .btn-add {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px){
+  header{ padding:1.5rem 1rem; }
+  header h1{ font-size:1.75rem; }
+  .coach-card h3{ font-size:1.25rem; }
+  .coach-price{ font-size:1.5rem; }
+}

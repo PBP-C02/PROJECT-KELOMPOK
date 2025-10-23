@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>MoveBuddy - Add Coach</title>
+<link rel="stylesheet" href="{% static 'coach/create_coach.css' %}">
+{% endblock meta %}
+
+{% block content %}
+<div class="form-container">
+  <div class="form-header">
+    <h1>Create New Coach</h1>
+    <p>Fill in the details to create your sports coach</p>
+  </div>
+
+  <form action="{% url 'coach:add_coach' %}" method="post" enctype="multipart/form-data" class="coach-form">
+    {% csrf_token %}
+
+    <div class="form-grid">
+      <!-- Title -->
+      <div class="form-group full-width">
+        <label for="id_title">Title</label>
+        <input id="id_title" name="title" type="text" required>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group full-width">
+        <label for="id_description">Description</label>
+        <textarea id="id_description" name="description" rows="4" required></textarea>
+      </div>
+
+      <!-- Category -->
+      <div class="form-group">
+        <label for="id_category">Category</label>
+        <select id="id_category" name="category" required>
+          <option value="">-- Choose --</option>
+          <option value="tennis">Tennis</option>
+          <option value="basketball">Basketball</option>
+          <option value="soccer">Soccer</option>
+          <option value="badminton">Badminton</option>
+          <option value="volleyball">Volleyball</option>
+          <option value="paddle">Paddle</option>
+          <option value="futsal">Futsal</option>
+          <option value="table_tennis">Table Tennis</option>
+          <option value="swimming">Swimming</option>
+        </select>
+      </div>
+
+      <!-- Location -->
+      <div class="form-group">
+        <label for="id_location">Location (City/Area)</label>
+        <input id="id_location" name="location" type="text" required>
+      </div>
+
+      <!-- Address (full address) -->
+      <div class="form-group full-width">
+        <label for="id_address">Address</label>
+        <textarea id="id_address" name="address" rows="3" required></textarea>
+      </div>
+
+      <!-- Date -->
+      <div class="form-group">
+        <label for="id_date">Tanggal</label>
+        <input id="id_date" name="date" type="date" required>
+      </div>
+
+      <!-- Start Time (NEW) -->
+      <div class="form-group">
+        <label for="id_startTime">Waktu Mulai</label>
+        <input id="id_startTime" name="startTime" type="time" required>
+      </div>
+
+      <!-- End Time (NEW) -->
+      <div class="form-group">
+        <label for="id_endTime">Waktu Selesai</label>
+        <input id="id_endTime" name="endTime" type="time" required>
+      </div>
+
+      <!-- Price -->
+      <div class="form-group">
+        <label for="id_price">Price (Rp)</label>
+        <input id="id_price" name="price" type="number" min="0" step="1" required>
+      </div>
+
+      <!-- Rating (NEW) -->
+      <div class="form-group">
+        <label for="id_rating">Rating (0-5)</label>
+        <input id="id_rating" name="rating" type="number" min="0" max="5" step="0.1" value="0">
+      </div>
+
+      <!-- Instagram Link (NEW) -->
+      <div class="form-group full-width">
+        <label for="id_instagram_link">Instagram Link (optional)</label>
+        <input id="id_instagram_link" name="instagram_link" type="url" placeholder="https://instagram.com/username">
+      </div>
+
+      <!-- Image (optional) -->
+      <div class="form-group full-width">
+        <label for="id_image">Image</label>
+        <input id="id_image" name="image" type="file" accept="image/*">
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a href="{% url 'coach:show_main' %}" class="btn-secondary">Cancel</a>
+      <button type="submit" class="btn-primary">Create Coach</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

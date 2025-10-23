@@ -5,12 +5,24 @@ from .models import User
 import json
 from datetime import datetime
 
+from django.contrib.auth.decorators import login_required
+import json # Tambahkan import json yang sebelumnya belum ada
+from django.contrib.auth import login
+from django.contrib.auth.models import auth
+
+@login_required(login_url='/login/')
 def homepage_view(request):
-    user = User.objects.get(id=request.session['user_id'])
-    context = {
-        'user': user
-    }
-    return render(request, 'homepage.html', context)
+    try:
+        user = User.objects.get(id=request.session.get('user_id'))
+        context = {
+            'user': user
+        }
+        return redirect('coach:show_main')
+    
+    except (User.DoesNotExist, KeyError):
+        # Jika user_id tidak ada di session atau user tidak ditemukan
+        return redirect('login')
+    
 def login_view(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -26,9 +38,11 @@ def login_view(request):
         try:
             user = User.objects.get(email=email)
             
-            # Cek password
             if check_password(password, user.password):
-                # Simpan user info di session
+                # Login user menggunakan auth
+                auth.login(request, user)
+                
+                # Simpan session
                 request.session['user_id'] = str(user.id)
                 request.session['email'] = user.email
                 request.session['nama'] = user.nama
@@ -36,14 +50,15 @@ def login_view(request):
                 request.session['tanggal_lahir'] = str(user.tanggal_lahir)
                 request.session['nomor_handphone'] = user.nomor_handphone
                 
+                next_url = request.GET.get('next', '/')
                 return JsonResponse({
                     'success': True,
                     'message': 'Login berhasil',
-                    'redirect_url': '/'
+                    'redirect_url': next_url
                 })
             else:
                 return JsonResponse({
-                    'success': False,
+                    'success': False, 
                     'message': 'Email atau password salah'
                 })
         except User.DoesNotExist:
@@ -59,6 +74,9 @@ def register_view(request):
         data = json.loads(request.body)
         nama = data.get('nama')
         email = data.get('email')
+        role = data.get('role')
+        # Tambahkan username, gunakan email sebagai username
+        username = email.split('@')[0]  # Atau bisa menggunakan email langsung
         kelamin = data.get('kelamin')
         tanggal_lahir = data.get('tanggal_lahir')
         nomor_handphone = data.get('nomor_handphone')
@@ -123,12 +141,21 @@ def register_view(request):
                 'message': 'Email sudah terdaftar'
             })
         
-        # Buat user baru dengan password yang di-hash
+        # Cek username sudah terdaftar
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({
+                'success': False,
+                'message': 'Username sudah terdaftar'
+            })
+
+        # Buat user baru
         try:
             user = User.objects.create(
+                username=username,  # Tambahkan ini
                 nama=nama,
                 email=email,
                 kelamin=kelamin,
+                role=role,
                 tanggal_lahir=tanggal_lahir,
                 nomor_handphone=nomor_handphone,
                 password=make_password(password)
