@@ -1,10 +1,10 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoveBuddy - Cari Lapangan</title>
+    <title>MoveBuddy - Find Courts</title>
     <style>
         * {
             margin: 0;
@@ -268,16 +268,16 @@
 <body>
     <header>
         <h1>MoveBuddy</h1>
-        <p>Temukan lapangan olahraga terdekat dan lakukan pemesanan dengan mudah.</p>
+        <p>Find nearby sports courts and book instantly.</p>
     </header>
 
     <div class="container">
         <!-- Search Section -->
         <div class="search-section">
             <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Cari lapangan atau lokasi...">
+                <input type="text" id="searchInput" placeholder="Search courts or locations...">
                 <select id="locationFilter">
-                    <option value="">Semua Lokasi</option>
+                    <option value="">All Locations</option>
                     <option value="Jakarta">Jakarta</option>
                     <option value="Bandung">Bandung</option>
                     <option value="Surabaya">Surabaya</option>
@@ -285,11 +285,11 @@
                     <option value="Tangerang">Tangerang</option>
                     <option value="Bekasi">Bekasi</option>
                 </select>
-                <button onclick="searchCourt()">🔍 Cari</button>
+                <button onclick="searchCourt()">🔍 Search</button>
             </div>
 
             <div class="filters">
-                <button class="filter-chip active" data-sport="" onclick="filterSport(this, '')">Semua</button>
+                <button class="filter-chip active" data-sport="" onclick="filterSport(this, '')">All</button>
                 <button class="filter-chip" data-sport="tennis" onclick="filterSport(this, 'tennis')">Tennis</button>
                 <button class="filter-chip" data-sport="basketball" onclick="filterSport(this, 'basketball')">Basketball</button>
                 <button class="filter-chip" data-sport="soccer" onclick="filterSport(this, 'soccer')">Soccer</button>
@@ -300,20 +300,20 @@
             <div style="text-align:right; margin-bottom: 20px;">
                 <a href="{% url 'Court:add_court' %}"
                 style="background:#667eea; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
-                + Tambah Lapangan
+                + Add Court
                 </a>
             </div>
             <div style="margin-bottom: 10px; display:flex; gap:10px; align-items:center;">
                 <label style="display:flex; align-items:center; gap:6px;">
                     <input type="checkbox" id="availableOnly" onchange="loadCourt()">
-                    <span>Tampilkan hanya lapangan yang tersedia</span>
+                    <span>Show only available courts</span>
                 </label>
             </div>
         </div>
 
         <!-- Loading -->
         <div id="loading" style="display:none;">
-            <p>Memuat lapangan...</p>
+            <p>Loading courts...</p>
         </div>
 
         <!-- Court Grid -->
@@ -422,7 +422,7 @@
                     }
                     console.error('Error:', error);
                     showLoading(false);
-                    alert('Gagal memuat data lapangan');
+                    alert('Failed to load court data');
                 });
         }
 
@@ -479,8 +479,8 @@
             if (!Array.isArray(Court) || Court.length === 0) {
                 grid.innerHTML = `
                     <div class="no-results">
-                        <h3>Lapangan tidak ditemukan</h3>
-                        <p>Coba ubah filter pencarian Anda</p>
+                        <h3>No courts found</h3>
+                        <p>Try adjusting your search filters</p>
                     </div>
                 `;
                 return;
@@ -495,7 +495,7 @@
                         <span class="court-badge ${court.is_available ? 'available' : 'full'}">
                             ${court.is_available ? 'Tersedia' : 'Tidak tersedia'}
                         </span>
-                        ${court.owned_by_user ? '<span class="court-badge owner">Lapangan Anda</span>' : ''}
+                        ${court.owned_by_user ? '<span class="court-badge owner">Your Court</span>' : ''}
                         <h3>${escapeHtml(court.name)}</h3>
                         
                         <div class="court-info">

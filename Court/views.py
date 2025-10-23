@@ -12,6 +12,7 @@ from django.views.decorators.http import require_http_methods
 
 from Auth_Profile.models import User as ProfileUser
 
+from .forms import CourtForm
 from .models import Court, TimeSlot
 
 
@@ -155,60 +156,33 @@ def _get_user_phone(user):
     return getattr(user, 'nomor_handphone', '')
 
 def add_court(request):
-    """
-    Form untuk menambahkan court secara manual (via halaman web).
-    Hanya user yang sudah login.
-    """
+    """Render and process the create-court form."""
     current_user, error_response = _require_user(request)
     if error_response:
         return error_response
 
     if request.method == 'POST':
-        name = request.POST.get('name')
-        sport_type = request.POST.get('sport_type')
-        location = request.POST.get('location')
-        address = request.POST.get('address')
-        price_per_hour = clean_decimal(
-            request.POST.get('price_per_hour'),
-            default=Decimal("0"),
-            min_value=Decimal("0"),
-        )
-        facilities = request.POST.get('facilities') or ""
-        rating = clean_decimal(
-            request.POST.get('rating'),
-            default=Decimal("0"),
-            min_value=Decimal("0"),
-            max_value=Decimal("5"),
-        )
-        description = request.POST.get('description')
-        owner_name = _get_user_name(current_user)
-        owner_phone = _get_user_phone(current_user)
-        maps_link = request.POST.get('maps_link')
-        link_lat, link_lng = parse_maps_link(maps_link)
-        latitude = sanitize_coordinate(link_lat, "latitude") if link_lat else None
-        longitude = sanitize_coordinate(link_lng, "longitude") if link_lng else None
+        form = CourtForm(request.POST, request.FILES)
+        if form.is_valid():
+            court = form.save(commit=False)
+            court.owner_name = _get_user_name(current_user)
+            court.owner_phone = _get_user_phone(current_user)
+            court.created_by = current_user
 
-        image = request.FILES.get('image')
+            maps_link = form.cleaned_data.get('maps_link')
+            if maps_link:
+                link_lat, link_lng = parse_maps_link(maps_link)
+                if link_lat:
+                    court.latitude = sanitize_coordinate(link_lat, "latitude")
+                if link_lng:
+                    court.longitude = sanitize_coordinate(link_lng, "longitude")
 
-        Court.objects.create(
-            name=name,
-            sport_type=sport_type,
-            location=location,
-            address=address,
-            price_per_hour=price_per_hour,
-            facilities=facilities,
-            rating=rating,
-            description=description,
-            owner_name=owner_name,
-            owner_phone=owner_phone,
-            latitude=latitude,
-            longitude=longitude,
-            image=image,
-            created_by=current_user,
-        )
-        return redirect('Court:show_main')
+            court.save()
+            return redirect('Court:show_main')
+    else:
+        form = CourtForm()
 
-    return render(request, 'add_court.html', {'user': current_user})
+    return render(request, 'add_court.html', {'form': form, 'user': current_user})
 
 @csrf_exempt
 def api_add_court(request):
@@ -294,63 +268,37 @@ def edit_court(request, court_id):
     court = get_object_or_404(Court, id=court_id, created_by=current_user)
 
     if request.method == 'POST':
-        court.name = request.POST.get('name') or court.name
-        court.sport_type = request.POST.get('sport_type') or court.sport_type
-        court.location = request.POST.get('location') or court.location
-        court.address = request.POST.get('address') or court.address
+        form = CourtForm(request.POST, request.FILES, instance=court)
+        if form.is_valid():
+            court = form.save(commit=False)
+            court.owner_name = _get_user_name(current_user)
+            court.owner_phone = _get_user_phone(current_user)
 
-        price_value = clean_decimal(
-            request.POST.get('price_per_hour'),
-            default=court.price_per_hour,
-            min_value=Decimal("0"),
-        )
-        if price_value is not None:
-            court.price_per_hour = price_value
+            maps_link = form.cleaned_data.get('maps_link')
+            if maps_link:
+                link_lat, link_lng = parse_maps_link(maps_link)
+                if link_lat:
+                    parsed_lat = sanitize_coordinate(link_lat, "latitude")
+                    if parsed_lat is not None:
+                        court.latitude = parsed_lat
+                if link_lng:
+                    parsed_lng = sanitize_coordinate(link_lng, "longitude")
+                    if parsed_lng is not None:
+                        court.longitude = parsed_lng
 
-        rating_value = clean_decimal(
-            request.POST.get('rating'),
-            default=court.rating,
-            min_value=Decimal("0"),
-            max_value=Decimal("5"),
-        )
-        if rating_value is not None:
-            court.rating = rating_value
+            court.save()
+            return redirect('Court:court_detail', court_id=court.id)
+    else:
+        form = CourtForm(instance=court)
 
-        facilities = request.POST.get('facilities')
-        if facilities is not None:
-            court.facilities = facilities
-
-        description = request.POST.get('description')
-        if description is not None:
-            court.description = description
-
-        maps_link = request.POST.get('maps_link')
-        if maps_link:
-            link_lat, link_lng = parse_maps_link(maps_link)
-            if link_lat:
-                parsed_lat = sanitize_coordinate(link_lat, "latitude")
-                if parsed_lat is not None:
-                    court.latitude = parsed_lat
-            if link_lng:
-                parsed_lng = sanitize_coordinate(link_lng, "longitude")
-                if parsed_lng is not None:
-                    court.longitude = parsed_lng
-
-        image = request.FILES.get('image')
-        if image:
-            court.image = image
-
-        court.owner_name = _get_user_name(current_user)
-        court.owner_phone = _get_user_phone(current_user)
-
-        court.save()
-        return redirect('Court:court_detail', court_id=court.id)
-
-    context = {
-        'court': court,
-        'sport_choices': Court.SPORT_CHOICES,
-    }
-    return render(request, 'edit_court.html', context)
+    return render(
+        request,
+        'edit_court.html',
+        {
+            'form': form,
+            'court': court,
+        },
+    )
 @require_http_methods(["GET"])
 def search_Court(request):
     """
@@ -438,7 +386,7 @@ def delete_court(request, court_id):
     try:
         court = Court.objects.get(id=court_id, created_by=current_user)
     except Court.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Anda tidak memiliki akses untuk lapangan ini'}, status=403)
+        return JsonResponse({'success': False, 'error': 'You do not have permission to manage this court'}, status=403)
 
     court.delete()
     return JsonResponse({'success': True})
@@ -486,7 +434,7 @@ def set_availability(request, court_id):
     try:
         court = Court.objects.get(id=court_id, created_by=current_user)
     except Court.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Anda tidak memiliki akses untuk lapangan ini'}, status=403)
+        return JsonResponse({'success': False, 'error': 'You do not have permission to manage this court'}, status=403)
 
     try:
         payload = json.loads(request.body)
@@ -497,7 +445,7 @@ def set_availability(request, court_id):
     is_available = payload.get('is_available', True)
 
     if not date_str:
-        return JsonResponse({'success': False, 'error': 'Tanggal wajib diisi'}, status=400)
+        return JsonResponse({'success': False, 'error': 'Date is required'}, status=400)
 
     try:
         slot_date = datetime.strptime(date_str, '%Y-%m-%d').date()
@@ -549,7 +497,7 @@ def create_booking(request):
         if not court_id or not date_str:
             return JsonResponse({
                 'success': False,
-                'message': 'court_id dan date wajib diisi'
+                'message': 'court_id and date are required'
             }, status=400)
 
         try:
@@ -582,7 +530,7 @@ def create_booking(request):
         if not slot.is_available:
             return JsonResponse({
                 'success': False,
-                'message': 'Tanggal tersebut sudah dibooking'
+                'message': 'That date has already been booked'
             }, status=400)
 
         slot.is_available = False
@@ -696,7 +644,7 @@ def api_court_whatsapp(request):
     try:
         court = Court.objects.get(id=court_id)
     except Court.DoesNotExist:
-        return JsonResponse({'success': False, 'error': 'Lapangan tidak ditemukan'}, status=404)
+        return JsonResponse({'success': False, 'error': 'Court not found'}, status=404)
 
     whatsapp_link = court.get_whatsapp_link(
         date=data.get('date'),
@@ -728,9 +676,8 @@ def get_whatsapp_link(request):
 
             return JsonResponse({'success': True, 'whatsapp_link': whatsapp_link})
         except Court.DoesNotExist:
-            return JsonResponse({'success': False, 'error': 'Lapangan tidak ditemukan'}, status=404)
+            return JsonResponse({'success': False, 'error': 'Court not found'}, status=404)
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
     else:
         return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
-

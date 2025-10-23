@@ -21,17 +21,17 @@ class Court(models.Model):
     address = models.TextField()
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='Court/', blank=True, null=True)
-    facilities = models.TextField()  # Format: "Parkir, Toilet, Kantin"
+    facilities = models.TextField()
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     description = models.TextField(blank=True)
     
-    # Koordinat untuk fitur terdekat
+    # Coordinates for proximity features
     latitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     longitude = models.DecimalField(max_digits=9, decimal_places=6, null=True, blank=True)
     
-    # Contact owner untuk WhatsApp
+    # Owner contact for WhatsApp
     owner_name = models.CharField(max_length=100)
-    owner_phone = models.CharField(max_length=20, help_text="Format: 628123456789 (tanpa +)")
+    owner_phone = models.CharField(max_length=20, help_text="Format: 628123456789 (without +)")
     created_by = models.ForeignKey(
         'Auth_Profile.User',
         on_delete=models.SET_NULL,
@@ -62,13 +62,13 @@ class Court(models.Model):
     def get_whatsapp_link(self, date=None, time=None):
         """Generate WhatsApp link for booking with URL-safe encoding."""
         base_url = f"https://wa.me/{self.owner_phone}"
-        message = f"Halo, saya ingin booking lapangan *{self.name}*"
+        message = f"Hello, I would like to book the court *{self.name}*"
         if date and time:
-            message += f" untuk tanggal *{date}* jam *{time}*"
+            message += f" for date *{date}* at *{time}*"
         elif date:
-            message += f" untuk tanggal *{date}*"
+            message += f" for date *{date}*"
         elif time:
-            message += f" pada jam *{time}*"
+            message += f" at *{time}*"
 
         encoded_message = quote(message, safe='*')
         return f"{base_url}?text={encoded_message}"
