@@ -4,26 +4,27 @@
 {% endblock meta %}
 
 {% block content %}
-<h1>LOGIN</h1>
 
 <div id="error-message" style="color: red; margin-bottom: 10px;"></div>
-
-<form id="loginForm" method="POST">
-    {% csrf_token %}
-    <div>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required>
-    </div>
-    <br>
-    <div>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <br>
-    <button type="submit">Login</button>
-</form>
-
-<p>Belum punya akun? <a href="/register/">Register di sini</a></p>
+<div>
+    <h1>LOGIN</h1>
+    <form id="loginForm" method="POST">
+        {% csrf_token %}
+        <div>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <br>
+        <div>
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <br>
+        <button type="submit">Login</button>
+    </form>
+    
+    <p>Belum punya akun? <a href="/register/">Register di sini</a></p>
+</div>
 
 <script>
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
