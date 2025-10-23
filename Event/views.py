@@ -239,3 +239,51 @@ def my_events(request):
     }
     
     return render(request, 'Event/my_events.html', context)
+
+@login_required
+def create_event(request):
+    """Create event baru"""
+    # Cek apakah user punya organizer profile
+    try:
+        organizer = request.user.organizer_profile
+    except EventOrganizer.DoesNotExist:
+        messages.error(request, 'Kamu harus jadi organizer dulu!')
+        return redirect('Event:event_list')
+    
+    if request.method == 'POST':
+        # Ambil data dari form
+        try:
+            event = Event.objects.create(
+                name=request.POST.get('name'),
+                description=request.POST.get('description'),
+                category=request.POST.get('category'),
+                level=request.POST.get('level'),
+                date=request.POST.get('date'),
+                time=request.POST.get('time'),
+                duration_hours=request.POST.get('duration_hours', 2.0),
+                location_name=request.POST.get('location_name'),
+                location_address=request.POST.get('location_address'),
+                city=request.POST.get('city'),
+                price=request.POST.get('price'),
+                max_participants=request.POST.get('max_participants'),
+                min_participants=request.POST.get('min_participants', 2),
+                organizer=organizer,
+                requirements=request.POST.get('requirements', ''),
+                payment_info=request.POST.get('payment_info', ''),
+                instagram_link=request.POST.get('instagram_link', ''),
+                image=request.FILES.get('image')
+            )
+            
+            messages.success(request, f'Event "{event.name}" berhasil dibuat!')
+            return redirect('Event:event_detail', event_id=event.id)
+            
+        except Exception as e:
+            messages.error(request, f'Gagal membuat event: {str(e)}')
+    
+    # GET request - tampilkan form
+    context = {
+        'categories': Event.CATEGORY_CHOICES,
+        'levels': Event.LEVEL_CHOICES,
+    }
+    
+    return render(request, 'Event/create_event.html', context)

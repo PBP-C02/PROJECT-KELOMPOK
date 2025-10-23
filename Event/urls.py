@@ -9,6 +9,8 @@ urlpatterns = [
     
     # Detail event
     path('<int:event_id>/', views.event_detail, name='event_detail'),
+
+    path('create/', views.create_event, name='create_event'),
     
     # Pendaftaran
     path('<int:event_id>/register/', views.event_register, name='event_register'),

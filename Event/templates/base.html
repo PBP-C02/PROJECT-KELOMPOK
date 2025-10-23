@@ -1,57 +1,51 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}MoveBuddy{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
-    <link rel="stylesheet" href="{% static 'css/event.css' %}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %} {% endblock meta %}
+    
+    <!-- Tailwind (optional, bisa dihapus kalau ga pake) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'lime': '#CBED98',
+              'yellow': '#F6F930',
+              'light-grey': '#D1D1D1',
+              'grey': '#2F2F2F',
+              'dark-lime': '#90B35B',
+            },
+            fontFamily: {
+              raleway: ['Raleway', 'system-ui', 'sans-serif'],
+              race_sport: ['Race Sport', 'system-ui', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
+    
+    <!-- DOMPurify -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <!-- CSS FILES - INI YANG PENTING! -->
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/event.css' %}"/>
+    
     {% block extra_css %}{% endblock %}
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">MoveBuddy</a>
-            <ul class="nav-menu">
-                <li><a href="{% url 'Event:event_list' %}">Events</a></li>
-                <li><a href="/coach/">Coaches</a></li>
-                <li><a href="/court/">Courts</a></li>
-                <li><a href="/partner/">Find Partner</a></li>
-                
-                {% if user.is_authenticated %}
-                <li><a href="/profile/">{{ user.username }}</a></li>
-                <li><a href="/auth/logout/">Logout</a></li>
-                {% else %}
-                <li><a href="/auth/login/">Login</a></li>
-                <li><a href="/auth/register/">Register</a></li>
-                {% endif %}
-            </ul>
-        </div>
-    </nav>
-
-    <!-- Messages (Toast Notification) -->
-    {% if messages %}
-    <div class="messages-container">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <!-- Main Content -->
-    <main class="main-content">
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2025 MoveBuddy - Find Your Sport Buddy</p>
-    </footer>
-
-    {% block extra_js %}{% endblock %}
-</body>
+  </head>
+  <body>
+    {% block content %} 
+    
+    {% endblock content %}
+  </body>
 </html>

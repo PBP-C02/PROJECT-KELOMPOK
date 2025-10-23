@@ -915,4 +915,84 @@ body {
             font-size: 24px;
         }
     }
+        /* ========================================
+    FIX DROPDOWN STYLING
+    ======================================== */
+
+    /* Reset native select styling */
+    select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 1.25rem;
+        padding-right: 2.5rem !important;
+        cursor: pointer;
+    }
+
+    select:focus {
+        outline: none;
+        border-color: #dc2626;
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    /* Style untuk search form select */
+    .search-input-group select {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        padding-right: 2.5rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #1f2937;
+        background-color: white;
+        transition: all 0.2s;
+    }
+
+    .search-input-group select:hover {
+        border-color: #d1d5db;
+    }
+
+    .search-input-group select:focus {
+        border-color: #dc2626;
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    /* Style untuk form create event select */
+    .form-group select,
+    .event-form select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        padding-right: 2.5rem;
+        border: 1px solid #ddd;
+        border-radius: 0.5rem;
+        font-size: 1rem;
+        color: #1f2937;
+        background-color: white;
+        transition: all 0.2s;
+    }
+
+    .form-group select:focus,
+    .event-form select:focus {
+        border-color: #dc2626;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    /* Sort dropdown */
+    .sort-group select {
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+        background-color: white;
+        cursor: pointer;
+    }
+
+    .sort-group select:hover {
+        border-color: #d1d5db;
+    }
 }
