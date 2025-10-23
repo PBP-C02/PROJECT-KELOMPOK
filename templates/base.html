@@ -1,122 +1,41 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}MoveBuddy - Find Your Sport Buddy{% endblock %}</title>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
-    <link rel="stylesheet" href="{% static 'css/event.css' %}">
-    {% block extra_css %}{% endblock %}
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="/" class="logo">
-                <span class="logo-icon">🏃‍♂️</span>
-                <span class="logo-text">MoveBuddy</span>
-            </a>
-            
-            <ul class="nav-menu">
-                <li><a href="{% url 'Event:event_list' %}" class="nav-link">Events</a></li>
-                <li><a href="#" class="nav-link">Coaches</a></li>
-                <li><a href="#" class="nav-link">Courts</a></li>
-                <li><a href="#" class="nav-link">Partners</a></li>
-            </ul>
-            
-            <div class="nav-actions">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'Event:create_event' %}}" class="btn-primary-nav">
-                        <span>+</span> Create Event
-                    </a>
-                    <div class="user-menu">
-                        <button class="user-avatar">
-                            {{ user.username|first|upper }}
-                        </button>
-                        <div class="dropdown-menu">
-                            <a href="#" class="dropdown-item">Profile</a>
-                            <a href="#" class="dropdown-item">My Events</a>
-                            <a href="/admin/logout/" class="dropdown-item logout">Logout</a>
-                        </div>
-                    </div>
-                {% else %}
-                    <a href="/admin/login/" class="btn-secondary-nav">Login</a>
-                    <a href="#" class="btn-primary-nav">Sign Up</a>
-                {% endif %}
-            </div>
-        </div>
-    </nav>
-
-    <!-- Messages Toast -->
-    {% if messages %}
-    <div class="toast-container">
-        {% for message in messages %}
-        <div class="toast toast-{{ message.tags }}">
-            <div class="toast-content">
-                <span class="toast-icon">
-                    {% if message.tags == 'success' %}✓{% elif message.tags == 'error' %}✗{% else %}ℹ{% endif %}
-                </span>
-                <span class="toast-message">{{ message }}</span>
-            </div>
-            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-
-    <!-- Main Content -->
-    <main class="main-content">
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>🏃‍♂️ MoveBuddy</h3>
-                <p>Find your perfect sport buddy and join exciting events</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="{% url 'Event:event_list' %}">Events</a></li>
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Sports</h4>
-                <ul>
-                    <li><a href="?category=basketball">Basketball</a></li>
-                    <li><a href="?category=soccer">Soccer</a></li>
-                    <li><a href="?category=badminton">Badminton</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 MoveBuddy. All rights reserved.</p>
-        </div>
-    </footer>
-
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block meta %} {% endblock meta %}
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Auto hide toast after 5 seconds
-        document.addEventListener('DOMContentLoaded', function() {
-            const toasts = document.querySelectorAll('.toast');
-            toasts.forEach(toast => {
-                setTimeout(() => {
-                    toast.style.animation = 'slideOut 0.3s ease forwards';
-                    setTimeout(() => toast.remove(), 300);
-                }, 5000);
-            });
-        });
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'lime': '#CBED98',
+              'yellow': '#F6F930',
+              'light-grey': '#D1D1D1',
+              'grey': '#2F2F2F',
+              'dark-lime': '#90B35B',
+            },
+            fontFamily: {
+              raleway: ['Raleway', 'system-ui', 'sans-serif'],
+              race_sport: ['Race Sport', 'system-ui', 'sans-serif']
+            }
+          }
+        }
+      }
     </script>
+    <!-- Add DOMPurify here -->
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    {% block extra_js %}{% endblock %}
-</body>
+  </head>
+  <body>
+    {% block content %} 
+    
+    {% endblock content %}
+  </body>
 </html>

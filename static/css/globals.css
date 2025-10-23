@@ -1,3 +1,9 @@
+@font-face {
+    font-family: 'Race Sport';
+    src: url('../fonts/Race\ Sport.woff2');
+    font-weight: 400;
+    font-style: normal;
+}
 /* ========================================
    RESET & BASE STYLES
 ======================================== */
