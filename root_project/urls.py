@@ -5,17 +5,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    
-    # COMMENT SEMUA APP YANG BELUM SIAP!
-    # path('', include('Auth_Profile.urls')),
-    # path('coach/', include('Coach.urls')),
-    # path('court/', include('Court.urls')),
-    # path('partner/', include('Sport_Partner.urls')),
-    
-    # Yang aktif cuma Event (kamu)
+    path('', include('Auth_Profile.urls')),
+    path('sport_partner/', include('Sport_Partner.urls')),
     path('event/', include('Event.urls')),
+    path('coach/', include('Coach.urls')),
+    path('court/', include('Court.urls')),
 ]
 
-# Media files
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
