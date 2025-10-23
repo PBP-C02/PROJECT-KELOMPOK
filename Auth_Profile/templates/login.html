@@ -6,26 +6,44 @@
 {% block content %}
 
 <div id="error-message" style="color: red; margin-bottom: 10px;"></div>
-<div>
+
+<div class="flex flex-col justify-between items-center border-2 border-solid border-black w-[626px] h-[822px] rounded-[42px] px-14 py-16">
     <h1 class="font-raleway font-bold text-5xl text-grey">Log In</h1>
-    <p class="font-raleway font-regular text-2xl text-grey">Welcome back to <span class="text-lime font-bold"><i>MOVE BUDDY</i></span></p>
-    <form id="loginForm" method="POST">
+    <p class="font-raleway font-regular text-2xl text-light-grey">Welcome back to <span class="text-lime font-bold"><i>MOVE BUDDY</i></span></p>
+    <form id="loginForm" method="POST" class="w-full">
         {% csrf_token %}
         <div>
             <label for="email" class="font-raleway font-medium text-2xl text-grey">Email:</label><br>
-            <input type="email" id="email" name="email" required>
+            <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[66px] font-raleway
+                        font-regular text-2xl px-7 py-5"
+                placeholder="Masukkan email"
+                required
+            >
         </div>
         <br>
         <div>
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required>
+            <label for="password" class="font-raleway font-medium text-2xl text-grey">Password:</label><br>
+            <input 
+                type="password" 
+                id="password" 
+                name="password"
+                class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[66px] font-raleway
+                        font-regular text-2xl px-7 py-5"
+                placeholder="Masukkan password"
+                required
+            >
         </div>
         <br>
-        <button type="submit">Login</button>
+        <button type="submit" class="bg-lime font-raleway font-medium text-2xl text-grey w-full h-[66px] rounded-[20px]">Login</button>
     </form>
     
-    <p>Belum punya akun? <a href="/register/">Register di sini</a></p>
+    <p class="font-raleway font-regular text-2xl text-grey">Belum punya akun? <a href="/register/" class="font-bold text-lime">Register di sini</a></p>
 </div>
+
 
 <script>
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
