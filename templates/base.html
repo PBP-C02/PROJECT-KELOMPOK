@@ -6,9 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% block meta %} {% endblock meta %}
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'lime': '#CBED98',
+              'yellow': '#F6F930',
+              'light-grey': '#D1D1D1',
+              'grey': '#2F2F2F',
+              'dark-lime': '#90B35B',
+            },
+            fontFamily: {
+              raleway: ['Raleway', 'system-ui', 'sans-serif'],
+              race_sport: ['Race Sport', 'system-ui', 'sans-serif']
+            }
+          }
+        }
+      }
+    </script>
     <!-- Add DOMPurify here -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/globals.css' %}"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
   </head>
   <body>
     {% block content %} 
