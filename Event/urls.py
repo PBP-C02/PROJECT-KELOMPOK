@@ -1,14 +1,22 @@
 from django.urls import path
 from . import views
 
-app_name = 'event'
+app_name = 'Event'
 
 urlpatterns = [
+    # Listing event
     path('', views.event_list, name='event_list'),
-    path('<int:pk>/', views.event_detail, name='event_detail'),
-    path('create/', views.create_event, name='create_event'),
-    path('<int:pk>/edit/', views.edit_event, name='edit_event'),
-    path('<int:pk>/delete/', views.delete_event, name='delete_event'),
-    path('<int:pk>/register/', views.register_event, name='register_event'),
-    path('<int:pk>/cancel/', views.cancel_registration, name='cancel_registration'),
+    
+    # Detail event
+    path('<int:event_id>/', views.event_detail, name='event_detail'),
+    
+    # Pendaftaran
+    path('<int:event_id>/register/', views.event_register, name='event_register'),
+    path('registration/<int:registration_id>/cancel/', views.event_cancel_registration, name='event_cancel_registration'),
+    
+    # Review
+    path('<int:event_id>/review/', views.event_add_review, name='event_add_review'),
+    
+    # Event user
+    path('my-events/', views.my_events, name='my_events'),
 ]

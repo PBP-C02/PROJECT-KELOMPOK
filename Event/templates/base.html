@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}MoveBuddy{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/global.css' %}">
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
     <link rel="stylesheet" href="{% static 'css/event.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
@@ -15,7 +15,7 @@
         <div class="nav-container">
             <a href="/" class="logo">MoveBuddy</a>
             <ul class="nav-menu">
-                <li><a href="{% url 'event:event_list' %}">Events</a></li>
+                <li><a href="{% url 'Event:event_list' %}">Events</a></li>
                 <li><a href="/coach/">Coaches</a></li>
                 <li><a href="/court/">Courts</a></li>
                 <li><a href="/partner/">Find Partner</a></li>

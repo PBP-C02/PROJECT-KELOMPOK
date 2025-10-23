@@ -1,114 +1,151 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}All Events - MoveBuddy{% endblock %}
+{% block title %}Event Main Bareng{% endblock %}
 
 {% block content %}
-<div class="event-container">
-    <!-- Header Section -->
-    <div class="event-header">
-        <div class="header-content">
-            <h1>🏃 Upcoming Sports Events</h1>
-            <p>Find and join exciting sports events in your area</p>
-        </div>
-        {% if user.is_authenticated %}
-        <a href="{% url 'event:create_event' %}" class="btn-create">
-            <span>+</span> Create Event
-        </a>
-        {% endif %}
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <h1 class="header-title">EVENT MAIN BARENG</h1>
     </div>
-    
-    <!-- Filter Section -->
-    <div class="filter-section">
-        <form method="get" class="filter-form">
-            <div class="filter-group">
-                <label for="category">Filter by Sport:</label>
-                <select name="category" id="category" onchange="this.form.submit()">
-                    <option value="">All Sports</option>
-                    {% for value, label in categories %}
-                    <option value="{{ value }}" {% if selected_category == value %}selected{% endif %}>
-                        {{ label }}
-                    </option>
-                    {% endfor %}
+</header>
+
+<!-- Search Section -->
+<section class="search-section">
+    <div class="container">
+        <form method="GET" class="search-form">
+            <div class="search-inputs">
+                <div class="search-input-group">
+                    <svg class="input-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                    </svg>
+                    <input type="text" name="search" placeholder="Cari event mabar" value="{{ search_query }}">
+                </div>
+
+                <div class="search-input-group">
+                    <svg class="input-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    <input type="text" name="city" placeholder="Pilih Kota" value="{{ city_filter }}">
+                </div>
+
+                <div class="search-input-group">
+                    <svg class="input-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                    </svg>
+                    <select name="category">
+                        <option value="">Pilih Cabang Olahraga</option>
+                        {% for value, label in categories %}
+                        <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-search">Cari mabar</button>
+        </form>
+    </div>
+</section>
+
+<!-- Results Section -->
+<section class="results-section">
+    <div class="container">
+        <div class="results-header">
+            <p class="results-count">Menampilkan <strong>{{ total_events }}</strong> event mabar</p>
+            
+            <div class="sort-group">
+                <label>Urutkan berdasarkan:</label>
+                <select name="sort" onchange="this.form.submit()" form="sort-form">
+                    <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Waktu dan Tanggal</option>
+                    <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Harga Terendah</option>
+                    <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Harga Tertinggi</option>
+                    <option value="participants" {% if sort_by == 'participants' %}selected{% endif %}>Paling Ramai</option>
                 </select>
             </div>
-        </form>
-        
-        <div class="results-count">
-            <p>{{ events.count }} event(s) found</p>
+            <form id="sort-form" method="GET" style="display:none;">
+                <input type="hidden" name="search" value="{{ search_query }}">
+                <input type="hidden" name="city" value="{{ city_filter }}">
+                <input type="hidden" name="category" value="{{ category_filter }}">
+                <input type="hidden" name="level" value="{{ level_filter }}">
+            </form>
+        </div>
+
+        <div class="events-grid">
+            {% for event in events %}
+            <div class="event-card">
+                <a href="{% url 'Event:event_detail' event.id %}" class="event-card-link">
+                    <div class="event-header">
+                        <h3 class="event-title">{{ event.name }}</h3>
+                        <span class="event-sport-badge">{{ event.get_category_display }}</span>
+                    </div>
+
+                    <div class="event-details">
+                        <div class="detail-row">
+                            <svg class="detail-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span>{{ event.get_level_display }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <svg class="detail-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>{{ event.date|date:"D, d M Y" }}, {{ event.time|time:"H:i" }} - {{ event.duration_hours }}h</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <svg class="detail-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            </svg>
+                            <span>{{ event.location_name }}, {{ event.city }}</span>
+                        </div>
+                    </div>
+
+                    <div class="event-badges">
+                        <span class="badge badge-join">Bergabung AYO</span>
+                        {% if event.organizer.is_superhost %}
+                        <span class="badge badge-superhost">⚡ Superhost</span>
+                        {% endif %}
+                    </div>
+
+                    <div class="participants-section">
+                        <div class="participant-avatars">
+                            {% for participant in event.registrations.all|slice:":5" %}
+                            <div class="avatar">{{ participant.user.username|first|upper }}</div>
+                            {% endfor %}
+                        </div>
+                        <span class="participant-count">{{ event.confirmed_participants_count }}/{{ event.max_participants }}</span>
+                    </div>
+
+                    <div class="organizer-info">
+                        <div class="organizer-avatar">
+                            {{ event.organizer.display_name|first|upper }}
+                        </div>
+                        <div class="organizer-details">
+                            <p class="organizer-name">{{ event.organizer.display_name }}</p>
+                            {% if event.average_rating > 0 %}
+                            <p class="organizer-rating">★ {{ event.average_rating }} ({{ event.reviews.count }})</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="no-results">
+                <p>Tidak ada event yang ditemukan. Coba ubah filter pencarian kamu!</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
-    
-    <!-- Event Cards Grid -->
-    <div class="event-grid">
-        {% for event in events %}
-        <div class="event-card">
-            <!-- Event Image -->
-            <div class="event-image">
-                {% if event.image %}
-                <img src="{{ event.image.url }}" alt="{{ event.title }}">
-                {% else %}
-                <div class="event-placeholder">
-                    <span class="sport-icon">🏃‍♂️</span>
-                </div>
-                {% endif %}
-                
-                <!-- Category Badge -->
-                <span class="category-badge {{ event.category }}">
-                    {{ event.get_category_display }}
-                </span>
-                
-                <!-- Full Badge (if full) -->
-                {% if event.is_full %}
-                <span class="full-badge">FULL</span>
-                {% endif %}
-            </div>
-            
-            <!-- Event Content -->
-            <div class="event-content">
-                <h3>{{ event.title }}</h3>
-                <p class="event-description">
-                    {{ event.description|truncatewords:15 }}
-                </p>
-                
-                <div class="event-details">
-                    <div class="detail-item">
-                        <span class="icon">📅</span>
-                        <span>{{ event.date|date:"d M Y" }}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="icon">⏰</span>
-                        <span>{{ event.time|time:"H:i" }}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="icon">📍</span>
-                        <span>{{ event.location|truncatewords:3 }}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="icon">👥</span>
-                        <span class="participants-count">
-                            {{ event.registrations.count }}/{{ event.max_participants }}
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-footer">
-                    <a href="{% url 'event:event_detail' event.pk %}" class="btn-view">
-                        View Details →
-                    </a>
-                </div>
-            </div>
-        </div>
-        {% empty %}
-        <div class="empty-state">
-            <div class="empty-icon">📭</div>
-            <h3>No Events Found</h3>
-            <p>Be the first to create an event!</p>
-            {% if user.is_authenticated %}
-            <a href="{% url 'event:create_event' %}" class="btn-primary">Create Event</a>
-            {% endif %}
-        </div>
-        {% endfor %}
-    </div>
-</div>
+</section>
 {% endblock %}

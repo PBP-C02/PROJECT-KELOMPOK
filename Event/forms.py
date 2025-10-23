@@ -1,53 +1,87 @@
 from django import forms
-from .models import Event
+from .models import EventRegistration, EventReview, Event
 
-class EventForm(forms.ModelForm):
+
+class EventSearchForm(forms.Form):
+    """Form untuk search dan filter events"""
+    search = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Cari event mabar...'
+        })
+    )
+    
+    city = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Pilih Kota'
+        })
+    )
+    
+    category = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Semua Olahraga')] + Event.CATEGORY_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    level = forms.ChoiceField(
+        required=False,
+        choices=[('', 'Semua Level')] + Event.LEVEL_CHOICES,
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+    
+    sort = forms.ChoiceField(
+        required=False,
+        choices=[
+            ('date', 'Waktu dan Tanggal'),
+            ('price_low', 'Harga Terendah'),
+            ('price_high', 'Harga Tertinggi'),
+            ('participants', 'Paling Ramai'),
+        ],
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+
+class EventRegistrationForm(forms.ModelForm):
+    """Form untuk pendaftaran event"""
     class Meta:
-        model = Event
-        fields = ['title', 'description', 'category', 'date', 'time', 
-                  'location', 'max_participants', 'image']
+        model = EventRegistration
+        fields = ['notes', 'payment_proof']
         widgets = {
-            'title': forms.TextInput(attrs={
-                'class': 'form-input',
-                'placeholder': 'Enter event title'
+            'notes': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Catatan tambahan (opsional)',
+                'rows': 3
             }),
-            'description': forms.Textarea(attrs={
-                'class': 'form-input',
-                'rows': 4,
-                'placeholder': 'Describe your event...'
-            }),
-            'category': forms.Select(attrs={
-                'class': 'form-input'
-            }),
-            'date': forms.DateInput(attrs={
-                'type': 'date',
-                'class': 'form-input'
-            }),
-            'time': forms.TimeInput(attrs={
-                'type': 'time',
-                'class': 'form-input'
-            }),
-            'location': forms.TextInput(attrs={
-                'class': 'form-input',
-                'placeholder': 'Event location'
-            }),
-            'max_participants': forms.NumberInput(attrs={
-                'class': 'form-input',
-                'min': 2,
-                'placeholder': 'Maximum participants'
-            }),
-            'image': forms.FileInput(attrs={
-                'class': 'form-input',
-                'accept': 'image/*'
+            'payment_proof': forms.FileInput(attrs={
+                'class': 'form-control'
             })
         }
         labels = {
-            'title': 'Event Title',
-            'description': 'Description',
-            'category': 'Sport Category',
-            'date': 'Event Date',
-            'time': 'Event Time',
-            'location': 'Location',
-            'max_participants': 'Max Participants',
-            'image': 'Event Image'
+            'notes': 'Catatan',
+            'payment_proof': 'Bukti Transfer (jika sudah bayar)'
+        }
+
+
+class EventReviewForm(forms.ModelForm):
+    """Form untuk review event"""
+    class Meta:
+        model = EventReview
+        fields = ['rating', 'comment']
+        widgets = {
+            'rating': forms.Select(
+                choices=[(i, f"{i} ★") for i in range(1, 6)],
+                attrs={'class': 'form-control'}
+            ),
+            'comment': forms.Textarea(attrs={
+                'class': 'form-control',
+                'placeholder': 'Bagikan pengalaman kamu...',
+                'rows': 4
+            })
+        }
+        labels = {
+            'rating': 'Rating',
+            'comment': 'Review'
         }
