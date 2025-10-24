@@ -13,12 +13,11 @@ User = get_user_model()
 
 # ==================== HELPER FUNCTION ====================
 def create_test_user(username='testuser', email='test@example.com', password='testpass123'):
-    """Helper function to create test user with required tanggal_lahir field"""
+    """Helper function to create test user"""
     return User.objects.create_user(
         username=username,
         email=email,
         password=password,
-        tanggal_lahir=date(1990, 1, 1)  # Required field for Auth_Profile.User
     )
 
 

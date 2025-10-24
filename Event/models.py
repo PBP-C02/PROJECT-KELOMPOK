@@ -1,4 +1,5 @@
 from django.db import models
+from Auth_Profile.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 import uuid
 
@@ -25,7 +26,7 @@ class Event(models.Model):
     name = models.CharField(max_length=200)
     sport_type = models.CharField(max_length=50, choices=SPORT_CHOICES)
     description = models.TextField(blank=True, null=True)
-    #test
+    
     # Location
     city = models.CharField(max_length=100)
     full_address = models.TextField()
@@ -38,7 +39,7 @@ class Event(models.Model):
         max_digits=3, 
         decimal_places=2, 
         default=0.00, 
-        blank=True,  # ← FIX: Tambahkan blank=True agar optional di form
+        blank=True,
         validators=[MinValueValidator(0), MaxValueValidator(5)]
     )
     
@@ -51,7 +52,7 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # Categories (from image 4)
+    # Categories
     category = models.CharField(max_length=100, default='category 1')
     
     class Meta:
