@@ -80,21 +80,15 @@
                 })
             });
             
-            // Cek apakah response OK
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            
             const data = await response.json();
             
             if (data.success) {
                 window.location.href = data.redirect_url;
             } else {
-                errorDiv.textContent = data.message || 'Login gagal';
+                errorDiv.textContent = data.message;
                 errorDiv.classList.remove('hidden');
             }
         } catch (error) {
-            console.error('Error:', error); // Tambahkan ini untuk debugging
             errorDiv.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
             errorDiv.classList.remove('hidden');
         }

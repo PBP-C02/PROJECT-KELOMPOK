@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'coach_base.html' %}
 {% load static %}
 
 {% block meta %}
@@ -89,16 +89,17 @@
     </div>
   </dialog>
 
-  <!-- Category Pills -->
+  <!-- Category Pills - UPDATED: Same as Court categories -->
   <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
     <button type="button" class="category-pill {% if not request.GET.category %}active{% endif %}" onclick="setCategory('')">All</button>
-    <button type="button" class="category-pill {% if request.GET.category == 'tennis' %}active{% endif %}" onclick="setCategory('tennis')">Tennis</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'badminton' %}active{% endif %}" onclick="setCategory('badminton')">Badminton</button>
     <button type="button" class="category-pill {% if request.GET.category == 'basketball' %}active{% endif %}" onclick="setCategory('basketball')">Basketball</button>
     <button type="button" class="category-pill {% if request.GET.category == 'soccer' %}active{% endif %}" onclick="setCategory('soccer')">Soccer</button>
-    <button type="button" class="category-pill {% if request.GET.category == 'badminton' %}active{% endif %}" onclick="setCategory('badminton')">Badminton</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'tennis' %}active{% endif %}" onclick="setCategory('tennis')">Tennis</button>
     <button type="button" class="category-pill {% if request.GET.category == 'volleyball' %}active{% endif %}" onclick="setCategory('volleyball')">Volleyball</button>
-    <button type="button" class="category-pill {% if request.GET.category == 'futsal' %}active{% endif %}" onclick="setCategory('futsal')">Futsal</button>
     <button type="button" class="category-pill {% if request.GET.category == 'paddle' %}active{% endif %}" onclick="setCategory('paddle')">Paddle</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'futsal' %}active{% endif %}" onclick="setCategory('futsal')">Futsal</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'table_tennis' %}active{% endif %}" onclick="setCategory('table_tennis')">Table Tennis</button>
   </div>
   <input type="hidden" name="category" id="category-input" value="{{ request.GET.category }}">
 
@@ -208,7 +209,7 @@
 
           <!-- Action Buttons -->
           <div class="coach-card-actions" onclick="event.stopPropagation();">
-            {% if request.user.is_authenticated and c.user_id == request.user.id %}
+            {% if user and user.id and c.user_id == user.id %}
               <a href="{% url 'coach:edit_coach_page' c.pk %}" class="btn-edit-card">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                   <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z"/>

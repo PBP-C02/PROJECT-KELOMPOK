@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from Coach.models import Coach
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
-from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
+from functools import wraps
 import re
 import datetime as dt
 from django.utils import timezone
@@ -10,11 +10,38 @@ from django.utils.dateparse import parse_datetime
 from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
 import json
 from PIL import Image
 import os
 
+# ==================== CUSTOM LOGIN DECORATOR ====================
+def custom_login_required(view_func):
+    """Custom decorator that checks session instead of Django auth"""
+    @wraps(view_func)
+    def wrapper(request, *args, **kwargs):
+        if 'user_id' not in request.session:
+            # AJAX request
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Please login first',
+                    'redirect_url': '/login/'
+                }, status=401)
+            # Normal request
+            return redirect('/login/')
+        
+        # Set request.user from session
+        try:
+            from Auth_Profile.models import User
+            request.user = User.objects.get(id=request.session['user_id'])
+        except User.DoesNotExist:
+            request.session.flush()
+            return redirect('/login/')
+        
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+# ==================== HELPER FUNCTIONS ====================
 def _to_int(s):
     if not s:
         return None
@@ -77,8 +104,20 @@ def validate_image(file):
     
     return file
 
+# ==================== VIEWS ====================
 def show_main(request):
     coach_list = Coach.objects.all()
+
+    # Set request.user from session if logged in - FIXED
+    if 'user_id' in request.session:
+        try:
+            from Auth_Profile.models import User
+            request.user = User.objects.get(id=request.session['user_id'])
+        except User.DoesNotExist:
+            request.session.flush()
+            request.user = None
+    else:
+        request.user = None
 
     nama_coach = (request.GET.get('nama_coach') or '').strip()
     location = request.GET.get('location') or ''
@@ -89,9 +128,9 @@ def show_main(request):
     view_mode = request.GET.get('view', 'all')  
 
     # --- Filter by view mode ---
-    if view_mode == 'my_bookings':
+    if view_mode == 'my_bookings' and request.user:
         coach_list = coach_list.filter(peserta=request.user)
-    elif view_mode == 'my_coaches':
+    elif view_mode == 'my_coaches' and request.user:
         coach_list = coach_list.filter(user=request.user)
 
     # --- filters ---
@@ -127,19 +166,37 @@ def show_main(request):
         'coach_list': coach_list, 
         'count': coach_list.count(),
         'nama_coach': nama_coach,
-        'view_mode': view_mode, 
+        'view_mode': view_mode,
+        'user': request.user,  # ADDED: explicitly pass user to template
     }
     return render(request, 'main.html', context)
 
 def coach_detail(request, pk):
+    # Set request.user from session if logged in - FIXED
+    if 'user_id' in request.session:
+        try:
+            from Auth_Profile.models import User
+            request.user = User.objects.get(id=request.session['user_id'])
+        except User.DoesNotExist:
+            request.session.flush()
+            request.user = None
+    else:
+        request.user = None
+    
     coach = get_object_or_404(Coach, pk=pk)
-    return render(request, "coach_detail.html", {'coach': coach})
+    
+    context = {
+        'coach': coach,
+        'user': request.user,  # ADDED: Pass user explicitly to template
+    }
+    
+    return render(request, "coach_detail.html", context)
 
-@login_required(login_url='/login/')  # CHANGED: Gunakan path absolut
+@custom_login_required
 def create_coach_page(request):
     return render(request, 'create_coach.html')
 
-@login_required(login_url='/login/')  # CHANGED
+@custom_login_required
 @require_http_methods(["POST"])
 def add_coach(request):
     try:
@@ -205,14 +262,14 @@ def add_coach(request):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
-@login_required(login_url='/login/')  # CHANGED
+@custom_login_required
 def edit_coach_page(request, pk):
     coach = get_object_or_404(Coach, pk=pk)
     if coach.user_id != request.user.id:
         return HttpResponseForbidden(b"FORBIDDEN: not the owner")
     return render(request, "edit_coach.html", {"coach": coach})
 
-@login_required(login_url='/login/')  # CHANGED
+@custom_login_required
 @require_http_methods(["POST"])
 def update_coach(request, pk):
     try:
@@ -277,7 +334,7 @@ def update_coach(request, pk):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
-@login_required(login_url='/login/')  # CHANGED
+@custom_login_required
 @require_http_methods(["POST"])
 def book_coach(request, pk):
     coach = get_object_or_404(Coach, pk=pk)
@@ -305,7 +362,7 @@ def book_coach(request, pk):
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
 
-@login_required(login_url='/login/')  # CHANGED
+@custom_login_required
 @require_http_methods(["POST"])
 def cancel_booking(request, pk):
     coach = get_object_or_404(Coach, pk=pk)
@@ -325,7 +382,7 @@ def cancel_booking(request, pk):
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
 
-@login_required(login_url='/login/')  # CHANGED
+@custom_login_required
 @require_http_methods(["POST"])
 def mark_available(request, pk):
     """Mark coach as available"""
@@ -355,8 +412,7 @@ def mark_available(request, pk):
             'message': str(e)
         }, status=500)
 
-
-@login_required(login_url='/login/')  # CHANGED
+@custom_login_required
 @require_http_methods(["POST"])
 def mark_unavailable(request, pk):
     """Mark coach as unavailable"""
@@ -385,8 +441,7 @@ def mark_unavailable(request, pk):
             'message': str(e)
         }, status=500)
 
-
-@login_required(login_url='/login/')  # CHANGED
+@custom_login_required
 @require_http_methods(["POST"])
 def delete_coach(request, pk):
     """Delete coach"""
