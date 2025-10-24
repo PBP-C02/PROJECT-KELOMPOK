@@ -11,7 +11,6 @@ from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.auth.signals import user_logged_in
-from django.contrib.sessions.backends.db import SessionStore
 from django.db import models as djm
 from django.contrib.auth.hashers import make_password
 
@@ -68,16 +67,12 @@ def make_user(nama: str = "Nama", phone: str = "081234567890", email: str | None
 
 def manual_login(client, user):
     """
-    Manually log in a user without triggering user_logged_in signal.
-    This bypasses the signal that tries to update last_login field.
+    Manually log in a user by setting session variables.
+    Compatible with custom User model and custom auth system.
     """
-    from django.conf import settings
-    
-    # Create session manually
+    # Set custom user_id in session (your views check this)
     session = client.session
-    session['_auth_user_id'] = str(user.pk)
-    session['_auth_user_backend'] = 'django.contrib.auth.backends.ModelBackend'
-    session['_auth_user_hash'] = ''  # Can be empty for tests
+    session['user_id'] = str(user.id)
     session.save()
 
 
@@ -361,12 +356,17 @@ class CoachFormTests(TestCase):
 
 # ---------- View (JSON) tests ----------
 
+@override_settings(
+    AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend'],
+    MIDDLEWARE=[m for m in __import__('django.conf', fromlist=['settings']).settings.MIDDLEWARE 
+                if 'SessionMiddleware' in m or 'AuthenticationMiddleware' in m]
+)
 class CoachJSONViewTests(TestCase):
     def setUp(self):
         self.owner = make_user(nama="Owner", phone="081234567890", email="owner@test.com")
         self.other = make_user(nama="Other", phone="082233445566", email="other@test.com")
         
-        # Use manual login to bypass user_logged_in signal
+        # Use manual login
         manual_login(self.client, self.owner)
 
         fut = make_future_datetime(days=4, hour=9)
