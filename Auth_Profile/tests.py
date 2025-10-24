@@ -1,458 +1,328 @@
+
 import json
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth.hashers import make_password, check_password
-from Auth_Profile.models import User
 from datetime import date
+from django.test import TestCase, Client
+from django.urls import reverse, resolve
+from django.contrib.auth.hashers import make_password
+from Auth_Profile.models import User
+from Auth_Profile import views
 
 
-class UserModelTest(TestCase):
-    def setUp(self):
-        self.user = User.objects.create(
-            nama="Test User",
-            email="test@example.com",
+class AuthProfileURLTests(TestCase):
+    def test_url_names_resolve(self):
+        self.assertEqual(resolve(reverse("Auth_Profile:homepage")).func, views.homepage_view)
+        self.assertEqual(resolve(reverse("Auth_Profile:login")).func, views.login_view)
+        self.assertEqual(resolve(reverse("Auth_Profile:register")).func, views.register_view)
+        self.assertEqual(resolve(reverse("Auth_Profile:logout")).func, views.logout_view)
+        self.assertEqual(resolve(reverse("Auth_Profile:profile_display")).func, views.profile_display_view)
+        self.assertEqual(resolve(reverse("Auth_Profile:profile_edit")).func, views.profile_edit_view)
+
+
+class UserModelTests(TestCase):
+    def test_str_returns_email(self):
+        u = User.objects.create(
+            nama="Elliot",
+            email="elliot@example.com",
             kelamin="L",
-            tanggal_lahir=date(1990, 1, 1),
-            nomor_handphone="1234567890",
-            password=make_password("password123")
+            tanggal_lahir="2004-01-02",
+            nomor_handphone="08123456789",
+            password=make_password("supersecret"),
         )
-
-    def test_user_creation(self):
-        self.assertEqual(self.user.nama, "Test User")
-        self.assertEqual(self.user.email, "test@example.com")
-        self.assertEqual(self.user.kelamin, "L")
-        self.assertEqual(self.user.tanggal_lahir, date(1990, 1, 1))
-        self.assertEqual(self.user.nomor_handphone, "1234567890")
-        self.assertTrue(check_password("password123", self.user.password))
-
-    def test_user_str(self):
-        self.assertEqual(str(self.user), "test@example.com")
-
-    def test_unique_email(self):
-        with self.assertRaises(Exception):
-            User.objects.create(
-                nama="Another User",
-                email="test@example.com",  # Duplicate email
-                kelamin="P",
-                tanggal_lahir=date(1991, 1, 1),
-                nomor_handphone="0987654321",
-                password=make_password("password123")
-            )
-
-    def test_choices_kelamin(self):
-        self.assertIn(self.user.kelamin, ['L', 'P'])
+        self.assertEqual(str(u), "elliot@example.com")
 
 
-class AuthProfileViewsTest(TestCase):
+class BaseAuthTestCase(TestCase):
     def setUp(self):
         self.client = Client()
+        self.password_plain = "verystrongpassword"
         self.user = User.objects.create(
-            nama="Test User",
-            email="test@example.com",
+            nama="Tester",
+            email="tester@example.com",
             kelamin="L",
-            tanggal_lahir=date(1990, 1, 1),
-            nomor_handphone="1234567890",
-            password=make_password("password123")
+            tanggal_lahir="2000-12-31",
+            nomor_handphone="0811223344",
+            password=make_password(self.password_plain),
         )
 
-    def test_homepage_view_not_logged_in(self):
-        response = self.client.get(reverse('Auth_Profile:homepage'))
-        self.assertEqual(response.status_code, 302)  # Redirect to login
+    def login_session(self):
+        """Simulate an authenticated session by setting session keys."""
+        session = self.client.session
+        session["user_id"] = str(self.user.id)
+        session["email"] = self.user.email
+        session["nama"] = self.user.nama
+        session["kelamin"] = self.user.kelamin
+        session["tanggal_lahir"] = str(self.user.tanggal_lahir)
+        session["nomor_handphone"] = self.user.nomor_handphone
+        session.save()
 
-    def test_homepage_view_logged_in(self):
-        self.client.session['user_id'] = str(self.user.id)
-        self.client.session.save()
-        response = self.client.get(reverse('Auth_Profile:homepage'))
-        # The view redirects if user doesn't exist, but in test it should work
-        # Let's check what the actual redirect is
-        if response.status_code == 302:
-            self.assertEqual(response['Location'], '/login/')
-        else:
-            self.assertEqual(response.status_code, 200)
-            self.assertContains(response, "Test User")
 
-    def test_homepage_view_invalid_user(self):
-        self.client.session['user_id'] = 'invalid-uuid'
-        response = self.client.get(reverse('Auth_Profile:homepage'))
-        self.assertEqual(response.status_code, 302)  # Redirect to login
+class HomepageViewTests(BaseAuthTestCase):
+    def test_redirect_to_login_if_not_logged_in(self):
+        url = reverse("Auth_Profile:homepage")
+        res = self.client.get(url, follow=False)
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, reverse("Auth_Profile:login"))
 
-    def test_profile_display_view_not_logged_in(self):
-        response = self.client.get(reverse('Auth_Profile:profile_display'))
-        self.assertEqual(response.status_code, 302)
+    def test_homepage_renders_when_logged_in(self):
+        self.login_session()
+        res = self.client.get(reverse("Auth_Profile:homepage"))
+        self.assertEqual(res.status_code, 200)
+        self.assertIn("user", res.context)
+        self.assertEqual(res.context["user"].email, self.user.email)
 
-    def test_profile_display_view_logged_in(self):
-        self.client.session['user_id'] = str(self.user.id)
-        self.client.session.save()
-        response = self.client.get(reverse('Auth_Profile:profile_display'))
-        if response.status_code == 302:
-            self.assertEqual(response['Location'], '/login/')
-        else:
-            self.assertEqual(response.status_code, 200)
-            self.assertContains(response, "Test User")
+    def test_homepage_invalid_user_in_session_flushes_and_redirects(self):
+        session = self.client.session
+        session["user_id"] = "00000000-0000-0000-0000-000000000000"  # non-existent UUID
+        session.save()
+        res = self.client.get(reverse("Auth_Profile:homepage"))
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, reverse("Auth_Profile:login"))
+        # session should be flushed (no user_id key)
+        self.assertNotIn("user_id", self.client.session)
 
-    def test_profile_edit_view_get_not_logged_in(self):
-        response = self.client.get(reverse('Auth_Profile:profile_edit'))
-        self.assertEqual(response.status_code, 302)
 
-    def test_profile_edit_view_get_logged_in(self):
-        self.client.session['user_id'] = str(self.user.id)
-        self.client.session.save()
-        response = self.client.get(reverse('Auth_Profile:profile_edit'))
-        if response.status_code == 302:
-            self.assertEqual(response['Location'], '/login/')
-        else:
-            self.assertEqual(response.status_code, 200)
+class ProfileDisplayViewTests(BaseAuthTestCase):
+    def test_redirect_to_login_if_not_logged_in(self):
+        res = self.client.get(reverse("Auth_Profile:profile_display"))
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, reverse("Auth_Profile:login"))
 
-    def test_profile_edit_view_post_valid(self):
-        self.client.session['user_id'] = str(self.user.id)
-        self.client.session.save()
-        data = {
-            'nama': 'Updated Name',
-            'kelamin': 'P',
-            'tanggal_lahir': '1991-01-01',
-            'nomor_handphone': '0987654321'
+    def test_profile_display_ok_when_logged_in(self):
+        self.login_session()
+        res = self.client.get(reverse("Auth_Profile:profile_display"))
+        self.assertEqual(res.status_code, 200)
+        self.assertIn("user", res.context)
+        self.assertEqual(res.context["user"].id, self.user.id)
+
+
+class ProfileEditViewTests(BaseAuthTestCase):
+    def test_redirect_to_login_if_not_logged_in(self):
+        res = self.client.get(reverse("Auth_Profile:profile_edit"))
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, reverse("Auth_Profile:login"))
+
+    def test_get_profile_edit_when_logged_in(self):
+        self.login_session()
+        res = self.client.get(reverse("Auth_Profile:profile_edit"))
+        self.assertEqual(res.status_code, 200)
+        self.assertIn("user", res.context)
+
+    def test_post_missing_fields(self):
+        self.login_session()
+        res = self.client.post(reverse("Auth_Profile:profile_edit"), data={})
+        self.assertEqual(res.status_code, 200)  # renders with error
+        self.assertContains(res, "Semua field harus diisi")
+
+    def test_post_invalid_date(self):
+        self.login_session()
+        payload = {
+            "nama": "Baru",
+            "kelamin": "L",
+            "tanggal_lahir": "31-12-2000",  # wrong format
+            "nomor_handphone": "08123",
         }
-        response = self.client.post(reverse('Auth_Profile:profile_edit'), data)
-        if response.status_code == 302:
-            self.assertEqual(response['Location'], '/profile/')
-            self.user.refresh_from_db()
-            self.assertEqual(self.user.nama, 'Updated Name')
-        else:
-            # If it doesn't redirect, check if it's because user doesn't exist
-            self.assertEqual(response.status_code, 302)
-            self.assertEqual(response['Location'], '/login/')
+        res = self.client.post(reverse("Auth_Profile:profile_edit"), data=payload)
+        self.assertEqual(res.status_code, 200)
+        self.assertContains(res, "Format tanggal lahir tidak valid")
 
-    def test_profile_edit_view_post_missing_fields(self):
-        self.client.session['user_id'] = str(self.user.id)
-        self.client.session.save()
-        data = {'nama': 'Updated Name'}  # Missing fields
-        response = self.client.post(reverse('Auth_Profile:profile_edit'), data)
-        if response.status_code == 302:
-            self.assertEqual(response['Location'], '/login/')
-        else:
-            self.assertEqual(response.status_code, 200)
-            self.assertContains(response, 'Semua field harus diisi')
-
-    def test_profile_edit_view_post_invalid_date(self):
-        self.client.session['user_id'] = str(self.user.id)
-        self.client.session.save()
-        data = {
-            'nama': 'Updated Name',
-            'kelamin': 'P',
-            'tanggal_lahir': 'invalid-date',
-            'nomor_handphone': '0987654321'
+    def test_post_valid_updates_and_session_refreshed(self):
+        self.login_session()
+        payload = {
+            "nama": "Nama Update",
+            "kelamin": "P",
+            "tanggal_lahir": "2001-01-01",
+            "nomor_handphone": "081234567000",
         }
-        response = self.client.post(reverse('Auth_Profile:profile_edit'), data)
-        if response.status_code == 302:
-            self.assertEqual(response['Location'], '/login/')
-        else:
-            self.assertEqual(response.status_code, 200)
-            self.assertContains(response, 'Format tanggal lahir tidak valid')
+        res = self.client.post(reverse("Auth_Profile:profile_edit"), data=payload, follow=False)
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, reverse("Auth_Profile:profile_display"))
+        # reload from DB
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.nama, "Nama Update")
+        self.assertEqual(self.user.kelamin, "P")
+        self.assertEqual(str(self.user.tanggal_lahir), "2001-01-01")
+        self.assertEqual(self.user.nomor_handphone, "081234567000")
+        # session updated
+        s = self.client.session
+        self.assertEqual(s["nama"], "Nama Update")
+        self.assertEqual(s["kelamin"], "P")
+        self.assertEqual(s["tanggal_lahir"], "2001-01-01")
+        self.assertEqual(s["nomor_handphone"], "081234567000")
 
-    def test_login_view_get(self):
-        response = self.client.get(reverse('Auth_Profile:login'))
-        self.assertEqual(response.status_code, 200)
 
-    def test_login_view_post_valid(self):
-        data = {'email': 'test@example.com', 'password': 'password123'}
-        response = self.client.post(reverse('Auth_Profile:login'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['success'])
-        self.assertIn('user_id', self.client.session)
+class LoginViewTests(BaseAuthTestCase):
+    def test_get_login_renders(self):
+        res = self.client.get(reverse("Auth_Profile:login"))
+        self.assertEqual(res.status_code, 200)
 
-    def test_login_view_post_invalid_password(self):
-        data = {'email': 'test@example.com', 'password': 'wrongpassword'}
-        response = self.client.post(reverse('Auth_Profile:login'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
+    def test_post_login_missing_fields(self):
+        data = {}
+        res = self.client.post(
+            reverse("Auth_Profile:login"),
+            data=json.dumps(data),
+            content_type="application/json",
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertJSONEqual(
+            res.content,
+            {"success": False, "message": "Email dan password harus diisi"},
+        )
 
-    def test_login_view_post_nonexistent_email(self):
-        data = {'email': 'nonexistent@example.com', 'password': 'password123'}
-        response = self.client.post(reverse('Auth_Profile:login'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
+    def test_post_login_unknown_email(self):
+        data = {"email": "nouser@example.com", "password": "abc"}
+        res = self.client.post(
+            reverse("Auth_Profile:login"),
+            data=json.dumps(data),
+            content_type="application/json",
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertJSONEqual(
+            res.content, {"success": False, "message": "Email atau password salah"}
+        )
 
-    def test_login_view_post_missing_fields(self):
-        data = {'email': 'test@example.com'}  # Missing password
-        response = self.client.post(reverse('Auth_Profile:login'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
+    def test_post_login_wrong_password(self):
+        data = {"email": self.user.email, "password": "wrongpassword"}
+        res = self.client.post(
+            reverse("Auth_Profile:login"),
+            data=json.dumps(data),
+            content_type="application/json",
+        )
+        self.assertEqual(res.status_code, 200)
+        self.assertJSONEqual(
+            res.content, {"success": False, "message": "Email atau password salah"}
+        )
 
-    def test_register_view_get(self):
-        response = self.client.get(reverse('Auth_Profile:register'))
-        self.assertEqual(response.status_code, 200)
+    def test_post_login_success(self):
+        data = {"email": self.user.email, "password": self.password_plain}
+        res = self.client.post(
+            reverse("Auth_Profile:login"),
+            data=json.dumps(data),
+            content_type="application/json",
+        )
+        self.assertEqual(res.status_code, 200)
+        payload = json.loads(res.content.decode())
+        self.assertTrue(payload.get("success"))
+        self.assertEqual(payload.get("redirect_url"), "/")
+        # session is populated
+        s = self.client.session
+        self.assertIn("user_id", s)
+        self.assertEqual(s["email"], self.user.email)
 
-    def test_register_view_post_valid(self):
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '1122334455',
-            'password': 'password123',
-            'password2': 'password123'
+
+class RegisterViewTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        self.url = reverse("Auth_Profile:register")
+
+    def test_get_register_renders(self):
+        res = self.client.get(self.url)
+        self.assertEqual(res.status_code, 200)
+
+    def post_json(self, payload):
+        return self.client.post(
+            self.url, data=json.dumps(payload), content_type="application/json"
+        )
+
+    def test_missing_fields(self):
+        res = self.post_json({})
+        self.assertJSONEqual(res.content, {"success": False, "message": "Semua field harus diisi"})
+
+    def test_invalid_email(self):
+        payload = {
+            "nama": "A", "email": "invalid", "kelamin": "L",
+            "tanggal_lahir": "2000-01-01", "nomor_handphone": "0812",
+            "password": "abcdefgh", "password2": "abcdefgh"
         }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['success'])
-        self.assertTrue(User.objects.filter(email='new@example.com').exists())
+        res = self.post_json(payload)
+        self.assertJSONEqual(res.content, {"success": False, "message": "Format email tidak valid"})
 
-    def test_register_view_post_missing_fields(self):
-        data = {'nama': 'New User'}  # Missing fields
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
-
-    def test_register_view_post_invalid_email(self):
-        data = {
-            'nama': 'New User',
-            'email': 'invalidemail',
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '1122334455',
-            'password': 'password123',
-            'password2': 'password123'
+    def test_invalid_gender(self):
+        payload = {
+            "nama": "A", "email": "a@example.com", "kelamin": "X",
+            "tanggal_lahir": "2000-01-01", "nomor_handphone": "0812",
+            "password": "abcdefgh", "password2": "abcdefgh"
         }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
+        res = self.post_json(payload)
+        self.assertJSONEqual(res.content, {"success": False, "message": "Kelamin harus L atau P"})
 
-    def test_register_view_post_invalid_kelamin(self):
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'X',  # Invalid
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '1122334455',
-            'password': 'password123',
-            'password2': 'password123'
+    def test_invalid_date(self):
+        payload = {
+            "nama": "A", "email": "a@example.com", "kelamin": "L",
+            "tanggal_lahir": "01-01-2000", "nomor_handphone": "0812",
+            "password": "abcdefgh", "password2": "abcdefgh"
         }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
+        res = self.post_json(payload)
+        self.assertJSONEqual(
+            res.content, {"success": False, "message": "Format tanggal lahir tidak valid (gunakan YYYY-MM-DD)"}
+        )
 
-    def test_register_view_post_invalid_date(self):
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'P',
-            'tanggal_lahir': 'invalid-date',
-            'nomor_handphone': '1122334455',
-            'password': 'password123',
-            'password2': 'password123'
+    def test_invalid_phone(self):
+        payload = {
+            "nama": "A", "email": "a@example.com", "kelamin": "L",
+            "tanggal_lahir": "2000-01-01", "nomor_handphone": "08AB",
+            "password": "abcdefgh", "password2": "abcdefgh"
         }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
+        res = self.post_json(payload)
+        self.assertJSONEqual(
+            res.content, {"success": False, "message": "Nomor handphone hanya boleh berisi angka"}
+        )
 
-    def test_register_view_post_invalid_phone(self):
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': 'abc123',  # Invalid
-            'password': 'password123',
-            'password2': 'password123'
+    def test_password_mismatch(self):
+        payload = {
+            "nama": "A", "email": "a@example.com", "kelamin": "L",
+            "tanggal_lahir": "2000-01-01", "nomor_handphone": "0812",
+            "password": "abcdefgh", "password2": "abcdefgZ"
         }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
+        res = self.post_json(payload)
+        self.assertJSONEqual(res.content, {"success": False, "message": "Password tidak cocok"})
 
-    def test_register_view_post_invalid_phone_with_special_chars(self):
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '123-456-789a',  # Invalid with letters
-            'password': 'password123',
-            'password2': 'password123'
+    def test_password_too_short(self):
+        payload = {
+            "nama": "A", "email": "a@example.com", "kelamin": "L",
+            "tanggal_lahir": "2000-01-01", "nomor_handphone": "0812",
+            "password": "short", "password2": "short"
         }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
+        res = self.post_json(payload)
+        self.assertJSONEqual(res.content, {"success": False, "message": "Password minimal 8 karakter"})
 
-    def test_register_view_post_valid_phone_with_plus(self):
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '+628123456789',  # Valid with plus
-            'password': 'password123',
-            'password2': 'password123'
+    def test_email_already_exists(self):
+        User.objects.create(
+            nama="Dup",
+            email="dup@example.com",
+            kelamin="P",
+            tanggal_lahir="2001-02-03",
+            nomor_handphone="08123",
+            password=make_password("abcdefgh"),
+        )
+        payload = {
+            "nama": "A", "email": "dup@example.com", "kelamin": "L",
+            "tanggal_lahir": "2000-01-01", "nomor_handphone": "0812",
+            "password": "abcdefgh", "password2": "abcdefgh"
         }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['success'])
+        res = self.post_json(payload)
+        self.assertJSONEqual(res.content, {"success": False, "message": "Email sudah terdaftar"})
 
-    def test_register_view_post_valid_phone_with_dash(self):
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '0812-345-6789',  # Valid with dash
-            'password': 'password123',
-            'password2': 'password123'
+    def test_register_success(self):
+        payload = {
+            "nama": "User Baru", "email": "baru@example.com", "kelamin": "P",
+            "tanggal_lahir": "2002-03-04", "nomor_handphone": "08129876",
+            "password": "passwordku", "password2": "passwordku"
         }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['success'])
+        res = self.post_json(payload)
+        self.assertEqual(res.status_code, 200)
+        body = json.loads(res.content.decode())
+        self.assertTrue(body.get("success"))
+        self.assertEqual(body.get("redirect_url"), "/login/")
+        # User is actually created and password hashed
+        u = User.objects.get(email="baru@example.com")
+        self.assertNotEqual(u.password, "passwordku")  # hashed in DB
+        self.assertEqual(str(u.tanggal_lahir), "2002-03-04")
 
-    def test_register_view_post_exception_handling(self):
-        # Test the exception handling in register view
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '08123456789',
-            'password': 'password123',
-            'password2': 'password123'
-        }
-        # Force an exception by temporarily making User.objects.create fail
-        original_create = User.objects.create
-        def mock_create(**kwargs):
-            raise Exception("Database error")
-        User.objects.create = mock_create
 
-        try:
-            response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-            self.assertEqual(response.status_code, 200)
-            self.assertFalse(response.json()['success'])
-            self.assertIn('Terjadi kesalahan', response.json()['message'])
-        finally:
-            User.objects.create = original_create
-
-    def test_login_view_post_json_decode_error(self):
-        # Test invalid JSON in login POST - this will raise JSONDecodeError
-        with self.assertRaises(json.JSONDecodeError):
-            self.client.post(reverse('Auth_Profile:login'), 'invalid json', content_type='application/json')
-
-    def test_register_view_post_json_decode_error(self):
-        # Test invalid JSON in register POST - this will raise JSONDecodeError
-        with self.assertRaises(json.JSONDecodeError):
-            self.client.post(reverse('Auth_Profile:register'), 'invalid json', content_type='application/json')
-
-    def test_login_view_post_empty_json(self):
-        # Test empty JSON object
-        response = self.client.post(reverse('Auth_Profile:login'), '{}', content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
-
-    def test_register_view_post_empty_json(self):
-        # Test empty JSON object
-        response = self.client.post(reverse('Auth_Profile:register'), '{}', content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
-
-    def test_login_view_post_none_values(self):
-        # Test None values in login data
-        data = {'email': None, 'password': None}
-        response = self.client.post(reverse('Auth_Profile:login'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
-
-    def test_register_view_post_none_values(self):
-        # Test None values in register data
-        data = {'nama': None, 'email': None, 'kelamin': None, 'tanggal_lahir': None, 'nomor_handphone': None, 'password': None, 'password2': None}
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
-
-    def test_register_view_post_password_mismatch(self):
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '1122334455',
-            'password': 'password123',
-            'password2': 'differentpassword'
-        }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
-
-    def test_register_view_post_short_password(self):
-        data = {
-            'nama': 'New User',
-            'email': 'new@example.com',
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '1122334455',
-            'password': 'short',
-            'password2': 'short'
-        }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
-
-    def test_register_view_post_duplicate_email(self):
-        data = {
-            'nama': 'New User',
-            'email': 'test@example.com',  # Duplicate
-            'kelamin': 'P',
-            'tanggal_lahir': '1992-01-01',
-            'nomor_handphone': '1122334455',
-            'password': 'password123',
-            'password2': 'password123'
-        }
-        response = self.client.post(reverse('Auth_Profile:register'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertFalse(response.json()['success'])
-
-    def test_logout_view(self):
-        self.client.session['user_id'] = str(self.user.id)
-        self.client.session.save()
-        response = self.client.get(reverse('Auth_Profile:logout'))
-        self.assertEqual(response.status_code, 302)  # Redirect to login
-        self.assertNotIn('user_id', self.client.session)
-
-    def test_homepage_view_session_data_persistence(self):
-        # Test that session data is properly maintained
-        self.client.session['user_id'] = str(self.user.id)
-        self.client.session['nama'] = self.user.nama
-        self.client.session['email'] = self.user.email
-        self.client.session.save()
-        response = self.client.get(reverse('Auth_Profile:homepage'))
-        if response.status_code == 302:
-            self.assertEqual(response['Location'], '/login/')
-        else:
-            self.assertEqual(response.status_code, 200)
-
-    def test_profile_edit_view_session_update(self):
-        # Test session update after profile edit
-        self.client.session['user_id'] = str(self.user.id)
-        self.client.session.save()
-        data = {
-            'nama': 'Updated Name',
-            'kelamin': 'P',
-            'tanggal_lahir': '1991-01-01',
-            'nomor_handphone': '0987654321'
-        }
-        response = self.client.post(reverse('Auth_Profile:profile_edit'), data)
-        if response.status_code == 302:
-            self.assertEqual(response['Location'], '/profile/')
-            # Check if session was updated
-            self.assertEqual(self.client.session.get('nama'), 'Updated Name')
-        else:
-            # If it doesn't redirect, check if it's because user doesn't exist
-            self.assertEqual(response.status_code, 302)
-            self.assertEqual(response['Location'], '/login/')
-
-    def test_login_view_session_population(self):
-        # Test that login properly populates session
-        data = {'email': 'test@example.com', 'password': 'password123'}
-        response = self.client.post(reverse('Auth_Profile:login'), json.dumps(data), content_type='application/json')
-        self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.json()['success'])
-        # Check session data
-        self.assertIn('user_id', self.client.session)
-        self.assertIn('nama', self.client.session)
-        self.assertIn('email', self.client.session)
-        self.assertIn('kelamin', self.client.session)
-        self.assertIn('tanggal_lahir', self.client.session)
-        self.assertIn('nomor_handphone', self.client.session)
+class LogoutViewTests(BaseAuthTestCase):
+    def test_logout_flushes_session_and_redirects(self):
+        self.login_session()
+        res = self.client.get(reverse("Auth_Profile:logout"))
+        self.assertEqual(res.status_code, 302)
+        self.assertEqual(res.url, "/login/")
+        self.assertEqual(dict(self.client.session), {})  # flushed

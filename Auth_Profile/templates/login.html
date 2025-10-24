@@ -13,45 +13,45 @@
 {% endblock meta %}
 
 {% block content %}
-<div class="bg-login flex justify-center items-center w-full min-h-screen bg-dark-lime">
-    <div class="flex flex-col justify-center items-center gap-[50px] w-[626px] rounded-[42px] px-14 py-16 shadow-2xl bg-white">
-        <div class="flex flex-col justify-center items-center gap-[20px]">
-            <h1 class="font-raleway font-bold text-5xl text-grey">Log In</h1>
-            <p class="font-raleway font-regular text-2xl text-light-grey">Welcome back to <span class="text-lime font-bold"><i>MOVE BUDDY</i></span></p>
+<div class="bg-login flex justify-center items-center w-full min-h-screen bg-dark-lime px-4 sm:px-6 py-8">
+    <div class="flex flex-col justify-center items-center gap-8 sm:gap-[50px] w-full max-w-[626px] rounded-3xl sm:rounded-[42px] px-6 sm:px-14 py-10 sm:py-16 shadow-2xl bg-white">
+        <div class="flex flex-col justify-center items-center gap-3 sm:gap-[20px]">
+            <h1 class="font-raleway font-bold text-3xl sm:text-5xl text-grey text-center">Log In</h1>
+            <p class="font-raleway font-regular text-lg sm:text-2xl text-light-grey text-center">Welcome back to <span class="text-lime font-bold"><i>MOVE BUDDY</i></span></p>
         </div>
         
-        <div id="error-message" class="text-red-600 font-raleway text-lg hidden"></div>
+        <div id="error-message" class="text-red-600 font-raleway text-base sm:text-lg hidden text-center w-full"></div>
         
-        <form id="loginForm" method="POST" class="w-full flex flex-col justify-center gap-[50px]">
+        <form id="loginForm" method="POST" class="w-full flex flex-col justify-center gap-8 sm:gap-[50px]">
             {% csrf_token %}
-            <div class="flex flex-col justify-center gap-[25px]">
-                <div class="flex flex-col justify-center gap-[8px]">
-                    <label for="email" class="font-raleway font-medium text-2xl text-grey">Email:</label>
+            <div class="flex flex-col justify-center gap-5 sm:gap-[25px]">
+                <div class="flex flex-col justify-center gap-2 sm:gap-[8px]">
+                    <label for="email" class="font-raleway font-medium text-xl sm:text-2xl text-grey">Email:</label>
                     <input 
                         type="email" 
                         id="email" 
                         name="email" 
-                        class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[66px] font-raleway font-regular text-2xl px-7 py-5 focus:outline-none focus:border-lime"
+                        class="border-light-grey border-2 sm:border-[3px] border-solid rounded-2xl sm:rounded-[20px] w-full h-14 sm:h-[66px] font-raleway font-regular text-base sm:text-2xl px-5 sm:px-7 py-3 sm:py-5 focus:outline-none focus:border-lime"
                         placeholder="Masukkan email"
                         required
                     >
                 </div>
-                <div class="flex flex-col justify-center gap-[8px]">
-                    <label for="password" class="font-raleway font-medium text-2xl text-grey">Password:</label>
+                <div class="flex flex-col justify-center gap-2 sm:gap-[8px]">
+                    <label for="password" class="font-raleway font-medium text-xl sm:text-2xl text-grey">Password:</label>
                     <input 
                         type="password" 
                         id="password" 
                         name="password"
-                        class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[66px] font-raleway font-regular text-2xl px-7 py-5 focus:outline-none focus:border-lime"
+                        class="border-light-grey border-2 sm:border-[3px] border-solid rounded-2xl sm:rounded-[20px] w-full h-14 sm:h-[66px] font-raleway font-regular text-base sm:text-2xl px-5 sm:px-7 py-3 sm:py-5 focus:outline-none focus:border-lime"
                         placeholder="Masukkan password"
                         required
                     >
                 </div>
             </div>
-            <button type="submit" class="bg-lime font-raleway font-medium text-2xl text-grey w-full h-[66px] rounded-[20px] hover:bg-dark-lime transition-colors">Login</button>
+            <button type="submit" class="bg-lime font-raleway font-medium text-xl sm:text-2xl text-grey w-full h-14 sm:h-[66px] rounded-2xl sm:rounded-[20px] hover:bg-dark-lime transition-colors">Login</button>
         </form>
         <hr class="border-none h-[1px] bg-light-grey w-full">
-        <p class="font-raleway font-regular text-2xl text-grey">Belum punya akun? <a href="/register/" class="font-bold text-lime hover:text-dark-lime transition-colors">Register di sini</a></p>
+        <p class="font-raleway font-regular text-lg sm:text-2xl text-grey text-center">Belum punya akun? <a href="/register/" class="font-bold text-lime hover:text-dark-lime transition-colors">Register di sini</a></p>
     </div>
 </div>
 
