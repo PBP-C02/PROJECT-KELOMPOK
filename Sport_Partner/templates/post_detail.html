@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>{{ post.title }}</title>
+{% endblock meta %}
+
+{% block content %}
+<div>
+    <h1>{{ post.title }}</h1>
+    <p><strong>Kategori:</strong> {{ post.get_category_display }}</p>
+    <p><strong>Deskripsi:</strong> {{ post.description }}</p>
+    <p><strong>Tanggal:</strong> {{ post.tanggal }}</p>
+    <p><strong>Waktu:</strong> {{ post.jam_mulai }} - {{ post.jam_selesai }}</p>
+    <p><strong>Lokasi:</strong> {{ post.lokasi }}</p>
+    <p><strong>Dibuat oleh:</strong> {{ post.creator.nama }}</p>
+    <hr>
+    
+    <!-- Participants Section -->
+    <h2>Participants (<span id="participant-count">0</span>)</h2>
+    
+    <div id="loading" style="display: none;">Loading participants...</div>
+    <div id="error-message" style="color: red;"></div>
+    
+    <ul id="participant-list"></ul>
+    
+    <!-- Join/Leave Button -->
+    <div id="action-section">
+        {% if post.creator.id != user_now.id %}
+            {% if is_participant %}
+                <button id="leave-btn" onclick="leavePost()">LEAVE</button>
+            {% else %}
+                <button id="join-btn" onclick="joinPost()">JOIN NOW!</button>
+            {% endif %}
+        {% else %}
+            <p><em>Anda adalah creator post ini</em></p>
+        {% endif %}
+    </div>
+    
+    <br>
+    <a href="{% url 'Sport_Partner:show_post' %}">Kembali</a>
+</div>
+
+<script>
+const POST_ID = '{{ post.post_id }}';
+const CSRF_TOKEN = '{{ csrf_token }}';
+
+// Load participants
+async function loadParticipants() {
+    const loading = document.getElementById('loading');
+    const errorDiv = document.getElementById('error-message');
+    const participantList = document.getElementById('participant-list');
+    const participantCount = document.getElementById('participant-count');
+    
+    loading.style.display = 'block';
+    errorDiv.textContent = '';
+    
+    try {
+        const response = await fetch(`/sport-partner/post/${POST_ID}/participants/`);
+        const data = await response.json();
+        
+        if (data.success) {
+            participantList.innerHTML = '';
+            participantCount.textContent = data.total;
+            
+            if (data.participants.length === 0) {
+                participantList.innerHTML = '<li>Belum ada participant</li>';
+            } else {
+                data.participants.forEach(participant => {
+                    const li = document.createElement('li');
+                    li.textContent = `${participant.nama} (${participant.email})`;
+                    participantList.appendChild(li);
+                });
+            }
+        } else {
+            errorDiv.textContent = 'Gagal memuat participants';
+        }
+    } catch (error) {
+        errorDiv.textContent = 'Terjadi kesalahan saat memuat participants';
+        console.error(error);
+    } finally {
+        loading.style.display = 'none';
+    }
+}
+
+// Join post
+async function joinPost() {
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.textContent = '';
+    
+    try {
+        const response = await fetch(`/sport-partner/post/${POST_ID}/join/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': CSRF_TOKEN,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert(data.message);
+            location.reload(); // Reload page untuk update button
+        } else {
+            errorDiv.textContent = data.message;
+        }
+    } catch (error) {
+        errorDiv.textContent = 'Terjadi kesalahan';
+        console.error(error);
+    }
+}
+
+// Leave post
+async function leavePost() {
+    if (!confirm('Yakin ingin leave?')) return;
+    
+    const errorDiv = document.getElementById('error-message');
+    errorDiv.textContent = '';
+    
+    try {
+        const response = await fetch(`/sport-partner/post/${POST_ID}/leave/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': CSRF_TOKEN,
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            alert(data.message);
+            location.reload(); // Reload page untuk update button
+        } else {
+            errorDiv.textContent = data.message;
+        }
+    } catch (error) {
+        errorDiv.textContent = 'Terjadi kesalahan';
+        console.error(error);
+    }
+}
+
+// Load participants on page load
+loadParticipants();
+</script>
+
+{% endblock content %}
