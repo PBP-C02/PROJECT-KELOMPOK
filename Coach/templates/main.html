@@ -7,12 +7,9 @@
 {% endblock meta %}
 
 {% block content %}
-<!-- Include Navbar -->
 {% include 'includes/navbar.html' %}
 
-<!-- Background wrapper dengan CSS variable -->
 <div style="--bg-image: url('{% static 'img/bg.png' %}');" class="coach-bg-wrapper">
-
 <div class="container">
 
 <!-- Loading Overlay -->
@@ -38,43 +35,38 @@
 
 <!-- Search Form -->
 <form id="filter-form" class="search-bar" method="get" action="{% url 'coach:show_main' %}">
-  <input type="text" name="nama_coach" placeholder="Cari nama coach..." value="{{ nama_coach|escape }}">
-  
-  <select name="location">
-    <option value="">Semua Lokasi</option>
-    <option value="Jakarta" {% if request.GET.location == 'Jakarta' %}selected{% endif %}>Jakarta</option>
-    <option value="Bandung" {% if request.GET.location == 'Bandung' %}selected{% endif %}>Bandung</option>
-    <option value="Surabaya" {% if request.GET.location == 'Surabaya' %}selected{% endif %}>Surabaya</option>
-    <option value="Depok" {% if request.GET.location == 'Depok' %}selected{% endif %}>Depok</option>
-    <option value="Tangerang" {% if request.GET.location == 'Tangerang' %}selected{% endif %}>Tangerang</option>
-    <option value="Bekasi" {% if request.GET.location == 'Bekasi' %}selected{% endif %}>Bekasi</option>
-  </select>
+  <div style="display:flex; gap:12px; align-items:center; width:100%;">
+    <input 
+      type="text" 
+      name="nama_coach" 
+      placeholder="Search coaches..." 
+      value="{{ nama_coach|escape }}"
+      style="flex:1; min-width:0;">
+    
+    <select name="location" style="min-width:150px;">
+      <option value="">All Locations</option>
+      <option value="Jakarta" {% if request.GET.location == 'Jakarta' %}selected{% endif %}>Jakarta</option>
+      <option value="Bandung" {% if request.GET.location == 'Bandung' %}selected{% endif %}>Bandung</option>
+      <option value="Surabaya" {% if request.GET.location == 'Surabaya' %}selected{% endif %}>Surabaya</option>
+      <option value="Depok" {% if request.GET.location == 'Depok' %}selected{% endif %}>Depok</option>
+      <option value="Tangerang" {% if request.GET.location == 'Tangerang' %}selected{% endif %}>Tangerang</option>
+      <option value="Bekasi" {% if request.GET.location == 'Bekasi' %}selected{% endif %}>Bekasi</option>
+    </select>
 
-  <select name="category">
-    <option value="">Semua kategori</option>
-    <option value="tennis" {% if request.GET.category == 'tennis' %}selected{% endif %}>Tennis</option>
-    <option value="basketball" {% if request.GET.category == 'basketball' %}selected{% endif %}>Basketball</option>
-    <option value="soccer" {% if request.GET.category == 'soccer' %}selected{% endif %}>Soccer</option>
-    <option value="badminton" {% if request.GET.category == 'badminton' %}selected{% endif %}>Badminton</option>
-    <option value="volleyball" {% if request.GET.category == 'volleyball' %}selected{% endif %}>Volleyball</option>
-    <option value="paddle" {% if request.GET.category == 'paddle' %}selected{% endif %}>Paddle</option>
-    <option value="futsal" {% if request.GET.category == 'futsal' %}selected{% endif %}>Futsal</option>
-    <option value="table_tennis" {% if request.GET.category == 'table_tennis' %}selected{% endif %}>Table Tennis</option>
-    <option value="swimming" {% if request.GET.category == 'swimming' %}selected{% endif %}>Swimming</option>
-  </select>
+    <input type="hidden" name="min_price" id="min_price" value="{{ request.GET.min_price }}">
+    <input type="hidden" name="max_price" id="max_price" value="{{ request.GET.max_price }}">
 
-  <input type="hidden" name="min_price" id="min_price" value="{{ request.GET.min_price }}">
-  <input type="hidden" name="max_price" id="max_price" value="{{ request.GET.max_price }}">
-
-  <div style="display:flex; gap:8px; align-items:center;">
-    <button type="button" id="btn-price" class="btn-outline">
+    <button type="button" id="btn-price" class="btn-outline" style="white-space:nowrap;">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="12" y1="1" x2="12" y2="23"></line>
         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
       </svg>
-      <span>Harga</span>
+      <span>Price</span>
     </button>
-    <button type="submit" class="btn-primary">Terapkan</button>
+
+    <button type="submit" class="btn-primary" style="white-space:nowrap;">
+      🔍 Search
+    </button>
   </div>
 
   <!-- Price Modal -->
@@ -97,6 +89,20 @@
     </div>
   </dialog>
 
+  <!-- Category Pills -->
+  <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+    <button type="button" class="category-pill {% if not request.GET.category %}active{% endif %}" onclick="setCategory('')">All</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'tennis' %}active{% endif %}" onclick="setCategory('tennis')">Tennis</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'basketball' %}active{% endif %}" onclick="setCategory('basketball')">Basketball</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'soccer' %}active{% endif %}" onclick="setCategory('soccer')">Soccer</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'badminton' %}active{% endif %}" onclick="setCategory('badminton')">Badminton</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'volleyball' %}active{% endif %}" onclick="setCategory('volleyball')">Volleyball</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'futsal' %}active{% endif %}" onclick="setCategory('futsal')">Futsal</button>
+    <button type="button" class="category-pill {% if request.GET.category == 'paddle' %}active{% endif %}" onclick="setCategory('paddle')">Paddle</button>
+  </div>
+  <input type="hidden" name="category" id="category-input" value="{{ request.GET.category }}">
+
+  <!-- Available coaches checkbox + Add Coach button -->
   <div class="filter-footer">
     <div class="filter-left">
       <label class="avail-check">
@@ -137,46 +143,87 @@
 <div class="cards">
   {% if coach_list %}
     {% for c in coach_list %}
-      <article class="coach-card">
-        <a href="{% url 'coach:coach_detail' c.pk %}" class="card-link">
-          <div class="coach-thumb">
-            {% if c.image %}
-              <img src="{{ c.image.url }}" alt="{{ c.title }}">
-            {% else %}
-              <div style="width:100%; height:100%; background:#f0f0f0; display:flex; align-items:center; justify-content:center; color:#999;">
-                {{ c.category|upper }}
-              </div>
-            {% endif %}
-            {% if c.isBooked %}
-            <div class="ribbon-wrapper-small">
-              <div class="ribbon-small">BOOKED</div>
+      <div class="coach-card" onclick="window.location.href='{% url 'coach:coach_detail' c.pk %}'">
+        <!-- Thumbnail -->
+        <div class="coach-thumb">
+          {% if c.image %}
+            <img src="{{ c.image.url }}" alt="{{ c.title }}">
+          {% else %}
+            <div style="width:100%; height:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display:flex; align-items:center; justify-content:center; color:#fff; font-size:2rem; font-weight:700;">
+              {{ c.category|upper|slice:":1" }}
             </div>
-            {% endif %}
-          </div>
-          <div class="coach-card-content">
-            <span class="coach-badge">{{ c.category|title }}</span>
-            <h3>{{ c.title }}</h3>
-            <div class="coach-info">
-              <span>📍 {{ c.location }}</span>
-              {% if c.address %}<span>📌 {{ c.address }}</span>{% endif %}
-              <span>📅 {{ c.date|date:"d M Y" }}</span>
-              <span>🕐 {{ c.startTime|time:"H:i" }} - {{ c.endTime|time:"H:i" }}</span>
-              <span>⭐ {{ c.rating }}</span>
-              <span>👤 {{ c.user.nama }}</span>
+          {% endif %}
+        </div>
+
+        <!-- Content -->
+        <div class="coach-card-content">
+          <!-- Status Badge (di atas title) -->
+          <span class="coach-status-badge-inline {% if not c.isBooked %}available{% else %}booked{% endif %}">
+            {% if not c.isBooked %}Tersedia{% else %}Booked{% endif %}
+          </span>
+          
+          <!-- Title -->
+          <h3>{{ c.title }}</h3>
+          
+          <!-- Info -->
+          <div class="coach-info">
+            <!-- Jenis olahraga dengan icon bicep/muscle -->
+            <div class="coach-info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/>
+              </svg>
+              <span>Jenis olahraga: {{ c.category|title }}</span>
             </div>
-            <div class="coach-price">{{ c.price_formatted }} <small>/sesi</small></div>
+
+            <div class="coach-info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 0 0 .281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 1 0 3 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 0 0 2.273 1.765 11.842 11.842 0 0 0 .976.544l.062.029.018.008.006.003ZM10 11.25a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" clip-rule="evenodd"/>
+              </svg>
+              <span>Lokasi: {{ c.location }}</span>
+            </div>
+            <div class="coach-info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M5.25 12a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H6a.75.75 0 0 1-.75-.75V12ZM6 13.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V14a.75.75 0 0 0-.75-.75H6ZM7.25 12a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H8a.75.75 0 0 1-.75-.75V12ZM8 13.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V14a.75.75 0 0 0-.75-.75H8ZM9.25 10a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H10a.75.75 0 0 1-.75-.75V10ZM10 11.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V12a.75.75 0 0 0-.75-.75H10ZM9.25 14a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H10a.75.75 0 0 1-.75-.75V14ZM12 9.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V10a.75.75 0 0 0-.75-.75H12ZM11.25 12a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H12a.75.75 0 0 1-.75-.75V12ZM12 13.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V14a.75.75 0 0 0-.75-.75H12ZM13.25 10a.75.75 0 0 1 .75-.75h.01a.75.75 0 0 1 .75.75v.01a.75.75 0 0 1-.75.75H14a.75.75 0 0 1-.75-.75V10ZM14 11.25a.75.75 0 0 0-.75.75v.01c0 .414.336.75.75.75h.01a.75.75 0 0 0 .75-.75V12a.75.75 0 0 0-.75-.75H14Z"/>
+                <path fill-rule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z" clip-rule="evenodd"/>
+              </svg>
+              <span>{{ c.date|date:"d M Y" }}</span>
+            </div>
+            <div class="coach-info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm.75-13a.75.75 0 0 0-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 0 0 0-1.5h-3.25V5Z" clip-rule="evenodd"/>
+              </svg>
+              <span>{{ c.startTime|time:"H:i" }} - {{ c.endTime|time:"H:i" }}</span>
+            </div>
+            <div class="coach-info-item">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM1.49 15.326a.78.78 0 0 1-.358-.442 3 3 0 0 1 4.308-3.516 6.484 6.484 0 0 0-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 0 1-2.07-.655ZM16.44 15.98a4.97 4.97 0 0 0 2.07-.654.78.78 0 0 0 .357-.442 3 3 0 0 0-4.308-3.517 6.484 6.484 0 0 1 1.907 3.96 2.32 2.32 0 0 1-.026.654ZM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM5.304 16.19a.844.844 0 0 1-.277-.71 5 5 0 0 1 9.947 0 .843.843 0 0 1-.277.71A6.975 6.975 0 0 1 10 18a6.974 6.974 0 0 1-4.696-1.81Z"/>
+              </svg>
+              <span>{{ c.user.nama }}</span>
+            </div>
           </div>
-        </a>
-        {% if request.user.is_authenticated and c.user_id == request.user.id %}
-          <a class="btn-edit-small" href="{% url 'coach:edit_coach_page' c.pk %}" onclick="event.stopPropagation()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-            </svg>
-            Edit
-          </a>
-        {% endif %}
-      </article>
+
+          <!-- Price dengan format "Rp 123123 /sesi" -->
+          <div class="coach-price">
+            {{ c.price_formatted }} <small>/sesi</small>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="coach-card-actions" onclick="event.stopPropagation();">
+            {% if request.user.is_authenticated and c.user_id == request.user.id %}
+              <a href="{% url 'coach:edit_coach_page' c.pk %}" class="btn-edit-card">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="m5.433 13.917 1.262-3.155A4 4 0 0 1 7.58 9.42l6.92-6.918a2.121 2.121 0 0 1 3 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 0 1-.65-.65Z"/>
+                  <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0 0 10 3H4.75A2.75 2.75 0 0 0 2 5.75v9.5A2.75 2.75 0 0 0 4.75 18h9.5A2.75 2.75 0 0 0 17 15.25V10a.75.75 0 0 0-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5Z"/>
+                </svg>
+                Edit
+              </a>
+            {% endif %}
+            <button type="button" class="btn-detail-booking" onclick="window.location.href='{% url 'coach:coach_detail' c.pk %}'">
+              Lihat Detail & Booking
+            </button>
+          </div>
+        </div>
+      </div>
     {% endfor %}
   {% else %}
     <div class="empty-state">
@@ -192,9 +239,8 @@
   {% endif %}
 </div>
 
-</div> <!-- End container -->
-
-</div> <!-- End background wrapper -->
+</div>
+</div>
 
 <script>
 // ==================== UTILITY FUNCTIONS ====================
@@ -211,6 +257,12 @@ function getCookie(name) {
     }
   }
   return cookieValue;
+}
+
+// ==================== CATEGORY FILTER ====================
+function setCategory(cat) {
+  document.getElementById('category-input').value = cat;
+  document.getElementById('filter-form').submit();
 }
 
 // ==================== LOADING & ERROR HANDLING ====================
@@ -279,7 +331,7 @@ window.addEventListener('error', function(e) {
     if (a || b) {
       labelSpan.textContent = `${fmtIDR(a || 0)} – ${fmtIDR(b || '') || '∞'}`;
     } else {
-      labelSpan.textContent = 'Harga';
+      labelSpan.textContent = 'Price';
     }
   }
 

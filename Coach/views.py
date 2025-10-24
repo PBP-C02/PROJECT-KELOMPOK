@@ -324,3 +324,92 @@ def cancel_booking(request, pk):
         })
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
+
+@login_required(login_url='/login')
+@require_http_methods(["POST"])
+def mark_available(request, pk):
+    """Mark coach as available"""
+    try:
+        coach = get_object_or_404(Coach, pk=pk)
+        
+        # Check if user is the owner
+        if coach.user != request.user:
+            return JsonResponse({
+                'success': False,
+                'message': 'You do not have permission to modify this coach'
+            }, status=403)
+        
+        # Mark as available
+        coach.isBooked = False
+        coach.peserta = None
+        coach.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Coach marked as available'
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        }, status=500)
+
+
+@login_required(login_url='/login')
+@require_http_methods(["POST"])
+def mark_unavailable(request, pk):
+    """Mark coach as unavailable"""
+    try:
+        coach = get_object_or_404(Coach, pk=pk)
+        
+        # Check if user is the owner
+        if coach.user != request.user:
+            return JsonResponse({
+                'success': False,
+                'message': 'You do not have permission to modify this coach'
+            }, status=403)
+        
+        # Mark as unavailable
+        coach.isBooked = True
+        coach.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Coach marked as unavailable'
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        }, status=500)
+
+
+@login_required(login_url='/login')
+@require_http_methods(["POST"])
+def delete_coach(request, pk):
+    """Delete coach"""
+    try:
+        coach = get_object_or_404(Coach, pk=pk)
+        
+        # Check if user is the owner
+        if coach.user != request.user:
+            return JsonResponse({
+                'success': False,
+                'message': 'You do not have permission to delete this coach'
+            }, status=403)
+        
+        # Delete the coach
+        coach.delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Coach deleted successfully'
+        })
+        
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': str(e)
+        }, status=500)

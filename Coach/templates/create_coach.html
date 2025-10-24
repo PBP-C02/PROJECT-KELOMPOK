@@ -27,31 +27,24 @@
 
 <div class="form-container">
   <div class="form-header">
-    <h1>Create New Coach</h1>
-    <p>Fill in the details to create your sports coach</p>
+    <h1>Add New Coach</h1>
   </div>
 
   <form id="createCoachForm" enctype="multipart/form-data" class="coach-form">
     {% csrf_token %}
 
-    <div class="form-grid">
+    <div class="form-grid-simple">
       <!-- Title -->
-      <div class="form-group full-width">
-        <label for="id_title">Title</label>
-        <input id="id_title" name="title" type="text" required>
-      </div>
-
-      <!-- Description -->
-      <div class="form-group full-width">
-        <label for="id_description">Description</label>
-        <textarea id="id_description" name="description" rows="4" required></textarea>
+      <div class="form-group">
+        <label for="id_title">Coach Name</label>
+        <input id="id_title" name="title" type="text" placeholder="Coach name" required>
       </div>
 
       <!-- Category -->
       <div class="form-group">
-        <label for="id_category">Category</label>
+        <label for="id_category">Sport Type</label>
         <select id="id_category" name="category" required>
-          <option value="">-- Choose --</option>
+          <option value="">------</option>
           <option value="tennis">Tennis</option>
           <option value="basketball">Basketball</option>
           <option value="soccer">Soccer</option>
@@ -66,74 +59,106 @@
 
       <!-- Location -->
       <div class="form-group">
-        <label for="id_location">Location (City/Area)</label>
-        <input id="id_location" name="location" type="text" required>
+        <label for="id_location">City</label>
+        <input id="id_location" name="location" type="text" placeholder="City" required>
       </div>
 
       <!-- Address -->
-      <div class="form-group full-width">
-        <label for="id_address">Address</label>
-        <textarea id="id_address" name="address" rows="3" required></textarea>
+      <div class="form-group">
+        <label for="id_address">Full Address</label>
+        <textarea id="id_address" name="address" rows="3" placeholder="Complete address" required></textarea>
       </div>
 
-      <!-- Date -->
+      <!-- Date (Clickable) -->
       <div class="form-group">
-        <label for="id_date">Tanggal</label>
-        <input id="id_date" name="date" type="date" required>
+        <label for="id_date">Date</label>
+        <div class="date-time-wrapper" onclick="document.getElementById('id_date').showPicker()">
+          <input id="id_date" name="date" type="date" required>
+          <svg class="calendar-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+        </div>
       </div>
 
-      <!-- Start Time -->
+      <!-- Start Time (Clickable) -->
       <div class="form-group">
-        <label for="id_startTime">Waktu Mulai</label>
-        <input id="id_startTime" name="startTime" type="time" required>
+        <label for="id_startTime">Start Time</label>
+        <div class="date-time-wrapper" onclick="document.getElementById('id_startTime').showPicker()">
+          <input id="id_startTime" name="startTime" type="time" required>
+          <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
       </div>
 
-      <!-- End Time -->
+      <!-- End Time (Clickable) -->
       <div class="form-group">
-        <label for="id_endTime">Waktu Selesai</label>
-        <input id="id_endTime" name="endTime" type="time" required>
+        <label for="id_endTime">End Time</label>
+        <div class="date-time-wrapper" onclick="document.getElementById('id_endTime').showPicker()">
+          <input id="id_endTime" name="endTime" type="time" required>
+          <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </div>
       </div>
 
       <!-- Price -->
       <div class="form-group">
         <label for="id_price">Price (Rp)</label>
-        <input id="id_price" name="price" type="number" min="0" step="1" required>
+        <input id="id_price" name="price" type="number" min="0" step="1" placeholder="0" required>
       </div>
 
       <!-- Rating -->
       <div class="form-group">
-        <label for="id_rating">Rating (0-5)</label>
-        <input id="id_rating" name="rating" type="number" min="0" max="5" step="0.1" value="0">
+        <label for="id_rating">Rating (optional)</label>
+        <input id="id_rating" name="rating" type="number" min="0" max="5" step="0.1" placeholder="0" value="0">
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="id_description">Short description (optional)</label>
+        <textarea id="id_description" name="description" rows="4" placeholder="Description about the coach"></textarea>
+      </div>
+
+      <!-- Maps Link -->
+      <div class="form-group">
+        <label for="id_mapsLink">Google Maps link</label>
+        <input id="id_mapsLink" name="mapsLink" type="url" placeholder="https://maps.google.com/?q=-6.2,106.8" required>
       </div>
 
       <!-- Instagram Link -->
-      <div class="form-group full-width">
+      <div class="form-group">
         <label for="id_instagram_link">Instagram Link (optional)</label>
         <input id="id_instagram_link" name="instagram_link" type="url" placeholder="https://instagram.com/username">
       </div>
 
-      <!-- Maps Link -->
-      <div class="form-group full-width">
-        <label for="id_mapsLink">Google Maps Link</label>
-        <input id="id_mapsLink" name="mapsLink" type="url" placeholder="https://maps.google.com/?q=-6.2,106.8" required>
-      </div>
-
       <!-- Image -->
-      <div class="form-group full-width">
-        <label for="id_image">Image</label>
+      <div class="form-group">
+        <label for="id_image">Coach Photo (optional)</label>
         <input id="id_image" name="image" type="file" accept="image/*">
       </div>
     </div>
 
-    <div class="form-actions">
-      <a href="{% url 'coach:show_main' %}" class="btn-secondary">Cancel</a>
-      <button type="submit" class="btn-primary" id="submitBtn">
-        <span class="btn-text">Create Coach</span>
+    <div class="form-actions-simple">
+      <a href="{% url 'coach:show_main' %}" class="btn-back-form">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"></line>
+          <polyline points="12 19 5 12 12 5"></polyline>
+        </svg>
+        Back to Coach List
+      </a>
+      <button type="submit" class="btn-save" id="submitBtn">
+        <span class="btn-text">Save Coach</span>
         <span class="btn-spinner" style="display:none;">
           <svg class="spinner-small" viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
           </svg>
-          Creating...
+          Saving...
         </span>
       </button>
     </div>
@@ -167,6 +192,10 @@ function showError(message) {
 function hideError() {
   document.getElementById('errorMessage').style.display = 'none';
 }
+
+// Set minimum date to today
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('id_date').setAttribute('min', today);
 
 document.getElementById('createCoachForm').addEventListener('submit', function(e) {
   e.preventDefault();

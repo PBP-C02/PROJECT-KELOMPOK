@@ -78,7 +78,9 @@ class Coach(models.Model):
 
     @property
     def price_formatted(self):
-        return f"Rp {number_format(self.price, decimal_pos=0, force_grouping=True)}"
+        # Format dengan pemisah titik (format Indonesia)
+        price_str = "{:,.0f}".format(self.price).replace(',', '.')
+        return f"Rp {price_str}"
     
     @property
     def is_past(self):

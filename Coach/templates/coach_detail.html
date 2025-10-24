@@ -12,6 +12,14 @@
 
 <!-- Background wrapper -->
 <div style="--bg-image: url('{% static 'img/bg.png' %}');" class="coach-bg-wrapper">
+  
+  <!-- Back Button (outside container, di atas) -->
+  <div class="back-button-wrapper">
+    <a href="{% url 'coach:show_main' %}" class="btn-back-top">
+      Back to Coach List
+    </a>
+  </div>
+
   <div class="detail-container">
     <!-- Header Banner -->
     <div class="detail-header">
@@ -38,27 +46,22 @@
         {% if not coach.isBooked %}Available{% else %}Booked{% endif %}
       </div>
 
-      <!-- Title & Info -->
-      <h1 class="detail-title">{{ coach.title }}</h1>
-      <div class="detail-meta">
+      <!-- Title & Price -->
+      <div class="title-price-section">
+        <h1 class="detail-title">{{ coach.title }}</h1>
+        <div class="detail-meta">
         <span class="meta-item">{{ coach.get_category_display }}</span>
         <span class="meta-separator">•</span>
-        <span class="meta-item">Rating: ⭐ {{ coach.rating }}</span>
+        <span class="meta-item">Rating: {{ coach.rating }}</span>
         <span class="meta-separator">•</span>
-        <span class="meta-item">{{ coach.location }}</span>
+        <span class="meta-item">Location: {{ coach.location }}</span>
+      </div>
+        <div class="price-box-inline">
+          <span class="price-label">Price per Hour</span>
+          <span class="price-value">{{ coach.price_formatted }}</span>
+        </div>          
       </div>
 
-      <!-- Price Box -->
-      <div class="price-box">
-        <span class="price-label">Price per Session</span>
-        <span class="price-value">IDR {{ coach.price|floatformat:0 }}</span>
-      </div>
-
-      <!-- Description -->
-      <div class="detail-section">
-        <h2 class="section-title">Description</h2>
-        <p class="section-content">{{ coach.description }}</p>
-      </div>
 
       <!-- Address -->
       <div class="detail-section">
@@ -75,6 +78,14 @@
           </a>
         {% endif %}
       </div>
+
+      <!-- Description -->
+      {% if coach.description %}
+      <div class="detail-section">
+        <h2 class="section-title">Description</h2>
+        <p class="section-content">{{ coach.description }}</p>
+      </div>
+      {% endif %}
 
       <!-- Schedule -->
       <div class="detail-section">
@@ -125,37 +136,47 @@
         </div>
       </div>
 
-      <div class="back-action">
-        <a href="{% url 'coach:show_main' %}" class="btn-back">← Back to Coach List</a>
-        
-        {% if request.user != coach.user and not coach.isBooked %}
-      <button type="button" 
-              class="btn-book-small" 
-              data-coach-id="{{ coach.pk }}"
-              data-phone="{{ coach.user.nomor_handphone }}"
-              data-title="{{ coach.title|escape }}"
-              data-date="{{ coach.date|date:'l, d F Y' }}"
-              data-start="{{ coach.startTime|time:'H:i' }}"
-              data-end="{{ coach.endTime|time:'H:i' }}"
-              onclick="bookViaWhatsApp(this)">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        </svg>
-        Book via WhatsApp
-      </button>
+      <!-- Owner Actions (Hanya 4 tombol, tanpa wrapper Reserve Coach) -->
+      {% if request.user.is_authenticated and coach.user == request.user %}
+        <div class="owner-action-buttons">
+          <button type="button" class="btn-mark-available {% if not coach.isBooked %}active{% endif %}" onclick="markAvailable()">
+            Mark Available
+          </button>
+          <button type="button" class="btn-mark-unavailable {% if coach.isBooked %}active{% endif %}" onclick="markUnavailable()">
+            Mark Unavailable
+          </button>
+          <button type="button" class="btn-delete-coach" onclick="deleteCoach()">
+            Delete Coach
+          </button>
+          <a href="{% url 'coach:edit_coach_page' coach.pk %}" class="btn-edit-coach">
+            Edit Coach
+          </a>
+        </div>
+      {% endif %}
+
+      <!-- Book via WhatsApp Button (Big, untuk non-owner) -->
+      {% if request.user.is_authenticated and coach.user != request.user %}
+        {% if not coach.isBooked %}
+          <button type="button" 
+                  class="btn-book-whatsapp-big" 
+                  data-coach-id="{{ coach.pk }}"
+                  data-phone="{{ coach.user.nomor_handphone }}"
+                  data-title="{{ coach.title|escape }}"
+                  data-date="{{ coach.date|date:'l, d F Y' }}"
+                  data-start="{{ coach.startTime|time:'H:i' }}"
+                  data-end="{{ coach.endTime|time:'H:i' }}"
+                  onclick="bookViaWhatsApp(this)">
+            Book via WhatsApp
+          </button>
         {% elif coach.peserta == request.user %}
           <button type="button" 
-                  class="btn-cancel-small" 
+                  class="btn-cancel-booking-big" 
                   data-coach-id="{{ coach.pk }}"
                   onclick="cancelBooking(this)">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
             Cancel Booking
           </button>
         {% endif %}
-      </div>
+      {% endif %}
     </div>
   </div>
 </div> <!-- End background wrapper -->
@@ -176,8 +197,80 @@ function getCookie(name) {
   return cookieValue;
 }
 
+// Mark Available/Unavailable functions
+function markAvailable() {
+  if (confirm('Mark this coach as available?')) {
+    fetch('/coach/mark-available/{{ coach.pk }}/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert(data.message || 'Failed to mark as available');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred');
+    });
+  }
+}
+
+function markUnavailable() {
+  if (confirm('Mark this coach as unavailable?')) {
+    fetch('/coach/mark-unavailable/{{ coach.pk }}/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        location.reload();
+      } else {
+        alert(data.message || 'Failed to mark as unavailable');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred');
+    });
+  }
+}
+
+function deleteCoach() {
+  if (confirm('Are you sure you want to delete this coach? This action cannot be undone.')) {
+    fetch('/coach/delete-coach/{{ coach.pk }}/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      }
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        window.location.href = '/coach/';
+      } else {
+        alert(data.message || 'Failed to delete coach');
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('An error occurred');
+    });
+  }
+}
+
 function bookViaWhatsApp(btnElement) {
-  // Get data from button attributes
   const coachId = btnElement.dataset.coachId;
   const phoneNumber = btnElement.dataset.phone;
   const coachTitle = btnElement.dataset.title;
@@ -185,29 +278,21 @@ function bookViaWhatsApp(btnElement) {
   const startTime = btnElement.dataset.start;
   const endTime = btnElement.dataset.end;
   
-  // Validate phone number
   if (!phoneNumber || phoneNumber === 'None' || phoneNumber === '') {
     alert('Phone number not available for this coach.');
     return;
   }
   
-  // Format nomor HP (pastikan dimulai dengan 62)
-  let formattedPhone = phoneNumber.trim();
+  let formattedPhone = phoneNumber.trim().replace(/\D/g, '');
   
-  // Hapus karakter non-digit
-  formattedPhone = formattedPhone.replace(/\D/g, '');
-  
-  // Jika dimulai dengan 0, ganti dengan 62
   if (formattedPhone.startsWith('0')) {
     formattedPhone = '62' + formattedPhone.substring(1);
   }
   
-  // Jika belum dimulai dengan 62, tambahkan
   if (!formattedPhone.startsWith('62')) {
     formattedPhone = '62' + formattedPhone;
   }
   
-  // Buat pesan WhatsApp
   const message = `Hello! I would like to book a coaching session:
 
 *${coachTitle}*
@@ -216,31 +301,19 @@ function bookViaWhatsApp(btnElement) {
 
 Please confirm my booking. Thank you!`;
   
-  // URL encode message
   const encodedMessage = encodeURIComponent(message);
-  
-  // Buat WhatsApp link
   const whatsappLink = `https://wa.me/${formattedPhone}?text=${encodedMessage}`;
   
-  // Validate WhatsApp link
   if (!whatsappLink.startsWith('https://wa.me/')) {
     alert('Invalid WhatsApp link');
     return;
   }
   
-  console.log('WhatsApp Link:', whatsappLink); // DEBUG
-  
   const btn = btnElement;
   const originalHTML = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = `
-    <svg class="spinner-small" viewBox="0 0 24 24" style="width:14px;height:14px;">
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-    </svg>
-    <span>Opening WhatsApp...</span>
-  `;
+  btn.innerHTML = `<span>Opening WhatsApp...</span>`;
   
-  // Mark sebagai booked di database dulu
   fetch(`/coach/book-coach/${coachId}/`, {
     method: 'POST',
     headers: {
@@ -249,20 +322,11 @@ Please confirm my booking. Thank you!`;
     },
     body: JSON.stringify({})
   })
-  .then(response => {
-    console.log('Response status:', response.status); // DEBUG
-    return response.json();
-  })
+  .then(response => response.json())
   .then(data => {
-    console.log('Response data:', data); // DEBUG
     if (data.success) {
-      // Buka WhatsApp di tab baru
-      window.open(whatsappLink, '_blank', 'noopener,noreferrer');  // ✅ Add security flags
-      
-      // Reload page setelah delay singkat
-      setTimeout(() => {
-        location.reload();
-      }, 1000);
+      window.open(whatsappLink, '_blank', 'noopener,noreferrer');
+      setTimeout(() => location.reload(), 1000);
     } else {
       alert(data.message || 'Booking failed');
       btn.disabled = false;
@@ -283,12 +347,7 @@ function cancelBooking(btnElement) {
   const btn = btnElement;
   const originalHTML = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = `
-    <svg class="spinner-small" viewBox="0 0 24 24" style="width:14px;height:14px;">
-      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-    </svg>
-    <span>Cancelling...</span>
-  `;
+  btn.innerHTML = `<span>Cancelling...</span>`;
   
   fetch(`/coach/cancel-booking/${coachId}/`, {
     method: 'POST',
@@ -321,28 +380,4 @@ function cancelBooking(btnElement) {
   });
 }
 </script>
-
-<style>
-.spinner-small {
-  width: 16px;
-  height: 16px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.spinner-small circle {
-  stroke-dasharray: 60;
-  stroke-dashoffset: 20;
-  animation: spinCircle 1.5s ease-in-out infinite;
-}
-
-@keyframes spinCircle {
-  0% { stroke-dashoffset: 60; }
-  50% { stroke-dashoffset: 15; }
-  100% { stroke-dashoffset: 60; }
-}
-</style>
 {% endblock %}

@@ -10,6 +10,40 @@ body {
   line-height: 1.6;
 }
 
+/* Background Wrapper */
+.coach-bg-wrapper {
+  min-height: 100vh;
+  background-image: var(--bg-image);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 2rem 0;
+}
+
+/* Back Button Wrapper (di atas container) */
+.back-button-wrapper {
+  max-width: 900px;
+  margin: 0 auto 16px auto;
+  padding: 0;
+}
+
+.btn-back-top {
+  display: inline-block;
+  padding: 10px 20px;
+  background: #2d3748;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  transition: background 0.3s ease;
+}
+
+.btn-back-top:hover {
+  background: #1a202c;
+}
+
+/* Detail Container */
 .detail-container {
   max-width: 900px;
   margin: 0 auto;
@@ -17,15 +51,14 @@ body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   border-radius: 12px;
   overflow: hidden;
-  margin-top: 20px;
   margin-bottom: 40px;
   position: relative;  
 }
 
-/* Header Section */
+/* Header Section - REDUCED gap */
 .detail-header {
   width: 100%;
-  height: 300px;
+  height: 280px; /* REDUCED from 300px */
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   align-items: center;
@@ -34,7 +67,24 @@ body {
   overflow: hidden;
 }
 
-/* Ribbon Booked*/
+.header-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.header-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  font-weight: 700;
+  color: white;
+}
+
+/* Ribbon Booked */
 .ribbon-wrapper {
   position: absolute;
   top: 0;
@@ -62,31 +112,9 @@ body {
   text-transform: uppercase;
 }
 
-.ribbon::before,
-.ribbon::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  width: 0;
-  height: 0;
-  border-style: solid;
-}
-
-.ribbon::before {
-  left: 0;
-  border-width: 0 0 10px 10px;
-  border-color: transparent transparent #a71d2a transparent;
-}
-
-.ribbon::after {
-  right: 0;
-  border-width: 0 10px 10px 0;
-  border-color: transparent #a71d2a transparent transparent;
-}
-
-/* Content Section */
+/* Content Section - REDUCED padding top */
 .detail-content {
-  padding: 32px;
+  padding: 24px 32px 32px 32px; /* CHANGED: top padding dari 32px ke 24px */
   position: relative;  
 }
 
@@ -102,13 +130,13 @@ body {
 }
 
 .status-badge.available {
-  background: #d4edda;
-  color: #155724;
+  background: #c6f6d5; /* CHANGED: Lebih gelap dari #d4edda */
+  color: #22543d; /* CHANGED: Lebih gelap dari #155724 */
 }
 
 .status-badge.booked {
-  background: #f8d7da;
-  color: #721c24;
+  background: #fed7d7; /* CHANGED: Lebih gelap dari #f8d7da */
+  color: #742a2a; /* CHANGED: Lebih gelap dari #721c24 */
 }
 
 /* Title & Meta */
@@ -126,6 +154,7 @@ body {
   color: #666;
   font-size: 14px;
   margin-bottom: 24px;
+  margin-top: 4px; /* CHANGED: dari 8px ke 4px */
 }
 
 .meta-item {
@@ -244,193 +273,182 @@ body {
   opacity: 0.7;
 }
 
-/* Booking Section */
-.booking-section {
-  display: none;
+/* Title & Price Section (inline) */
+.title-price-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+  gap: 20px;
 }
 
-.booking-info {
-  margin-bottom: 16px;
+.detail-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+  flex: 1;
+  margin-bottom: 0;
+  line-height: 1.1;
 }
 
-.booking-date {
-  color: #666;
+.price-box-inline {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background: #1a202c;
+  padding: 12px 20px;
+  border-radius: 12px;
+  min-width: 180px;
+}
+
+.price-box-inline .price-label {
+  font-size: 12px;
+  color: #a0aec0;
+  margin-bottom: 4px;
+}
+
+.price-box-inline .price-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+}
+
+/* Owner Action Buttons */
+.owner-action-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #eee;
+}
+
+.btn-mark-available,
+.btn-mark-unavailable,
+.btn-delete-coach,
+.btn-edit-coach {
+  padding: 12px 20px;
+  border-radius: 8px;
   font-size: 14px;
-}
-
-.booking-status {
-  padding: 16px;
-  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
   text-align: center;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
 }
 
-.booking-status.booked {
-  background: #fff3cd;
-  color: #856404;
+.btn-mark-available {
+  background: #48bb78; /* CHANGED: Lebih gelap dari #c8f08b */
+  color: white; /* CHANGED: Dari #2b2b2b ke white */
 }
 
-/* Buttons */
-.btn-book {
+.btn-mark-available:hover {
+  background: #38a169; /* CHANGED: Lebih gelap */
+}
+
+.btn-mark-available.active {
+  background: #2f855a; /* CHANGED: Even darker when active */
+  box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.3);
+}
+
+.btn-mark-unavailable {
+  background: #f56565; /* CHANGED: Lebih gelap dari #fc8181 */
+  color: white;
+}
+
+.btn-mark-unavailable:hover {
+  background: #e53e3e; /* CHANGED: Lebih gelap */
+}
+
+.btn-mark-unavailable.active {
+  background: #c53030; /* CHANGED: Even darker when active */
+  box-shadow: 0 0 0 3px rgba(245, 101, 101, 0.3);
+}
+
+.btn-delete-coach {
+  background: white;
+  color: #c53030; /* CHANGED: Lebih gelap dari #e53e3e */
+  border: 2px solid #c53030;
+}
+
+.btn-delete-coach:hover {
+  background: #c53030;
+  color: white;
+}
+
+.btn-edit-coach {
+  background: #4299e1;
+  color: white;
+}
+
+.btn-edit-coach:hover {
+  background: #3182ce;
+}
+
+/* Big Book via WhatsApp Button */
+.btn-book-whatsapp-big {
   width: 100%;
-  padding: 14px 24px;
+  padding: 18px 24px;
   background: #25D366;
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 16px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-book:hover {
-  background: #1da851;
-}
-
-.btn-cancel {
-  padding: 10px 20px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin-top: 12px;
-}
-
-.btn-cancel:hover {
-  background: #c82333;
-}
-
-/* Owner Actions */
-.owner-actions {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.btn-edit {
-  flex: 1;
-  padding: 12px 24px;
-  background: #667eea;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-.btn-edit:hover {
-  background: #5568d3;
-}
-
-.btn-delete {
-  flex: 1;
-  padding: 12px 24px;
-  background: #dc3545;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.btn-delete:hover {
-  background: #c82333;
-}
-
-/* Back Button & Action Section*/
-.back-action {
-  padding-top: 24px;
-  border-top: 1px solid #eee;
-  display: flex;                
-  justify-content: space-between; 
-  align-items: center;         
-  gap: 12px;                 
-}
-
-.btn-back {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 20px;
-  background: #f8f9fa;
-  color: #666;
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-.btn-back:hover {
-  background: #e9ecef;
-  color: #333;
-}
-
-.btn-book-small {
-  background: #25D366; /* WhatsApp green */
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-book-small:hover {
-  background: #1da851; /* Darker WhatsApp green */
+.btn-book-whatsapp-big:hover {
+  background: #1da851;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(37, 211, 102, 0.5);
 }
 
-.btn-book-small:disabled {
+.btn-book-whatsapp-big:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.btn-book-small:disabled:hover {
   transform: none;
 }
 
-.btn-cancel-small {
-  background: #dc3545;
+/* Big Cancel Booking Button */
+.btn-cancel-booking-big {
+  width: 100%;
+  padding: 18px 24px;
+  background: #e53e3e;
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 600;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+  margin-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.btn-cancel-small:hover {
-  background: #c82333;
+.btn-cancel-booking-big:hover {
+  background: #c53030;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(220, 53, 69, 0.5);
 }
 
-/* Coach Background Wrapper */
-.coach-bg-wrapper {
-  min-height: 100vh;
-  background-image: var(--bg-image); /* Ambil dari CSS variable */
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  padding: 2rem 0;
+.btn-cancel-booking-big:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
 }
 
 /* Responsive */
@@ -452,23 +470,16 @@ body {
     font-size: 22px;
   }
   
-  .owner-actions {
+  .owner-action-buttons {
+    grid-template-columns: 1fr;
+  }
+  
+  .title-price-section {
     flex-direction: column;
   }
   
-  .back-action {
-    flex-direction: column;   
-    align-items: stretch;      
-  }
-  
-  .btn-back {
+  .price-box-inline {
     width: 100%;
-    justify-content: center;
-  }
-  
-  .btn-book-small,
-  .btn-cancel-small {
-    width: 100%;
-    justify-content: center;
+    align-items: flex-start;
   }
 }
