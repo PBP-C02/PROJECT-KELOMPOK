@@ -5,6 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% block meta %} {% endblock meta %}
+    
+    <!-- Tailwind (optional, bisa dihapus kalau ga pake) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
       tailwind.config = {
@@ -19,21 +21,29 @@
             },
             fontFamily: {
               raleway: ['Raleway', 'system-ui', 'sans-serif'],
+              race_sport: ['Race Sport', 'system-ui', 'sans-serif']
             }
           }
         }
       }
     </script>
-    <!-- Add DOMPurify here -->
+    
+    <!-- DOMPurify -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.5/dist/purify.min.js"></script>
-    <link rel="stylesheet" href="{% static 'css/globals.css' %}"/>
-    <link rel="stylesheet" href="{% static 'css/event.css' %}"/>
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-
+    
+    <!-- CSS FILES - INI YANG PENTING! -->
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}"/>
+    <link rel="stylesheet" href="{% static 'css/event.css' %}"/>
+    
+    {% block extra_css %}{% endblock %}
   </head>
-  <body class="font-raleway bg-[#f6f7fb] text-[#111827]">
+  <body>
     {% block content %} 
     
     {% endblock content %}

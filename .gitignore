@@ -112,4 +112,7 @@ GitHub.sublime-settings
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-.history
+.history__pycache__/
+*.pyc
+__pycache__/
+

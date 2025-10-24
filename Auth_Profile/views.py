@@ -5,12 +5,26 @@ from Auth_Profile.models import User
 import json
 from datetime import datetime
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+
 def homepage_view(request):
-    user = User.objects.get(id=request.session['user_id'])
+    user_id = request.session.get('user_id')
+    if not user_id:
+        # Kalau belum login, arahkan ke halaman login (atau halaman lain)
+        return redirect('login')  # pastikan 'login' sesuai dengan nama path di urls.py
+    
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        # Kalau user_id tidak valid di database
+        return redirect('login')
+
     context = {
         'user': user
     }
     return render(request, 'homepage.html', context)
+
 def login_view(request):
     if request.method == 'POST':
         data = json.loads(request.body)
