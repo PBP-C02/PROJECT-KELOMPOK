@@ -6,3 +6,5 @@ requests
 urllib3
 python-dotenv
 selenium
+Pillow>=10.0.0
+python-decouple>=3.8
