@@ -1,331 +1,164 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoveBuddy - Find Courts</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% block meta %}
+<title>MoveBuddy | Courts</title>
+{% endblock meta %}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+{% block content %}
+<section class="relative min-h-screen w-full overflow-hidden pb-16 pt-6">
+  <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'img/bg.png' %}');"></div>
+  <div class="absolute inset-0 bg-white/95"></div>
 
-        header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
+  <div class="relative z-10">
+    {% include 'includes/navbar.html' %}
 
-        header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .search-section {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
-
-        .search-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-
-        .search-bar input,
-        .search-bar select {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border 0.3s;
-        }
-
-        .search-bar input:focus,
-        .search-bar select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .search-bar button {
-            padding: 12px 30px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .search-bar button:hover {
-            background: #5568d3;
-        }
-
-        .filters {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-bottom: 15px;
-        }
-
-        .filter-chip {
-            padding: 8px 16px;
-            border: 2px solid #e0e0e0;
-            background: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-
-        .filter-chip:hover {
-            border-color: #667eea;
-            background: #f5f7ff;
-        }
-
-        .filter-chip.active {
-            background: #667eea;
-            color: white;
-            border-color: #667eea;
-        }
-
-        #loading {
-            text-align: center;
-            padding: 40px;
-            color: white;
-            font-size: 1.2em;
-        }
-
-        #CourtGrid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-bottom: 30px;
-        }
-
-        .court-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-            cursor: pointer;
-        }
-
-        .court-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .court-card img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .court-card-content {
-            padding: 20px;
-        }
-
-        .court-card h3 {
-            font-size: 1.3em;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        .court-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #f0f0f0;
-            border-radius: 15px;
-            font-size: 0.85em;
-            margin-bottom: 10px;
-        }
-
-        .court-badge.available {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .court-badge.full {
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        .court-badge.owner {
-            background: #fff3cd;
-            color: #856404;
-            margin-left: 8px;
-        }
-
-        .court-info {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin: 15px 0;
-            font-size: 0.95em;
-            color: #666;
-        }
-
-        .court-info span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .court-price {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #667eea;
-            margin: 10px 0;
-        }
-
-        .court-distance {
-            color: #2e7d32;
-            font-weight: bold;
-            font-size: 0.9em;
-        }
-
-        .btn-detail {
-            width: 100%;
-            padding: 12px;
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        .btn-detail:hover {
-            background: #5568d3;
-        }
-
-        .no-results {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 15px;
-            color: #666;
-        }
-
-        .no-results p:first-child {
-            font-size: 4em;
-            margin-bottom: 15px;
-        }
-
-        .no-results h3 {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            color: #333;
-        }
-
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 1.8em;
-            }
-
-            .search-bar {
-                flex-direction: column;
-            }
-
-            .search-bar input,
-            .search-bar select,
-            .search-bar button {
-                min-width: 100%;
-            }
-
-            #CourtGrid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>MoveBuddy</h1>
-        <p>Find nearby sports courts and book instantly.</p>
-    </header>
-
-    <div class="container">
-        <!-- Search Section -->
-        <div class="search-section">
-            <div class="search-bar">
-                <input type="text" id="searchInput" placeholder="Search courts or locations...">
-                <select id="locationFilter">
-                    <option value="">All Locations</option>
-                    <option value="Jakarta">Jakarta</option>
-                    <option value="Bandung">Bandung</option>
-                    <option value="Surabaya">Surabaya</option>
-                    <option value="Depok">Depok</option>
-                    <option value="Tangerang">Tangerang</option>
-                    <option value="Bekasi">Bekasi</option>
-                </select>
-                <button onclick="searchCourt()">🔍 Search</button>
-            </div>
-
-            <div class="filters">
-                <button class="filter-chip active" data-sport="" onclick="filterSport(this, '')">All</button>
-                <button class="filter-chip" data-sport="tennis" onclick="filterSport(this, 'tennis')">Tennis</button>
-                <button class="filter-chip" data-sport="basketball" onclick="filterSport(this, 'basketball')">Basketball</button>
-                <button class="filter-chip" data-sport="soccer" onclick="filterSport(this, 'soccer')">Soccer</button>
-                <button class="filter-chip" data-sport="badminton" onclick="filterSport(this, 'badminton')">Badminton</button>
-                <button class="filter-chip" data-sport="volleyball" onclick="filterSport(this, 'volleyball')">Volleyball</button>
-                <button class="filter-chip" data-sport="futsal" onclick="filterSport(this, 'futsal')">Futsal</button>
-            </div>
-            <div style="text-align:right; margin-bottom: 20px;">
-                <a href="{% url 'Court:add_court' %}"
-                style="background:#667eea; color:white; padding:10px 20px; border-radius:6px; text-decoration:none;">
-                + Add Court
-                </a>
-            </div>
-            <div style="margin-bottom: 10px; display:flex; gap:10px; align-items:center;">
-                <label style="display:flex; align-items:center; gap:6px;">
-                    <input type="checkbox" id="availableOnly" onchange="loadCourt()">
-                    <span>Show only available courts</span>
-                </label>
-            </div>
+    <div class="mx-auto flex w-full max-w-[88rem] flex-col gap-12 px-4 sm:px-10 lg:px-16">
+    <div class="rounded-[32px] bg-white/95 p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur">
+      <div class="flex flex-col gap-6">
+        <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_200px_auto_auto] md:items-center">
+          <label class="relative flex items-center">
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Cari lapangan atau lokasi..."
+              class="h-[50px] w-full rounded-lg border border-[#d7dae2] bg-white px-5 pr-12 text-sm font-medium text-[#111827] shadow-inner shadow-white/50 outline-none transition focus:border-[#bade7e] focus:ring-4 focus:ring-[#dff7b4]/60"
+            />
+            <svg class="absolute right-4 h-5 w-5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+            </svg>
+          </label>
+          <select
+            id="locationFilter"
+            class="h-[50px] rounded-lg border border-[#d7dae2] bg-white px-5 text-sm font-medium text-[#111827] shadow-inner shadow-white/50 outline-none transition focus:border-[#bade7e] focus:ring-4 focus:ring-[#dff7b4]/60"
+          >
+            <option value="">Semua lokasi</option>
+          </select>
+          <button
+            type="button"
+            onclick="searchCourt()"
+            class="h-[50px] rounded-lg bg-[#bade7e] px-6 text-xs font-semibold uppercase tracking-[0.3em] text-[#1f2b15] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(154,216,97,0.25)]"
+          >
+            Search
+          </button>
+          <a
+            href="{% url 'Court:add_court' %}"
+            class="flex h-[50px] items-center justify-center rounded-lg bg-[#bade7e] px-6 text-xs font-semibold uppercase tracking-[0.3em] text-[#1f2b15] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(154,216,97,0.25)]"
+          >
+            + Add Court
+          </a>
         </div>
 
-        <!-- Loading -->
-        <div id="loading" style="display:none;">
-            <p>Loading courts...</p>
-        </div>
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div class="flex min-w-0 flex-nowrap gap-3 overflow-x-auto pb-1 pr-2">
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="" data-default="true" onclick="filterSport(this, '')">
+              All
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="tennis" onclick="filterSport(this, 'tennis')">
+              Tennis
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="basketball" onclick="filterSport(this, 'basketball')">
+              Basketball
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="soccer" onclick="filterSport(this, 'soccer')">
+              Soccer
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="badminton" onclick="filterSport(this, 'badminton')">
+              Badminton
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="volleyball" onclick="filterSport(this, 'volleyball')">
+              Volleyball
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="futsal" onclick="filterSport(this, 'futsal')">
+              Futsal
+            </button>
+          </div>
 
-        <!-- Court Grid -->
-        <div id="CourtGrid"></div>
+          <label class="flex shrink-0 items-center gap-3 rounded-[18px] bg-white/70 px-4 py-2 text-sm font-semibold text-[#4b5563] shadow-inner shadow-white/70">
+            <input
+              id="availableOnly"
+              type="checkbox"
+              onchange="loadCourt()"
+              class="h-5 w-5 rounded border border-[#bade7e] text-[#89d65c] focus:ring-[#89d65c]"
+            />
+            <span>Hanya tampilkan yang tersedia</span>
+          </label>
+        </div>
+      </div>
     </div>
 
-    <script>
-        // State management
-        let currentFilters = {
-            query: '',
-            sport: '',
-            location: '',
+    <div id="loading" class="hidden rounded-[30px] bg-white/80 py-16 text-center text-[#6b7280] shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
+      Memuat lapangan...
+    </div>
+
+    <div id="CourtGrid" class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3"></div>
+  </div>
+  </div>
+</section>
+
+<script>
+  const COURT_PLACEHOLDER =
+    "data:image/svg+xml,%3Csvg%20xmlns%3D'http://www.w3.org/2000/svg'%20viewBox%3D'0%200%20320%20200'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'a'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%3Cstop%20offset%3D'0%25'%20stop-color%3D'%23dbeafe'/%3E%3Cstop%20offset%3D'60%25'%20stop-color%3D'%23bfdbfe'/%3E%3Cstop%20offset%3D'100%25'%20stop-color%3D'%2393c5fd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D'320'%20height%3D'200'%20fill%3D'url(%23a)'/%3E%3Cg%20fill%3D'none'%20stroke%3D'%231e3a8a'%20stroke-width%3D'6'%20opacity%3D'0.35'%3E%3Crect%20x%3D'30'%20y%3D'40'%20width%3D'260'%20height%3D'120'%20rx%3D'18'/%3E%3Cline%20x1%3D'160'%20y1%3D'40'%20x2%3D'160'%20y2%3D'160'/%3E%3Ccircle%20cx%3D'160'%20cy%3D'100'%20r%3D'24'/%3E%3Ccircle%20cx%3D'160'%20cy%3D'100'%20r%3D'8'/%3E%3C/g%3E%3C/svg%3E";
+  const CHIP_BASE_CLASSES =
+    "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900";
+  const CHIP_ACTIVE_CLASSES =
+    "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-transparent bg-[#CBED98] px-6 py-3 text-sm font-semibold text-[#1f2b15] shadow-[0_12px_22px_rgba(186,230,126,0.25)] transition hover:border-[#a9d66f] hover:text-[#1b1b1b]";
+  const LOCATION_OPTIONS = [
+    'Jakarta',
+    'Surabaya',
+    'Bandung',
+    'Medan',
+    'Bekasi',
+    'Semarang',
+    'Tangerang',
+    'Depok',
+    'Palembang',
+    'South Tangerang',
+    'Makassar',
+    'Denpasar',
+    'Yogyakarta',
+    'Balikpapan',
+    'Pontianak',
+    'Batam',
+    'Banjarmasin',
+    'Malang',
+  ];
+  const STAR_FULL_ICON =
+    `<svg aria-hidden="true" class="h-4 w-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034 1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461z"/></svg>`;
+  const STAR_EMPTY_ICON =
+    `<svg aria-hidden="true" class="h-4 w-4 text-slate-300" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034 1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461z"/></svg>`;
+
+  function setChipState(chip, isActive) {
+    if (!chip) return;
+    chip.className = isActive ? CHIP_ACTIVE_CLASSES : CHIP_BASE_CLASSES;
+  }
+
+populateLocationOptions();
+
+document.querySelectorAll('.filter-chip').forEach(chip => {
+    setChipState(chip, chip.dataset.default === 'true');
+  });
+
+  function populateLocationOptions(selected = '') {
+    const select = document.getElementById('locationFilter');
+    if (!select) return;
+    const previous = selected || select.value;
+    select.innerHTML = '<option value=\"\">Semua lokasi</option>';
+    LOCATION_OPTIONS.forEach(city => {
+      const option = document.createElement('option');
+      option.value = city;
+      option.textContent = city;
+      select.appendChild(option);
+    });
+    if (previous && LOCATION_OPTIONS.includes(previous)) {
+      select.value = previous;
+    }
+  }
+
+    // State management
+    let currentFilters = {
+        query: '',
+        sport: '',
+        location: '',
             availableOnly: false,
             userLat: null,
             userLng: null
@@ -375,9 +208,8 @@
         // Filter by sport
         function filterSport(element, sport) {
             document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.classList.remove('active');
+                setChipState(chip, chip === element);
             });
-            element.classList.add('active');
             currentFilters.sport = sport;
             loadCourt();
         }
@@ -478,39 +310,53 @@
             const grid = document.getElementById('CourtGrid');
             if (!Array.isArray(Court) || Court.length === 0) {
                 grid.innerHTML = `
-                    <div class="no-results">
-                        <h3>No courts found</h3>
-                        <p>Try adjusting your search filters</p>
-                    </div>
-                `;
+                      <div class="col-span-full flex justify-center">
+                          <div class="w-full max-w-xl rounded-xl bg-white/90 px-6 py-12 text-center shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+                              <h3 class="text-lg font-semibold text-[#1f2937]">Tidak ada lapangan ditemukan</h3>
+                              <p class="mt-2 text-sm text-[#6b7280]">Coba ubah filter pencarian kamu.</p>
+                          </div>
+                      </div>
+                  `;
                 return;
             }
 
             grid.innerHTML = Court.map(court => `
-                <div class="court-card" onclick="goToDetail(${court.id})">
-                    <img src="${court.image || '/static/placeholder-court.jpg'}" 
-                         alt="${escapeHtml(court.name)}" 
-                         onerror="this.src='/static/placeholder-court.jpg'">
-                    <div class="court-card-content">
-                        <span class="court-badge ${court.is_available ? 'available' : 'full'}">
-                            ${court.is_available ? 'Tersedia' : 'Tidak tersedia'}
-                        </span>
-                        ${court.owned_by_user ? '<span class="court-badge owner">Your Court</span>' : ''}
-                        <h3>${escapeHtml(court.name)}</h3>
-                        
-                        <div class="court-info">
-                            <span>Sport: ${formatSportName(court.sport_type)}</span>
-                            <span>Rating: ${court.rating}</span>
-                            <span>Location: ${escapeHtml(court.location)}</span>
-                            ${court.distance ? `<span class="court-distance">Distance: ${court.distance} km</span>` : ''}
-                        </div>
-                        
-                        <div class="court-price">Rp ${formatPrice(court.price)} <small>/jam</small></div>
-                        
-                        <button class="btn-detail" onclick="event.stopPropagation(); goToDetail(${court.id})">
-                            Lihat Detail & Booking
-                        </button>
+                <div class="group flex w-full cursor-pointer flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_22px_50px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-[0_32px_70px_rgba(15,23,42,0.12)]" onclick="goToDetail(${court.id})">
+                  <div class="overflow-hidden">
+                    <img src="${court.image || COURT_PLACEHOLDER}"
+                         alt="${escapeHtml(court.name)}"
+                         class="h-52 w-full object-cover transition duration-500 group-hover:scale-105"
+                         onerror="this.src='${COURT_PLACEHOLDER}'">
+                  </div>
+                  <div class="flex flex-1 flex-col gap-5 px-6 py-6">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="inline-flex items-center rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${court.is_available ? 'bg-[#e7f5da] text-[#2d8a41]' : 'bg-[#ffe2e2] text-[#b54141]'}">
+                        ${court.is_available ? 'Tersedia' : 'Penuh'}
+                      </span>
+                      ${court.owned_by_user ? '<span class="inline-flex items-center rounded-full bg-[#ffe8cc] px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#a85522]">Court kamu</span>' : ''}
                     </div>
+                    <div class="space-y-3">
+                      <h3 class="text-[1.35rem] font-bold uppercase tracking-[0.08em] text-[#101828]">
+                        ${escapeHtml(court.name)}
+                      </h3>
+                      <div class="space-y-1 text-sm font-medium text-[#6b7280]">
+                        <p>Olahraga: <span class="text-[#374151]">${formatSportName(court.sport_type)}</span></p>
+                        <div class="flex items-center gap-2">
+                          <span>Rating:</span>
+                          <span class="inline-flex items-center gap-1" aria-hidden="true">${renderStars(court.rating)}</span>
+                          <span class="text-[#374151]">${formatRating(court.rating)} / 5.0</span>
+                        </div>
+                        <p>Lokasi: <span class="text-[#374151]">${escapeHtml(court.location || '-')}</span></p>
+                        ${court.distance ? `<p>Jarak: <span class="text-[#2f855a] font-semibold">${court.distance} km</span></p>` : ''}
+                      </div>
+                    </div>
+                    <div class="mt-auto space-y-4">
+                      <div class="text-2xl font-bold text-[#1f2937]">Rp ${formatPrice(court.price)} <span class="text-sm font-medium text-[#9ca3af]">/ jam</span></div>
+                      <button class="w-full rounded-lg bg-[#111827] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#0a0f1a]" type="button" onclick="event.stopPropagation(); goToDetail(${court.id})">
+                        Lihat Detail & Booking
+                      </button>
+                    </div>
+                  </div>
                 </div>
             `).join('');
         }
@@ -525,8 +371,23 @@
             document.getElementById('loading').style.display = show ? 'block' : 'none';
         }
 
+        function renderStars(rating) {
+            const value = Math.max(0, Math.min(5, parseFloat(rating) || 0));
+            const stars = [];
+            for (let i = 1; i <= 5; i++) {
+                stars.push(i <= value ? STAR_FULL_ICON : STAR_EMPTY_ICON);
+            }
+            return `<span class="inline-flex items-center gap-1" aria-hidden="true">${stars.join('')}</span>`;
+        }
+
         function formatPrice(price) {
-            return parseFloat(price).toLocaleString('id-ID');
+            const numeric = parseFloat(price);
+            return Number.isFinite(numeric) ? numeric.toLocaleString('id-ID') : '0';
+        }
+
+        function formatRating(rating) {
+            const value = parseFloat(rating);
+            return Number.isFinite(value) ? value.toFixed(1) : '0.0';
         }
 
         function formatSportName(sport) {
@@ -561,6 +422,5 @@
                 searchCourt();
             }
         });
-    </script>
-</body>
-</html>
+</script>
+{% endblock content %}
