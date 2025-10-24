@@ -1,5 +1,5 @@
 from django.urls import path
-from Auth_Profile.views import login_view, register_view, logout_view, homepage_view, profile_display_view, profile_edit_view
+from Auth_Profile.views import login_view, register_view, logout_view, homepage_view
 
 app_name = 'Auth_Profile'
 
@@ -8,6 +8,4 @@ urlpatterns = [
     path('login/', login_view, name='login'),
     path('register/', register_view, name='register'),
     path('logout/', logout_view, name='logout'),
-    path('profile/', profile_display_view, name='profile_display'),
-    path('profile/edit/', profile_edit_view, name='profile_edit'),
 ]
