@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% block meta %}
+<title>MoveBuddy | Courts</title>
+{% endblock meta %}
+
+{% block content %}
+<section
+  class="min-h-screen w-full bg-[#f6f7fb] py-12 font-raleway"
+  style="background-image:url('data:image/svg+xml,%0A%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22240%22%20height%3D%22240%22%20viewBox%3D%220%200%20240%20240%22%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23E2E6ED%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%224%22%3E%3Ccircle%20cx%3D%2248%22%20cy%3D%2248%22%20r%3D%2232%22%2F%3E%3Cpath%20d%3D%22M16%2048h64M48%2016v64%22%2F%3E%3Cpath%20d%3D%22M168%2040c18%200%2032%2014%2032%2032s-14%2032-32%2032-32-14-32-32%2014-32%2032-32z%22%2F%3E%3Cpath%20d%3D%22M156%2048c8%205%2024%205%2032%200M156%2072c8-5%2024-5%2032%200%22%2F%3E%3Cpath%20d%3D%22M56%20176l48-18-18%2048-48%2018z%22%2F%3E%3Cpath%20d%3D%22M180%20176c0%2022-18%2040-40%2040s-40-18-40-40%2018-40%2040-40%2040%2018%2040%2040z%22%2F%3E%3Cpath%20d%3D%22M152%20148v56M168%20148v56%22%2F%3E%3Cpath%20d%3D%22M24%20120h80l-16%2044H40z%22%2F%3E%3Cpath%20d%3D%22M192%20108c0-10%208-18%2018-18s18%208%2018%2018c0%2016-18%2020-18%2034%22%2F%3E%3Crect%20x%3D%22204%22%20y%3D%22142%22%20width%3D%2212%22%20height%3D%2216%22%20rx%3D%225%22%2F%3E%3Cpath%20d%3D%22M104%2028l26%2014v28l-26%2014-26-14V42z%22%2F%3E%3Cpath%20d%3D%22M92%2042l40%2022%22%2F%3E%3C%2Fg%3E%3Cg%20fill%3D%22none%22%20stroke%3D%22%23ECEFF5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20stroke-width%3D%223%22%3E%3Ccircle%20cx%3D%22120%22%20cy%3D%2228%22%20r%3D%2220%22%2F%3E%3Cpath%20d%3D%22M110%2028h20M120%2018v20%22%2F%3E%3Cpath%20d%3D%22M206%2032l22%2012-10%2018-22-12z%22%2F%3E%3Cpath%20d%3D%22M30%20210l36-14-14%2036-36%2014z%22%2F%3E%3Cpath%20d%3D%22M132%20206c0%2014-10%2024-24%2024s-24-10-24-24%2010-24%2024-24%2024%2010%2024%2024z%22%2F%3E%3Cpath%20d%3D%22M112%20188v36%22%2F%3E%3Cpath%20d%3D%22M24%2048l-16%2012%22%20stroke-width%3D%222%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E');background-size:240px;"
+>
+  <div class="mx-auto flex w-full max-w-6xl flex-col gap-10 px-4 sm:px-6 lg:px-8">
+    <header class="space-y-3">
+      <span class="inline-flex items-center rounded-full bg-white/80 px-4 py-2 text-xs font-semibold tracking-[0.35em] text-[#7d7d7d] shadow font-race_sport uppercase">
+        Court
+      </span>
+      <h1 class="text-4xl font-race_sport tracking-[0.15em] text-[#1b1b1b] md:text-5xl">
+        Temukan Lapangan Favoritmu
+      </h1>
+      <p class="max-w-2xl text-base text-[#5f6368]">
+        Gunakan filter olahraga, lokasi, dan ketersediaan untuk menemukan lapangan olahraga terbaik sesuai kebutuhanmu.
+      </p>
+    </header>
+
+    <div class="rounded-[32px] bg-white/95 p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur">
+      <div class="grid gap-6 lg:grid-cols-[minmax(0,1fr)_220px] lg:items-start">
+        <div class="space-y-6">
+          <div class="grid gap-4 md:grid-cols-[minmax(0,1fr)_220px]">
+            <label class="relative flex items-center">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Cari lapangan atau lokasi..."
+                class="h-[56px] w-full rounded-[22px] border border-[#d7dae2] bg-white px-5 pr-14 text-sm font-medium text-[#111827] shadow-inner shadow-white/60 outline-none transition focus:border-[#bade7e] focus:ring-4 focus:ring-[#dff7b4]/60"
+              />
+              <svg class="absolute right-5 h-5 w-5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+              </svg>
+            </label>
+            <select
+              id="locationFilter"
+              class="h-[56px] rounded-[22px] border border-[#d7dae2] bg-white px-5 text-sm font-medium text-[#111827] shadow-inner shadow-white/60 outline-none transition focus:border-[#bade7e] focus:ring-4 focus:ring-[#dff7b4]/60"
+            >
+              <option value="">Semua lokasi</option>
+              <option value="Jakarta">Jakarta</option>
+              <option value="Bandung">Bandung</option>
+              <option value="Surabaya">Surabaya</option>
+              <option value="Depok">Depok</option>
+              <option value="Tangerang">Tangerang</option>
+              <option value="Bekasi">Bekasi</option>
+            </select>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="" data-default="true" onclick="filterSport(this, '')">
+              All
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="tennis" onclick="filterSport(this, 'tennis')">
+              Tennis
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="basketball" onclick="filterSport(this, 'basketball')">
+              Basketball
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="soccer" onclick="filterSport(this, 'soccer')">
+              Soccer
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="badminton" onclick="filterSport(this, 'badminton')">
+              Badminton
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="volleyball" onclick="filterSport(this, 'volleyball')">
+              Volleyball
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="futsal" onclick="filterSport(this, 'futsal')">
+              Futsal
+            </button>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <button
+            type="button"
+            onclick="searchCourt()"
+            class="h-[56px] rounded-[22px] bg-[#bade7e] font-race_sport text-xs tracking-[0.32em] text-[#1f2b15] uppercase transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(154,216,97,0.25)]"
+          >
+            Search
+          </button>
+          <label class="flex items-center justify-between gap-4 rounded-[22px] bg-white/70 px-5 py-3 text-sm font-semibold text-[#4b5563] shadow-inner shadow-white/70">
+            <span>Hanya tampilkan yang tersedia</span>
+            <input
+              id="availableOnly"
+              type="checkbox"
+              onchange="loadCourt()"
+              class="peer sr-only"
+            />
+            <span
+              class="relative h-7 w-14 rounded-full border border-[#bade7e] bg-[#dff7b4]/70 transition peer-checked:border-transparent peer-checked:bg-gradient-to-r peer-checked:from-[#89d65c] peer-checked:to-[#6db745]"
+            >
+              <span
+                class="absolute left-1 top-[6px] h-4 w-4 rounded-full bg-white shadow transition-all peer-checked:left-8"
+              ></span>
+            </span>
+          </label>
+          <a
+            href="{% url 'Court:add_court' %}"
+            class="h-[56px] rounded-[22px] bg-[#bade7e] font-race_sport text-xs tracking-[0.32em] text-[#1f2b15] uppercase transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(154,216,97,0.25)] flex items-center justify-center"
+          >
+            + Add Court
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div id="loading" class="hidden rounded-[30px] bg-white/80 py-16 text-center text-[#6b7280] shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
+      Memuat lapangan...
+    </div>
+
+    <div id="CourtGrid" class="grid justify-items-center gap-8 sm:grid-cols-2 xl:grid-cols-3"></div>
+  </div>
+</section>
