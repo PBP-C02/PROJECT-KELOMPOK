@@ -20,7 +20,7 @@ body {
   padding: 2rem 0;
 }
 
-/* Back Button Wrapper (di atas container) */
+/* Back Button Wrapper */
 .back-button-wrapper {
   max-width: 900px;
   margin: 0 auto 16px auto;
@@ -55,10 +55,10 @@ body {
   position: relative;  
 }
 
-/* Header Section - REDUCED gap */
+/* Header Section  */
 .detail-header {
   width: 100%;
-  height: 280px; /* REDUCED from 300px */
+  height: 280px; 
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
   align-items: center;
@@ -112,9 +112,9 @@ body {
   text-transform: uppercase;
 }
 
-/* Content Section - REDUCED padding top */
+/* Content Section  */
 .detail-content {
-  padding: 24px 32px 32px 32px; /* CHANGED: top padding dari 32px ke 24px */
+  padding: 24px 32px 32px 32px; 
   position: relative;  
 }
 
@@ -130,13 +130,13 @@ body {
 }
 
 .status-badge.available {
-  background: #c6f6d5; /* CHANGED: Lebih gelap dari #d4edda */
-  color: #22543d; /* CHANGED: Lebih gelap dari #155724 */
+  background: #c6f6d5; 
+  color: #22543d; 
 }
 
 .status-badge.booked {
-  background: #fed7d7; /* CHANGED: Lebih gelap dari #f8d7da */
-  color: #742a2a; /* CHANGED: Lebih gelap dari #721c24 */
+  background: #fed7d7;
+  color: #742a2a; 
 }
 
 /* Title & Meta */
@@ -154,7 +154,7 @@ body {
   color: #666;
   font-size: 14px;
   margin-bottom: 24px;
-  margin-top: 4px; /* CHANGED: dari 8px ke 4px */
+  margin-top: 4px; 
 }
 
 .meta-item {
@@ -349,36 +349,36 @@ body {
 }
 
 .btn-mark-available {
-  background: #48bb78; /* CHANGED: Lebih gelap dari #c8f08b */
-  color: white; /* CHANGED: Dari #2b2b2b ke white */
+  background: #48bb78; 
+  color: white;
 }
 
 .btn-mark-available:hover {
-  background: #38a169; /* CHANGED: Lebih gelap */
+  background: #38a169; 
 }
 
 .btn-mark-available.active {
-  background: #2f855a; /* CHANGED: Even darker when active */
+  background: #2f855a;
   box-shadow: 0 0 0 3px rgba(72, 187, 120, 0.3);
 }
 
 .btn-mark-unavailable {
-  background: #f56565; /* CHANGED: Lebih gelap dari #fc8181 */
+  background: #f56565; 
   color: white;
 }
 
 .btn-mark-unavailable:hover {
-  background: #e53e3e; /* CHANGED: Lebih gelap */
+  background: #e53e3e;
 }
 
 .btn-mark-unavailable.active {
-  background: #c53030; /* CHANGED: Even darker when active */
+  background: #c53030; 
   box-shadow: 0 0 0 3px rgba(245, 101, 101, 0.3);
 }
 
 .btn-delete-coach {
   background: white;
-  color: #c53030; /* CHANGED: Lebih gelap dari #e53e3e */
+  color: #c53030;
   border: 2px solid #c53030;
 }
 

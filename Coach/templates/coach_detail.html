@@ -13,7 +13,6 @@
 <!-- Background wrapper -->
 <div style="--bg-image: url('{% static 'img/bg.png' %}');" class="coach-bg-wrapper">
   
-  <!-- Back Button (outside container, di atas) -->
   <div class="back-button-wrapper">
     <a href="{% url 'coach:show_main' %}" class="btn-back-top">
       Back to Coach List
@@ -137,7 +136,7 @@
         </div>
       </div>
 
-      <!-- Owner Actions (Hanya 4 tombol, tanpa wrapper Reserve Coach) -->
+      <!-- Owner Actions  -->
       {% if request.user.is_authenticated and coach.user == request.user %}
         <div class="owner-action-buttons">
           <button type="button" class="btn-mark-available {% if not coach.isBooked %}active{% endif %}" onclick="markAvailable()">
@@ -155,7 +154,7 @@
         </div>
       {% endif %}
 
-      <!-- Book via WhatsApp Button (Big, untuk non-owner) -->
+      <!-- Book via WhatsApp Button -->
       {% if request.user.is_authenticated and coach.user != request.user %}
         {% if not coach.isBooked %}
           <button type="button" 

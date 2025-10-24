@@ -23,10 +23,10 @@ body {
 
 /* ========== Form Container ========== */
 .form-container {
-  max-width: 640px; /* Increased from 520px to 640px */
+  max-width: 640px; 
   margin: 0 auto;
   background: white;
-  padding: 2.5rem; /* Increased from 2rem to 2.5rem */
+  padding: 2.5rem; 
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -50,7 +50,7 @@ body {
 .form-grid-simple {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem; /* Increased gap */
+  gap: 1.75rem; 
 }
 
 .form-group {
@@ -69,7 +69,7 @@ body {
 .form-group textarea,
 .form-group select {
   width: 100%;
-  padding: 0.875rem; /* Increased from 0.75rem to 0.875rem */
+  padding: 0.875rem; 
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   font-size: 0.95rem;
@@ -87,7 +87,7 @@ body {
 
 .form-group textarea {
   resize: vertical;
-  min-height: 100px; /* Increased from 80px to 100px */
+  min-height: 100px; 
 }
 
 .form-group select {
@@ -112,9 +112,9 @@ body {
   padding-top: 1.5rem;
   border-top: 1px solid #e0e0e0;
   display: flex;
-  flex-direction: column; /* Stack vertically */
+  flex-direction: column; 
   gap: 12px;
-  align-items: stretch; /* Full width */
+  align-items: stretch; 
 }
 
 .btn-save {
@@ -148,7 +148,7 @@ body {
 }
 
 .btn-back-form {
-  width: 100%; /* Full width */
+  width: 100%; 
   padding: 0.875rem 1.5rem;
   font-size: 0.95rem;
   font-weight: 600;
@@ -247,7 +247,7 @@ body {
   opacity: 1;
 }
 
-/* ========== Form Actions Edit (Save Changes di atas, 2 tombol di bawah) ========== */
+/* ========== Form Actions Edit  ========== */
 .form-actions-edit {
   margin-top: 2rem;
   padding-top: 1.5rem;

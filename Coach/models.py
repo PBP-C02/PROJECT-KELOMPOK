@@ -78,7 +78,6 @@ class Coach(models.Model):
 
     @property
     def price_formatted(self):
-        # Format dengan pemisah titik (format Indonesia)
         price_str = "{:,.0f}".format(self.price).replace(',', '.')
         return f"Rp {price_str}"
     
