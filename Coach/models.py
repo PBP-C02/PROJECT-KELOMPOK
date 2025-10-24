@@ -6,6 +6,7 @@ from django.utils.formats import number_format
 from Auth_Profile.models import User
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from urllib.parse import quote
 
 
 CATEGORY_CHOICES = [
@@ -94,6 +95,42 @@ class Coach(models.Model):
         
         return False
 
+    def get_whatsapp_link(self):
+        """Generate WhatsApp booking link"""
+        if not self.user or not hasattr(self.user, 'nomor_handphone'):
+            return None
+        
+        phone = self.user.nomor_handphone.strip().replace(' ', '').replace('-', '')
+        
+        # Format phone number to international format (62xxx)
+        if phone.startswith('0'):
+            phone = '62' + phone[1:]
+        elif not phone.startswith('62'):
+            phone = '62' + phone
+        
+        # Create booking message
+        message = f"""Hello! I would like to book a coaching session:
+
+*{self.title}*
+ Date: {self.date.strftime('%A, %d %B %Y')}
+ Time: {self.startTime.strftime('%H:%M')} - {self.endTime.strftime('%H:%M')}
+
+Please confirm my booking. Thank you!"""
+        
+        # URL encode message
+        encoded_message = quote(message, safe='*\n')
+        return f"https://wa.me/{phone}?text={encoded_message}"
+    
+    def get_formatted_phone(self):
+        """Get formatted phone number"""
+        if not self.user or not hasattr(self.user, 'nomor_handphone'):
+            return None
+        
+        phone = self.user.nomor_handphone.strip()
+        if len(phone) >= 10:
+            return f"{phone[:4]}-{phone[4:8]}-{phone[8:]}"
+        return phone
+    
     class Meta:
         ordering = ['-created_at']
         indexes = [

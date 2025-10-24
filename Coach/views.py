@@ -12,6 +12,8 @@ from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 import json
+from PIL import Image
+import os
 
 def _to_int(s):
     if not s:
@@ -50,6 +52,30 @@ def _to_decimal(s):
         return Decimal(s)
     except:
         return Decimal('0')
+
+def validate_image(file):
+    """Validate uploaded image"""
+    if not file:
+        return None
+    
+    # Check file size (max 5MB)
+    if file.size > 5 * 1024 * 1024:
+        raise ValidationError('Image size must be less than 5MB')
+    
+    # Check file extension
+    ext = os.path.splitext(file.name)[1].lower()
+    valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+    if ext not in valid_extensions:
+        raise ValidationError(f'Invalid file type. Allowed: {", ".join(valid_extensions)}')
+    
+    # Verify it's actually an image
+    try:
+        img = Image.open(file)
+        img.verify()
+    except Exception:
+        raise ValidationError('Invalid image file')
+    
+    return file
 
 def show_main(request):
     coach_list = Coach.objects.all()
@@ -114,7 +140,6 @@ def create_coach_page(request):
     return render(request, 'create_coach.html')
 
 @login_required(login_url='/login')
-@csrf_exempt
 @require_http_methods(["POST"])
 def add_coach(request):
     try:
@@ -144,13 +169,21 @@ def add_coach(request):
         if rating < 0 or rating > 5:
             return JsonResponse({'success': False, 'message': 'Rating must be between 0 and 5'}, status=400)
 
+        # Validate image
+        image = request.FILES.get("image")
+        if image:
+            try:
+                image = validate_image(image)
+            except ValidationError as e:
+                return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
         new_coach = Coach(
             title=strip_tags(request.POST.get("title")),
             description=strip_tags(request.POST.get("description")),
             category=request.POST.get("category"),
             location=strip_tags(request.POST.get("location")),
             address=strip_tags(request.POST.get("address")),
-            image=request.FILES.get("image"),
+            image=image,
             user=request.user,
             price=price,
             date=event_dt.date(),
@@ -180,7 +213,6 @@ def edit_coach_page(request, pk):
     return render(request, "edit_coach.html", {"coach": coach})
 
 @login_required(login_url='/login')
-@csrf_exempt
 @require_http_methods(["POST"])
 def update_coach(request, pk):
     try:
@@ -246,7 +278,6 @@ def update_coach(request, pk):
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
 @login_required(login_url='/login')
-@csrf_exempt  # ADD: Bypass CSRF untuk testing (atau handle di fetch)
 @require_http_methods(["POST"])
 def book_coach(request, pk):
     coach = get_object_or_404(Coach, pk=pk)
@@ -275,7 +306,6 @@ def book_coach(request, pk):
         return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
 
 @login_required(login_url='/login')
-@csrf_exempt  # ADD: Bypass CSRF untuk testing
 @require_http_methods(["POST"])
 def cancel_booking(request, pk):
     coach = get_object_or_404(Coach, pk=pk)

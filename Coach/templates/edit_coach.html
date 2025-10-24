@@ -6,6 +6,12 @@
 {% endblock meta %}
 
 {% block content %}
+<!-- Include Navbar -->
+{% include 'includes/navbar.html' %}
+
+<!-- Background wrapper dengan CSS variable -->
+<div style="--bg-image: url('{% static 'img/bg.jpg' %}');" class="coach-bg-wrapper">
+
 <!-- Error Message -->
 <div id="errorMessage" class="error-banner" style="display:none;">
   <div class="error-content">
@@ -139,6 +145,8 @@
     </div>
   </form>
 </div>
+
+</div> <!-- End background wrapper -->
 
 <script>
 function getCookie(name) {
