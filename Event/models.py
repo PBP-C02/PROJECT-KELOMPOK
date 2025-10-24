@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
+import uuid
 
 class Event(models.Model):
     """Model untuk event olahraga"""
@@ -23,6 +24,7 @@ class Event(models.Model):
     ]
     
     # Basic Info
+    pk_event = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     sport_type = models.CharField(max_length=50, choices=SPORT_CHOICES)
     description = models.TextField(blank=True, null=True)
@@ -71,6 +73,7 @@ class Event(models.Model):
 
 class EventSchedule(models.Model):
     """Store available dates for events"""
+    pk_event_sched = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='schedules')
     date = models.DateField()
     is_available = models.BooleanField(default=True)
@@ -85,6 +88,7 @@ class EventSchedule(models.Model):
 
 class EventRegistration(models.Model):
     """Join Event functionality"""
+    pk_event_regis = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='registrations')
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='event_registrations')
     schedule = models.ForeignKey(EventSchedule, on_delete=models.CASCADE, related_name='registrations')
