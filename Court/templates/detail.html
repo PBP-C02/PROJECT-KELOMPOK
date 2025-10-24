@@ -113,18 +113,18 @@
                 </div>
 
                 {% if can_manage_slots %}
-                <div class="grid gap-2 sm:grid-cols-2">
-                  <button type="button" id="markAvailable" class="flex items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-emerald-700 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-200/40 disabled:cursor-not-allowed disabled:opacity-60" onclick="setAvailability(true)">
+                <div class="flex flex-wrap gap-2">
+                  <button type="button" id="markAvailable" class="flex items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-200/40 disabled:cursor-not-allowed disabled:opacity-60 min-w-[130px]" onclick="setAvailability(true)">
                     Tandai Tersedia
                   </button>
-                  <button type="button" id="markUnavailable" class="flex items-center justify-center rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-rose-700 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-rose-200/40 disabled:cursor-not-allowed disabled:opacity-60" onclick="setAvailability(false)">
-                    Tandai Tidak Tersedia
+                  <button type="button" id="markUnavailable" class="flex items-center justify-center rounded-xl border border-rose-300 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-rose-200/40 disabled:cursor-not-allowed disabled:opacity-60 min-w-[130px]" onclick="setAvailability(false)">
+                    Tidak Tersedia
                   </button>
-                  <button type="button" class="flex items-center justify-center rounded-xl border border-rose-300 bg-white px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-rose-600 transition hover:-translate-y-0.5 hover:bg-rose-50" onclick="openDeleteModal()">
-                    Hapus Lapangan
+                  <button type="button" class="flex items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-900" title="Edit court" onclick="window.location.href='{% url 'Court:edit_court' court.id %}'">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M4 13.5V16h2.5L15.374 7.126 12.874 4.626 4 13.5Zm12.915-7.915a.997.997 0 0 0 0-1.414l-1.586-1.586a.999.999 0 0 0-1.414 0L12.586 3.5l3.5 3.5.829-.415Z"/></svg>
                   </button>
-                  <button type="button" class="flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-900" onclick="window.location.href='{% url 'Court:edit_court' court.id %}'">
-                    Edit Court
+                  <button type="button" class="flex items-center justify-center rounded-lg border border-rose-300 bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-rose-600 transition hover:-translate-y-0.5 hover:bg-rose-50" title="Hapus court" onclick="openDeleteModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M6 7a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Zm4 0a1 1 0 0 1 1 1v7a1 1 0 1 1-2 0V8a1 1 0 0 1 1-1Zm5-4h-3.5l-1-1h-4l-1 1H2v2h16V3h-3Z"/><path d="M4 6h12v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6Z"/></svg>
                   </button>
                 </div>
                 {% endif %}
