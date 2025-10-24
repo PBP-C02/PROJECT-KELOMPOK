@@ -1,4 +1,5 @@
 from django.db import models
+from Auth_Profile.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 import uuid
 
@@ -25,7 +26,7 @@ class Event(models.Model):
     name = models.CharField(max_length=200)
     sport_type = models.CharField(max_length=50, choices=SPORT_CHOICES)
     description = models.TextField(blank=True, null=True)
-    #test
+    
     # Location
     city = models.CharField(max_length=100)
     full_address = models.TextField()
@@ -33,8 +34,14 @@ class Event(models.Model):
     
     # Pricing & Details
     entry_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
-    activities = models.TextField(help_text="Comma separated facilities")
-    rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    activities = models.TextField(help_text="Comma separated facilities", blank=True)
+    rating = models.DecimalField(
+        max_digits=3, 
+        decimal_places=2, 
+        default=0.00, 
+        blank=True,
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
     
     # Event Photo
     photo = models.ImageField(upload_to='events/', blank=True, null=True)
@@ -45,8 +52,8 @@ class Event(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # Categories (from image 4)
-    category = models.CharField(max_length=100, default='category 1')
+    # Categories
+    category = models.CharField(max_length=100, default='category 1', blank=True)
     
     class Meta:
         ordering = ['-created_at']
@@ -66,6 +73,22 @@ class Event(models.Model):
             'available': 'badge-available',
             'unavailable': 'badge-unavailable'
         }.get(self.status, 'badge-available')
+    
+    # Property untuk compatibility dengan template
+    @property
+    def is_available(self):
+        """Check if event is available"""
+        return self.status == 'available'
+    
+    @property
+    def title(self):
+        """Alias for name field"""
+        return self.name
+    
+    @property
+    def location(self):
+        """Alias for full_address field"""
+        return self.full_address
 
 
 class EventSchedule(models.Model):
