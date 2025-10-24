@@ -20,17 +20,14 @@ def custom_login_required(view_func):
     @wraps(view_func)
     def wrapper(request, *args, **kwargs):
         if 'user_id' not in request.session:
-            # AJAX request
             if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
                 return JsonResponse({
                     'success': False,
                     'message': 'Please login first',
                     'redirect_url': '/login/'
                 }, status=401)
-            # Normal request
             return redirect('/login/')
         
-        # Set request.user from session
         try:
             from Auth_Profile.models import User
             request.user = User.objects.get(id=request.session['user_id'])
@@ -108,7 +105,6 @@ def validate_image(file):
 def show_main(request):
     coach_list = Coach.objects.all()
 
-    # Set request.user from session if logged in - FIXED
     if 'user_id' in request.session:
         try:
             from Auth_Profile.models import User
@@ -167,12 +163,11 @@ def show_main(request):
         'count': coach_list.count(),
         'nama_coach': nama_coach,
         'view_mode': view_mode,
-        'user': request.user,  # ADDED: explicitly pass user to template
+        'user': request.user,  
     }
     return render(request, 'main.html', context)
 
 def coach_detail(request, pk):
-    # Set request.user from session if logged in - FIXED
     if 'user_id' in request.session:
         try:
             from Auth_Profile.models import User
@@ -187,7 +182,7 @@ def coach_detail(request, pk):
     
     context = {
         'coach': coach,
-        'user': request.user,  # ADDED: Pass user explicitly to template
+        'user': request.user, 
     }
     
     return render(request, "coach_detail.html", context)

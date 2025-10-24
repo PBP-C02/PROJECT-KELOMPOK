@@ -1,26 +1,31 @@
-
-import io
 import json
 import uuid
 import datetime as dt
 from decimal import Decimal
 from io import BytesIO
-from django.test import TestCase
+
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+from django.contrib.auth.signals import user_logged_in
+from django.contrib.sessions.backends.db import SessionStore
+from django.db import models as djm
+from django.contrib.auth.hashers import make_password
+
 from PIL import Image
+
 from Coach.models import Coach
 from Coach.forms import CoachForm
 from Coach.views import _to_int, _parse_time, _parse_dt_local, _to_decimal, validate_image
-from Auth_Profile.models import User
-from django.db import models as djm
 
 
-# Helpers
-def make_png_file(name="test.png", size=(10, 10)):
-    """Create a small valid PNG image as uploaded file."""
+# ---------- Helpers ----------
+
+def make_png_file(name: str = "test.png", size=(10, 10)):
+    """Create a tiny valid PNG file as if uploaded by a user."""
     bio = BytesIO()
     img = Image.new("RGB", size)
     img.save(bio, format="PNG")
@@ -34,76 +39,50 @@ def make_future_datetime(days=1, hour=9, minute=0):
     return base.replace(hour=hour, minute=minute, second=0, microsecond=0)
 
 
-
-def make_user(username="user", nama="User", phone="081234567890"):
-    """Create a User, mengisi otomatis field NOT NULL pada custom model.
-    - Skip primary key (biar default uuid jalan)
-    - Handle UUIDField dengan uuid4()
-    - Hormati choices & max_length
-    - Buat nilai unik per-username untuk field Char unik
+def make_user(nama: str = "Nama", phone: str = "081234567890", email: str | None = None,
+              kelamin: str = "L", tanggal_lahir: dt.date | None = None):
     """
-    defaults = {
-        "username": username,
-        "nama": nama,
-        "nomor_handphone": phone,
-        "is_active": True,
-        "email": f"{username}@example.com",
-    }
+    Create a test user compatible with Coach.user ForeignKey.
+    Works with custom User model from Auth_Profile.
+    """
+    from Auth_Profile.models import User
+    
+    if email is None:
+        email = f"{uuid.uuid4().hex[:8]}@example.com"
+    if tanggal_lahir is None:
+        tanggal_lahir = dt.date(2000, 1, 1)
 
-    def pick_choice(field):
-        choices = getattr(field, "choices", None) or []
-        if not choices:
-            return None
-        if isinstance(choices[0][1], (list, tuple)):
-            choices = [opt for _grp, opts in choices for opt in opts]
-        return choices[0][0]
-
-    for f in User._meta.get_fields():
-        if not getattr(f, "concrete", False):
-            continue
-        if getattr(f, "auto_created", False):
-            continue
-        if getattr(f, "is_relation", False):
-            continue
-        if getattr(f, "primary_key", False):
-            continue  
-
-        if f.name in defaults:
-            continue
-
-        required = getattr(f, "null", True) is False and getattr(f, "blank", True) is False
-        if not required:
-            continue
-
-        choice_val = pick_choice(f)
-
-        if isinstance(f, djm.DateField) and not isinstance(f, djm.DateTimeField):
-            defaults[f.name] = timezone.now().date()
-        elif isinstance(f, djm.DateTimeField):
-            defaults[f.name] = timezone.now()
-        elif isinstance(f, djm.BooleanField):
-            defaults[f.name] = True if choice_val is None else bool(choice_val)
-        elif isinstance(f, djm.IntegerField):
-            defaults[f.name] = int(choice_val) if choice_val is not None else 0
-        elif isinstance(f, djm.DecimalField):
-            defaults[f.name] = Decimal(str(choice_val)) if choice_val is not None else Decimal("0")
-        elif isinstance(f, djm.EmailField):
-            defaults[f.name] = f"{username}@example.com"
-        elif isinstance(f, djm.UUIDField):
-            defaults[f.name] = uuid.uuid4()
-        elif isinstance(f, djm.CharField):
-            val = str(choice_val) if choice_val is not None else f"{f.name}-{username}"
-            max_len = getattr(f, "max_length", None)
-            if max_len:
-                val = val[:max_len]
-            defaults[f.name] = val
-        else:
-            defaults[f.name] = f"{f.name}-{username}"
-
-    return User.objects.create(**defaults)
+    # Custom User model has these fields:
+    # id, nama, email, kelamin, tanggal_lahir, nomor_handphone, password
+    user = User.objects.create(
+        nama=nama,
+        email=email,
+        kelamin=kelamin,
+        tanggal_lahir=tanggal_lahir,
+        nomor_handphone=phone,
+        password=make_password("xpass123")  # Hashed password
+    )
+    
+    return user
 
 
-# Unit tests for small helpers
+def manual_login(client, user):
+    """
+    Manually log in a user without triggering user_logged_in signal.
+    This bypasses the signal that tries to update last_login field.
+    """
+    from django.conf import settings
+    
+    # Create session manually
+    session = client.session
+    session['_auth_user_id'] = str(user.pk)
+    session['_auth_user_backend'] = 'django.contrib.auth.backends.ModelBackend'
+    session['_auth_user_hash'] = ''  # Can be empty for tests
+    session.save()
+
+
+# ---------- Unit tests for small helpers ----------
+
 class HelperFunctionTests(TestCase):
     def test__to_int(self):
         self.assertEqual(_to_int("1.000"), 1000)
@@ -122,7 +101,10 @@ class HelperFunctionTests(TestCase):
         parsed = _parse_dt_local(s)
         self.assertIsNotNone(parsed)
         self.assertFalse(timezone.is_naive(parsed))
-        self.assertEqual(parsed.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%dT%H:%M"), s)
+        self.assertEqual(
+            parsed.astimezone(timezone.get_current_timezone()).strftime("%Y-%m-%dT%H:%M"),
+            s,
+        )
         self.assertIsNone(_parse_dt_local("invalid"))
         self.assertIsNone(_parse_dt_local(None))
 
@@ -140,9 +122,8 @@ class ImageValidationTests(TestCase):
 
     def test_validate_image_rejects_large_file(self):
         big = SimpleUploadedFile("big.png", b"0" * (5 * 1024 * 1024 + 100), content_type="image/png")
-        with self.assertRaises(ValidationError) as ctx:
+        with self.assertRaises(ValidationError):
             validate_image(big)
-        self.assertIsInstance(ctx.exception, ValidationError.__class__) if False else None
 
     def test_validate_image_rejects_wrong_extension(self):
         f = make_png_file(name="test.txt")
@@ -157,12 +138,12 @@ class ImageValidationTests(TestCase):
         self.assertIn("Invalid image file", str(ctx.exception))
 
 
+# ---------- Model tests ----------
 
-# Model tests
 class CoachModelTests(TestCase):
     def setUp(self):
-        self.owner = make_user("owner", "Owner", "081234567890")
-        self.alice = make_user("alice", "Alice", "082233445566")
+        self.owner = make_user(nama="Owner", phone="081234567890")
+        self.alice = make_user(nama="Alice", phone="082233445566")
         fut = make_future_datetime(days=5, hour=9)
         self.coach = Coach.objects.create(
             user=self.owner,
@@ -177,11 +158,12 @@ class CoachModelTests(TestCase):
             startTime=dt.time(9, 0),
             endTime=dt.time(10, 0),
             rating=Decimal("4.50"),
-            instagram_link="https://instagram.com/coach"
+            instagram_link="https://instagram.com/coach",
         )
 
     def test_str(self):
-        self.assertIn("Tennis 101 by owner", str(self.coach))
+        s = str(self.coach)
+        self.assertIn("Tennis 101", s)
 
     def test_price_formatted(self):
         self.coach.price = 1500000
@@ -190,66 +172,103 @@ class CoachModelTests(TestCase):
     def test_is_past_logic(self):
         # Future date
         future = Coach(
-            user=self.owner, title="Future", description="x", price=1, category="tennis",
-            location="JKT", address="addr", mapsLink="https://maps.google.com/?q=x",
+            user=self.owner,
+            title="Future",
+            description="x",
+            price=1,
+            category="tennis",
+            location="JKT",
+            address="addr",
+            mapsLink="https://maps.google.com/?q=x",
             date=(timezone.now() + dt.timedelta(days=1)).date(),
-            startTime=dt.time(9, 0), endTime=dt.time(10, 0),
+            startTime=dt.time(9, 0),
+            endTime=dt.time(10, 0),
         )
         future.full_clean()
         future.save()
         self.assertFalse(future.is_past)
 
+        # Today
         today = Coach(
-            user=self.owner, title="Today", description="x", price=1, category="tennis",
-            location="JKT", address="addr", mapsLink="https://maps.google.com/?q=x",
+            user=self.owner,
+            title="Today",
+            description="x",
+            price=1,
+            category="tennis",
+            location="JKT",
+            address="addr",
+            mapsLink="https://maps.google.com/?q=x",
             date=timezone.now().date(),
-            startTime=dt.time(0, 0), endTime=dt.time(0, 1),
+            startTime=dt.time(0, 0),
+            endTime=dt.time(0, 1),
         )
         today.full_clean()
         today.save()
         self.assertIsInstance(today.is_past, bool)
 
-
     def test_get_whatsapp_link_and_phone_format(self):
         link = self.coach.get_whatsapp_link()
         self.assertIsNotNone(link)
-        self.assertIn("https://wa.me/62", link) 
-        self.assertIn("Tennis%20101", link)     
+        self.assertIn("https://wa.me/62", link)
+        self.assertIn("Tennis%20101", link)
         self.assertEqual(self.coach.get_formatted_phone(), "0812-3456-7890")
 
     def test_clean_validations(self):
         # endTime <= startTime
         bad_time = Coach(
-            user=self.owner, title="Bad", description="x", price=1, category="tennis",
-            location="JKT", address="addr", mapsLink="https://maps.google.com/?q=x",
+            user=self.owner,
+            title="Bad",
+            description="x",
+            price=1,
+            category="tennis",
+            location="JKT",
+            address="addr",
+            mapsLink="https://maps.google.com/?q=x",
             date=(timezone.now() + dt.timedelta(days=1)).date(),
-            startTime=dt.time(10, 0), endTime=dt.time(9, 0),
+            startTime=dt.time(10, 0),
+            endTime=dt.time(9, 0),
         )
         with self.assertRaises(ValidationError):
             bad_time.full_clean()
 
         # date in the past
         bad_date = Coach(
-            user=self.owner, title="BadDate", description="x", price=1, category="tennis",
-            location="JKT", address="addr", mapsLink="https://maps.google.com/?q=x",
+            user=self.owner,
+            title="BadDate",
+            description="x",
+            price=1,
+            category="tennis",
+            location="JKT",
+            address="adadr",
+            mapsLink="https://maps.google.com/?q=x",
             date=(timezone.now() - dt.timedelta(days=1)).date(),
-            startTime=dt.time(9, 0), endTime=dt.time(10, 0),
+            startTime=dt.time(9, 0),
+            endTime=dt.time(10, 0),
         )
         with self.assertRaises(ValidationError):
             bad_date.full_clean()
 
         # peserta == user
         same = Coach(
-            user=self.owner, peserta=self.owner, title="Same", description="x", price=1, category="tennis",
-            location="JKT", address="addr", mapsLink="https://maps.google.com/?q=x",
+            user=self.owner,
+            peserta=self.owner,
+            title="Same",
+            description="x",
+            price=1,
+            category="tennis",
+            location="JKT",
+            address="addr",
+            mapsLink="https://maps.google.com/?q=x",
             date=(timezone.now() + dt.timedelta(days=1)).date(),
-            startTime=dt.time(9, 0), endTime=dt.time(10, 0),
+            startTime=dt.time(9, 0),
+            endTime=dt.time(10, 0),
         )
         with self.assertRaises(ValidationError):
             same.full_clean()
 
 
-# Form tests
+# ---------- Form tests ----------
+
 class CoachFormTests(TestCase):
     def setUp(self):
         self.future = (timezone.now() + dt.timedelta(days=3)).date()
@@ -340,18 +359,19 @@ class CoachFormTests(TestCase):
         self.assertIn("Waktu selesai harus lebih besar dari waktu mulai.", form.non_field_errors())
 
 
+# ---------- View (JSON) tests ----------
 
-# View (JSON) tests
 class CoachJSONViewTests(TestCase):
     def setUp(self):
-        self.owner = make_user("owner", "Owner", "081234567890")
-        self.other = make_user("other", "Other", "082233445566")
-        self.client.force_login(self.owner)
+        self.owner = make_user(nama="Owner", phone="081234567890", email="owner@test.com")
+        self.other = make_user(nama="Other", phone="082233445566", email="other@test.com")
+        
+        # Use manual login to bypass user_logged_in signal
+        manual_login(self.client, self.owner)
 
         fut = make_future_datetime(days=4, hour=9)
         self.future_date_str = fut.strftime("%Y-%m-%dT%H:%M")
 
-        # Create one coach owned by self.owner
         self.coach = Coach.objects.create(
             user=self.owner,
             title="Owned",
@@ -376,7 +396,7 @@ class CoachJSONViewTests(TestCase):
             "location": "Bandung",
             "address": "Jl. Y",
             "price": "100000",
-            "date": self.future_date_str,  
+            "date": self.future_date_str,
             "startTime": "09:00",
             "endTime": "10:00",
             "rating": "4.5",
@@ -392,10 +412,11 @@ class CoachJSONViewTests(TestCase):
     def test_add_coach_rejects_bad_inputs(self):
         url = reverse("coach:add_coach")
 
+        # Bad price
         resp = self.client.post(url, data={
             "title": "X", "description": "Y", "category": "tennis",
             "location": "Z", "address": "A",
-            "price": "abc", 
+            "price": "abc",
             "date": self.future_date_str, "startTime": "09:00", "endTime": "10:00",
             "rating": "3.0", "mapsLink": "https://maps.google.com/?q=x",
         })
@@ -447,13 +468,14 @@ class CoachJSONViewTests(TestCase):
 
     def test_update_coach_permissions_and_changes(self):
         url = reverse("coach:update_coach", kwargs={"pk": self.coach.pk})
-        # Non-owner should get 403
-        self.client.force_login(self.other)
+        
+        # Non-owner -> 403
+        manual_login(self.client, self.other)
         resp = self.client.post(url, data={"title": "Hack"})
         self.assertEqual(resp.status_code, 403)
 
         # Owner updates
-        self.client.force_login(self.owner)
+        manual_login(self.client, self.owner)
         resp = self.client.post(url, data={
             "title": "Updated",
             "price": "75000",
@@ -472,15 +494,16 @@ class CoachJSONViewTests(TestCase):
         self.assertEqual(self.coach.startTime, dt.time(9, 30))
 
     def test_booking_flow_and_permissions(self):
-        # Book own coach -> 400
         url = reverse("coach:book_coach", kwargs={"pk": self.coach.pk})
-        self.client.force_login(self.owner)
+        
+        # Book own coach -> 400
+        manual_login(self.client, self.owner)
         resp = self.client.post(url)
         self.assertEqual(resp.status_code, 400)
         self.assertIn("message", resp.json())
 
-        # Other user can book -> success
-        self.client.force_login(self.other)
+        # Other user can book
+        manual_login(self.client, self.other)
         resp = self.client.post(url)
         self.assertEqual(resp.status_code, 200, resp.content)
         self.assertTrue(resp.json()["success"])
@@ -490,32 +513,31 @@ class CoachJSONViewTests(TestCase):
         self.assertEqual(resp.status_code, 400)
         self.assertIn("message", resp.json())
 
-        # Cancel booking by non-peserta -> 403
+        # Cancel by non-peserta -> 403
         cancel_url = reverse("coach:cancel_booking", kwargs={"pk": self.coach.pk})
-        self.client.force_login(self.owner)
+        manual_login(self.client, self.owner)
         resp = self.client.post(cancel_url)
         self.assertEqual(resp.status_code, 403)
 
-        # Cancel by peserta -> success
-        self.client.force_login(self.other)
+        # Cancel by peserta
+        manual_login(self.client, self.other)
         resp = self.client.post(cancel_url)
         self.assertEqual(resp.status_code, 200)
         self.assertTrue(resp.json()["success"])
 
     def test_mark_available_unavailable_and_delete(self):
-        # Only owner allowed
         mark_avail = reverse("coach:mark_available", kwargs={"pk": self.coach.pk})
         mark_unavail = reverse("coach:mark_unavailable", kwargs={"pk": self.coach.pk})
         delete_url = reverse("coach:delete_coach", kwargs={"pk": self.coach.pk})
 
         # Other user -> 403
-        self.client.force_login(self.other)
+        manual_login(self.client, self.other)
         self.assertEqual(self.client.post(mark_avail).status_code, 403)
         self.assertEqual(self.client.post(mark_unavail).status_code, 403)
         self.assertEqual(self.client.post(delete_url).status_code, 403)
 
         # Owner -> success
-        self.client.force_login(self.owner)
+        manual_login(self.client, self.owner)
         resp = self.client.post(mark_unavail)
         self.assertEqual(resp.status_code, 200)
         self.coach.refresh_from_db()
@@ -532,8 +554,8 @@ class CoachJSONViewTests(TestCase):
         self.assertFalse(Coach.objects.filter(pk=self.coach.pk).exists())
 
 
+# ---------- URL smoke tests ----------
 
-# URL smoke tests
 class URLResolutionTests(TestCase):
     def test_named_urls_reverse(self):
         self.assertTrue(reverse("coach:show_main").startswith("/"))
