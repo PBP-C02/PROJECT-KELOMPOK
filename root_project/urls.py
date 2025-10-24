@@ -9,4 +9,5 @@ urlpatterns = [
     path('event/', include(('Event.urls', 'Event'), namespace='Event')),
     path('sport_partner/', include('Sport_Partner.urls')),
     path('court/', include('Court.urls')),
+    path('coach/', include('Coach.urls')),
 ]
