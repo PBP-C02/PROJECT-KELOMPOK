@@ -499,10 +499,10 @@
                         <h3>${escapeHtml(court.name)}</h3>
                         
                         <div class="court-info">
-                            <span>Jenis olahraga: ${formatSportName(court.sport_type)}</span>
+                            <span>Sport: ${formatSportName(court.sport_type)}</span>
                             <span>Rating: ${court.rating}</span>
-                            <span>Lokasi: ${escapeHtml(court.location)}</span>
-                            <span class="court-distance">Jarak: ${court.distance ? `${court.distance} km` : 'Tidak diketahui'}</span>
+                            <span>Location: ${escapeHtml(court.location)}</span>
+                            ${court.distance ? `<span class="court-distance">Distance: ${court.distance} km</span>` : ''}
                         </div>
                         
                         <div class="court-price">Rp ${formatPrice(court.price)} <small>/jam</small></div>
