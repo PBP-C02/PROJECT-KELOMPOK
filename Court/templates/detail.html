@@ -1,675 +1,420 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ court.name }} - Court Detail</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+{% block meta %}
+<title>{{ court.name }} - MoveBuddy Court Detail</title>
+{% endblock meta %}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
+{% block content %}
+<section class="relative min-h-screen overflow-hidden py-12">
+  <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'img/bg.png' %}');"></div>
+  <div class="absolute inset-0 bg-white/95"></div>
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+  <div class="relative z-10">
+    {% include 'includes/navbar.html' %}
+    <div class="mx-auto w-full max-w-7xl space-y-6 px-5 sm:px-10">
+      <a href="{% url 'Court:show_main' %}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-600 transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-900">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m15 19-7-7 7-7" />
+        </svg>
+        Back to Court List
+      </a>
 
-        .back-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: white;
-            text-decoration: none;
-            margin-bottom: 20px;
-            padding: 10px 20px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 8px;
-            transition: background 0.3s;
-        }
+      <article class="overflow-hidden rounded-[2.5rem] bg-white/95 shadow-[0_32px_80px_rgba(15,23,42,0.12)] backdrop-blur">
+        <div class="relative h-64 bg-gradient-to-br from-pink-500 to-rose-500">
+          <img
+            src="{% if court.image %}{{ court.image.url }}{% else %}data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20320%20200'%3E%3Cdefs%3E%3ClinearGradient%20id='a'%20x1='0%25'%20y1='0%25'%20x2='100%25'%20y2='100%25'%3E%3Cstop%20offset='0%25'%20stop-color='%23dbeafe'/%3E%3Cstop%20offset='60%25'%20stop-color='%23bfdbfe'/%3E%3Cstop%20offset='100%25'%20stop-color='%2393c5fd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='320'%20height='200'%20fill='url(%23a)'/%3E%3Cg%20fill='none'%20stroke='%231e3a8a'%20stroke-width='6'%20opacity='0.35'%3E%3Crect%20x='30'%20y='40'%20width='260'%20height='120'%20rx='18'/%3E%3Cline%20x1='160'%20y1='40'%20x2='160'%20y2='160'/%3E%3Ccircle%20cx='160'%20cy='100'%20r='24'/%3E%3Ccircle%20cx='160'%20cy='100'%20r='8'/%3E%3C/g%3E%3C/svg%3E{% endif %}"
+            alt="{{ court.name }}"
+            class="h-full w-full object-cover"
+            onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20viewBox=\'0%200%20320%20200\'%3E%3Cdefs%3E%3ClinearGradient%20id=\'a\'%20x1=\'0%25\'%20y1=\'0%25\'%20x2=\'100%25\'%20y2=\'100%25\'%3E%3Cstop%20offset=\'0%25\'%20stop-color=\'%23dbeafe\'/%3E%3Cstop%20offset=\'60%25\'%20stop-color=\'%23bfdbfe\'/%3E%3Cstop%20offset=\'100%25\'%20stop-color=\'%2393c5fd\'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width=\'320\'%20height=\'200\'%20fill=\'url(%23a)\'/%3E%3Cg%20fill=\'none\'%20stroke=\'%231e3a8a\'%20stroke-width=\'6\'%20opacity=\'0.35\'%3E%3Crect%20x=\'30\'%20y=\'40\'%20width=\'260\'%20height=\'120\'%20rx=\'18\'/%3E%3Cline%20x1=\'160\'%20y1=\'40\'%20x2=\'160\'%20y2=\'160\'/%3E%3Ccircle%20cx=\'160\'%20cy=\'100\'%20r=\'24\'/%3E%3Ccircle%20cx=\'160\'%20cy=\'100\'%20r=\'8\'/%3E%3C/g%3E%3C/svg%3E';"
+          />
+        </div>
 
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
+        <div class="grid gap-8 px-6 py-8 md:px-10 md:py-10 lg:grid-cols-[1.6fr_1fr]">
+          <div class="space-y-8">
+            <header class="space-y-4">
+              <div class="flex flex-wrap items-center gap-3">
+                <span class="inline-flex items-center justify-center rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] {% if court.is_available %}border-emerald-200 bg-emerald-100 text-emerald-700{% else %}border-rose-200 bg-rose-100 text-rose-700{% endif %}">
+                  {% if court.is_available %}Available{% else %}Unavailable{% endif %}
+                </span>
+                <span class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/80 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+                  <span id="detailRatingStars" class="inline-flex"></span>
+                  <span class="text-slate-600">{{ court.rating|floatformat:1 }}/5.0</span>
+                </span>
+              </div>
 
-        .detail-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
+              <div>
+                <h1 class="text-3xl font-bold uppercase tracking-[0.22em] text-slate-900 md:text-4xl">{{ court.name }}</h1>
+                <p class="mt-2 text-sm font-semibold uppercase tracking-[0.28em] text-slate-500">
+                  {{ court.get_sport_type_display }} • {{ court.location }}
+                </p>
+              </div>
+            </header>
 
-        .court-image {
-            width: 100%;
-            height: 400px;
-            object-fit: cover;
-        }
+            {% if court.description %}
+            <section class="space-y-3">
+              <h2 class="text-sm font-semibold uppercase tracking-[0.28em] text-slate-600">Description</h2>
+              <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 text-sm leading-relaxed text-slate-600">
+                {{ court.description }}
+              </div>
+            </section>
+            {% endif %}
 
-        .detail-content {
-            padding: 30px;
-        }
+            <div class="grid gap-6 md:grid-cols-2">
+              <section class="space-y-3">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.28em] text-slate-600">Address</h2>
+                <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-600">
+                  {{ court.address }}
+                </div>
+              </section>
+              <section class="space-y-3">
+                <h2 class="text-sm font-semibold uppercase tracking-[0.28em] text-slate-600">Facilities</h2>
+                <div class="flex flex-wrap gap-3 rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
+                  {% for facility in court.get_facilities_list %}
+                  <span class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 shadow-inner">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-emerald-500" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill-rule="evenodd" d="M16.704 5.29a1 1 0 0 1 .005 1.414l-7.428 7.5a1 1 0 0 1-1.437-.01L3.29 9.414a1 1 0 1 1 1.42-1.406l3.12 3.152 6.714-6.78a1 1 0 0 1 1.414-.01Z" clip-rule="evenodd" />
+                    </svg>
+                    {{ facility }}
+                  </span>
+                  {% empty %}
+                  <span class="text-sm text-slate-400">Belum ada fasilitas yang ditambahkan.</span>
+                  {% endfor %}
+                </div>
+              </section>
+            </div>
+          </div>
 
-        .court-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 20px;
-            gap: 20px;
-        }
+          <aside class="space-y-6">
+            <div class="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 px-6 py-6 text-white shadow-lg">
+              <span class="text-xs font-semibold uppercase tracking-[0.3em] text-white/70">Price per hour</span>
+              <p class="mt-3 text-3xl font-bold tracking-[0.15em]">IDR {{ court.price_per_hour|floatformat:0 }}</p>
+            </div>
 
-        .court-title h1 {
-            font-size: 2em;
-            color: #333;
-            margin-bottom: 10px;
-        }
+            <div class="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-[0_18px_40px_rgba(15,23,42,0.06)] space-y-5">
+              <div class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3 text-sm font-semibold text-slate-800">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-sky-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.5 20.118a7.5 7.5 0 0 1 15 0A17.933 17.933 0 0 1 12 21.75c-2.68 0-5.216-.584-7.5-1.632Z" />
+                </svg>
+                <span>{{ court.owner_name }}</span>
+              </div>
 
-        .court-meta {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            font-size: 0.95em;
-            color: #666;
-        }
+              <div class="flex flex-col gap-2">
+                <label for="bookingDate" class="text-xs font-semibold uppercase tracking-[0.2em] text-slate-600">Tanggal Reservasi</label>
+                <input type="date" id="bookingDate" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 shadow-inner outline-none transition focus:border-lime-300 focus:ring-4 focus:ring-lime-200/60" />
+              </div>
 
-        .court-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
+              <div id="loadingSlots" class="hidden text-sm text-slate-500">
+                Memuat ketersediaan...
+              </div>
 
-        .price-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            min-width: 180px;
-        }
-
-        .price-box .label {
-            font-size: 0.9em;
-            opacity: 0.9;
-        }
-
-        .price-box .price {
-            font-size: 2em;
-            font-weight: bold;
-            margin: 5px 0;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .status-badge.available {
-            background: #e8f5e9;
-            color: #2e7d32;
-        }
-
-        .status-badge.full {
-            background: #ffebee;
-            color: #c62828;
-        }
-
-        .section {
-            margin: 30px 0;
-        }
-
-        .section h2 {
-            font-size: 1.4em;
-            color: #333;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-
-        .description {
-            line-height: 1.8;
-            color: #666;
-        }
-
-        .facilities {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 10px;
-        }
-
-        .facility-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            font-size: 0.95em;
-        }
-
-        .booking-section {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin-top: 30px;
-        }
-
-        .booking-section h2 {
-            margin-bottom: 20px;
-        }
-
-        .date-selector {
-            margin-bottom: 20px;
-        }
-
-        .date-selector label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #333;
-        }
-
-        .date-selector input {
-            width: 100%;
-            max-width: 300px;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-        }
-
-        .btn-whatsapp {
-            width: 100%;
-            padding: 15px;
-            background: #25D366;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-top: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: background 0.3s;
-        }
-
-        .btn-whatsapp:hover {
-            background: #20BA5A;
-        }
-
-        .btn-whatsapp:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn-primary:hover {
-            background: #5568d3;
-        }
-
-        .btn-secondary {
-            background: #f0f0f0;
-            color: #555;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn-secondary:hover {
-            background: #e0e0e0;
-        }
-
-        .btn-danger {
-            background: #d32f2f;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        .btn-danger:hover {
-            background: #b71c1c;
-        }
-
-        .availability-card {
-            margin-top: 20px;
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-        }
-
-        .availability-status {
-            font-size: 1.1em;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .availability-status.available {
-            color: #2e7d32;
-        }
-
-        .availability-status.unavailable {
-            color: #c62828;
-        }
-
-        .availability-actions {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .owner-info {
-            background: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .owner-info-text h3 {
-            font-size: 1.1em;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .owner-info-text p {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .loading-slots {
-            text-align: center;
-            padding: 20px;
-            color: #666;
-        }
-
-        .no-slots {
-            text-align: center;
-            padding: 30px;
-            color: #666;
-            background: white;
-            border-radius: 8px;
-        }
-
-        @media (max-width: 768px) {
-            .court-header {
-                flex-direction: column;
-            }
-
-            .price-box {
-                width: 100%;
-            }
-
-            .court-image {
-                height: 250px;
-            }
-
-            .detail-content {
-                padding: 20px;
-            }
-
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <a href="{% url 'Court:show_main' %}" class="back-btn">
-            Back to Court List
-        </a>
-
-        <div class="detail-card">
-            <img src="{% if court.image %}{{ court.image.url }}{% else %}/static/placeholder-court.jpg{% endif %}" 
-                 alt="{{ court.name }}" 
-                 class="court-image"
-                 onerror="this.src='/static/placeholder-court.jpg'">
-            
-            <div class="detail-content">
-                <div class="court-header">
-                    <div class="court-title">
-                        <span class="status-badge {% if court.is_available %}available{% else %}full{% endif %}">
-                            {% if court.is_available %}Available{% else %}Unavailable{% endif %}
-                        </span>
-                        <h1>{{ court.name }}</h1>
-                        <div class="court-meta">
-                            <span>{{ court.get_sport_type_display }}</span>
-                            <span>Rating: {{ court.rating }}</span>
-                            <span>Location: {{ court.location }}</span>
-                        </div>
-                    </div>
-                    <div class="price-box">
-                        <div class="label">Price per Hour</div>
-                        <div class="price">IDR {{ court.price_per_hour|floatformat:0 }}</div>
-                    </div>
+              <div class="space-y-4">
+                <div id="availabilityStatus" class="flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-600 transition-colors">
+                  Memeriksa ketersediaan...
                 </div>
 
-                {% if court.description %}
-                <div class="section">
-                    <h2>Description</h2>
-                    <p class="description">{{ court.description }}</p>
+                {% if can_manage_slots %}
+                <div class="grid gap-2 sm:grid-cols-2">
+                  <button type="button" id="markAvailable" class="flex items-center justify-center rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-emerald-700 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-200/40 disabled:cursor-not-allowed disabled:opacity-60" onclick="setAvailability(true)">
+                    Tandai Tersedia
+                  </button>
+                  <button type="button" id="markUnavailable" class="flex items-center justify-center rounded-xl border border-rose-200 bg-rose-50 px-4 py-2.5 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-rose-700 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-rose-200/40 disabled:cursor-not-allowed disabled:opacity-60" onclick="setAvailability(false)">
+                    Tandai Tidak Tersedia
+                  </button>
+                  <button type="button" class="flex items-center justify-center rounded-xl border border-rose-300 bg-white px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-rose-600 transition hover:-translate-y-0.5 hover:bg-rose-50" onclick="openDeleteModal()">
+                    Hapus Lapangan
+                  </button>
+                  <button type="button" class="flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-[0.7rem] font-semibold uppercase tracking-[0.25em] text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-900" onclick="window.location.href='{% url 'Court:edit_court' court.id %}'">
+                    Edit Court
+                  </button>
                 </div>
                 {% endif %}
 
-                <div class="section">
-                    <h2>Address</h2>
-                    <p class="description">{{ court.address }}</p>
-                </div>
-
-                <div class="section">
-                    <h2>Facilities</h2>
-                    <div class="facilities">
-                        {% for facility in court.get_facilities_list %}
-                        <div class="facility-item">
-                            <span>✓</span>
-                            <span>{{ facility }}</span>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <!-- Booking Section -->
-                <div class="booking-section">
-                    <h2>Reserve Court</h2>
-                    
-                    <div class="owner-info">
-                        <div class="owner-info-text">
-                            <h3>{{ court.owner_name }}</h3>
-                            <p>Court Owner</p>
-                        </div>
-                    </div>
-
-                    <div class="date-selector">
-                        <label for="bookingDate">Select Date:</label>
-                        <input type="date" id="bookingDate" onchange="loadAvailability()">
-                    </div>
-
-                    <div id="loadingSlots" class="loading-slots" style="display:none;">
-                        <p>Loading availability...</p>
-                    </div>
-
-                    <div class="availability-card">
-                        <div id="availabilityStatus" class="availability-status">Loading availability...</div>
-                        {% if can_manage_slots %}
-                        <div class="availability-actions">
-                            <button type="button" class="btn-primary" id="markAvailable" onclick="setAvailability(true)">Mark Available</button>
-                            <button type="button" class="btn-danger" id="markUnavailable" onclick="setAvailability(false)">Mark Unavailable</button>
-                            <button type="button" class="btn-secondary" onclick="deleteCourt()">Delete Court</button>
-                            <button type="button" class="btn-primary" onclick="window.location.href='{% url 'Court:edit_court' court.id %}'">Edit Court</button>
-                        </div>
-                        {% endif %}
-                    </div>
-
-                    <button class="btn-whatsapp" id="btnWhatsApp" onclick="bookViaWhatsApp()" disabled>
-                        <span>Book via WhatsApp</span>
-                    </button>
-                </div>
+                <button id="btnWhatsApp" onclick="bookViaWhatsApp()" disabled class="w-full rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white transition hover:-translate-y-0.5 hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-60">
+                  Book via WhatsApp
+                </button>
+              </div>
             </div>
+          </aside>
         </div>
+      </article>
     </div>
+  </div>
+</section>
+<div id="deleteModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-900/60 px-4">
+  <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-xl">
+    <h3 class="text-lg font-semibold text-slate-900">Hapus Lapangan?</h3>
+    <p class="mt-2 text-sm text-slate-600">Tindakan ini tidak dapat dibatalkan. Data lapangan akan hilang secara permanen.</p>
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <button type="button" class="flex-1 rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:text-slate-900" onclick="closeDeleteModal()">
+        Batal
+      </button>
+      <button type="button" class="flex-1 rounded-2xl bg-rose-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-600" onclick="confirmDeleteCourt()">
+        Ya, hapus sekarang
+      </button>
+    </div>
+  </div>
+</div>
+<script>
+  const STAR_FULL_ICON =
+    `<svg aria-hidden="true" class="h-4 w-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034 1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461z"/></svg>`;
+  const STAR_EMPTY_ICON =
+    `<svg aria-hidden="true" class="h-4 w-4 text-slate-300" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034 1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461z"/></svg>`;
 
-    <script>
-        const courtId = {{ court.id }};
-        const canManageInitial = {{ can_manage_slots|yesno:"true,false" }};
-        const btnWhatsApp = document.getElementById('btnWhatsApp');
-        let selectedDate = null;
-        let currentAvailability = true;
+  function renderStars(rating) {
+      const value = Math.max(0, Math.min(5, parseFloat(rating) || 0));
+      const stars = [];
+      for (let i = 1; i <= 5; i++) {
+          stars.push(i <= value ? STAR_FULL_ICON : STAR_EMPTY_ICON);
+      }
+      return stars.join('');
+  }
 
-        window.onload = function() {
-            setMinDate();
-        };
+  const courtId = {{ court.id }};
+  const canManageInitial = {{ can_manage_slots|yesno:"true,false" }};
+  const btnWhatsApp = document.getElementById('btnWhatsApp');
+  let selectedDate = null;
+  let currentAvailability = true;
 
-        function authFetch(url, options) {
-            return fetch(url, options).then(response => {
-                if (response.status === 401) {
-                    window.location.href = '/login/';
-                    throw new Error('Unauthenticated');
-                }
-                return response;
-            });
-        }
+  window.onload = function() {
+      setMinDate();
+      const detailRatingContainer = document.getElementById('detailRatingStars');
+      if (detailRatingContainer) {
+          const detailRatingValue = parseFloat('{{ court.rating|floatformat:"2" }}') || 0;
+          detailRatingContainer.innerHTML = renderStars(detailRatingValue);
+      }
+      const deleteModal = document.getElementById('deleteModal');
+      if (deleteModal) {
+          deleteModal.addEventListener('click', function(event) {
+              if (event.target === deleteModal) {
+                  closeDeleteModal();
+              }
+          });
+      }
+  };
 
-        function setMinDate() {
-            const today = new Date().toISOString().split('T')[0];
-            const dateInput = document.getElementById('bookingDate');
-            dateInput.min = today;
-            dateInput.value = today;
-            selectedDate = today;
-            loadAvailability();
-        }
+  function authFetch(url, options) {
+      return fetch(url, options).then(response => {
+          if (response.status === 401) {
+              window.location.href = '/login/';
+              throw new Error('Unauthenticated');
+          }
+          return response;
+      });
+  }
 
-        function loadAvailability() {
-            const date = document.getElementById('bookingDate').value;
-            if (!date) {
-                return;
-            }
+  function setMinDate() {
+      const today = new Date().toISOString().split('T')[0];
+      const dateInput = document.getElementById('bookingDate');
+      dateInput.min = today;
+      dateInput.value = today;
+      selectedDate = today;
+      loadAvailability();
+  }
 
-            selectedDate = date;
-            showLoading(true);
-            if (btnWhatsApp) {
-                btnWhatsApp.disabled = true;
-            }
+  function loadAvailability() {
+      const date = document.getElementById('bookingDate').value;
+      if (!date) {
+          return;
+      }
 
-            authFetch(`/court/api/court/${courtId}/availability/?date=${encodeURIComponent(date)}`)
-                .then(response => response.json())
-                .then(data => {
-                    currentAvailability = data ? !!data.available : true;
-                    updateAvailabilityStatus(currentAvailability);
-                    updateManagementButtons(data && data.can_manage ? true : canManageInitial);
-                    showLoading(false);
-                })
-                .catch(error => {
-                    if (error && error.message === 'Unauthenticated') {
-                        return;
-                    }
-                    console.error('Error:', error);
-                    showLoading(false);
-                    alert('Failed to load availability');
-                });
-        }
+      selectedDate = date;
+      showLoading(true);
+      if (btnWhatsApp) {
+          btnWhatsApp.disabled = true;
+      }
 
-        function updateAvailabilityStatus(isAvailable) {
-            const statusEl = document.getElementById('availabilityStatus');
-            if (!statusEl) return;
+      authFetch(`/court/api/court/${courtId}/availability/?date=${encodeURIComponent(date)}`)
+          .then(response => response.json())
+          .then(data => {
+              currentAvailability = data ? !!data.available : true;
+              updateAvailabilityStatus(currentAvailability);
+              updateManagementButtons(data && data.can_manage ? true : canManageInitial);
+              showLoading(false);
+          })
+          .catch(error => {
+              if (error && error.message === 'Unauthenticated') {
+                  return;
+              }
+              console.error('Error:', error);
+              showLoading(false);
+              alert('Gagal memuat data ketersediaan.');
+          });
+  }
 
-            statusEl.classList.remove('available', 'unavailable');
-            const dateLabel = formatDateForLabel(selectedDate);
+  function updateAvailabilityStatus(isAvailable) {
+      const statusEl = document.getElementById('availabilityStatus');
+      if (!statusEl) return;
 
-            if (isAvailable) {
-                statusEl.classList.add('available');
-                statusEl.innerHTML = `Court available on ${dateLabel}.`;
-                if (btnWhatsApp) {
-                    btnWhatsApp.disabled = false;
-                }
-            } else {
-                statusEl.classList.add('unavailable');
-                statusEl.innerHTML = `Court unavailable on ${dateLabel}.`;
-                if (btnWhatsApp) {
-                    btnWhatsApp.disabled = true;
-                }
-            }
-        }
+      statusEl.classList.remove('text-emerald-700', 'border-emerald-200', 'bg-emerald-50', 'text-rose-700', 'border-rose-200', 'bg-rose-50');
+      const dateLabel = formatDateForLabel(selectedDate);
 
-        function updateManagementButtons(canManage) {
-            const availableBtn = document.getElementById('markAvailable');
-            const unavailableBtn = document.getElementById('markUnavailable');
-            if (!availableBtn || !unavailableBtn) {
-                return;
-            }
+      if (isAvailable) {
+          statusEl.classList.add('text-emerald-700', 'border-emerald-200', 'bg-emerald-50');
+          statusEl.innerHTML = `Lapangan tersedia pada ${dateLabel}.`;
+          if (btnWhatsApp) {
+              btnWhatsApp.disabled = false;
+          }
+      } else {
+          statusEl.classList.add('text-rose-700', 'border-rose-200', 'bg-rose-50');
+          statusEl.innerHTML = `Lapangan tidak tersedia pada ${dateLabel}.`;
+          if (btnWhatsApp) {
+              btnWhatsApp.disabled = true;
+          }
+      }
+  }
 
-            availableBtn.disabled = !canManage || currentAvailability;
-            unavailableBtn.disabled = !canManage || !currentAvailability;
-        }
+  function updateManagementButtons(canManage) {
+      const availableBtn = document.getElementById('markAvailable');
+      const unavailableBtn = document.getElementById('markUnavailable');
+      if (!availableBtn || !unavailableBtn) {
+          return;
+      }
 
-        function setAvailability(isAvailable) {
-            if (!selectedDate) {
-                alert('Select a date first.');
-                return;
-            }
+      availableBtn.disabled = !canManage || currentAvailability;
+      unavailableBtn.disabled = !canManage || !currentAvailability;
+  }
 
-            authFetch(`/court/api/court/${courtId}/availability/set/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({
-                    date: selectedDate,
-                    is_available: isAvailable
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.success) {
-                    currentAvailability = data.available;
-                    updateAvailabilityStatus(currentAvailability);
-                    updateManagementButtons(true);
-                } else {
-                    alert((data && data.error) || 'Failed to update availability');
-                }
-            })
-            .catch(error => {
-                if (error && error.message === 'Unauthenticated') {
-                    return;
-                }
-                console.error('Error:', error);
-                alert('Failed to update availability');
-            });
-        }
+  function setAvailability(isAvailable) {
+      if (!selectedDate) {
+          alert('Pilih tanggal terlebih dahulu.');
+          return;
+      }
 
-        function bookViaWhatsApp() {
-            if (!selectedDate) {
-                alert('Select a date first!');
-                return;
-            }
-            if (!currentAvailability) {
-                alert('Court unavailable on tanggal tersebut.');
-                return;
-            }
+      authFetch(`/court/api/court/${courtId}/availability/set/`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({
+              date: selectedDate,
+              is_available: isAvailable
+          })
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (!data.success) {
+              throw new Error(data.error || 'Gagal memperbarui ketersediaan.');
+          }
+          currentAvailability = data.available;
+          updateAvailabilityStatus(currentAvailability);
+          updateManagementButtons(true);
+      })
+      .catch(error => {
+          if (error && error.message === 'Unauthenticated') {
+              return;
+          }
+          console.error('Error:', error);
+          alert('Gagal memperbarui ketersediaan.');
+      });
+  }
 
-            const dateObj = new Date(selectedDate);
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const formattedDate = dateObj.toLocaleDateString('id-ID', options);
+  function showLoading(isLoading) {
+      const loadingEl = document.getElementById('loadingSlots');
+      if (!loadingEl) return;
+      loadingEl.classList.toggle('hidden', !isLoading);
+  }
 
-            authFetch('/court/api/court/whatsapp/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                },
-                body: JSON.stringify({
-                    court_id: courtId,
-                    date: formattedDate,
-                    time: null
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.success) {
-                    window.open(data.whatsapp_link, '_blank');
-                } else {
-                    alert('Failed to generate WhatsApp link: ' + ((data && data.error) || 'Unknown error'));
-                }
-            })
-            .catch(error => {
-                if (error && error.message === 'Unauthenticated') {
-                    return;
-                }
-                console.error('Error:', error);
-                alert('Failed to generate WhatsApp link');
-            });
-        }
+  function formatDateForLabel(dateStr) {
+      if (!dateStr) return '-';
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('id-ID', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+      });
+  }
 
-        function showLoading(show) {
-            const loadingEl = document.getElementById('loadingSlots');
-            if (loadingEl) {
-                loadingEl.style.display = show ? 'block' : 'none';
-            }
-        }
+  function bookViaWhatsApp() {
+      if (!selectedDate) {
+          alert('Pilih tanggal terlebih dahulu.');
+          return;
+      }
 
-        function formatDateForLabel(dateStr) {
-            const dateObj = new Date(dateStr);
-            return dateObj.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-        }
+      authFetch('/court/api/court/whatsapp/', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken')
+          },
+          body: JSON.stringify({
+              court_id: {{ court.id }},
+              date: selectedDate
+          })
+      })
+      .then(response => response.json())
+      .then(data => {
+          const link = data.whatsapp_link || data.link;
+          if (!data.success || !link) {
+              throw new Error(data.error || 'Link WhatsApp tidak tersedia');
+          }
+          window.open(link, '_blank');
+      })
+      .catch(error => {
+          if (error && error.message === 'Unauthenticated') {
+              return;
+          }
+          console.error('Error:', error);
+          alert('Gagal membuka WhatsApp.');
+      });
+  }
 
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
+  function confirmDeleteCourt() {
+      authFetch(`/court/api/court/${courtId}/delete/`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': getCookie('csrftoken')
+          }
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (!data.success) {
+              throw new Error(data.error || 'Gagal menghapus lapangan.');
+          }
+          closeDeleteModal();
+          window.location.href = '{% url "Court:show_main" %}';
+      })
+      .catch(error => {
+          if (error && error.message === 'Unauthenticated') {
+              return;
+          }
+          console.error('Error:', error);
+          alert('Gagal menghapus lapangan.');
+      });
+  }
 
-        function deleteCourt() {
-            if (!confirm('Hapus lapangan ini beserta seluruh jadwalnya?')) {
-                return;
-            }
+  function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
 
-            authFetch(`/court/api/court/${courtId}/delete/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': getCookie('csrftoken')
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data && data.success) {
-                    alert('Court deleted successfully.');
-                    window.location.href = '/court/';
-                } else {
-                    alert((data && data.error) || 'Failed to delete court');
-                }
-            })
-            .catch(error => {
-                if (error && error.message === 'Unauthenticated') {
-                    return;
-                }
-                console.error('Error:', error);
-                alert('Failed to delete court');
-            });
-        }
-    </script>
-</body>
-</html>
+  document.getElementById('bookingDate').addEventListener('change', loadAvailability);
+  function openDeleteModal() {
+      const modal = document.getElementById('deleteModal');
+      if (modal) {
+          modal.classList.add('flex');
+          modal.classList.remove('hidden');
+      }
+  }
+  
+  function closeDeleteModal() {
+      const modal = document.getElementById('deleteModal');
+      if (modal) {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+      }
+  }
+</script>
+{% endblock content %}
