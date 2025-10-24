@@ -13,7 +13,7 @@
 <section class="relative w-full py-24 text-center overflow-hidden">
     <div class="relative z-10 px-4">
         <div class="bg-white max-w-3xl mx-auto p-10 rounded-2xl shadow-lg">
-            <h1 class="text-5xl font-bold text-gray-800">Hi, {{ user.nama }}!</h1>
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-800">Hi, {{ user.nama }}!</h1>
             <p class="mt-4 text-lg text-gray-600">
                 Welcome to <span class="font-bold text-lime">Move Buddy</span> - your one-stop platform to find<br>
                 courts, partners, coaches, and events for your favorite sports.
@@ -22,14 +22,14 @@
     </div>
 </section>
 
-<section class="relative h-[900px] w-full text-white">
+<section class="relative w-full text-white py-32 md:py-48 lg:py-56">
     <div class="absolute inset-0 bg-cover bg-center" 
          style="background-image: url('{% static 'img/sport_partner_thumbnail.png' %}');">
          </div>
     <div class="absolute inset-0 bg-black/50"></div>
     
-    <div class="relative z-10 h-full flex flex-col justify-center items-start p-12 md:p-16">
-        <h2 class="text-5xl font-bold">Mau nyari teman baru<br>dengan hobby yang sama?</h2>
+    <div class="relative z-10 flex flex-col justify-center items-center text-center md:items-start md:text-left p-12 md:p-16">
+        <h2 class="text-4xl md:text-5xl font-bold">Mau nyari teman baru<br>dengan hobby yang sama?</h2>
         <a href="{% url 'Sport_Partner:show_post' %}" 
            class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
             Cari Sport Partner &rarr;
@@ -37,42 +37,42 @@
     </div>
 </section>
 
-<section class="relative h-[700px] w-full text-white">
+<section class="relative w-full text-white py-32 md:py-48">
     <div class="absolute inset-0 bg-cover bg-center" 
          style="background-image: url('{% static 'img/event_thumbnail.png' %}');">
          </div>
     <div class="absolute inset-0 bg-black/50"></div>
     
-    <div class="relative z-10 h-full flex flex-col justify-center items-end text-right p-12 md:p-16">
-        <h2 class="text-5xl font-bold">Lagi berminat ikut event-<br>event olahraga?</h2>
+    <div class="relative z-10 flex flex-col justify-center items-center text-center md:items-end md:text-right p-12 md:p-16">
+        <h2 class="text-4xl md:text-5xl font-bold">Lagi berminat ikut event-<br>event olahraga?</h2>
         <a href="#" class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
             Cari Event &rarr;
         </a>
     </div>
 </section>
 
-<section class="relative h-[700px] w-full text-white">
+<section class="relative w-full text-white py-32 md:py-48">
     <div class="absolute inset-0 bg-cover bg-center" 
          style="background-image: url('{% static 'img/coach_thumbnail.png' %}');">
          </div>
     <div class="absolute inset-0 bg-black/50"></div>
     
-    <div class="relative z-10 h-full flex flex-col justify-center items-start p-12 md:p-16">
-        <h2 class="text-5xl font-bold">Butuh coach untuk<br>berlatih secara privat?</h2>
+    <div class="relative z-10 flex flex-col justify-center items-center text-center md:items-start md:text-left p-12 md:p-16">
+        <h2 class="text-4xl md:text-5xl font-bold">Butuh coach untuk<br>berlatih secara privat?</h2>
         <a href="#" class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
             Cari Coach &rarr;
         </a>
     </div>
 </section>
 
-<section class="relative h-[700px] w-full text-white">
+<section class="relative w-full text-white py-32 md:py-48">
     <div class="absolute inset-0 bg-cover bg-center" 
          style="background-image: url('{% static 'img/court_thumbnail.png' %}');">
          </div>
     <div class="absolute inset-0 bg-black/50"></div>
     
-    <div class="relative z-10 h-full flex flex-col justify-center items-end text-right p-12 md:p-16">
-        <h2 class="text-5xl font-bold">Lagi nyari court yang dapat<br>digunakan untuk aktivitas olahraga?</h2>
+    <div class="relative z-10 flex flex-col justify-center items-center text-center md:items-end md:text-right p-12 md:p-16">
+        <h2 class="text-4xl md:text-5xl font-bold">Lagi nyari court yang dapat<br>digunakan untuk aktivitas olahraga?</h2>
         <a href="{% url 'Court:show_main' %}" 
            class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
             Cari Court &rarr;
