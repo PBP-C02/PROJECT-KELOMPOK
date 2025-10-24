@@ -1,96 +1,664 @@
-{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event - MoveBuddy</title>
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+    <link rel="stylesheet" href="{% static 'css/event.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Include Navbar -->
+    {% include 'includes/navbar.html' %}
 
-{% block title %}Edit Event - MoveBuddy{% endblock %}
+    <div class="max-w-2xl mx-auto px-6 py-8">
+        <div class="bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-3xl font-bold text-center mb-8">Edit Event</h1>
 
-{% block content %}
-<div class="form-container">
-    <div class="form-header">
-        <h1>Edit Event</h1>
-        <p>Update the details of your event</p>
-    </div>
-    
-    <form method="post" enctype="multipart/form-data" class="event-form">
-        {% csrf_token %}
-        
-        <div class="form-grid">
-            <!-- Same form fields as create_event.html -->
-            <div class="form-group full-width">
-                <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
-                {{ form.title }}
-                {% if form.title.errors %}
-                    <span class="error">{{ form.title.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="form-group full-width">
-                <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
-                {{ form.description }}
-                {% if form.description.errors %}
-                    <span class="error">{{ form.description.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.category.id_for_label }}">{{ form.category.label }}</label>
-                {{ form.category }}
-                {% if form.category.errors %}
-                    <span class="error">{{ form.category.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.max_participants.id_for_label }}">{{ form.max_participants.label }}</label>
-                {{ form.max_participants }}
-                {% if form.max_participants.errors %}
-                    <span class="error">{{ form.max_participants.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.date.id_for_label }}">{{ form.date.label }}</label>
-                {{ form.date }}
-                {% if form.date.errors %}
-                    <span class="error">{{ form.date.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="form-group">
-                <label for="{{ form.time.id_for_label }}">{{ form.time.label }}</label>
-                {{ form.time }}
-                {% if form.time.errors %}
-                    <span class="error">{{ form.time.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="form-group full-width">
-                <label for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
-                {{ form.location }}
-                {% if form.location.errors %}
-                    <span class="error">{{ form.location.errors.0 }}</span>
-                {% endif %}
-            </div>
-            
-            <div class="form-group full-width">
-                <label for="{{ form.image.id_for_label }}">{{ form.image.label }}</label>
-                {% if event.image %}
-                <div class="current-image">
-                    <p>Current image:</p>
-                    <img src="{{ event.image.url }}" alt="Current" style="max-width: 200px;">
+            <form id="editEventForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Event Name -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Event Name</label>
+                    <input type="text" 
+                           name="name" 
+                           id="name"
+                           value="{{ event.name }}"
+                           required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">
+                    <span class="text-red-500 text-sm" id="name-error"></span>
+                </div>
+
+                <!-- Sport Type -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Sport Type</label>
+                    <select name="sport_type" 
+                            id="sport_type"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">
+                        <option value="Tennis" {% if event.sport_type == 'Tennis' %}selected{% endif %}>Tennis</option>
+                        <option value="Basketball" {% if event.sport_type == 'Basketball' %}selected{% endif %}>Basketball</option>
+                        <option value="Soccer" {% if event.sport_type == 'Soccer' %}selected{% endif %}>Soccer</option>
+                        <option value="Badminton" {% if event.sport_type == 'Badminton' %}selected{% endif %}>Badminton</option>
+                        <option value="Volleyball" {% if event.sport_type == 'Volleyball' %}selected{% endif %}>Volleyball</option>
+                        <option value="Futsal" {% if event.sport_type == 'Futsal' %}selected{% endif %}>Futsal</option>
+                        <option value="Football" {% if event.sport_type == 'Football' %}selected{% endif %}>Football</option>
+                        <option value="Running" {% if event.sport_type == 'Running' %}selected{% endif %}>Running</option>
+                        <option value="Cycling" {% if event.sport_type == 'Cycling' %}selected{% endif %}>Cycling</option>
+                        <option value="Swimming" {% if event.sport_type == 'Swimming' %}selected{% endif %}>Swimming</option>
+                        <option value="Other" {% if event.sport_type == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                    <span class="text-red-500 text-sm" id="sport_type-error"></span>
+                </div>
+
+                <!-- City -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">City</label>
+                    <input type="text" 
+                           name="city" 
+                           id="city"
+                           value="{{ event.city }}"
+                           required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">
+                    <span class="text-red-500 text-sm" id="city-error"></span>
+                </div>
+
+                <!-- Full Address -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Full Address</label>
+                    <textarea name="full_address" 
+                              id="full_address"
+                              rows="3" 
+                              required
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">{{ event.full_address }}</textarea>
+                    <span class="text-red-500 text-sm" id="full_address-error"></span>
+                </div>
+
+                <!-- Entry Price -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Entry Price (IDR)</label>
+                    <input type="number" 
+                           name="entry_price" 
+                           id="entry_price"
+                           value="{{ event.entry_price }}"
+                           step="0.01"
+                           required
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">
+                    <span class="text-red-500 text-sm" id="entry_price-error"></span>
+                </div>
+
+                <!-- Activities -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Activities (comma separated)</label>
+                    <textarea name="activities" 
+                              id="activities"
+                              rows="2" 
+                              required
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">{{ event.activities }}</textarea>
+                    <span class="text-red-500 text-sm" id="activities-error"></span>
+                </div>
+
+                <!-- Rating -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Rating (optional)</label>
+                    <input type="number" 
+                           name="rating" 
+                           id="rating"
+                           value="{{ event.rating|default:'0.00' }}"
+                           step="0.01"
+                           min="0"
+                           max="5"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">
+                    <span class="text-red-500 text-sm" id="rating-error"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Description (optional)</label>
+                    <textarea name="description" 
+                              id="description"
+                              rows="4" 
+                              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">{{ event.description }}</textarea>
+                    <span class="text-red-500 text-sm" id="description-error"></span>
+                </div>
+
+                <!-- Google Maps Link -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Google Maps link</label>
+                    <input type="url" 
+                           name="google_maps_link" 
+                           id="google_maps_link"
+                           value="{{ event.google_maps_link|default:'' }}"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">
+                    <p class="text-xs text-gray-500 mt-1">Leave empty to keep the current location</p>
+                    <span class="text-red-500 text-sm" id="google_maps_link-error"></span>
+                </div>
+
+                <!-- Current Photo -->
+                {% if event.photo %}
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Event Photo (optional) Currently:</label>
+                    <a href="{{ event.photo.url }}" target="_blank" class="text-blue-600 hover:underline text-sm">
+                        {{ event.photo.name }}
+                    </a>
+                    <div class="mt-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" 
+                                   name="clear_photo" 
+                                   id="clear_photo"
+                                   class="w-4 h-4 text-[#CBED98] rounded focus:ring-[#CBED98]">
+                            <span class="text-gray-700">Clear</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Change Photo -->
+                <div class="mb-5">
+                    <label class="block text-gray-700 font-semibold mb-2">Change:</label>
+                    <input type="file" 
+                           name="photo" 
+                           id="photo"
+                           accept="image/*"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">
+                    <p class="text-xs text-gray-500 mt-1">Upload to replace the current photo. Leave empty to keep it.</p>
+                </div>
+
+                <!-- Current Photo Preview -->
+                <div class="mb-8">
+                    <label class="block text-gray-700 font-semibold mb-2">Current photo:</label>
+                    <img src="{{ event.photo.url }}" alt="{{ event.name }}" class="max-w-full h-64 object-cover rounded-lg">
+                </div>
+                {% else %}
+                <!-- New Photo Upload -->
+                <div class="mb-8">
+                    <label class="block text-gray-700 font-semibold mb-2">Event Photo (optional)</label>
+                    <input type="file" 
+                           name="photo" 
+                           id="photo"
+                           accept="image/*"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">
                 </div>
                 {% endif %}
-                {{ form.image }}
-                {% if form.image.errors %}
-                    <span class="error">{{ form.image.errors.0 }}</span>
+
+                <!-- Status (hidden) -->
+                <input type="hidden" name="status" value="{{ event.status }}">
+
+                <!-- Submit Button -->
+                <button type="submit" 
+                        id="submitBtn"
+                        class="w-full py-4 bg-[#CBED98] text-gray-800 rounded-lg font-bold text-lg hover:bg-[#b8d687] transition mb-3">
+                    Save Changes
+                </button>
+
+                <!-- Additional Buttons -->
+                <div class="grid grid-cols-2 gap-3">
+                    <a href="{% url 'event:detail' event.id %}" 
+                       class="block text-center py-3 bg-gray-300 text-gray-800 rounded-lg font-semibold hover:bg-gray-400 transition">
+                        Back to Detail
+                    </a>
+                    <a href="{% url 'event:list' %}" 
+                       class="block text-center py-3 bg-gray-300 text-gray-800 rounded-lg font-semibold hover:bg-gray-400 transition">
+                        All Events
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white p-8 rounded-lg text-center">
+            <div class="inline-block w-12 h-12 border-4 border-gray-300 border-t-[#CBED98] rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-700 font-semibold">Updating event...</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-8 right-8 px-6 py-3 rounded-lg shadow-lg transform translate-y-32 transition-transform duration-300 z-50"></div>
+
+    <!-- Authentication Data -->
+    <script id="auth-data" type="application/json">
+    {
+        "isAuthenticated": {% if user.is_authenticated %}true{% else %}false{% endif %},
+        "currentUserId": {% if user.is_authenticated %}{{ user.id }}{% else %}null{% endif %},
+        "eventOwnerId": {{ event.created_by.id }}
+    }
+    </script>
+
+    <script>
+        // Get authentication data
+        const authData = JSON.parse(document.getElementById('auth-data').textContent);
+        const isAuthenticated = authData.isAuthenticated;
+        const currentUserId = authData.currentUserId;
+        const eventOwnerId = authData.eventOwnerId;
+
+        // Check authentication
+        if (!isAuthenticated) {
+            alert('Kamu harus login dulu!');
+            window.location.href = '/login/';
+        } else if (currentUserId !== eventOwnerId) {
+            alert('Kamu bukan owner event ini!');
+            window.location.href = '/event/{{ event.id }}/';
+        }
+
+        // Get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `fixed bottom-8 right-8 px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 z-50 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            toast.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateY(8rem)';
+            }, 3000);
+        }
+
+        // Form submission
+        document.getElementById('editEventForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!isAuthenticated || currentUserId !== eventOwnerId) {
+                alert('Kamu tidak punya akses!');
+                return;
+            }
+
+            // Clear errors
+            document.querySelectorAll('[id$="-error"]').forEach(el => el.textContent = '');
+
+            // Show loading
+            document.getElementById('loadingOverlay').classList.remove('hidden');
+            document.getElementById('submitBtn').disabled = true;
+
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('{% url "event:ajax_update" event.id %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Event updated successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = `/event/${data.event_id}/`;
+                    }, 1000);
+                } else {
+                    // Show errors
+                    if (data.errors) {
+                        Object.keys(data.errors).forEach(field => {
+                            const errorEl = document.getElementById(`${field}-error`);
+                            if (errorEl) {
+                                errorEl.textContent = data.errors[field].join(', ');
+                            }
+                        });
+                    }
+                    showToast(data.message || 'Please fix the errors', 'error');
+                    document.getElementById('loadingOverlay').classList.add('hidden');
+                    document.getElementById('submitBtn').disabled = false;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred. Please try again.', 'error');
+                document.getElementById('loadingOverlay').classList.add('hidden');
+                document.getElementById('submitBtn').disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event - MoveBuddy</title>
+    <link rel="stylesheet" href="{% static 'css/event.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Edit Event</h1>
+            <a href="{% url 'event:detail' event.id %}" class="btn-secondary">Back to Detail</a>
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-container">
+            <form id="editEventForm" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <!-- Event Name -->
+                <div class="form-group">
+                    <label for="name">Event Name *</label>
+                    <input type="text" id="name" name="name" required 
+                           value="{{ event.name }}" 
+                           placeholder="Enter event name" class="form-input">
+                    <span class="error-message" id="name-error"></span>
+                </div>
+
+                <!-- Sport Type -->
+                <div class="form-group">
+                    <label for="sport_type">Sport Type *</label>
+                    <select id="sport_type" name="sport_type" required class="form-input">
+                        <option value="">Select sport type</option>
+                        <option value="Football" {% if event.sport_type == 'Football' %}selected{% endif %}>Football</option>
+                        <option value="Basketball" {% if event.sport_type == 'Basketball' %}selected{% endif %}>Basketball</option>
+                        <option value="Badminton" {% if event.sport_type == 'Badminton' %}selected{% endif %}>Badminton</option>
+                        <option value="Tennis" {% if event.sport_type == 'Tennis' %}selected{% endif %}>Tennis</option>
+                        <option value="Volleyball" {% if event.sport_type == 'Volleyball' %}selected{% endif %}>Volleyball</option>
+                        <option value="Running" {% if event.sport_type == 'Running' %}selected{% endif %}>Running</option>
+                        <option value="Cycling" {% if event.sport_type == 'Cycling' %}selected{% endif %}>Cycling</option>
+                        <option value="Swimming" {% if event.sport_type == 'Swimming' %}selected{% endif %}>Swimming</option>
+                        <option value="Other" {% if event.sport_type == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                    <span class="error-message" id="sport_type-error"></span>
+                </div>
+
+                <!-- Description -->
+                <div class="form-group">
+                    <label for="description">Description *</label>
+                    <textarea id="description" name="description" required 
+                              rows="4" placeholder="Describe your event..." 
+                              class="form-input">{{ event.description }}</textarea>
+                    <span class="error-message" id="description-error"></span>
+                </div>
+
+                <!-- Location -->
+                <div class="form-group">
+                    <label for="location">Location *</label>
+                    <input type="text" id="location" name="location" required 
+                           value="{{ event.location }}"
+                           placeholder="Event location" class="form-input">
+                    <span class="error-message" id="location-error"></span>
+                </div>
+
+                <!-- Current Photo -->
+                {% if event.photo %}
+                <div class="form-group">
+                    <label>Current Photo</label>
+                    <div class="current-photo">
+                        <img src="{{ event.photo.url }}" alt="{{ event.name }}">
+                    </div>
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="clear_photo" name="clear_photo">
+                        Remove current photo
+                    </label>
+                </div>
                 {% endif %}
-                <small class="form-hint">Upload a new image to replace the current one</small>
-            </div>
+
+                <!-- New Photo Upload -->
+                <div class="form-group">
+                    <label for="photo">New Photo</label>
+                    <input type="file" id="photo" name="photo" 
+                           accept="image/*" class="form-input">
+                    <small class="help-text">Optional: Upload a new image to replace the current one</small>
+                    <div id="photoPreview" class="photo-preview"></div>
+                </div>
+
+                <!-- Status -->
+                <div class="form-group">
+                    <label for="status">Status *</label>
+                    <select id="status" name="status" required class="form-input">
+                        <option value="available" {% if event.status == 'available' %}selected{% endif %}>Available</option>
+                        <option value="unavailable" {% if event.status == 'unavailable' %}selected{% endif %}>Unavailable</option>
+                    </select>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <button type="button" onclick="window.history.back()" 
+                            class="btn-secondary">Cancel</button>
+                    <button type="button" onclick="deleteEvent()" 
+                            class="btn-danger">Delete Event</button>
+                    <button type="submit" id="submitBtn" class="btn-primary">
+                        Update Event
+                    </button>
+                </div>
+            </form>
         </div>
-        
-        <div class="form-actions">
-            <a href="{% url 'event:event_detail' event.pk %}" class="btn-secondary">Cancel</a>
-            <button type="submit" class="btn-primary">Update Event</button>
-        </div>
-    </form>
-</div>
-{% endblock %}
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+        <div class="spinner"></div>
+        <p>Updating event...</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Authentication Data -->
+    <script id="auth-data" type="application/json">
+    {
+        "isAuthenticated": {% if request.user.is_authenticated %}true{% else %}false{% endif %},
+        "currentUserId": {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}null{% endif %},
+        "eventOwnerId": {{ event.created_by.id }}
+    }
+    </script>
+
+    <script>
+        // Get authentication data
+        const authData = JSON.parse(document.getElementById('auth-data').textContent);
+        const isAuthenticated = authData.isAuthenticated;
+        const currentUserId = authData.currentUserId;
+        const eventOwnerId = authData.eventOwnerId;
+
+        // Check authentication dan ownership saat page load
+        if (!isAuthenticated) {
+            showToast('Kamu harus login dulu!', 'error');
+            setTimeout(() => {
+                window.location.href = '/login/';
+            }, 1500);
+        } else if (currentUserId !== eventOwnerId) {
+            showToast('Kamu tidak punya akses untuk edit event ini!', 'error');
+            setTimeout(() => {
+                window.location.href = '/event/{{ event.id }}/';
+            }, 1500);
+        }
+
+        // Get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast toast-${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Photo preview untuk new photo
+        document.getElementById('photo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('photoPreview');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `
+                        <img src="${e.target.result}" alt="Preview">
+                        <button type="button" onclick="clearNewPhoto()" class="btn-remove">Remove</button>
+                    `;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Clear new photo
+        function clearNewPhoto() {
+            document.getElementById('photo').value = '';
+            document.getElementById('photoPreview').innerHTML = '';
+            document.getElementById('photoPreview').style.display = 'none';
+        }
+
+        // Form submission dengan AJAX
+        document.getElementById('editEventForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Check authentication dan ownership lagi
+            if (!isAuthenticated) {
+                showToast('Kamu harus login dulu!', 'error');
+                window.location.href = '/login/';
+                return;
+            }
+
+            if (currentUserId !== eventOwnerId) {
+                showToast('Kamu tidak punya akses untuk edit event ini!', 'error');
+                return;
+            }
+
+            // Clear previous errors
+            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+            document.querySelectorAll('.form-input').forEach(el => el.classList.remove('error'));
+
+            // Show loading
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            document.getElementById('submitBtn').disabled = true;
+
+            // Prepare form data
+            const formData = new FormData(this);
+
+            try {
+                const response = await fetch('{% url "event:ajax_update" event.id %}', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Event updated successfully!', 'success');
+                    
+                    // Redirect ke detail page setelah 1 detik
+                    setTimeout(() => {
+                        window.location.href = `/event/${data.event_id}/`;
+                    }, 1000);
+                } else {
+                    // Show validation errors
+                    if (data.errors) {
+                        Object.keys(data.errors).forEach(field => {
+                            const errorEl = document.getElementById(`${field}-error`);
+                            const inputEl = document.getElementById(field);
+                            
+                            if (errorEl && inputEl) {
+                                errorEl.textContent = data.errors[field].join(', ');
+                                inputEl.classList.add('error');
+                            }
+                        });
+                    }
+                    
+                    showToast(data.message || 'Please fix the errors', 'error');
+                    
+                    // Hide loading
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                    document.getElementById('submitBtn').disabled = false;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred. Please try again.', 'error');
+                
+                // Hide loading
+                document.getElementById('loadingOverlay').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+            }
+        });
+
+        // Delete event function
+        async function deleteEvent() {
+            // Check authentication dan ownership
+            if (!isAuthenticated) {
+                showToast('Kamu harus login dulu!', 'error');
+                window.location.href = '/login/';
+                return;
+            }
+
+            if (currentUserId !== eventOwnerId) {
+                showToast('Kamu tidak punya akses untuk delete event ini!', 'error');
+                return;
+            }
+
+            if (!confirm('Yakin mau delete event ini? Ga bisa di-undo loh!')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('{% url "event:ajax_delete" event.id %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Event deleted successfully!', 'success');
+                    
+                    // Redirect ke event list setelah 1 detik
+                    setTimeout(() => {
+                        window.location.href = '/event/';
+                    }, 1000);
+                } else {
+                    showToast(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred. Please try again.', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

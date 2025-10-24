@@ -1,151 +1,512 @@
-{% extends 'base.html' %}
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event - MoveBuddy</title>
+    <link rel="stylesheet" href="{% static 'css/globals.css' %}">
+    <link rel="stylesheet" href="{% static 'css/event.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <!-- Include Navbar -->
+    {% include 'includes/navbar.html' %}
 
-{% block title %}Event Main Bareng{% endblock %}
-
-{% block content %}
-<!-- Header -->
-<header class="header">
-    <div class="container">
-        <h1 class="header-title">EVENT MAIN BARENG</h1>
-    </div>
-</header>
-
-<!-- Search Section -->
-<section class="search-section">
-    <div class="container">
-        <form method="GET" class="search-form">
-            <div class="search-inputs">
-                <div class="search-input-group">
-                    <svg class="input-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                    </svg>
-                    <input type="text" name="search" placeholder="Cari event mabar" value="{{ search_query }}">
-                </div>
-
-                <div class="search-input-group">
-                    <svg class="input-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                    <input type="text" name="city" placeholder="Pilih Kota" value="{{ city_filter }}">
-                </div>
-
-                <div class="search-input-group">
-                    <svg class="input-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
-                    </svg>
-                    <select name="category">
-                        <option value="">Pilih Cabang Olahraga</option>
-                        {% for value, label in categories %}
-                        <option value="{{ value }}" {% if category_filter == value %}selected{% endif %}>{{ label }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-            </div>
-
-            <button type="submit" class="btn-search">Cari mabar</button>
-        </form>
-    </div>
-</section>
-
-<!-- Results Section -->
-<section class="results-section">
-    <div class="container">
-        <div class="results-header">
-            <p class="results-count">Menampilkan <strong>{{ total_events }}</strong> event mabar</p>
-            
-            <div class="sort-group">
-                <label>Urutkan berdasarkan:</label>
-                <select name="sort" onchange="this.form.submit()" form="sort-form">
-                    <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Waktu dan Tanggal</option>
-                    <option value="price_low" {% if sort_by == 'price_low' %}selected{% endif %}>Harga Terendah</option>
-                    <option value="price_high" {% if sort_by == 'price_high' %}selected{% endif %}>Harga Tertinggi</option>
-                    <option value="participants" {% if sort_by == 'participants' %}selected{% endif %}>Paling Ramai</option>
-                </select>
-            </div>
-            <form id="sort-form" method="GET" style="display:none;">
-                <input type="hidden" name="search" value="{{ search_query }}">
-                <input type="hidden" name="city" value="{{ city_filter }}">
-                <input type="hidden" name="category" value="{{ category_filter }}">
-                <input type="hidden" name="level" value="{{ level_filter }}">
-            </form>
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Search Bar -->
+        <div class="flex gap-3 mb-6">
+            <input type="text" 
+                   id="searchInput" 
+                   placeholder="Search events..." 
+                   class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#CBED98]">
+            <button onclick="performSearch()" 
+                    class="px-8 py-3 bg-[#CBED98] text-gray-800 rounded-lg font-semibold hover:bg-[#b8d687] transition">
+                + Search
+            </button>
         </div>
 
-        <div class="events-grid">
+        <!-- Filter Pills -->
+        <div class="flex flex-wrap gap-3 mb-6">
+            <button class="pill-btn active" data-sport="" onclick="filterBySport(this, '')">All</button>
+            <button class="pill-btn" data-sport="Tennis" onclick="filterBySport(this, 'Tennis')">Tennis</button>
+            <button class="pill-btn" data-sport="Basketball" onclick="filterBySport(this, 'Basketball')">Basketball</button>
+            <button class="pill-btn" data-sport="Soccer" onclick="filterBySport(this, 'Soccer')">Soccer</button>
+            <button class="pill-btn" data-sport="Badminton" onclick="filterBySport(this, 'Badminton')">Badminton</button>
+            <button class="pill-btn" data-sport="Volleyball" onclick="filterBySport(this, 'Volleyball')">Volleyball</button>
+            <button class="pill-btn" data-sport="Futsal" onclick="filterBySport(this, 'Futsal')">Futsal</button>
+        </div>
+
+        <!-- Controls Row -->
+        <div class="flex justify-between items-center mb-6">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" 
+                       id="availableOnly" 
+                       onchange="performSearch()"
+                       class="w-4 h-4 text-[#CBED98] rounded focus:ring-[#CBED98]">
+                <span class="text-gray-700">Show only available events</span>
+            </label>
+            {% if user.is_authenticated %}
+            <a href="{% url 'event:add' %}" 
+               class="px-6 py-2 bg-[#CBED98] text-gray-800 rounded-lg font-semibold hover:bg-[#b8d687] transition">
+                + Add Event
+            </a>
+            {% endif %}
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="hidden text-center py-12">
+            <div class="inline-block w-12 h-12 border-4 border-gray-300 border-t-[#CBED98] rounded-full animate-spin"></div>
+            <p class="mt-4 text-gray-600">Loading events...</p>
+        </div>
+
+        <!-- Event Grid -->
+        <div id="eventGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for event in events %}
-            <div class="event-card">
-                <a href="{% url 'Event:event_detail' event.id %}" class="event-card-link">
-                    <div class="event-header">
-                        <h3 class="event-title">{{ event.name }}</h3>
-                        <span class="event-sport-badge">{{ event.get_category_display }}</span>
+            <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
+                <div class="relative h-48">
+                    {% if event.photo %}
+                    <img src="{{ event.photo.url }}" alt="{{ event.name }}" class="w-full h-full object-cover">
+                    {% else %}
+                    <div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                        <span class="text-6xl font-bold text-white">{{ event.name|slice:":1"|upper }}</span>
                     </div>
-
-                    <div class="event-details">
-                        <div class="detail-row">
-                            <svg class="detail-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                            <span>{{ event.get_level_display }}</span>
-                        </div>
-
-                        <div class="detail-row">
-                            <svg class="detail-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                            </svg>
-                            <span>{{ event.date|date:"D, d M Y" }}, {{ event.time|time:"H:i" }} - {{ event.duration_hours }}h</span>
-                        </div>
-
-                        <div class="detail-row">
-                            <svg class="detail-icon" width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                            </svg>
-                            <span>{{ event.location_name }}, {{ event.city }}</span>
-                        </div>
-                    </div>
-
-                    <div class="event-badges">
-                        <span class="badge badge-join">Bergabung AYO</span>
-                        {% if event.organizer.is_superhost %}
-                        <span class="badge badge-superhost">⚡ Superhost</span>
-                        {% endif %}
-                    </div>
-
-                    <div class="participants-section">
-                        <div class="participant-avatars">
-                            {% for participant in event.registrations.all|slice:":5" %}
-                            <div class="avatar">{{ participant.user.username|first|upper }}</div>
-                            {% endfor %}
-                        </div>
-                        <span class="participant-count">{{ event.confirmed_participants_count }}/{{ event.max_participants }}</span>
-                    </div>
-
-                    <div class="organizer-info">
-                        <div class="organizer-avatar">
-                            {{ event.organizer.display_name|first|upper }}
-                        </div>
-                        <div class="organizer-details">
-                            <p class="organizer-name">{{ event.organizer.display_name }}</p>
-                            {% if event.average_rating > 0 %}
-                            <p class="organizer-rating">★ {{ event.average_rating }} ({{ event.reviews.count }})</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </a>
+                    {% endif %}
+                </div>
+                <div class="p-5">
+                    <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full mb-2 
+                        {% if event.status == 'Available' %}bg-green-100 text-green-800{% else %}bg-red-100 text-red-800{% endif %}">
+                        {{ event.status }}
+                    </span>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">{{ event.name }}</h3>
+                    <p class="text-sm text-gray-600 mb-1">{{ event.created_by.username }}</p>
+                    <p class="text-sm text-gray-600 mb-1">Rating: {{ event.rating|default:"0.00" }}</p>
+                    <p class="text-sm text-gray-600 mb-2">Lokasi: {{ event.city }}</p>
+                    <p class="text-xs text-green-600 mb-1">Jarak: Tidak dihitung</p>
+                    <a href="#" class="text-xs text-green-600 hover:underline mb-3 block">Jarak: Tidak dihitung</a>
+                    <div class="text-xl font-bold text-gray-900 mb-4">Rp {{ event.entry_price|floatformat:0 }} /jam</div>
+                    <a href="{% url 'event:detail' event.id %}" 
+                       class="block w-full text-center px-4 py-2 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-700 transition">
+                        Lihat Detail & Booking
+                    </a>
+                </div>
             </div>
             {% empty %}
-            <div class="no-results">
-                <p>Tidak ada event yang ditemukan. Coba ubah filter pencarian kamu!</p>
+            <div class="col-span-3 text-center py-12">
+                <p class="text-gray-500 text-lg">No events found. Be the first to create one!</p>
             </div>
             {% endfor %}
         </div>
     </div>
-</section>
-{% endblock %}
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-8 right-8 px-6 py-3 rounded-lg shadow-lg transform translate-y-32 transition-transform duration-300 z-50"></div>
+
+    <!-- Authentication Data -->
+    <script id="auth-data" type="application/json">
+    {
+        "isAuthenticated": {% if user.is_authenticated %}true{% else %}false{% endif %},
+        "currentUserId": {% if user.is_authenticated %}{{ user.id }}{% else %}null{% endif %}
+    }
+    </script>
+
+    <script>
+        // Get authentication data
+        const authData = JSON.parse(document.getElementById('auth-data').textContent);
+        const isAuthenticated = authData.isAuthenticated;
+        const currentUserId = authData.currentUserId;
+
+        // Get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `fixed bottom-8 right-8 px-6 py-3 rounded-lg shadow-lg transform transition-transform duration-300 z-50 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            toast.style.transform = 'translateY(0)';
+            
+            setTimeout(() => {
+                toast.style.transform = 'translateY(8rem)';
+            }, 3000);
+        }
+
+        // Filter by sport
+        let currentSportFilter = '';
+        function filterBySport(button, sport) {
+            document.querySelectorAll('.pill-btn').forEach(pill => pill.classList.remove('active'));
+            button.classList.add('active');
+            currentSportFilter = sport;
+            performSearch();
+        }
+
+        // Search & Filter Function
+        async function performSearch() {
+            const searchQuery = document.getElementById('searchInput').value;
+            const availableOnly = document.getElementById('availableOnly').checked;
+
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+            document.getElementById('eventGrid').style.opacity = '0.5';
+
+            try {
+                const response = await fetch('{% url "event:ajax_search" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        search: searchQuery,
+                        sport_type: currentSportFilter,
+                        available_only: availableOnly
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    updateEventGrid(data.events);
+                } else {
+                    showToast(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred while searching', 'error');
+            } finally {
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                document.getElementById('eventGrid').style.opacity = '1';
+            }
+        }
+
+        // Update event grid
+        function updateEventGrid(events) {
+            const eventGrid = document.getElementById('eventGrid');
+            
+            if (events.length === 0) {
+                eventGrid.innerHTML = `
+                    <div class="col-span-3 text-center py-12">
+                        <p class="text-gray-500 text-lg">No events found matching your criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            eventGrid.innerHTML = events.map(event => `
+                <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition">
+                    <div class="relative h-48">
+                        ${event.photo_url ? 
+                            `<img src="${event.photo_url}" alt="${event.name}" class="w-full h-full object-cover">` :
+                            `<div class="w-full h-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                                <span class="text-6xl font-bold text-white">${event.name.charAt(0).toUpperCase()}</span>
+                            </div>`
+                        }
+                    </div>
+                    <div class="p-5">
+                        <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full mb-2 
+                            ${event.status === 'Available' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}">
+                            ${event.status}
+                        </span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">${event.name}</h3>
+                        <p class="text-sm text-gray-600 mb-1">${event.created_by}</p>
+                        <p class="text-sm text-gray-600 mb-1">Rating: ${event.rating}</p>
+                        <p class="text-sm text-gray-600 mb-2">Lokasi: ${event.city}</p>
+                        <p class="text-xs text-green-600 mb-1">Jarak: Tidak dihitung</p>
+                        <a href="#" class="text-xs text-green-600 hover:underline mb-3 block">Jarak: Tidak dihitung</a>
+                        <div class="text-xl font-bold text-gray-900 mb-4">Rp ${Number(event.entry_price).toLocaleString('id-ID')} /jam</div>
+                        <a href="/event/${event.id}/" 
+                           class="block w-full text-center px-4 py-2 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-700 transition">
+                            Lihat Detail & Booking
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Real-time search
+        document.getElementById('searchInput').addEventListener('input', function() {
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(() => {
+                performSearch();
+            }, 500);
+        });
+    </script>
+
+    <style>
+        .pill-btn {
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            background-color: white;
+            border: 1px solid #d1d5db;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        .pill-btn:hover {
+            background-color: #f3f4f6;
+        }
+        .pill-btn.active {
+            background-color: #CBED98;
+            color: #1f2937;
+            border-color: #CBED98;
+        }
+    </style>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event List - MoveBuddy</title>
+    <link rel="stylesheet" href="{% static 'css/event.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Events</h1>
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'event:add' %}" class="btn-primary">+ Add New Event</a>
+            {% endif %}
+        </div>
+
+        <!-- Search & Filter Section -->
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Search events..." class="search-input">
+                <button onclick="performSearch()" class="search-btn">Search</button>
+            </div>
+
+            <div class="filter-section">
+                <select id="sportFilter" onchange="performSearch()" class="filter-select">
+                    <option value="">All Sports</option>
+                    <option value="Football">Football</option>
+                    <option value="Basketball">Basketball</option>
+                    <option value="Badminton">Badminton</option>
+                    <option value="Tennis">Tennis</option>
+                    <option value="Volleyball">Volleyball</option>
+                    <option value="Running">Running</option>
+                    <option value="Cycling">Cycling</option>
+                    <option value="Swimming">Swimming</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label class="checkbox-label">
+                    <input type="checkbox" id="availableOnly" onchange="performSearch()">
+                    Show Available Only
+                </label>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading events...</p>
+        </div>
+
+        <!-- Event Grid -->
+        <div id="eventGrid" class="event-grid">
+            {% for event in events %}
+            <div class="event-card" data-event-id="{{ event.id }}">
+                {% if event.photo %}
+                <img src="{{ event.photo.url }}" alt="{{ event.name }}" class="event-image">
+                {% else %}
+                <div class="event-image-placeholder">
+                    <span>{{ event.sport_type|slice:":1" }}</span>
+                </div>
+                {% endif %}
+
+                <div class="event-content">
+                    <div class="event-header">
+                        <h3>{{ event.name }}</h3>
+                        <span class="status-badge status-{{ event.status }}">
+                            {{ event.get_status_display }}
+                        </span>
+                    </div>
+
+                    <p class="event-sport">
+                        <strong>Sport:</strong> {{ event.sport_type }}
+                    </p>
+
+                    <p class="event-description">
+                        {{ event.description|truncatewords:20 }}
+                    </p>
+
+                    <div class="event-footer">
+                        <span class="event-creator">By: {{ event.created_by.username }}</span>
+                        <a href="{% url 'event:detail' event.id %}" class="btn-view">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-events">
+                <p>No events found. Be the first to create one!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Authentication Data -->
+    <script id="auth-data" type="application/json">
+    {
+        "isAuthenticated": {% if request.user.is_authenticated %}true{% else %}false{% endif %},
+        "currentUserId": {% if request.user.is_authenticated %}{{ request.user.id }}{% else %}null{% endif %}
+    }
+    </script>
+
+    <script>
+        // Get authentication data
+        const authData = JSON.parse(document.getElementById('auth-data').textContent);
+        const isAuthenticated = authData.isAuthenticated;
+        const currentUserId = authData.currentUserId;
+
+        // Get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        const csrftoken = getCookie('csrftoken');
+
+        // Toast notification function
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast toast-${type} show`;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Search & Filter Function dengan AJAX
+        async function performSearch() {
+            const searchQuery = document.getElementById('searchInput').value;
+            const sportFilter = document.getElementById('sportFilter').value;
+            const availableOnly = document.getElementById('availableOnly').checked;
+
+            // Show loading
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('eventGrid').style.opacity = '0.5';
+
+            try {
+                const response = await fetch('{% url "event:ajax_search" %}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        search: searchQuery,
+                        sport_type: sportFilter,
+                        available_only: availableOnly
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    updateEventGrid(data.events);
+                } else {
+                    showToast(data.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('An error occurred while searching', 'error');
+            } finally {
+                // Hide loading
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('eventGrid').style.opacity = '1';
+            }
+        }
+
+        // Update event grid dengan hasil search
+        function updateEventGrid(events) {
+            const eventGrid = document.getElementById('eventGrid');
+            
+            if (events.length === 0) {
+                eventGrid.innerHTML = `
+                    <div class="no-events">
+                        <p>No events found matching your criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            eventGrid.innerHTML = events.map(event => `
+                <div class="event-card" data-event-id="${event.id}">
+                    ${event.photo_url ? 
+                        `<img src="${event.photo_url}" alt="${event.name}" class="event-image">` :
+                        `<div class="event-image-placeholder">
+                            <span>${event.sport_type.charAt(0)}</span>
+                        </div>`
+                    }
+
+                    <div class="event-content">
+                        <div class="event-header">
+                            <h3>${event.name}</h3>
+                            <span class="status-badge status-${event.status}">
+                                ${event.status === 'available' ? 'Available' : 'Unavailable'}
+                            </span>
+                        </div>
+
+                        <p class="event-sport">
+                            <strong>Sport:</strong> ${event.sport_type}
+                        </p>
+
+                        <p class="event-description">
+                            ${event.description}
+                        </p>
+
+                        <div class="event-footer">
+                            <span class="event-creator">By: ${event.created_by}</span>
+                            <a href="/event/${event.id}/" class="btn-view">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Real-time search saat user mengetik
+        document.getElementById('searchInput').addEventListener('input', function() {
+            // Debounce search - tunggu 500ms setelah user selesai ngetik
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(() => {
+                performSearch();
+            }, 500);
+        });
+    </script>
+</body>
+</html>

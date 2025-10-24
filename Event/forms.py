@@ -1,87 +1,106 @@
 from django import forms
-from .models import EventRegistration, EventReview, Event
+from .models import Event, EventSchedule
 
-
-class EventSearchForm(forms.Form):
-    """Form untuk search dan filter events"""
-    search = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Cari event mabar...'
-        })
-    )
-    
-    city = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Pilih Kota'
-        })
-    )
-    
-    category = forms.ChoiceField(
-        required=False,
-        choices=[('', 'Semua Olahraga')] + Event.CATEGORY_CHOICES,
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    
-    level = forms.ChoiceField(
-        required=False,
-        choices=[('', 'Semua Level')] + Event.LEVEL_CHOICES,
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-    
-    sort = forms.ChoiceField(
-        required=False,
-        choices=[
-            ('date', 'Waktu dan Tanggal'),
-            ('price_low', 'Harga Terendah'),
-            ('price_high', 'Harga Tertinggi'),
-            ('participants', 'Paling Ramai'),
-        ],
-        widget=forms.Select(attrs={'class': 'form-control'})
-    )
-
-
-class EventRegistrationForm(forms.ModelForm):
-    """Form untuk pendaftaran event"""
+class EventForm(forms.ModelForm):
     class Meta:
-        model = EventRegistration
-        fields = ['notes', 'payment_proof']
+        model = Event
+        fields = [
+            'name', 
+            'sport_type', 
+            'city', 
+            'full_address', 
+            'entry_price', 
+            'activities', 
+            'rating', 
+            'description', 
+            'google_maps_link', 
+            'photo',
+            'category',
+            'status'
+        ]
+        
         widgets = {
-            'notes': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Catatan tambahan (opsional)',
-                'rows': 3
+            'name': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Event name'
             }),
-            'payment_proof': forms.FileInput(attrs={
-                'class': 'form-control'
-            })
-        }
-        labels = {
-            'notes': 'Catatan',
-            'payment_proof': 'Bukti Transfer (jika sudah bayar)'
-        }
-
-
-class EventReviewForm(forms.ModelForm):
-    """Form untuk review event"""
-    class Meta:
-        model = EventReview
-        fields = ['rating', 'comment']
-        widgets = {
-            'rating': forms.Select(
-                choices=[(i, f"{i} ★") for i in range(1, 6)],
-                attrs={'class': 'form-control'}
-            ),
-            'comment': forms.Textarea(attrs={
-                'class': 'form-control',
-                'placeholder': 'Bagikan pengalaman kamu...',
+            'sport_type': forms.Select(attrs={
+                'class': 'form-select'
+            }),
+            'city': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'City'
+            }),
+            'full_address': forms.Textarea(attrs={
+                'class': 'form-textarea',
+                'placeholder': 'Complete address',
                 'rows': 4
-            })
+            }),
+            'entry_price': forms.NumberInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Entry Price (IDR)',
+                'step': '0.01'
+            }),
+            'activities': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Facilities (comma separated)'
+            }),
+            'rating': forms.NumberInput(attrs={
+                'class': 'form-input',
+                'placeholder': '0',
+                'step': '0.01',
+                'min': '0',
+                'max': '5'
+            }),
+            'description': forms.Textarea(attrs={
+                'class': 'form-textarea',
+                'placeholder': 'Short description (optional)',
+                'rows': 5
+            }),
+            'google_maps_link': forms.URLInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'https://maps.google.com/?q=-6.2,106.8'
+            }),
+            'photo': forms.FileInput(attrs={
+                'class': 'form-file',
+                'accept': 'image/*'
+            }),
+            'category': forms.TextInput(attrs={
+                'class': 'form-input',
+                'placeholder': 'Category (e.g., category 1)'
+            }),
+            'status': forms.Select(attrs={
+                'class': 'form-select'
+            }),
         }
+        
         labels = {
-            'rating': 'Rating',
-            'comment': 'Review'
+            'name': 'Event Name',
+            'sport_type': 'Sport Type',
+            'city': 'City',
+            'full_address': 'Full Address',
+            'entry_price': 'Entry Price (IDR)',
+            'activities': 'Activities (comma separated)',
+            'rating': 'Rating (optional)',
+            'description': 'Short description (optional)',
+            'google_maps_link': 'Google Maps link',
+            'photo': 'Event Photo (optional)',
+            'category': 'Category',
+            'status': 'Status'
+        }
+
+
+class EventScheduleForm(forms.ModelForm):
+    class Meta:
+        model = EventSchedule
+        fields = ['date', 'is_available']
+        
+        widgets = {
+            'date': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-input'
+            }),
+            'is_available': forms.CheckboxInput(attrs={
+                'class': 'form-checkbox'
+            })
         }

@@ -1,24 +1,27 @@
 from django.urls import path
 from . import views
 
-app_name = 'Event'
+app_name = 'event'
 
 urlpatterns = [
-    # Listing event
+    # Main pages
     path('', views.event_list, name='event_list'),
+    path('<int:pk>/', views.event_detail, name='event_detail'),
+    path('add/', views.add_event, name='add_event'),
+    path('<int:pk>/edit/', views.edit_event, name='edit_event'),
     
-    # Detail event
-    path('<int:event_id>/', views.event_detail, name='event_detail'),
-
-    path('create/', views.create_event, name='create_event'),
+    # AJAX endpoints for Search & Filter
+    path('ajax/search/', views.ajax_search_events, name='ajax_search'),
+    path('ajax/filter/', views.ajax_filter_sport, name='ajax_filter'),
     
-    # Pendaftaran
-    path('<int:event_id>/register/', views.event_register, name='event_register'),
-    path('registration/<int:registration_id>/cancel/', views.event_cancel_registration, name='event_cancel_registration'),
+    # AJAX endpoints for Add Event 
+    path('ajax/validate/', views.ajax_validate_event_form, name='ajax_validate'),
     
-    # Review
-    path('<int:event_id>/review/', views.event_add_review, name='event_add_review'),
+    # AJAX endpoints for Edit Event 
+    path('<int:pk>/ajax/delete/', views.ajax_delete_event, name='ajax_delete'),
     
-    # Event user
-    path('my-events/', views.my_events, name='my_events'),
+    # AJAX endpoints for Event Detail & Join 
+    path('<int:pk>/ajax/join/', views.ajax_join_event, name='ajax_join'),
+    path('<int:pk>/ajax/toggle-availability/', views.ajax_toggle_availability, name='ajax_toggle_availability'),
+    path('<int:pk>/ajax/schedules/', views.ajax_get_schedules, name='ajax_schedules'),
 ]
