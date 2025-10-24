@@ -21,7 +21,10 @@
                 Sport Partner
             </a>
             <span class="text-white/40">Event</span>
-            <a href="#" class="text-white/75 hover:text-[#CBED98] transition">Coach</a>
+            <a href="{% url 'coach:show_main' %}" 
+               class="{% if '/coach' in request.path %}text-[#CBED98]{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
+                Coach
+            </a>
             <a href="{% url 'Court:show_main' %}" 
                class="{% if '/court' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
                 Court

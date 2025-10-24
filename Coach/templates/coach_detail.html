@@ -46,22 +46,23 @@
         {% if not coach.isBooked %}Available{% else %}Booked{% endif %}
       </div>
 
-      <!-- Title & Price -->
+<!-- Title & Price -->
       <div class="title-price-section">
-        <h1 class="detail-title">{{ coach.title }}</h1>
-        <div class="detail-meta">
-        <span class="meta-item">{{ coach.get_category_display }}</span>
-        <span class="meta-separator">•</span>
-        <span class="meta-item">Rating: {{ coach.rating }}</span>
-        <span class="meta-separator">•</span>
-        <span class="meta-item">Location: {{ coach.location }}</span>
-      </div>
+        <div>
+          <h1 class="detail-title">{{ coach.title }}</h1>
+          <div class="detail-meta">
+            <span class="meta-item">{{ coach.get_category_display }}</span>
+            <span class="meta-separator">•</span>
+            <span class="meta-item">Rating: {{ coach.rating }}</span>
+            <span class="meta-separator">•</span>
+            <span class="meta-item">Location: {{ coach.location }}</span>
+          </div>
+        </div>
         <div class="price-box-inline">
           <span class="price-label">Price per Hour</span>
           <span class="price-value">{{ coach.price_formatted }}</span>
         </div>          
       </div>
-
 
       <!-- Address -->
       <div class="detail-section">
