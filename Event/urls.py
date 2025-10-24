@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 
-app_name = 'event'
+app_name = 'Event'
 
 urlpatterns = [
     # Main pages

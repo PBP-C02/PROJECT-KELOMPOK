@@ -20,7 +20,10 @@
                class="{% if '/sport_partner' in request.path %}text-[#CBED98]{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
                 Sport Partner
             </a>
-            <span class="text-white/40">Event</span>
+            <a href="{% url 'Event:event_list' %}"
+               class="{% if '/event' in request.path %}text-[#CBED98]{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
+                Event
+            </a>
             <a href="#" class="text-white/75 hover:text-[#CBED98] transition">Coach</a>
             <a href="{% url 'Court:show_main' %}" 
                class="{% if '/court' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
