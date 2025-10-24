@@ -81,7 +81,7 @@
         }
         
         /* Badge styling */
-        .badge-tersedia {
+        .badge-available {
             background: #a3e635;
             color: #1a1a1a;
             padding: 4px 12px;
@@ -91,7 +91,7 @@
             display: inline-block;
         }
         
-        .badge-tidak-tersedia {
+        .badge-unavailable {
             background: #ef4444;
             color: white;
             padding: 4px 12px;
@@ -200,6 +200,7 @@
                         id="searchInput"
                         placeholder="Search events..." 
                         class="search-input flex-1"
+                        value="{{ query }}"
                     />
                     <button onclick="searchEvents()" class="btn-search">
                         🔍 Search
@@ -208,13 +209,13 @@
                 
                 <!-- Filter Pills -->
                 <div class="flex gap-3 flex-wrap mb-6">
-                    <button class="filter-pill active" data-category="all">All</button>
-                    <button class="filter-pill" data-category="tennis">Tennis</button>
-                    <button class="filter-pill" data-category="basketball">Basketball</button>
-                    <button class="filter-pill" data-category="soccer">Soccer</button>
-                    <button class="filter-pill" data-category="badminton">Badminton</button>
-                    <button class="filter-pill" data-category="volleyball">Volleyball</button>
-                    <button class="filter-pill" data-category="futsal">Futsal</button>
+                    <button class="filter-pill {% if not selected_category or selected_category == 'All' %}active{% endif %}" data-category="all">All</button>
+                    <button class="filter-pill {% if selected_category == 'tennis' %}active{% endif %}" data-category="tennis">Tennis</button>
+                    <button class="filter-pill {% if selected_category == 'basketball' %}active{% endif %}" data-category="basketball">Basketball</button>
+                    <button class="filter-pill {% if selected_category == 'soccer' %}active{% endif %}" data-category="soccer">Soccer</button>
+                    <button class="filter-pill {% if selected_category == 'badminton' %}active{% endif %}" data-category="badminton">Badminton</button>
+                    <button class="filter-pill {% if selected_category == 'volleyball' %}active{% endif %}" data-category="volleyball">Volleyball</button>
+                    <button class="filter-pill {% if selected_category == 'futsal' %}active{% endif %}" data-category="futsal">Futsal</button>
                 </div>
                 
                 <!-- Checkbox + Add Event Button -->
@@ -224,21 +225,65 @@
                             type="checkbox" 
                             id="showAvailableOnly"
                             class="custom-checkbox"
+                            {% if available_only %}checked{% endif %}
                         />
                         <span class="font-medium text-gray-700">Show only available events</span>
                     </label>
                     
-                    <!-- Add Event Button - SELALU MUNCUL -->
+                    <!-- Add Event Button -->
+                    {% if user.is_authenticated %}
                     <a href="{% url 'event:add_event' %}" class="btn-add-event">
                         + Add Event
                     </a>
+                    {% endif %}
                 </div>
                 
             </div>
             
             <!-- Event Cards Grid -->
             <div id="eventGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Event cards will be loaded here via AJAX -->
+                <!-- Initial server-side rendered events -->
+                {% for event in events %}
+                <div class="event-card rounded-lg overflow-hidden">
+                    {% if event.photo %}
+                    <img src="{{ event.photo.url }}" alt="{{ event.name }}" class="event-image" onerror="this.src='https://via.placeholder.com/400x200?text=Event+Image'">
+                    {% else %}
+                    <img src="https://via.placeholder.com/400x200?text=Event+Image" alt="{{ event.name }}" class="event-image">
+                    {% endif %}
+                    
+                    <div class="p-5">
+                        <!-- Badge -->
+                        <div class="mb-3">
+                            <span class="badge-{{ event.status }}">
+                                {% if event.status == 'available' %}Tersedia{% else %}Tidak Tersedia{% endif %}
+                            </span>
+                        </div>
+                        
+                        <!-- Title -->
+                        <h3 class="text-xl font-bold mb-3">{{ event.name }}</h3>
+                        
+                        <!-- Details -->
+                        <div class="space-y-2 text-sm text-gray-600 mb-4">
+                            <p>Jenis olahraga: {{ event.get_sport_type_display }}</p>
+                            <p>Rating: {{ event.rating|default:"0.00" }}</p>
+                            <p>Lokasi: {{ event.city }}</p>
+                            <p class="text-green">Jarak: Tidak diketahui</p>
+                        </div>
+                        
+                        <!-- Price -->
+                        <p class="text-2xl font-bold mb-4">Rp {{ event.entry_price|floatformat:0 }} /jam</p>
+                        
+                        <!-- Button -->
+                        <a href="{% url 'event:event_detail' pk=event.id %}" class="btn-primary block text-center">
+                            Lihat Detail & Booking
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-span-full text-center py-12">
+                    <p class="text-gray-500 text-lg font-medium">No events found</p>
+                </div>
+                {% endfor %}
             </div>
             
             <!-- Loading State -->
@@ -256,61 +301,47 @@
     </div>
     
     <script>
-        let currentCategory = 'all';
-        let availableOnly = false;
-        
-        // Load events on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            loadEvents();
-            setupFilterButtons();
-            setupAvailableCheckbox();
-            setupSearch();
-        });
+        let currentCategory = '{{ selected_category|default:"all" }}';
+        let availableOnly = {{ available_only|yesno:"true,false" }};
         
         // Setup filter buttons
-        function setupFilterButtons() {
-            const filterButtons = document.querySelectorAll('.filter-pill');
-            filterButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Update active state
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    this.classList.add('active');
-                    
-                    // Update category and load events
-                    currentCategory = this.dataset.category;
-                    loadEvents();
-                });
-            });
-        }
-        
-        // Setup available checkbox
-        function setupAvailableCheckbox() {
-            const checkbox = document.getElementById('showAvailableOnly');
-            checkbox.addEventListener('change', function() {
-                availableOnly = this.checked;
+        const filterButtons = document.querySelectorAll('.filter-pill');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Update active state
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update category and load events
+                currentCategory = this.dataset.category;
                 loadEvents();
             });
-        }
+        });
+        
+        // Setup available checkbox
+        const checkbox = document.getElementById('showAvailableOnly');
+        checkbox.addEventListener('change', function() {
+            availableOnly = this.checked;
+            loadEvents();
+        });
         
         // Setup search with debounce
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            let debounceTimer;
-            
-            searchInput.addEventListener('input', function() {
-                clearTimeout(debounceTimer);
-                debounceTimer = setTimeout(() => {
-                    loadEvents();
-                }, 500);
-            });
-            
-            // Enter key untuk search
-            searchInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    loadEvents();
-                }
-            });
-        }
+        const searchInput = document.getElementById('searchInput');
+        let debounceTimer;
+        
+        searchInput.addEventListener('input', function() {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                loadEvents();
+            }, 500);
+        });
+        
+        // Enter key untuk search
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadEvents();
+            }
+        });
         
         // Search button
         function searchEvents() {
@@ -319,7 +350,7 @@
         
         // Load events via AJAX
         function loadEvents() {
-            const searchQuery = document.getElementById('searchInput').value;
+            const searchQuery = searchInput.value;
             const eventGrid = document.getElementById('eventGrid');
             const loadingState = document.getElementById('loadingState');
             const emptyState = document.getElementById('emptyState');
@@ -330,12 +361,12 @@
             emptyState.classList.add('hidden');
             
             // Build query params
-            let url = '/event/api/events/?';
+            let url = '{% url "event:ajax_search" %}?';
             if (currentCategory !== 'all') {
-                url += `category=${currentCategory}&`;
+                url += `sport=${currentCategory}&`;
             }
             if (availableOnly) {
-                url += `available_only=true&`;
+                url += `available=true&`;
             }
             if (searchQuery) {
                 url += `search=${encodeURIComponent(searchQuery)}&`;
@@ -377,17 +408,17 @@
             card.className = 'event-card rounded-lg overflow-hidden';
             
             // Get image URL or use placeholder
-            const imageUrl = event.photo_url || '{% static "img/placeholder-court.jpg" %}';
+            const imageUrl = event.photo_url || 'https://via.placeholder.com/400x200?text=Event+Image';
             
             // Badge class
-            const badgeClass = event.is_available ? 'badge-tersedia' : 'badge-tidak-tersedia';
-            const badgeText = event.is_available ? 'Tersedia' : 'Tidak Tersedia';
+            const badgeClass = event.status === 'available' ? 'badge-available' : 'badge-unavailable';
+            const badgeText = event.status === 'available' ? 'Tersedia' : 'Tidak Tersedia';
             
-            // Format category name
-            const categoryName = formatCategoryName(event.category);
+            // Format sport type
+            const sportType = formatSportType(event.sport_type);
             
             card.innerHTML = `
-                <img src="${imageUrl}" alt="${event.title}" class="event-image" onerror="this.src='https://via.placeholder.com/400x200?text=Event+Image'">
+                <img src="${imageUrl}" alt="${event.name}" class="event-image" onerror="this.src='https://via.placeholder.com/400x200?text=Event+Image'">
                 
                 <div class="p-5">
                     <!-- Badge -->
@@ -396,14 +427,14 @@
                     </div>
                     
                     <!-- Title -->
-                    <h3 class="text-xl font-bold mb-3">${event.title}</h3>
+                    <h3 class="text-xl font-bold mb-3">${event.name}</h3>
                     
                     <!-- Details -->
                     <div class="space-y-2 text-sm text-gray-600 mb-4">
-                        <p>Jenis olahraga: ${categoryName}</p>
-                        <p>Rating: ${event.rating || '5.00'}</p>
+                        <p>Jenis olahraga: ${sportType}</p>
+                        <p>Rating: ${event.rating || '0.00'}</p>
                         <p>Lokasi: ${event.city || 'Jakarta'}</p>
-                        <p class="text-green">Jarak: ${event.distance || 'Tidak diketahui'}</p>
+                        <p class="text-green">Jarak: Tidak diketahui</p>
                     </div>
                     
                     <!-- Price -->
@@ -419,9 +450,9 @@
             return card;
         }
         
-        // Format category name
-        function formatCategoryName(category) {
-            const categoryMap = {
+        // Format sport type
+        function formatSportType(sportType) {
+            const sportMap = {
                 'tennis': 'Tennis',
                 'basketball': 'Basketball',
                 'soccer': 'Soccer',
@@ -432,7 +463,7 @@
                 'table_tennis': 'Table Tennis',
                 'swimming': 'Swimming'
             };
-            return categoryMap[category] || category;
+            return sportMap[sportType] || sportType;
         }
         
         // Format price

@@ -178,7 +178,7 @@
                         <label class="form-label">Event Name</label>
                         <input 
                             type="text" 
-                            name="title" 
+                            name="name"
                             class="form-input" 
                             placeholder="Event name"
                             required
@@ -188,7 +188,7 @@
                     <!-- Sport Type -->
                     <div class="form-group">
                         <label class="form-label">Sport Type</label>
-                        <select name="category" class="form-input" required>
+                        <select name="sport_type" class="form-input" required>
                             <option value="">------</option>
                             <option value="tennis">Tennis</option>
                             <option value="basketball">Basketball</option>
@@ -218,7 +218,7 @@
                     <div class="form-group">
                         <label class="form-label">Full Address</label>
                         <textarea 
-                            name="location" 
+                            name="full_address"
                             class="form-input" 
                             placeholder="Complete address"
                             required
@@ -233,6 +233,7 @@
                             name="entry_price" 
                             class="form-input" 
                             placeholder="Entry Price (IDR)"
+                            step="0.01"
                             required
                         />
                     </div>
@@ -245,6 +246,7 @@
                             name="activities" 
                             class="form-input" 
                             placeholder="Activities (comma separated)"
+                            required
                         />
                     </div>
                     
@@ -256,7 +258,7 @@
                             name="rating" 
                             class="form-input" 
                             placeholder="0"
-                            step="0.1"
+                            step="0.01"
                             min="0"
                             max="5"
                         />
@@ -282,6 +284,27 @@
                             placeholder="https://maps.google.com/?q=6.2,106.8"
                         />
                         <p class="optional-text">Optional: paste a Google Maps link to update coordinates automatically</p>
+                    </div>
+                    
+                    <!-- Category -->
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <input 
+                            type="text" 
+                            name="category" 
+                            class="form-input" 
+                            placeholder="category 1"
+                            value="category 1"
+                        />
+                    </div>
+                    
+                    <!-- Status -->
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-input">
+                            <option value="available">Available</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
                     </div>
                     
                     <!-- Event Photo -->
@@ -314,7 +337,7 @@
             
             const formData = new FormData(this);
             
-            fetch('/event/create/', {
+            fetch('{% url "event:add_event" %}', {
                 method: 'POST',
                 body: formData,
                 headers: {
@@ -326,11 +349,18 @@
                 if (data.success) {
                     // Show success message
                     alert('Event created successfully!');
-                    // Redirect to event list or detail page
+                    // Redirect to event detail page
                     window.location.href = data.redirect_url || '/event/';
                 } else {
                     // Show error message
-                    alert('Error: ' + (data.message || 'Failed to create event'));
+                    let errorMsg = 'Failed to create event';
+                    if (data.errors) {
+                        errorMsg += ':\n';
+                        for (let field in data.errors) {
+                            errorMsg += `${field}: ${data.errors[field]}\n`;
+                        }
+                    }
+                    alert(errorMsg);
                 }
             })
             .catch(error => {

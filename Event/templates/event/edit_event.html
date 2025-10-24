@@ -224,7 +224,7 @@
                         <label class="form-label">Event Name</label>
                         <input 
                             type="text" 
-                            name="title" 
+                            name="name" 
                             class="form-input" 
                             value="{{ event.title }}"
                             required
@@ -234,7 +234,7 @@
                     <!-- Sport Type -->
                     <div class="form-group">
                         <label class="form-label">Sport Type</label>
-                        <select name="category" class="form-input" required>
+                        <select name="sport_type" class="form-input" required>
                             <option value="tennis" {% if event.category == 'tennis' %}selected{% endif %}>Tennis</option>
                             <option value="basketball" {% if event.category == 'basketball' %}selected{% endif %}>Basketball</option>
                             <option value="soccer" {% if event.category == 'soccer' %}selected{% endif %}>Soccer</option>
@@ -263,7 +263,7 @@
                     <div class="form-group">
                         <label class="form-label">Full Address</label>
                         <textarea 
-                            name="location" 
+                            name="full_address" 
                             class="form-input" 
                             required
                         >{{ event.location }}</textarea>

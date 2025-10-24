@@ -35,7 +35,13 @@ class Event(models.Model):
     # Pricing & Details
     entry_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     activities = models.TextField(help_text="Comma separated facilities")
-    rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00, validators=[MinValueValidator(0), MaxValueValidator(5)])
+    rating = models.DecimalField(
+        max_digits=3, 
+        decimal_places=2, 
+        default=0.00, 
+        blank=True,  # ← FIX: Tambahkan blank=True agar optional di form
+        validators=[MinValueValidator(0), MaxValueValidator(5)]
+    )
     
     # Event Photo
     photo = models.ImageField(upload_to='events/', blank=True, null=True)

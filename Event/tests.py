@@ -3,12 +3,23 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from decimal import Decimal
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import json
 from .models import Event, EventSchedule, EventRegistration
 from .forms import EventForm, EventScheduleForm
 
 User = get_user_model()
+
+
+# ==================== HELPER FUNCTION ====================
+def create_test_user(username='testuser', email='test@example.com', password='testpass123'):
+    """Helper function to create test user with required tanggal_lahir field"""
+    return User.objects.create_user(
+        username=username,
+        email=email,
+        password=password,
+        tanggal_lahir=date(1990, 1, 1)  # Required field for Auth_Profile.User
+    )
 
 
 # ==================== MODEL TESTS ====================
@@ -17,11 +28,7 @@ class EventModelTest(TestCase):
     
     def setUp(self):
         """Set up test data"""
-        self.user = User.objects.create_user(
-            username='testuser',
-            email='test@example.com',
-            password='testpass123'
-        )
+        self.user = create_test_user()
         
         self.event = Event.objects.create(
             name='Test Basketball Event',
@@ -122,10 +129,7 @@ class EventScheduleModelTest(TestCase):
     
     def setUp(self):
         """Set up test data"""
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
         
         self.event = Event.objects.create(
             name='Test Event',
@@ -171,14 +175,8 @@ class EventRegistrationModelTest(TestCase):
     
     def setUp(self):
         """Set up test data"""
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
-        self.organizer = User.objects.create_user(
-            username='organizer',
-            password='testpass123'
-        )
+        self.user = create_test_user()
+        self.organizer = create_test_user(username='organizer', email='organizer@example.com')
         
         self.event = Event.objects.create(
             name='Test Event',
@@ -220,10 +218,7 @@ class EventFormTest(TestCase):
     
     def setUp(self):
         """Set up test data"""
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
     
     def test_event_form_valid_data(self):
         """Test form with valid data"""
@@ -290,10 +285,7 @@ class EventListViewTest(TestCase):
     def setUp(self):
         """Set up test data"""
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
         
         self.event = Event.objects.create(
             name='Test Basketball Event',
@@ -340,10 +332,7 @@ class AddEventViewTest(TestCase):
     def setUp(self):
         """Set up test data"""
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
         self.url = reverse('event:add_event')
     
     def test_add_event_view_requires_login(self):
@@ -416,14 +405,8 @@ class EditEventViewTest(TestCase):
     def setUp(self):
         """Set up test data"""
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
-        self.other_user = User.objects.create_user(
-            username='otheruser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
+        self.other_user = create_test_user(username='otheruser', email='other@example.com')
         
         self.event = Event.objects.create(
             name='Test Event',
@@ -486,10 +469,7 @@ class EventDetailViewTest(TestCase):
     def setUp(self):
         """Set up test data"""
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
         
         self.event = Event.objects.create(
             name='Test Event',
@@ -523,10 +503,7 @@ class AjaxSearchEventsTest(TestCase):
     def setUp(self):
         """Set up test data"""
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
         
         self.event1 = Event.objects.create(
             name='Basketball Game',
@@ -592,10 +569,7 @@ class AjaxDeleteEventTest(TestCase):
     def setUp(self):
         """Set up test data"""
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
         
         self.event = Event.objects.create(
             name='Test Event',
@@ -633,10 +607,7 @@ class AjaxToggleAvailabilityTest(TestCase):
     def setUp(self):
         """Set up test data"""
         self.client = Client()
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
         
         self.event = Event.objects.create(
             name='Test Event',
@@ -680,10 +651,7 @@ class UrlTests(TestCase):
     
     def setUp(self):
         """Set up test data"""
-        self.user = User.objects.create_user(
-            username='testuser',
-            password='testpass123'
-        )
+        self.user = create_test_user()
         
         self.event = Event.objects.create(
             name='Test Event',

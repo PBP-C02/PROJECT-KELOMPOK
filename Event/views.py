@@ -103,7 +103,7 @@ def ajax_search_events(request):
             'entry_price': str(event.entry_price),
             'status': event.status,
             'photo_url': event.photo.url if event.photo else '/static/images/default-event.jpg',
-            'organizer': event.organizer.get_full_name() or event.organizer.username,
+            'organizer': event.organizer.get_full_name() if hasattr(event.organizer, 'get_full_name') else event.organizer.username,
             'full_address': event.full_address,
             'is_organizer': request.user.is_authenticated and request.user == event.organizer,
         })
@@ -120,16 +120,22 @@ def ajax_search_events(request):
 def add_event(request):
     """
     Add new event with AJAX form submission (Image 2)
+    FIX: Handle both regular POST and AJAX POST with/without files
     """
     if request.method == 'POST':
-        form = EventForm(request.POST, request.FILES)
+        # Check if this is AJAX request
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
+        # Handle file upload properly - FILES will be empty dict if no files
+        form = EventForm(request.POST, request.FILES if request.FILES else None)
+        
         if form.is_valid():
             event = form.save(commit=False)
             event.organizer = request.user
             event.save()
             
             # If AJAX request
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            if is_ajax:
                 return JsonResponse({
                     'success': True,
                     'message': 'Event created successfully!',
@@ -140,7 +146,7 @@ def add_event(request):
             return redirect('event:event_detail', pk=event.id)
         else:
             # If AJAX request with errors
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            if is_ajax:
                 return JsonResponse({
                     'success': False,
                     'errors': form.errors
@@ -158,16 +164,22 @@ def ajax_validate_event_form(request):
     """
     Validate event form fields via AJAX
     """
-    data = json.loads(request.body)
-    form = EventForm(data)
-    
-    if form.is_valid():
-        return JsonResponse({'success': True})
-    else:
+    try:
+        data = json.loads(request.body)
+        form = EventForm(data)
+        
+        if form.is_valid():
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({
+                'success': False,
+                'errors': form.errors
+            }, status=400)
+    except Exception as e:
         return JsonResponse({
             'success': False,
-            'errors': form.errors
-        }, status=400)
+            'message': str(e)
+        }, status=500)
 
 
 # ==================== EDIT EVENT WITH AJAX ====================
@@ -175,21 +187,32 @@ def ajax_validate_event_form(request):
 def edit_event(request, pk):
     """
     Edit existing event with AJAX (Image 3)
+    FIX: Handle both regular POST and AJAX POST with/without files
     """
     event = get_object_or_404(Event, pk=pk, organizer=request.user)
     
     if request.method == 'POST':
+        # Check if this is AJAX request
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
         # Check if clear photo
         if request.POST.get('clear_photo') == 'true':
-            event.photo.delete()
-            event.photo = None
+            if event.photo:
+                event.photo.delete()
+                event.photo = None
         
-        form = EventForm(request.POST, request.FILES, instance=event)
+        # Handle file upload properly - FILES will be empty dict if no files
+        form = EventForm(
+            request.POST, 
+            request.FILES if request.FILES else None, 
+            instance=event
+        )
+        
         if form.is_valid():
             form.save()
             
             # If AJAX request
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            if is_ajax:
                 return JsonResponse({
                     'success': True,
                     'message': 'Event updated successfully!',
@@ -198,7 +221,7 @@ def edit_event(request, pk):
             
             return redirect('event:event_detail', pk=event.id)
         else:
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            if is_ajax:
                 return JsonResponse({
                     'success': False,
                     'errors': form.errors
@@ -302,7 +325,7 @@ def ajax_join_event(request, pk):
         return JsonResponse({
             'success': True,
             'message': 'Successfully joined the event!',
-            'registration_id': registration.id
+            'registration_id': str(registration.pk_event_regis)
         })
         
     except Exception as e:
@@ -362,7 +385,7 @@ def ajax_get_schedules(request, pk):
     schedules_data = []
     for schedule in schedules:
         schedules_data.append({
-            'id': schedule.id,
+            'id': str(schedule.pk_event_sched),
             'date': schedule.date.strftime('%m / %d / %Y'),
             'formatted_date': schedule.date.strftime('%A, %B %d, %Y')
         })
@@ -397,7 +420,7 @@ def ajax_filter_sport(request):
             'entry_price': str(event.entry_price),
             'status': event.status,
             'photo_url': event.photo.url if event.photo else '/static/images/default-event.jpg',
-            'organizer': event.organizer.get_full_name() or event.organizer.username,
+            'organizer': event.organizer.get_full_name() if hasattr(event.organizer, 'get_full_name') else event.organizer.username,
             'full_address': event.full_address,
             'is_organizer': request.user.is_authenticated and request.user == event.organizer,
         })
