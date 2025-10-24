@@ -1,5 +1,6 @@
 from django.db import models
 from Auth_Profile.models import User
+from Auth_Profile.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 import uuid
 
@@ -26,6 +27,7 @@ class Event(models.Model):
     name = models.CharField(max_length=200)
     sport_type = models.CharField(max_length=50, choices=SPORT_CHOICES)
     description = models.TextField(blank=True, null=True)
+    
     
     # Location
     city = models.CharField(max_length=100)

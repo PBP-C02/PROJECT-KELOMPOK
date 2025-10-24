@@ -14,7 +14,7 @@ class EventForm(forms.ModelForm):
             'rating', 
             'description', 
             'google_maps_link', 
-            'photo',
+            'photo',  # ← FIXED: Changed from 'image' to 'photo'
             'category',
             'status'
         ]
@@ -61,7 +61,7 @@ class EventForm(forms.ModelForm):
                 'class': 'form-input',
                 'placeholder': 'https://maps.google.com/?q=-6.2,106.8'
             }),
-            'photo': forms.FileInput(attrs={
+            'photo': forms.FileInput(attrs={  # ← FIXED: Changed from 'image' to 'photo'
                 'class': 'form-file',
                 'accept': 'image/*'
             }),
@@ -84,7 +84,7 @@ class EventForm(forms.ModelForm):
             'rating': 'Rating (optional)',
             'description': 'Short description (optional)',
             'google_maps_link': 'Google Maps link',
-            'photo': 'Event Photo (optional)',
+            'photo': 'Event Photo (optional)',  # ← FIXED: Changed from 'image' to 'photo'
             'category': 'Category',
             'status': 'Status'
         }
