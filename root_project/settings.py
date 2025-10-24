@@ -59,7 +59,7 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Application definition
-
+#test push
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
