@@ -17,7 +17,7 @@ class PartnerPost(models.Model):
     ]
     
     post_id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)  # 👈 Tambah creator
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='soccer')
@@ -62,7 +62,7 @@ class PostParticipants(models.Model):
     participant = models.ForeignKey(User, on_delete=models.CASCADE)
     
     class Meta:
-        unique_together = ('post_id', 'participant')  # 👈 Prevent duplicate join
+        unique_together = ('post_id', 'participant')
     
     def __str__(self):
         return f"{self.participant.nama} joined {self.post_id.title}"
