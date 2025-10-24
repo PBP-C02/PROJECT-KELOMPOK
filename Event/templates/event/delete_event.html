@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Delete Event - MoveBuddy{% endblock %}
+
+{% block content %}
+<div class="delete-container">
+    <div class="delete-card">
+        <div class="delete-icon">⚠️</div>
+        <h1>Delete Event?</h1>
+        <p>Are you sure you want to delete <strong>"{{ event.title }}"</strong>?</p>
+        <p class="warning-text">
+            This action cannot be undone. All participants will be notified.
+        </p>
+        
+        <div class="event-info-box">
+            <h3>{{ event.title }}</h3>
+            <p>📅 {{ event.date|date:"d M Y" }} at {{ event.time|time:"H:i" }}</p>
+            <p>📍 {{ event.location }}</p>
+            <p>👥 {{ event.registrations.count }} participants registered</p>
+        </div>
+        
+        <form method="post" class="delete-form">
+            {% csrf_token %}
+            <div class="form-actions">
+                <a href="{% url 'event:event_detail' event.pk %}" class="btn-secondary">
+                    Cancel
+                </a>
+                <button type="submit" class="btn-danger">
+                    Yes, Delete Event
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
