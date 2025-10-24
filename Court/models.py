@@ -1,6 +1,7 @@
 # models.py
 from django.db import models
 from django.db.models import Q
+from django.utils import timezone
 from urllib.parse import quote
 
 class Court(models.Model):
@@ -51,13 +52,21 @@ class Court(models.Model):
         return [f.strip() for f in self.facilities.split(',') if f.strip()]
     
     def is_available(self):
-        """Check if court is available today or upcoming (default available unless marked otherwise)."""
+        """Backward-compatible availability check (any upcoming date)."""
         from datetime import date
         return not TimeSlot.objects.filter(
             court=self,
             date__gte=date.today(),
             is_available=False
         ).exists()
+
+    def is_available_today(self):
+        """Return availability status specifically for today's date."""
+        today = timezone.localdate()
+        slots = self.time_slots.filter(date=today)
+        if not slots.exists():
+            return True
+        return not slots.filter(is_available=False).exists()
     
     def get_whatsapp_link(self, date=None, time=None):
         """Generate WhatsApp link for booking with URL-safe encoding."""

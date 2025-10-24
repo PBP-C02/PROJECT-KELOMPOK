@@ -1,3 +1,134 @@
-<div>
-    Ini modal create
-</div>
+{% extends 'base.html' %}
+{% block meta %}
+<title>Make Many Friend!</title>
+{% endblock meta %}
+
+{% block content %}
+<h1>ONE STEP AHEAD TO FIND YOUR FRIEND</h1>
+
+<div id="error-message" style="color: red; margin-bottom: 10px;"></div>
+<div id="success-message" style="color: green; margin-bottom: 10px;"></div>
+
+<form id="createPostForm" method="POST">
+    {% csrf_token %}
+    <div>
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required>
+    </div>
+    <br>
+    <div>
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" rows="4" required></textarea>
+    </div>
+    <br>
+    <div>
+        <label for="category">Category:</label><br>
+        <select id="category" name="category" required>
+            <option value="">Pilih Kategori Olahraga</option>
+            <option value="tennis">Tennis</option>
+            <option value="basketball">Basketball</option>
+            <option value="soccer">Soccer</option>
+            <option value="badminton">Badminton</option>
+            <option value="volleyball">Volleyball</option>
+            <option value="paddle">Paddle</option>
+            <option value="futsal">Futsal</option>
+            <option value="table_tennis">Table Tennis</option>
+            <option value="jogging">Jogging</option>
+        </select>
+    </div>
+    <br>
+    <div>
+        <label for="tanggal">Tanggal:</label><br>
+        <input type="date" id="tanggal" name="tanggal" required>
+    </div>
+    <br>
+    <div>
+        <label for="jam_mulai">Jam Mulai:</label><br>
+        <input type="time" id="jam_mulai" name="jam_mulai" required>
+    </div>
+    <br>
+    <div>
+        <label for="jam_selesai">Jam Selesai:</label><br>
+        <input type="time" id="jam_selesai" name="jam_selesai" required>
+    </div>
+    <br>
+    <div>
+        <label for="lokasi">Lokasi:</label><br>
+        <input type="text" id="lokasi" name="lokasi" required>
+    </div>
+    <br>
+    <button type="submit" id="submitBtn">TAMBAH!</button>
+    <a href="{% url 'Sport_Partner:show_post' %}">Batal</a>
+</form>
+
+<script>
+    // Set min date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('tanggal').setAttribute('min', today);
+    
+    document.getElementById('createPostForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const title = document.getElementById('title').value;
+        const description = document.getElementById('description').value;
+        const category = document.getElementById('category').value;
+        const tanggal = document.getElementById('tanggal').value;
+        const jam_mulai = document.getElementById('jam_mulai').value;
+        const jam_selesai = document.getElementById('jam_selesai').value;
+        const lokasi = document.getElementById('lokasi').value;
+        const errorDiv = document.getElementById('error-message');
+        const successDiv = document.getElementById('success-message');
+        const submitBtn = document.getElementById('submitBtn');
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        errorDiv.textContent = '';
+        successDiv.textContent = '';
+        
+        // Validasi jam selesai harus lebih besar dari jam mulai
+        if (jam_mulai >= jam_selesai) {
+            errorDiv.textContent = 'Jam selesai harus lebih besar dari jam mulai';
+            return;
+        }
+        
+        // Disable button saat submit
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Loading...';
+        
+        try {
+            const response = await fetch('/sport-partner/create-post/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrftoken
+                },
+                body: JSON.stringify({
+                    title: title,
+                    description: description,
+                    category: category,
+                    tanggal: tanggal,
+                    jam_mulai: jam_mulai,
+                    jam_selesai: jam_selesai,
+                    lokasi: lokasi,
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                successDiv.textContent = data.message;
+                setTimeout(function() {
+                    window.location.href = data.redirect_url;
+                }, 1500);
+            } else {
+                errorDiv.textContent = data.message;
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'TAMBAH!';
+            }
+        } catch (error) {
+            errorDiv.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'TAMBAH!';
+        }
+    });
+</script>
+{% endblock content %}

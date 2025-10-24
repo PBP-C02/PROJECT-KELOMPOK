@@ -580,7 +580,7 @@ def get_all_Court(request):
         'rating': str(court.rating),
         'image': court.image.url if court.image else None,
         'facilities': court.facilities,
-        'is_available': court.is_available(),
+        'is_available': court.is_available_today(),
         'latitude': float(court.latitude) if court.latitude is not None else None,
         'longitude': float(court.longitude) if court.longitude is not None else None,
         'owned_by_user': court.created_by_id == getattr(current_user, 'id', None),
@@ -615,7 +615,7 @@ def api_search_court(request):
             "rating": float(c.rating),
             "location": c.location,
             "price": float(c.price_per_hour),
-            "is_available": c.is_available(),
+            "is_available": c.is_available_today(),
             "image": c.image.url if c.image else None,
             "owned_by_user": c.created_by_id == getattr(current_user, 'id', None),
         })
