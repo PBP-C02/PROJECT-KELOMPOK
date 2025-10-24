@@ -58,6 +58,7 @@ class PartnerPost(models.Model):
 
 
 class PostParticipants(models.Model):
+    pk_participant = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     post_id = models.ForeignKey(PartnerPost, on_delete=models.CASCADE)
     participant = models.ForeignKey(User, on_delete=models.CASCADE)
     
