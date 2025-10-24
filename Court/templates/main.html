@@ -1,0 +1,426 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block meta %}
+<title>MoveBuddy | Courts</title>
+{% endblock meta %}
+
+{% block content %}
+<section class="relative min-h-screen w-full overflow-hidden pb-16 pt-6">
+  <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'img/bg.png' %}');"></div>
+  <div class="absolute inset-0 bg-white/95"></div>
+
+  <div class="relative z-10">
+    {% include 'includes/navbar.html' %}
+
+    <div class="mx-auto flex w-full max-w-[88rem] flex-col gap-12 px-4 sm:px-10 lg:px-16">
+    <div class="rounded-[32px] bg-white/95 p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur">
+      <div class="flex flex-col gap-6">
+        <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_200px_auto_auto] md:items-center">
+          <label class="relative flex items-center">
+            <input
+              id="searchInput"
+              type="text"
+              placeholder="Cari lapangan atau lokasi..."
+              class="h-[50px] w-full rounded-lg border border-[#d7dae2] bg-white px-5 pr-12 text-sm font-medium text-[#111827] shadow-inner shadow-white/50 outline-none transition focus:border-[#bade7e] focus:ring-4 focus:ring-[#dff7b4]/60"
+            />
+            <svg class="absolute right-4 h-5 w-5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+            </svg>
+          </label>
+          <select
+            id="locationFilter"
+            class="h-[50px] rounded-lg border border-[#d7dae2] bg-white px-5 text-sm font-medium text-[#111827] shadow-inner shadow-white/50 outline-none transition focus:border-[#bade7e] focus:ring-4 focus:ring-[#dff7b4]/60"
+          >
+            <option value="">Semua lokasi</option>
+          </select>
+          <button
+            type="button"
+            onclick="searchCourt()"
+            class="h-[50px] rounded-lg bg-[#bade7e] px-6 text-xs font-semibold uppercase tracking-[0.3em] text-[#1f2b15] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(154,216,97,0.25)]"
+          >
+            Search
+          </button>
+          <a
+            href="{% url 'Court:add_court' %}"
+            class="flex h-[50px] items-center justify-center rounded-lg bg-[#bade7e] px-6 text-xs font-semibold uppercase tracking-[0.3em] text-[#1f2b15] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(154,216,97,0.25)]"
+          >
+            + Add Court
+          </a>
+        </div>
+
+        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div class="flex min-w-0 flex-nowrap gap-3 overflow-x-auto pb-1 pr-2">
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="" data-default="true" onclick="filterSport(this, '')">
+              All
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="tennis" onclick="filterSport(this, 'tennis')">
+              Tennis
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="basketball" onclick="filterSport(this, 'basketball')">
+              Basketball
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="soccer" onclick="filterSport(this, 'soccer')">
+              Soccer
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="badminton" onclick="filterSport(this, 'badminton')">
+              Badminton
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="volleyball" onclick="filterSport(this, 'volleyball')">
+              Volleyball
+            </button>
+            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="futsal" onclick="filterSport(this, 'futsal')">
+              Futsal
+            </button>
+          </div>
+
+          <label class="flex shrink-0 items-center gap-3 rounded-[18px] bg-white/70 px-4 py-2 text-sm font-semibold text-[#4b5563] shadow-inner shadow-white/70">
+            <input
+              id="availableOnly"
+              type="checkbox"
+              onchange="loadCourt()"
+              class="h-5 w-5 rounded border border-[#bade7e] text-[#89d65c] focus:ring-[#89d65c]"
+            />
+            <span>Hanya tampilkan yang tersedia</span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div id="loading" class="hidden rounded-[30px] bg-white/80 py-16 text-center text-[#6b7280] shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
+      Memuat lapangan...
+    </div>
+
+    <div id="CourtGrid" class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3"></div>
+  </div>
+  </div>
+</section>
+
+<script>
+  const COURT_PLACEHOLDER =
+    "data:image/svg+xml,%3Csvg%20xmlns%3D'http://www.w3.org/2000/svg'%20viewBox%3D'0%200%20320%20200'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'a'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%3Cstop%20offset%3D'0%25'%20stop-color%3D'%23dbeafe'/%3E%3Cstop%20offset%3D'60%25'%20stop-color%3D'%23bfdbfe'/%3E%3Cstop%20offset%3D'100%25'%20stop-color%3D'%2393c5fd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D'320'%20height%3D'200'%20fill%3D'url(%23a)'/%3E%3Cg%20fill%3D'none'%20stroke%3D'%231e3a8a'%20stroke-width%3D'6'%20opacity%3D'0.35'%3E%3Crect%20x%3D'30'%20y%3D'40'%20width%3D'260'%20height%3D'120'%20rx%3D'18'/%3E%3Cline%20x1%3D'160'%20y1%3D'40'%20x2%3D'160'%20y2%3D'160'/%3E%3Ccircle%20cx%3D'160'%20cy%3D'100'%20r%3D'24'/%3E%3Ccircle%20cx%3D'160'%20cy%3D'100'%20r%3D'8'/%3E%3C/g%3E%3C/svg%3E";
+  const CHIP_BASE_CLASSES =
+    "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900";
+  const CHIP_ACTIVE_CLASSES =
+    "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-transparent bg-[#CBED98] px-6 py-3 text-sm font-semibold text-[#1f2b15] shadow-[0_12px_22px_rgba(186,230,126,0.25)] transition hover:border-[#a9d66f] hover:text-[#1b1b1b]";
+  const LOCATION_OPTIONS = [
+    'Jakarta',
+    'Surabaya',
+    'Bandung',
+    'Medan',
+    'Bekasi',
+    'Semarang',
+    'Tangerang',
+    'Depok',
+    'Palembang',
+    'South Tangerang',
+    'Makassar',
+    'Denpasar',
+    'Yogyakarta',
+    'Balikpapan',
+    'Pontianak',
+    'Batam',
+    'Banjarmasin',
+    'Malang',
+  ];
+  const STAR_FULL_ICON =
+    `<svg aria-hidden="true" class="h-4 w-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034 1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461z"/></svg>`;
+  const STAR_EMPTY_ICON =
+    `<svg aria-hidden="true" class="h-4 w-4 text-slate-300" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034 1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461z"/></svg>`;
+
+  function setChipState(chip, isActive) {
+    if (!chip) return;
+    chip.className = isActive ? CHIP_ACTIVE_CLASSES : CHIP_BASE_CLASSES;
+  }
+
+populateLocationOptions();
+
+document.querySelectorAll('.filter-chip').forEach(chip => {
+    setChipState(chip, chip.dataset.default === 'true');
+  });
+
+  function populateLocationOptions(selected = '') {
+    const select = document.getElementById('locationFilter');
+    if (!select) return;
+    const previous = selected || select.value;
+    select.innerHTML = '<option value=\"\">Semua lokasi</option>';
+    LOCATION_OPTIONS.forEach(city => {
+      const option = document.createElement('option');
+      option.value = city;
+      option.textContent = city;
+      select.appendChild(option);
+    });
+    if (previous && LOCATION_OPTIONS.includes(previous)) {
+      select.value = previous;
+    }
+  }
+
+    // State management
+    let currentFilters = {
+        query: '',
+        sport: '',
+        location: '',
+            availableOnly: false,
+            userLat: null,
+            userLng: null
+        };
+
+        let cachedCourts = [];
+        let dataLoaded = false;
+
+        // Initialize
+        window.onload = function() {
+            initPage();
+        };
+
+        function initPage() {
+            if (!navigator.geolocation) {
+                loadCourt(true);
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    currentFilters.userLat = position.coords.latitude;
+                    currentFilters.userLng = position.coords.longitude;
+                    loadCourt(true);
+                },
+                function(error) {
+                    console.warn('Geolocation denied or unavailable:', error);
+                    currentFilters.userLat = null;
+                    currentFilters.userLng = null;
+                    loadCourt(true);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 300000
+                }
+            );
+        }
+
+        // Search Court dengan AJAX
+        function searchCourt() {
+            currentFilters.query = document.getElementById('searchInput').value;
+            currentFilters.location = document.getElementById('locationFilter').value;
+            loadCourt();
+        }
+
+        // Filter by sport
+        function filterSport(element, sport) {
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                setChipState(chip, chip === element);
+            });
+            currentFilters.sport = sport;
+            loadCourt();
+        }
+
+        // Load Court dengan AJAX
+        function authFetch(url, options) {
+            return fetch(url, options).then(response => {
+                if (response.status === 401) {
+                    window.location.href = '/login/';
+                    throw new Error('Unauthenticated');
+                }
+                return response;
+            });
+        }
+
+        function ensureDataLoaded(forceRefresh = false) {
+            if (!forceRefresh && dataLoaded) {
+                return Promise.resolve(cachedCourts);
+            }
+            return authFetch('/court/api/court/')
+                .then(response => response.json())
+                .then(data => {
+                    cachedCourts = (data && data.Court) ? data.Court : [];
+                    dataLoaded = true;
+                    return cachedCourts;
+                });
+        }
+
+        function loadCourt(forceRefresh = false) {
+            showLoading(true);
+            currentFilters.availableOnly = document.getElementById('availableOnly').checked;
+
+            ensureDataLoaded(forceRefresh)
+                .then(() => {
+                    const filtered = applyFilters();
+                    displayCourt(filtered);
+                    showLoading(false);
+                })
+                .catch(error => {
+                    if (error && error.message === 'Unauthenticated') {
+                        return;
+                    }
+                    console.error('Error:', error);
+                    showLoading(false);
+                    alert('Failed to load court data');
+                });
+        }
+
+        function applyFilters() {
+            let result = cachedCourts.slice();
+
+            const query = (currentFilters.query || '').trim().toLowerCase();
+            if (query) {
+                result = result.filter(c => (
+                    (c.name || '').toLowerCase().includes(query) ||
+                    (c.address || '').toLowerCase().includes(query) ||
+                    (c.location || '').toLowerCase().includes(query)
+                ));
+            }
+
+            if (currentFilters.sport) {
+                result = result.filter(c => c.sport_type === currentFilters.sport);
+            }
+
+            if (currentFilters.location) {
+                result = result.filter(c => (c.location || '').toLowerCase() === currentFilters.location.toLowerCase());
+            }
+
+            if (currentFilters.availableOnly) {
+                result = result.filter(c => c.is_available);
+            }
+
+            if (currentFilters.userLat !== null && currentFilters.userLng !== null) {
+                result = result
+                    .map(c => {
+                        const lat = c.latitude !== null ? parseFloat(c.latitude) : null;
+                        const lng = c.longitude !== null ? parseFloat(c.longitude) : null;
+                        if (isFinite(lat) && isFinite(lng)) {
+                            const distance = calculateDistance(currentFilters.userLat, currentFilters.userLng, lat, lng);
+                            return { ...c, distance: distance !== null ? distance.toFixed(1) : null };
+                        }
+                        return { ...c, distance: null };
+                    })
+                    .sort((a, b) => {
+                        if (a.distance === null) return 1;
+                        if (b.distance === null) return -1;
+                        return parseFloat(a.distance) - parseFloat(b.distance);
+                    });
+            } else {
+                result = result.map(c => ({ ...c, distance: null }));
+            }
+
+            return result;
+        }
+
+        // Display Court
+        function displayCourt(Court) {
+            const grid = document.getElementById('CourtGrid');
+            if (!Array.isArray(Court) || Court.length === 0) {
+                grid.innerHTML = `
+                      <div class="col-span-full flex justify-center">
+                          <div class="w-full max-w-xl rounded-xl bg-white/90 px-6 py-12 text-center shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+                              <h3 class="text-lg font-semibold text-[#1f2937]">Tidak ada lapangan ditemukan</h3>
+                              <p class="mt-2 text-sm text-[#6b7280]">Coba ubah filter pencarian kamu.</p>
+                          </div>
+                      </div>
+                  `;
+                return;
+            }
+
+            grid.innerHTML = Court.map(court => `
+                <div class="group flex w-full cursor-pointer flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_22px_50px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-[0_32px_70px_rgba(15,23,42,0.12)]" onclick="goToDetail(${court.id})">
+                  <div class="overflow-hidden">
+                    <img src="${court.image || COURT_PLACEHOLDER}"
+                         alt="${escapeHtml(court.name)}"
+                         class="h-52 w-full object-cover transition duration-500 group-hover:scale-105"
+                         onerror="this.src='${COURT_PLACEHOLDER}'">
+                  </div>
+                  <div class="flex flex-1 flex-col gap-5 px-6 py-6">
+                    <div class="flex flex-wrap items-center gap-2">
+                      <span class="inline-flex items-center rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${court.is_available ? 'bg-[#e7f5da] text-[#2d8a41]' : 'bg-[#ffe2e2] text-[#b54141]'}">
+                        ${court.is_available ? 'Tersedia' : 'Penuh'}
+                      </span>
+                      ${court.owned_by_user ? '<span class="inline-flex items-center rounded-full bg-[#ffe8cc] px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#a85522]">Court kamu</span>' : ''}
+                    </div>
+                    <div class="space-y-3">
+                      <h3 class="text-[1.35rem] font-bold uppercase tracking-[0.08em] text-[#101828]">
+                        ${escapeHtml(court.name)}
+                      </h3>
+                      <div class="space-y-1 text-sm font-medium text-[#6b7280]">
+                        <p>Olahraga: <span class="text-[#374151]">${formatSportName(court.sport_type)}</span></p>
+                        <div class="flex items-center gap-2">
+                          <span>Rating:</span>
+                          <span class="inline-flex items-center gap-1" aria-hidden="true">${renderStars(court.rating)}</span>
+                          <span class="text-[#374151]">${formatRating(court.rating)} / 5.0</span>
+                        </div>
+                        <p>Lokasi: <span class="text-[#374151]">${escapeHtml(court.location || '-')}</span></p>
+                        ${court.distance ? `<p>Jarak: <span class="text-[#2f855a] font-semibold">${court.distance} km</span></p>` : ''}
+                      </div>
+                    </div>
+                    <div class="mt-auto space-y-4">
+                      <div class="text-2xl font-bold text-[#1f2937]">Rp ${formatPrice(court.price)} <span class="text-sm font-medium text-[#9ca3af]">/ jam</span></div>
+                      <button class="w-full rounded-lg bg-[#111827] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#0a0f1a]" type="button" onclick="event.stopPropagation(); goToDetail(${court.id})">
+                        Lihat Detail & Booking
+                      </button>
+                    </div>
+                  </div>
+                </div>
+            `).join('');
+        }
+
+        // Navigate to detail page
+        function goToDetail(courtId) {
+            window.location.href = `/court/${courtId}/`;
+        }
+
+        // Helper functions
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function renderStars(rating) {
+            const value = Math.max(0, Math.min(5, parseFloat(rating) || 0));
+            const stars = [];
+            for (let i = 1; i <= 5; i++) {
+                stars.push(i <= value ? STAR_FULL_ICON : STAR_EMPTY_ICON);
+            }
+            return `<span class="inline-flex items-center gap-1" aria-hidden="true">${stars.join('')}</span>`;
+        }
+
+        function formatPrice(price) {
+            const numeric = parseFloat(price);
+            return Number.isFinite(numeric) ? numeric.toLocaleString('id-ID') : '0';
+        }
+
+        function formatRating(rating) {
+            const value = parseFloat(rating);
+            return Number.isFinite(value) ? value.toFixed(1) : '0.0';
+        }
+
+        function formatSportName(sport) {
+            const formatted = sport.replace(/_/g, ' ');
+            return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            if (![lat1, lon1, lat2, lon2].every(Number.isFinite)) {
+                return null;
+            }
+            const toRad = value => value * Math.PI / 180;
+            const R = 6371; // km
+            const dLat = toRad(lat2 - lat1);
+            const dLon = toRad(lon2 - lon1);
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                      Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+                      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return Math.round((R * c) * 10) / 10;
+        }
+
+        // Enter key untuk search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchCourt();
+            }
+        });
+</script>
+{% endblock content %}
