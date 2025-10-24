@@ -239,6 +239,7 @@
     searchTimeout = setTimeout(() => {
       currentFilters.query = e.target.value;
       currentPage = 1;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       displayCourt();
     }, 300);
   });
@@ -247,6 +248,7 @@
   document.getElementById('locationFilter').addEventListener('change', function(e) {
     currentFilters.location = e.target.value;
     currentPage = 1;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     displayCourt();
   });
 
@@ -257,6 +259,7 @@
     });
     currentFilters.sport = sport;
     currentPage = 1;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     displayCourt();
   }
 
@@ -424,14 +427,6 @@
 
     updatePagination();
     paginationContainer.classList.remove('hidden');
-    if (hasDisplayedOnce) {
-      const gridTop = grid.getBoundingClientRect().top + window.scrollY;
-      const offset = 120; // Offset agar tidak kepotong
-      window.scrollTo({ 
-        top: Math.max(0, gridTop - offset), 
-        behavior: 'smooth' 
-      });
-    }
     hasDisplayedOnce = true;
   }
 
@@ -494,6 +489,7 @@
   function goToPage(page) {
     if (page < 1 || page > totalPages) return;
     currentPage = page;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     displayCourt();
   }
 
