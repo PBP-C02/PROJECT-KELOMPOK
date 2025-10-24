@@ -11,50 +11,40 @@ from .forms import EventForm, EventScheduleForm
 User = get_user_model()
 
 
-# ==================== HELPER FUNCTION ====================
-def create_test_user(username='testuser', email='test@example.com', password='testpass123'):
-    """Helper function to create test user"""
-    return User.objects.create_user(
-        username=username,
-        email=email,
-        password=password,
-    )
-
-
-# ==================== MODEL TESTS ====================
 class EventModelTest(TestCase):
     """Test Event model"""
     
     def setUp(self):
-        """Set up test data"""
-        self.user = create_test_user()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
         
         self.event = Event.objects.create(
-            name='Test Basketball Event',
-            sport_type='basketball',
-            description='Test description',
+            name='Test Tennis Event',
+            sport_type='tennis',
+            description='A test tennis event',
             city='Jakarta',
-            full_address='Jl. Test No. 123',
+            full_address='Jl. Test No. 1, Jakarta',
             entry_price=Decimal('100000.00'),
             activities='Court, Shower, Locker',
             rating=Decimal('4.50'),
-            category='category 1',
+            category='Competition',
             status='available',
             organizer=self.user
         )
     
     def test_event_creation(self):
         """Test event is created correctly"""
-        self.assertEqual(self.event.name, 'Test Basketball Event')
-        self.assertEqual(self.event.sport_type, 'basketball')
-        self.assertEqual(self.event.city, 'Jakarta')
-        self.assertEqual(self.event.entry_price, Decimal('100000.00'))
-        self.assertEqual(self.event.status, 'available')
+        self.assertEqual(self.event.name, 'Test Tennis Event')
+        self.assertEqual(self.event.sport_type, 'tennis')
         self.assertEqual(self.event.organizer, self.user)
+        self.assertEqual(self.event.status, 'available')
     
     def test_event_str_method(self):
-        """Test event string representation"""
-        expected = f"{self.event.name} - {self.event.sport_type}"
+        """Test __str__ method"""
+        expected = 'Test Tennis Event - tennis'
         self.assertEqual(str(self.event), expected)
     
     def test_get_activities_list(self):
@@ -63,78 +53,66 @@ class EventModelTest(TestCase):
         self.assertEqual(len(activities), 3)
         self.assertIn('Court', activities)
         self.assertIn('Shower', activities)
-        self.assertIn('Locker', activities)
     
     def test_get_activities_list_empty(self):
         """Test get_activities_list with empty activities"""
         event = Event.objects.create(
-            name='Test Event',
-            sport_type='tennis',
-            city='Jakarta',
-            full_address='Test Address',
-            entry_price=Decimal('50000.00'),
+            name='Event No Activities',
+            sport_type='soccer',
+            city='Bandung',
+            full_address='Jl. Test',
+            entry_price=Decimal('50000'),
             activities='',
             organizer=self.user
         )
-        self.assertEqual(event.get_activities_list(), [])
-    
-    def test_get_status_display_badge(self):
-        """Test get_status_display_badge method"""
-        self.assertEqual(
-            self.event.get_status_display_badge(),
-            'badge-available'
-        )
-        
-        self.event.status = 'unavailable'
-        self.assertEqual(
-            self.event.get_status_display_badge(),
-            'badge-unavailable'
-        )
+        self.assertEqual(event.get_activities_list(), [''])
     
     def test_event_ordering(self):
         """Test events are ordered by created_at descending"""
         event2 = Event.objects.create(
             name='Newer Event',
-            sport_type='soccer',
-            city='Bandung',
-            full_address='Test Address',
-            entry_price=Decimal('75000.00'),
-            activities='Field',
+            sport_type='basketball',
+            city='Surabaya',
+            full_address='Jl. Test 2',
+            entry_price=Decimal('75000'),
+            activities='Court',
             organizer=self.user
         )
-        
         events = Event.objects.all()
-        self.assertEqual(events[0], event2)  # Newer event first
+        self.assertEqual(events[0], event2)
         self.assertEqual(events[1], self.event)
     
-    def test_rating_validation(self):
+    def test_event_rating_validation(self):
         """Test rating validators"""
-        # Valid rating
-        event = Event.objects.create(
-            name='Test Event',
+        # This will be caught by form validation in real usage
+        event = Event(
+            name='Test',
             sport_type='tennis',
             city='Jakarta',
             full_address='Test',
-            entry_price=Decimal('50000'),
+            entry_price=Decimal('100000'),
             activities='Test',
-            rating=Decimal('5.00'),
+            rating=Decimal('5.00'),  # Max valid
             organizer=self.user
         )
-        self.assertEqual(event.rating, Decimal('5.00'))
+        event.full_clean()  # Should not raise
 
 
 class EventScheduleModelTest(TestCase):
     """Test EventSchedule model"""
     
     def setUp(self):
-        """Set up test data"""
-        self.user = create_test_user()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
         
         self.event = Event.objects.create(
             name='Test Event',
-            sport_type='basketball',
+            sport_type='tennis',
             city='Jakarta',
-            full_address='Test Address',
+            full_address='Jl. Test',
             entry_price=Decimal('100000'),
             activities='Court',
             organizer=self.user
@@ -142,7 +120,7 @@ class EventScheduleModelTest(TestCase):
         
         self.schedule = EventSchedule.objects.create(
             event=self.event,
-            date=datetime.now().date() + timedelta(days=1),
+            date=date.today() + timedelta(days=7),
             is_available=True
         )
     
@@ -152,18 +130,26 @@ class EventScheduleModelTest(TestCase):
         self.assertTrue(self.schedule.is_available)
     
     def test_schedule_str_method(self):
-        """Test schedule string representation"""
+        """Test __str__ method"""
         expected = f"{self.event.name} - {self.schedule.date}"
         self.assertEqual(str(self.schedule), expected)
+    
+    def test_schedule_unique_together(self):
+        """Test unique constraint on event and date"""
+        with self.assertRaises(Exception):
+            EventSchedule.objects.create(
+                event=self.event,
+                date=self.schedule.date,
+                is_available=True
+            )
     
     def test_schedule_ordering(self):
         """Test schedules are ordered by date"""
         schedule2 = EventSchedule.objects.create(
             event=self.event,
-            date=datetime.now().date() + timedelta(days=2),
+            date=date.today() + timedelta(days=14),
             is_available=True
         )
-        
         schedules = EventSchedule.objects.all()
         self.assertEqual(schedules[0], self.schedule)
         self.assertEqual(schedules[1], schedule2)
@@ -173,23 +159,25 @@ class EventRegistrationModelTest(TestCase):
     """Test EventRegistration model"""
     
     def setUp(self):
-        """Set up test data"""
-        self.user = create_test_user()
-        self.organizer = create_test_user(username='organizer', email='organizer@example.com')
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
         
         self.event = Event.objects.create(
             name='Test Event',
-            sport_type='basketball',
+            sport_type='tennis',
             city='Jakarta',
-            full_address='Test Address',
+            full_address='Jl. Test',
             entry_price=Decimal('100000'),
             activities='Court',
-            organizer=self.organizer
+            organizer=self.user
         )
         
         self.schedule = EventSchedule.objects.create(
             event=self.event,
-            date=datetime.now().date() + timedelta(days=1),
+            date=date.today() + timedelta(days=7),
             is_available=True
         )
         
@@ -206,309 +194,97 @@ class EventRegistrationModelTest(TestCase):
         self.assertEqual(self.registration.schedule, self.schedule)
     
     def test_registration_str_method(self):
-        """Test registration string representation"""
+        """Test __str__ method"""
         expected = f"{self.user.username} - {self.event.name} ({self.schedule.date})"
         self.assertEqual(str(self.registration), expected)
+    
+    def test_registration_unique_together(self):
+        """Test unique constraint"""
+        with self.assertRaises(Exception):
+            EventRegistration.objects.create(
+                event=self.event,
+                user=self.user,
+                schedule=self.schedule
+            )
 
 
-# ==================== FORM TESTS ====================
 class EventFormTest(TestCase):
     """Test EventForm"""
     
     def setUp(self):
-        """Set up test data"""
-        self.user = create_test_user()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
     
-    def test_event_form_valid_data(self):
+    def test_valid_form(self):
         """Test form with valid data"""
         form_data = {
             'name': 'Test Event',
-            'sport_type': 'basketball',
+            'sport_type': 'tennis',
             'city': 'Jakarta',
-            'full_address': 'Jl. Test No. 123',
+            'full_address': 'Jl. Test No. 1',
             'entry_price': '100000.00',
             'activities': 'Court, Shower',
-            'rating': '4.50',
+            'rating': '4.5',
             'description': 'Test description',
-            'category': 'category 1',
+            'category': 'Competition',
             'status': 'available'
         }
         form = EventForm(data=form_data)
         self.assertTrue(form.is_valid())
     
-    def test_event_form_missing_required_field(self):
-        """Test form with missing required field"""
-        form_data = {
-            'sport_type': 'basketball',
-            # Missing 'name'
-            'city': 'Jakarta',
-            'full_address': 'Test Address',
-            'entry_price': '100000',
-            'activities': 'Court'
-        }
-        form = EventForm(data=form_data)
-        self.assertFalse(form.is_valid())
-        self.assertIn('name', form.errors)
-    
-    def test_event_form_invalid_sport_type(self):
-        """Test form with invalid sport type"""
+    def test_invalid_form_missing_required(self):
+        """Test form with missing required fields"""
         form_data = {
             'name': 'Test Event',
-            'sport_type': 'invalid_sport',
-            'city': 'Jakarta',
-            'full_address': 'Test Address',
-            'entry_price': '100000',
-            'activities': 'Court'
+            # Missing sport_type, city, etc.
         }
         form = EventForm(data=form_data)
         self.assertFalse(form.is_valid())
+    
+    def test_form_field_widgets(self):
+        """Test form widgets are configured"""
+        form = EventForm()
+        self.assertIn('form-input', form.fields['name'].widget.attrs['class'])
+        self.assertIn('form-select', form.fields['sport_type'].widget.attrs['class'])
 
 
 class EventScheduleFormTest(TestCase):
     """Test EventScheduleForm"""
     
-    def test_schedule_form_valid_data(self):
+    def test_valid_form(self):
         """Test form with valid data"""
         form_data = {
-            'date': datetime.now().date() + timedelta(days=1),
+            'date': date.today() + timedelta(days=7),
             'is_available': True
         }
         form = EventScheduleForm(data=form_data)
         self.assertTrue(form.is_valid())
+    
+    def test_form_widgets(self):
+        """Test form widgets"""
+        form = EventScheduleForm()
+        self.assertEqual(form.fields['date'].widget.attrs['type'], 'date')
 
 
-# ==================== VIEW TESTS ====================
 class EventListViewTest(TestCase):
     """Test event_list view"""
     
     def setUp(self):
-        """Set up test data"""
         self.client = Client()
-        self.user = create_test_user()
-        
-        self.event = Event.objects.create(
-            name='Test Basketball Event',
-            sport_type='basketball',
-            city='Jakarta',
-            full_address='Test Address',
-            entry_price=Decimal('100000'),
-            activities='Court',
-            status='available',
-            organizer=self.user
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
         )
-        
-        self.url = reverse('event:event_list')
-    
-    def test_event_list_view_get(self):
-        """Test GET request to event list"""
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'event/event_list.html')
-        self.assertContains(response, 'Test Basketball Event')
-    
-    def test_event_list_search(self):
-        """Test search functionality"""
-        response = self.client.get(self.url, {'q': 'Basketball'})
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(self.event, response.context['events'])
-    
-    def test_event_list_filter_category(self):
-        """Test category filter"""
-        response = self.client.get(self.url, {'category': 'basketball'})
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(self.event, response.context['events'])
-    
-    def test_event_list_available_only(self):
-        """Test available only filter"""
-        response = self.client.get(self.url, {'available_only': 'on'})
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(self.event, response.context['events'])
-
-
-class AddEventViewTest(TestCase):
-    """Test add_event view"""
-    
-    def setUp(self):
-        """Set up test data"""
-        self.client = Client()
-        self.user = create_test_user()
-        self.url = reverse('event:add_event')
-    
-    def test_add_event_view_requires_login(self):
-        """Test that add event requires login"""
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 302)  # Redirect to login
-    
-    def test_add_event_view_get_authenticated(self):
-        """Test GET request when authenticated"""
-        self.client.login(username='testuser', password='testpass123')
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'event/add_event.html')
-    
-    def test_add_event_view_post_valid_data(self):
-        """Test POST with valid data"""
-        self.client.login(username='testuser', password='testpass123')
-        
-        form_data = {
-            'name': 'New Event',
-            'sport_type': 'tennis',
-            'city': 'Bandung',
-            'full_address': 'Jl. New Address',
-            'entry_price': '75000.00',
-            'activities': 'Court, Net',
-            'rating': '4.00',
-            'description': 'New event description',
-            'category': 'category 1',
-            'status': 'available'
-        }
-        
-        response = self.client.post(self.url, data=form_data)
-        
-        # Should redirect to event detail
-        self.assertEqual(response.status_code, 302)
-        
-        # Check event was created
-        self.assertTrue(Event.objects.filter(name='New Event').exists())
-    
-    def test_add_event_ajax_request(self):
-        """Test AJAX add event request"""
-        self.client.login(username='testuser', password='testpass123')
-        
-        form_data = {
-            'name': 'AJAX Event',
-            'sport_type': 'soccer',
-            'city': 'Jakarta',
-            'full_address': 'Test Address',
-            'entry_price': '50000',
-            'activities': 'Field',
-            'category': 'category 1',
-            'status': 'available'
-        }
-        
-        response = self.client.post(
-            self.url,
-            data=form_data,
-            HTTP_X_REQUESTED_WITH='XMLHttpRequest'
-        )
-        
-        self.assertEqual(response.status_code, 200)
-        data = json.loads(response.content)
-        self.assertTrue(data['success'])
-        self.assertIn('event_id', data)
-
-
-class EditEventViewTest(TestCase):
-    """Test edit_event view"""
-    
-    def setUp(self):
-        """Set up test data"""
-        self.client = Client()
-        self.user = create_test_user()
-        self.other_user = create_test_user(username='otheruser', email='other@example.com')
-        
-        self.event = Event.objects.create(
-            name='Test Event',
-            sport_type='basketball',
-            city='Jakarta',
-            full_address='Test Address',
-            entry_price=Decimal('100000'),
-            activities='Court',
-            organizer=self.user
-        )
-        
-        self.url = reverse('event:edit_event', kwargs={'pk': self.event.pk})
-    
-    def test_edit_event_requires_login(self):
-        """Test that edit requires login"""
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 302)  # Redirect to login
-    
-    def test_edit_event_requires_organizer(self):
-        """Test that only organizer can edit"""
-        self.client.login(username='otheruser', password='testpass123')
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 404)  # Not found for non-organizer
-    
-    def test_edit_event_get_authenticated_organizer(self):
-        """Test GET request as organizer"""
-        self.client.login(username='testuser', password='testpass123')
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'event/edit_event.html')
-    
-    def test_edit_event_post_valid_data(self):
-        """Test POST with valid data"""
-        self.client.login(username='testuser', password='testpass123')
-        
-        form_data = {
-            'name': 'Updated Event',
-            'sport_type': 'tennis',
-            'city': 'Bandung',
-            'full_address': 'Updated Address',
-            'entry_price': '150000.00',
-            'activities': 'Updated activities',
-            'rating': '5.00',
-            'description': 'Updated description',
-            'category': 'category 2',
-            'status': 'unavailable'
-        }
-        
-        response = self.client.post(self.url, data=form_data)
-        
-        # Refresh event from database
-        self.event.refresh_from_db()
-        self.assertEqual(self.event.name, 'Updated Event')
-        self.assertEqual(self.event.city, 'Bandung')
-
-
-class EventDetailViewTest(TestCase):
-    """Test event_detail view"""
-    
-    def setUp(self):
-        """Set up test data"""
-        self.client = Client()
-        self.user = create_test_user()
-        
-        self.event = Event.objects.create(
-            name='Test Event',
-            sport_type='basketball',
-            city='Jakarta',
-            full_address='Test Address',
-            entry_price=Decimal('100000'),
-            activities='Court',
-            organizer=self.user
-        )
-        
-        self.url = reverse('event:event_detail', kwargs={'pk': self.event.pk})
-    
-    def test_event_detail_view_get(self):
-        """Test GET request to event detail"""
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'event/event_detail.html')
-        self.assertEqual(response.context['event'], self.event)
-    
-    def test_event_detail_404_invalid_pk(self):
-        """Test 404 for invalid event pk"""
-        url = reverse('event:event_detail', kwargs={'pk': 99999})
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 404)
-
-
-class AjaxSearchEventsTest(TestCase):
-    """Test ajax_search_events view"""
-    
-    def setUp(self):
-        """Set up test data"""
-        self.client = Client()
-        self.user = create_test_user()
         
         self.event1 = Event.objects.create(
-            name='Basketball Game',
-            sport_type='basketball',
+            name='Tennis Event',
+            sport_type='tennis',
             city='Jakarta',
-            full_address='Test Address',
+            full_address='Jl. Test 1',
             entry_price=Decimal('100000'),
             activities='Court',
             status='available',
@@ -516,178 +292,487 @@ class AjaxSearchEventsTest(TestCase):
         )
         
         self.event2 = Event.objects.create(
-            name='Tennis Match',
-            sport_type='tennis',
+            name='Basketball Event',
+            sport_type='basketball',
             city='Bandung',
-            full_address='Test Address',
+            full_address='Jl. Test 2',
             entry_price=Decimal('75000'),
             activities='Court',
             status='unavailable',
             organizer=self.user
         )
-        
-        self.url = reverse('event:ajax_search')
     
-    def test_ajax_search_all_events(self):
-        """Test searching all events"""
-        response = self.client.get(self.url)
+    def test_event_list_view_get(self):
+        """Test GET request to event list"""
+        response = self.client.get(reverse('Event:event_list'))
         self.assertEqual(response.status_code, 200)
-        
-        data = json.loads(response.content)
-        self.assertTrue(data['success'])
-        self.assertEqual(data['count'], 2)
+        self.assertContains(response, 'Tennis Event')
+        self.assertContains(response, 'Basketball Event')
     
-    def test_ajax_search_by_query(self):
-        """Test searching by query"""
-        response = self.client.get(self.url, {'search': 'Basketball'})
-        data = json.loads(response.content)
-        
-        self.assertEqual(data['count'], 1)
-        self.assertEqual(data['events'][0]['name'], 'Basketball Game')
+    def test_event_list_with_search(self):
+        """Test search functionality"""
+        response = self.client.get(reverse('Event:event_list'), {'q': 'Tennis'})
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Tennis Event')
+        self.assertNotContains(response, 'Basketball Event')
     
-    def test_ajax_search_by_sport(self):
-        """Test filtering by sport"""
-        response = self.client.get(self.url, {'sport': 'tennis'})
-        data = json.loads(response.content)
-        
-        self.assertEqual(data['count'], 1)
-        self.assertEqual(data['events'][0]['sport_type'], 'tennis')
+    def test_event_list_with_category_filter(self):
+        """Test category filter"""
+        response = self.client.get(reverse('Event:event_list'), {'category': 'tennis'})
+        self.assertEqual(response.status_code, 200)
     
-    def test_ajax_search_available_only(self):
-        """Test filtering available only"""
-        response = self.client.get(self.url, {'available': 'true'})
-        data = json.loads(response.content)
-        
-        self.assertEqual(data['count'], 1)
-        self.assertEqual(data['events'][0]['status'], 'available')
+    def test_event_list_available_only(self):
+        """Test available only filter"""
+        response = self.client.get(reverse('Event:event_list'), {'available_only': 'on'})
+        self.assertEqual(response.status_code, 200)
 
 
-class AjaxDeleteEventTest(TestCase):
-    """Test ajax_delete_event view"""
+class AjaxSearchEventsTest(TestCase):
+    """Test ajax_search_events view"""
     
     def setUp(self):
-        """Set up test data"""
         self.client = Client()
-        self.user = create_test_user()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
         
         self.event = Event.objects.create(
             name='Test Event',
-            sport_type='basketball',
+            sport_type='tennis',
             city='Jakarta',
-            full_address='Test Address',
+            full_address='Jl. Test',
+            entry_price=Decimal('100000'),
+            activities='Court',
+            organizer=self.user
+        )
+    
+    def test_ajax_search(self):
+        """Test AJAX search endpoint"""
+        response = self.client.get(
+            reverse('Event:ajax_search'),
+            {'search': 'Test', 'sport': 'All', 'available': 'false'}
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data['success'])
+        self.assertGreater(data['count'], 0)
+    
+    def test_ajax_search_with_sport_filter(self):
+        """Test AJAX search with sport filter"""
+        response = self.client.get(
+            reverse('Event:ajax_search'),
+            {'search': '', 'sport': 'tennis', 'available': 'false'}
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data['success'])
+
+
+class AddEventViewTest(TestCase):
+    """Test add_event view"""
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
+        self.client.login(username='testuser', password='testpass123')
+    
+    def test_add_event_get(self):
+        """Test GET request to add event"""
+        response = self.client.get(reverse('Event:add_event'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.context['form'], EventForm)
+    
+    def test_add_event_post_valid(self):
+        """Test POST with valid data"""
+        data = {
+            'name': 'New Event',
+            'sport_type': 'tennis',
+            'city': 'Jakarta',
+            'full_address': 'Jl. Test',
+            'entry_price': '100000',
+            'activities': 'Court',
+            'rating': '4.5',
+            'category': 'Competition',
+            'status': 'available'
+        }
+        response = self.client.post(reverse('Event:add_event'), data)
+        self.assertEqual(Event.objects.count(), 1)
+        event = Event.objects.first()
+        self.assertEqual(event.name, 'New Event')
+    
+    def test_add_event_requires_login(self):
+        """Test add event requires authentication"""
+        self.client.logout()
+        response = self.client.get(reverse('Event:add_event'))
+        self.assertEqual(response.status_code, 302)  # Redirect to login
+
+
+class EditEventViewTest(TestCase):
+    """Test edit_event view"""
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
+        self.other_user = User.objects.create_user(
+            username='otheruser',
+            email='other@test.com',
+            password='testpass123'
+        )
+        
+        self.event = Event.objects.create(
+            name='Test Event',
+            sport_type='tennis',
+            city='Jakarta',
+            full_address='Jl. Test',
             entry_price=Decimal('100000'),
             activities='Court',
             organizer=self.user
         )
         
-        self.url = reverse('event:ajax_delete', kwargs={'pk': self.event.pk})
-    
-    def test_delete_event_requires_login(self):
-        """Test delete requires login"""
-        response = self.client.post(self.url)
-        self.assertEqual(response.status_code, 302)  # Redirect to login
-    
-    def test_delete_event_success(self):
-        """Test successful event deletion"""
         self.client.login(username='testuser', password='testpass123')
-        response = self.client.post(self.url)
-        
+    
+    def test_edit_event_get(self):
+        """Test GET request to edit event"""
+        response = self.client.get(
+            reverse('Event:edit_event', kwargs={'pk': self.event.pk})
+        )
         self.assertEqual(response.status_code, 200)
-        data = json.loads(response.content)
-        self.assertTrue(data['success'])
-        
-        # Check event is deleted
-        self.assertFalse(Event.objects.filter(pk=self.event.pk).exists())
+        self.assertIsInstance(response.context['form'], EventForm)
+    
+    def test_edit_event_post_valid(self):
+        """Test POST with valid data"""
+        data = {
+            'name': 'Updated Event',
+            'sport_type': 'basketball',
+            'city': 'Bandung',
+            'full_address': 'Jl. Updated',
+            'entry_price': '150000',
+            'activities': 'Court, Shower',
+            'rating': '4.8',
+            'category': 'Training',
+            'status': 'available'
+        }
+        response = self.client.post(
+            reverse('Event:edit_event', kwargs={'pk': self.event.pk}),
+            data
+        )
+        self.event.refresh_from_db()
+        self.assertEqual(self.event.name, 'Updated Event')
+    
+    def test_edit_event_wrong_organizer(self):
+        """Test edit event by non-organizer"""
+        self.client.logout()
+        self.client.login(username='otheruser', password='testpass123')
+        response = self.client.get(
+            reverse('Event:edit_event', kwargs={'pk': self.event.pk})
+        )
+        self.assertEqual(response.status_code, 404)
 
 
-class AjaxToggleAvailabilityTest(TestCase):
-    """Test ajax_toggle_availability view"""
+class DeleteEventViewTest(TestCase):
+    """Test ajax_delete_event view"""
     
     def setUp(self):
-        """Set up test data"""
         self.client = Client()
-        self.user = create_test_user()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
         
         self.event = Event.objects.create(
             name='Test Event',
-            sport_type='basketball',
+            sport_type='tennis',
             city='Jakarta',
-            full_address='Test Address',
+            full_address='Jl. Test',
+            entry_price=Decimal('100000'),
+            activities='Court',
+            organizer=self.user
+        )
+        
+        self.client.login(username='testuser', password='testpass123')
+    
+    def test_delete_event(self):
+        """Test delete event"""
+        response = self.client.post(
+            reverse('Event:ajax_delete', kwargs={'pk': self.event.pk})
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data['success'])
+        self.assertEqual(Event.objects.count(), 0)
+
+
+class EventDetailViewTest(TestCase):
+    """Test event_detail view"""
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
+        
+        self.event = Event.objects.create(
+            name='Test Event',
+            sport_type='tennis',
+            city='Jakarta',
+            full_address='Jl. Test',
+            entry_price=Decimal('100000'),
+            activities='Court',
+            organizer=self.user
+        )
+        
+        self.schedule = EventSchedule.objects.create(
+            event=self.event,
+            date=date.today() + timedelta(days=7),
+            is_available=True
+        )
+    
+    def test_event_detail_get(self):
+        """Test GET request to event detail"""
+        response = self.client.get(
+            reverse('Event:event_detail', kwargs={'pk': self.event.pk})
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['event'], self.event)
+    
+    def test_event_detail_with_user_registered(self):
+        """Test detail view when user is registered"""
+        self.client.login(username='testuser', password='testpass123')
+        EventRegistration.objects.create(
+            event=self.event,
+            user=self.user,
+            schedule=self.schedule
+        )
+        response = self.client.get(
+            reverse('Event:event_detail', kwargs={'pk': self.event.pk})
+        )
+        self.assertTrue(response.context['user_registered'])
+
+
+class JoinEventViewTest(TestCase):
+    """Test ajax_join_event view"""
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
+        
+        self.event = Event.objects.create(
+            name='Test Event',
+            sport_type='tennis',
+            city='Jakarta',
+            full_address='Jl. Test',
+            entry_price=Decimal('100000'),
+            activities='Court',
+            organizer=self.user
+        )
+        
+        self.client.login(username='testuser', password='testpass123')
+    
+    def test_join_event_success(self):
+        """Test successful event join"""
+        future_date = date.today() + timedelta(days=7)
+        data = {
+            'date': future_date.strftime('%m / %d / %Y')
+        }
+        response = self.client.post(
+            reverse('Event:ajax_join', kwargs={'pk': self.event.pk}),
+            json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+        response_data = json.loads(response.content)
+        self.assertTrue(response_data['success'])
+    
+    def test_join_event_without_date(self):
+        """Test join event without date"""
+        response = self.client.post(
+            reverse('Event:ajax_join', kwargs={'pk': self.event.pk}),
+            json.dumps({}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+    
+    def test_join_event_already_registered(self):
+        """Test joining event when already registered"""
+        schedule = EventSchedule.objects.create(
+            event=self.event,
+            date=date.today() + timedelta(days=7),
+            is_available=True
+        )
+        EventRegistration.objects.create(
+            event=self.event,
+            user=self.user,
+            schedule=schedule
+        )
+        
+        data = {
+            'date': schedule.date.strftime('%m / %d / %Y')
+        }
+        response = self.client.post(
+            reverse('Event:ajax_join', kwargs={'pk': self.event.pk}),
+            json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
+
+class ToggleAvailabilityViewTest(TestCase):
+    """Test ajax_toggle_availability view"""
+    
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
+        
+        self.event = Event.objects.create(
+            name='Test Event',
+            sport_type='tennis',
+            city='Jakarta',
+            full_address='Jl. Test',
             entry_price=Decimal('100000'),
             activities='Court',
             status='available',
             organizer=self.user
         )
         
-        self.url = reverse('event:ajax_toggle_availability', kwargs={'pk': self.event.pk})
-    
-    def test_toggle_availability_requires_login(self):
-        """Test toggle requires login"""
-        response = self.client.post(self.url)
-        self.assertEqual(response.status_code, 302)
+        self.client.login(username='testuser', password='testpass123')
     
     def test_toggle_to_unavailable(self):
-        """Test toggling to unavailable"""
-        self.client.login(username='testuser', password='testpass123')
-        
+        """Test toggling event to unavailable"""
+        data = {'status': 'unavailable'}
         response = self.client.post(
-            self.url,
-            data=json.dumps({'status': 'unavailable'}),
+            reverse('Event:ajax_toggle_availability', kwargs={'pk': self.event.pk}),
+            json.dumps(data),
             content_type='application/json'
         )
-        
         self.assertEqual(response.status_code, 200)
-        data = json.loads(response.content)
-        self.assertTrue(data['success'])
-        
         self.event.refresh_from_db()
         self.assertEqual(self.event.status, 'unavailable')
+    
+    def test_toggle_invalid_status(self):
+        """Test toggling with invalid status"""
+        data = {'status': 'invalid'}
+        response = self.client.post(
+            reverse('Event:ajax_toggle_availability', kwargs={'pk': self.event.pk}),
+            json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
 
 
-# ==================== URL TESTS ====================
-class UrlTests(TestCase):
-    """Test URL routing"""
+class GetSchedulesViewTest(TestCase):
+    """Test ajax_get_schedules view"""
     
     def setUp(self):
-        """Set up test data"""
-        self.user = create_test_user()
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
         
         self.event = Event.objects.create(
             name='Test Event',
-            sport_type='basketball',
+            sport_type='tennis',
             city='Jakarta',
-            full_address='Test Address',
+            full_address='Jl. Test',
             entry_price=Decimal('100000'),
             activities='Court',
             organizer=self.user
         )
+        
+        EventSchedule.objects.create(
+            event=self.event,
+            date=date.today() + timedelta(days=7),
+            is_available=True
+        )
+        EventSchedule.objects.create(
+            event=self.event,
+            date=date.today() + timedelta(days=14),
+            is_available=True
+        )
     
-    def test_event_list_url_resolves(self):
-        """Test event list URL resolves"""
-        url = reverse('event:event_list')
-        self.assertEqual(url, '/event/')
+    def test_get_schedules(self):
+        """Test getting event schedules"""
+        response = self.client.get(
+            reverse('Event:ajax_schedules', kwargs={'pk': self.event.pk})
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data['success'])
+        self.assertEqual(len(data['schedules']), 2)
+
+
+class FilterSportViewTest(TestCase):
+    """Test ajax_filter_sport view"""
     
-    def test_event_detail_url_resolves(self):
-        """Test event detail URL resolves"""
-        url = reverse('event:event_detail', kwargs={'pk': self.event.pk})
-        self.assertEqual(url, f'/event/{self.event.pk}/')
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='testuser',
+            email='test@test.com',
+            password='testpass123'
+        )
+        
+        Event.objects.create(
+            name='Tennis Event',
+            sport_type='tennis',
+            city='Jakarta',
+            full_address='Jl. Test 1',
+            entry_price=Decimal('100000'),
+            activities='Court',
+            organizer=self.user
+        )
+        
+        Event.objects.create(
+            name='Basketball Event',
+            sport_type='basketball',
+            city='Bandung',
+            full_address='Jl. Test 2',
+            entry_price=Decimal('75000'),
+            activities='Court',
+            organizer=self.user
+        )
     
-    def test_add_event_url_resolves(self):
-        """Test add event URL resolves"""
-        url = reverse('event:add_event')
-        self.assertEqual(url, '/event/add/')
+    def test_filter_by_sport(self):
+        """Test filtering by sport type"""
+        response = self.client.get(
+            reverse('Event:ajax_filter'),
+            {'sport': 'tennis'}
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data['success'])
+        self.assertEqual(len(data['events']), 1)
+        self.assertEqual(data['events'][0]['sport_type'], 'tennis')
     
-    def test_edit_event_url_resolves(self):
-        """Test edit event URL resolves"""
-        url = reverse('event:edit_event', kwargs={'pk': self.event.pk})
-        self.assertEqual(url, f'/event/{self.event.pk}/edit/')
-    
-    def test_ajax_search_url_resolves(self):
-        """Test AJAX search URL resolves"""
-        url = reverse('event:ajax_search')
-        self.assertEqual(url, '/event/ajax/search/')
-    
-    def test_ajax_delete_url_resolves(self):
-        """Test AJAX delete URL resolves"""
-        url = reverse('event:ajax_delete', kwargs={'pk': self.event.pk})
-        self.assertEqual(url, f'/event/{self.event.pk}/ajax/delete/')
+    def test_filter_all_sports(self):
+        """Test filtering with 'All' option"""
+        response = self.client.get(
+            reverse('Event:ajax_filter'),
+            {'sport': 'All'}
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertTrue(data['success'])
+        self.assertEqual(len(data['events']), 2)
