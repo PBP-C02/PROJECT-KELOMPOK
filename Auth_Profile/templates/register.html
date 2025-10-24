@@ -134,18 +134,16 @@
         const nama = document.getElementById('nama').value;
         const email = document.getElementById('email').value;
         const kelamin = document.getElementById('kelamin').value;
-        const tanggal_lahir = document.getElementById('tanggal_lahir').value;
-        const nomor_handphone = document.getElementById('nomor_handphone').value;
+        const tanggalLahir = document.getElementById('tanggal_lahir').value;
+        const nomorHandphone = document.getElementById('nomor_handphone').value;
         const password = document.getElementById('password').value;
         const password2 = document.getElementById('password2').value;
+        
         const errorDiv = document.getElementById('error-message');
-        const successDiv = document.getElementById('success-message');
         const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
         
         errorDiv.textContent = '';
-        successDiv.textContent = '';
         errorDiv.classList.add('hidden');
-        successDiv.classList.add('hidden');
         
         try {
             const response = await fetch('/register/', {
@@ -158,27 +156,31 @@
                     nama: nama,
                     email: email,
                     kelamin: kelamin,
-                    tanggal_lahir: tanggal_lahir,
-                    nomor_handphone: nomor_handphone,
+                    tanggal_lahir: tanggalLahir,
+                    nomor_handphone: nomorHandphone,
                     password: password,
                     password2: password2
                 })
             });
             
+            // Cek apakah response OK
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const data = await response.json();
+            console.log('Response:', data); // Debug
             
             if (data.success) {
-                successDiv.textContent = data.message;
-                successDiv.classList.remove('hidden');
-                setTimeout(function() {
-                    window.location.href = data.redirect_url;
-                }, 1500);
+                // Redirect ke halaman login
+                window.location.href = data.redirect_url || '/login/';
             } else {
-                errorDiv.textContent = data.message;
+                errorDiv.textContent = data.message || 'Registrasi gagal';
                 errorDiv.classList.remove('hidden');
             }
         } catch (error) {
-            errorDiv.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
+            console.error('Error:', error); // Debug
+            errorDiv.textContent = 'Terjadi kesalahan: ' + error.message;
             errorDiv.classList.remove('hidden');
         }
     });
