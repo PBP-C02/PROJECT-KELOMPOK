@@ -1,0 +1,2702 @@
+[
+  {
+    "model": "Event.EventSchedule",
+    "pk": 1,
+    "fields": {
+      "event": 1,
+      "date": "2026-01-09",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 2,
+    "fields": {
+      "event": 1,
+      "date": "2026-03-20",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 3,
+    "fields": {
+      "event": 1,
+      "date": "2025-12-29",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 4,
+    "fields": {
+      "event": 2,
+      "date": "2026-03-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 5,
+    "fields": {
+      "event": 2,
+      "date": "2025-11-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 6,
+    "fields": {
+      "event": 2,
+      "date": "2026-02-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 7,
+    "fields": {
+      "event": 3,
+      "date": "2026-03-29",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 8,
+    "fields": {
+      "event": 3,
+      "date": "2026-02-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 9,
+    "fields": {
+      "event": 3,
+      "date": "2026-04-15",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 10,
+    "fields": {
+      "event": 4,
+      "date": "2025-11-09",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 11,
+    "fields": {
+      "event": 4,
+      "date": "2025-11-23",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 12,
+    "fields": {
+      "event": 4,
+      "date": "2026-02-18",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 13,
+    "fields": {
+      "event": 5,
+      "date": "2026-01-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 14,
+    "fields": {
+      "event": 5,
+      "date": "2025-11-02",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 15,
+    "fields": {
+      "event": 5,
+      "date": "2026-02-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 16,
+    "fields": {
+      "event": 6,
+      "date": "2026-04-01",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 17,
+    "fields": {
+      "event": 6,
+      "date": "2025-12-20",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 18,
+    "fields": {
+      "event": 6,
+      "date": "2026-04-13",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 19,
+    "fields": {
+      "event": 7,
+      "date": "2025-11-04",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 20,
+    "fields": {
+      "event": 7,
+      "date": "2026-03-04",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 21,
+    "fields": {
+      "event": 7,
+      "date": "2025-11-21",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 22,
+    "fields": {
+      "event": 8,
+      "date": "2025-12-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 23,
+    "fields": {
+      "event": 8,
+      "date": "2025-11-11",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 24,
+    "fields": {
+      "event": 8,
+      "date": "2026-03-30",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 25,
+    "fields": {
+      "event": 9,
+      "date": "2025-11-15",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 26,
+    "fields": {
+      "event": 9,
+      "date": "2025-11-19",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 27,
+    "fields": {
+      "event": 9,
+      "date": "2026-01-19",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 28,
+    "fields": {
+      "event": 10,
+      "date": "2026-02-20",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 29,
+    "fields": {
+      "event": 10,
+      "date": "2025-12-04",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 30,
+    "fields": {
+      "event": 10,
+      "date": "2026-04-13",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 31,
+    "fields": {
+      "event": 11,
+      "date": "2025-11-14",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 32,
+    "fields": {
+      "event": 11,
+      "date": "2025-12-21",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 33,
+    "fields": {
+      "event": 11,
+      "date": "2025-12-03",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 34,
+    "fields": {
+      "event": 12,
+      "date": "2025-12-22",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 35,
+    "fields": {
+      "event": 12,
+      "date": "2026-02-14",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 36,
+    "fields": {
+      "event": 12,
+      "date": "2026-03-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 37,
+    "fields": {
+      "event": 13,
+      "date": "2025-12-09",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 38,
+    "fields": {
+      "event": 13,
+      "date": "2026-03-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 39,
+    "fields": {
+      "event": 13,
+      "date": "2025-12-30",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 40,
+    "fields": {
+      "event": 14,
+      "date": "2025-12-14",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 41,
+    "fields": {
+      "event": 14,
+      "date": "2026-01-03",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 42,
+    "fields": {
+      "event": 14,
+      "date": "2026-03-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 43,
+    "fields": {
+      "event": 15,
+      "date": "2025-12-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 44,
+    "fields": {
+      "event": 15,
+      "date": "2025-12-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 45,
+    "fields": {
+      "event": 15,
+      "date": "2025-12-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 46,
+    "fields": {
+      "event": 16,
+      "date": "2026-02-19",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 47,
+    "fields": {
+      "event": 16,
+      "date": "2025-11-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 48,
+    "fields": {
+      "event": 16,
+      "date": "2025-12-03",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 49,
+    "fields": {
+      "event": 17,
+      "date": "2026-04-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 50,
+    "fields": {
+      "event": 17,
+      "date": "2026-02-09",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 51,
+    "fields": {
+      "event": 17,
+      "date": "2025-12-04",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 52,
+    "fields": {
+      "event": 18,
+      "date": "2025-11-12",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 53,
+    "fields": {
+      "event": 18,
+      "date": "2026-04-14",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 54,
+    "fields": {
+      "event": 18,
+      "date": "2026-03-09",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 55,
+    "fields": {
+      "event": 19,
+      "date": "2025-12-30",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 56,
+    "fields": {
+      "event": 19,
+      "date": "2026-01-07",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 57,
+    "fields": {
+      "event": 19,
+      "date": "2026-04-13",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 58,
+    "fields": {
+      "event": 20,
+      "date": "2025-12-18",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 59,
+    "fields": {
+      "event": 20,
+      "date": "2026-02-21",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 60,
+    "fields": {
+      "event": 20,
+      "date": "2025-11-02",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 61,
+    "fields": {
+      "event": 21,
+      "date": "2026-04-15",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 62,
+    "fields": {
+      "event": 21,
+      "date": "2026-04-07",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 63,
+    "fields": {
+      "event": 21,
+      "date": "2025-12-29",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 64,
+    "fields": {
+      "event": 22,
+      "date": "2025-11-07",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 65,
+    "fields": {
+      "event": 22,
+      "date": "2026-02-15",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 66,
+    "fields": {
+      "event": 22,
+      "date": "2025-11-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 67,
+    "fields": {
+      "event": 23,
+      "date": "2025-10-31",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 68,
+    "fields": {
+      "event": 23,
+      "date": "2026-04-01",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 69,
+    "fields": {
+      "event": 23,
+      "date": "2026-02-11",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 70,
+    "fields": {
+      "event": 24,
+      "date": "2025-12-26",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 71,
+    "fields": {
+      "event": 24,
+      "date": "2025-11-20",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 72,
+    "fields": {
+      "event": 24,
+      "date": "2026-02-09",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 73,
+    "fields": {
+      "event": 25,
+      "date": "2025-11-03",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 74,
+    "fields": {
+      "event": 25,
+      "date": "2025-11-02",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 75,
+    "fields": {
+      "event": 25,
+      "date": "2026-01-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 76,
+    "fields": {
+      "event": 26,
+      "date": "2026-01-14",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 77,
+    "fields": {
+      "event": 26,
+      "date": "2026-01-21",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 78,
+    "fields": {
+      "event": 26,
+      "date": "2026-01-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 79,
+    "fields": {
+      "event": 27,
+      "date": "2026-02-18",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 80,
+    "fields": {
+      "event": 27,
+      "date": "2026-02-02",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 81,
+    "fields": {
+      "event": 27,
+      "date": "2026-03-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 82,
+    "fields": {
+      "event": 28,
+      "date": "2025-11-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 83,
+    "fields": {
+      "event": 28,
+      "date": "2026-02-06",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 84,
+    "fields": {
+      "event": 28,
+      "date": "2026-01-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 85,
+    "fields": {
+      "event": 29,
+      "date": "2026-04-02",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 86,
+    "fields": {
+      "event": 29,
+      "date": "2026-01-05",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 87,
+    "fields": {
+      "event": 29,
+      "date": "2025-12-04",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 88,
+    "fields": {
+      "event": 30,
+      "date": "2026-04-01",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 89,
+    "fields": {
+      "event": 30,
+      "date": "2026-02-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 90,
+    "fields": {
+      "event": 30,
+      "date": "2025-11-01",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 91,
+    "fields": {
+      "event": 31,
+      "date": "2026-03-25",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 92,
+    "fields": {
+      "event": 31,
+      "date": "2026-01-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 93,
+    "fields": {
+      "event": 31,
+      "date": "2026-01-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 94,
+    "fields": {
+      "event": 32,
+      "date": "2026-02-06",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 95,
+    "fields": {
+      "event": 32,
+      "date": "2026-02-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 96,
+    "fields": {
+      "event": 32,
+      "date": "2026-03-30",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 97,
+    "fields": {
+      "event": 33,
+      "date": "2026-02-03",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 98,
+    "fields": {
+      "event": 33,
+      "date": "2025-12-31",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 99,
+    "fields": {
+      "event": 33,
+      "date": "2026-02-09",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 100,
+    "fields": {
+      "event": 34,
+      "date": "2025-12-29",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 101,
+    "fields": {
+      "event": 34,
+      "date": "2026-01-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 102,
+    "fields": {
+      "event": 34,
+      "date": "2025-11-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 103,
+    "fields": {
+      "event": 35,
+      "date": "2025-12-26",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 104,
+    "fields": {
+      "event": 35,
+      "date": "2026-04-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 105,
+    "fields": {
+      "event": 35,
+      "date": "2026-03-06",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 106,
+    "fields": {
+      "event": 36,
+      "date": "2025-11-01",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 107,
+    "fields": {
+      "event": 36,
+      "date": "2026-01-19",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 108,
+    "fields": {
+      "event": 36,
+      "date": "2025-12-06",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 109,
+    "fields": {
+      "event": 37,
+      "date": "2026-03-23",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 110,
+    "fields": {
+      "event": 37,
+      "date": "2026-04-02",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 111,
+    "fields": {
+      "event": 37,
+      "date": "2026-04-05",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 112,
+    "fields": {
+      "event": 38,
+      "date": "2026-04-05",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 113,
+    "fields": {
+      "event": 38,
+      "date": "2025-12-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 114,
+    "fields": {
+      "event": 38,
+      "date": "2025-12-06",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 115,
+    "fields": {
+      "event": 39,
+      "date": "2026-02-03",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 116,
+    "fields": {
+      "event": 39,
+      "date": "2025-10-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 117,
+    "fields": {
+      "event": 39,
+      "date": "2025-12-29",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 118,
+    "fields": {
+      "event": 40,
+      "date": "2026-02-22",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 119,
+    "fields": {
+      "event": 40,
+      "date": "2026-04-03",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 120,
+    "fields": {
+      "event": 40,
+      "date": "2026-03-18",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 121,
+    "fields": {
+      "event": 41,
+      "date": "2026-04-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 122,
+    "fields": {
+      "event": 41,
+      "date": "2025-11-21",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 123,
+    "fields": {
+      "event": 41,
+      "date": "2025-11-23",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 124,
+    "fields": {
+      "event": 42,
+      "date": "2025-12-21",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 125,
+    "fields": {
+      "event": 42,
+      "date": "2026-02-19",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 126,
+    "fields": {
+      "event": 42,
+      "date": "2025-11-12",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 127,
+    "fields": {
+      "event": 43,
+      "date": "2025-11-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 128,
+    "fields": {
+      "event": 43,
+      "date": "2026-04-20",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 129,
+    "fields": {
+      "event": 43,
+      "date": "2025-12-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 130,
+    "fields": {
+      "event": 44,
+      "date": "2025-12-14",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 131,
+    "fields": {
+      "event": 44,
+      "date": "2025-12-03",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 132,
+    "fields": {
+      "event": 44,
+      "date": "2025-12-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 133,
+    "fields": {
+      "event": 45,
+      "date": "2026-01-03",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 134,
+    "fields": {
+      "event": 45,
+      "date": "2025-11-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 135,
+    "fields": {
+      "event": 45,
+      "date": "2025-11-14",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 136,
+    "fields": {
+      "event": 46,
+      "date": "2026-03-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 137,
+    "fields": {
+      "event": 46,
+      "date": "2026-04-08",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 138,
+    "fields": {
+      "event": 46,
+      "date": "2025-12-02",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 139,
+    "fields": {
+      "event": 47,
+      "date": "2025-12-02",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 140,
+    "fields": {
+      "event": 47,
+      "date": "2025-12-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 141,
+    "fields": {
+      "event": 47,
+      "date": "2026-02-22",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 142,
+    "fields": {
+      "event": 48,
+      "date": "2025-11-04",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 143,
+    "fields": {
+      "event": 48,
+      "date": "2026-04-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 144,
+    "fields": {
+      "event": 48,
+      "date": "2026-01-07",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 145,
+    "fields": {
+      "event": 49,
+      "date": "2025-11-14",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 146,
+    "fields": {
+      "event": 49,
+      "date": "2026-04-12",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 147,
+    "fields": {
+      "event": 49,
+      "date": "2026-01-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 148,
+    "fields": {
+      "event": 50,
+      "date": "2026-02-23",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 149,
+    "fields": {
+      "event": 50,
+      "date": "2026-01-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 150,
+    "fields": {
+      "event": 50,
+      "date": "2025-11-15",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 151,
+    "fields": {
+      "event": 51,
+      "date": "2025-12-29",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 152,
+    "fields": {
+      "event": 51,
+      "date": "2025-12-07",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 153,
+    "fields": {
+      "event": 51,
+      "date": "2026-01-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 154,
+    "fields": {
+      "event": 52,
+      "date": "2026-04-21",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 155,
+    "fields": {
+      "event": 52,
+      "date": "2026-03-01",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 156,
+    "fields": {
+      "event": 52,
+      "date": "2025-12-11",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 157,
+    "fields": {
+      "event": 53,
+      "date": "2025-12-20",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 158,
+    "fields": {
+      "event": 53,
+      "date": "2026-01-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 159,
+    "fields": {
+      "event": 53,
+      "date": "2026-03-03",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 160,
+    "fields": {
+      "event": 54,
+      "date": "2026-02-25",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 161,
+    "fields": {
+      "event": 54,
+      "date": "2025-11-23",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 162,
+    "fields": {
+      "event": 54,
+      "date": "2026-01-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 163,
+    "fields": {
+      "event": 55,
+      "date": "2026-03-05",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 164,
+    "fields": {
+      "event": 55,
+      "date": "2026-03-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 165,
+    "fields": {
+      "event": 55,
+      "date": "2026-01-05",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 166,
+    "fields": {
+      "event": 56,
+      "date": "2026-02-25",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 167,
+    "fields": {
+      "event": 56,
+      "date": "2026-04-21",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 168,
+    "fields": {
+      "event": 56,
+      "date": "2025-11-30",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 169,
+    "fields": {
+      "event": 57,
+      "date": "2025-11-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 170,
+    "fields": {
+      "event": 57,
+      "date": "2025-11-02",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 171,
+    "fields": {
+      "event": 57,
+      "date": "2025-12-29",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 172,
+    "fields": {
+      "event": 58,
+      "date": "2026-03-07",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 173,
+    "fields": {
+      "event": 58,
+      "date": "2026-02-05",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 174,
+    "fields": {
+      "event": 58,
+      "date": "2025-10-30",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 175,
+    "fields": {
+      "event": 59,
+      "date": "2026-03-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 176,
+    "fields": {
+      "event": 59,
+      "date": "2025-11-18",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 177,
+    "fields": {
+      "event": 59,
+      "date": "2026-01-28",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 178,
+    "fields": {
+      "event": 60,
+      "date": "2025-11-14",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 179,
+    "fields": {
+      "event": 60,
+      "date": "2025-10-29",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 180,
+    "fields": {
+      "event": 60,
+      "date": "2026-01-05",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 181,
+    "fields": {
+      "event": 61,
+      "date": "2025-12-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 182,
+    "fields": {
+      "event": 61,
+      "date": "2026-03-22",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 183,
+    "fields": {
+      "event": 61,
+      "date": "2026-03-14",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 184,
+    "fields": {
+      "event": 62,
+      "date": "2025-12-31",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 185,
+    "fields": {
+      "event": 62,
+      "date": "2025-12-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 186,
+    "fields": {
+      "event": 62,
+      "date": "2026-01-05",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 187,
+    "fields": {
+      "event": 63,
+      "date": "2026-01-05",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 188,
+    "fields": {
+      "event": 63,
+      "date": "2026-04-08",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 189,
+    "fields": {
+      "event": 63,
+      "date": "2025-10-31",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 190,
+    "fields": {
+      "event": 64,
+      "date": "2026-02-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 191,
+    "fields": {
+      "event": 64,
+      "date": "2026-04-06",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 192,
+    "fields": {
+      "event": 64,
+      "date": "2026-02-24",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 193,
+    "fields": {
+      "event": 65,
+      "date": "2025-11-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 194,
+    "fields": {
+      "event": 65,
+      "date": "2026-03-03",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 195,
+    "fields": {
+      "event": 65,
+      "date": "2025-11-19",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 196,
+    "fields": {
+      "event": 66,
+      "date": "2026-04-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 197,
+    "fields": {
+      "event": 66,
+      "date": "2026-01-30",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 198,
+    "fields": {
+      "event": 66,
+      "date": "2026-03-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 199,
+    "fields": {
+      "event": 67,
+      "date": "2026-04-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 200,
+    "fields": {
+      "event": 67,
+      "date": "2026-04-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 201,
+    "fields": {
+      "event": 67,
+      "date": "2025-12-02",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 202,
+    "fields": {
+      "event": 68,
+      "date": "2025-10-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 203,
+    "fields": {
+      "event": 68,
+      "date": "2025-11-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 204,
+    "fields": {
+      "event": 68,
+      "date": "2026-04-12",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 205,
+    "fields": {
+      "event": 69,
+      "date": "2025-11-14",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 206,
+    "fields": {
+      "event": 69,
+      "date": "2025-12-15",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 207,
+    "fields": {
+      "event": 69,
+      "date": "2026-01-29",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 208,
+    "fields": {
+      "event": 70,
+      "date": "2026-02-15",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 209,
+    "fields": {
+      "event": 70,
+      "date": "2025-11-25",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 210,
+    "fields": {
+      "event": 70,
+      "date": "2025-12-24",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 211,
+    "fields": {
+      "event": 71,
+      "date": "2026-01-23",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 212,
+    "fields": {
+      "event": 71,
+      "date": "2025-12-23",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 213,
+    "fields": {
+      "event": 71,
+      "date": "2026-01-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 214,
+    "fields": {
+      "event": 72,
+      "date": "2026-03-14",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 215,
+    "fields": {
+      "event": 72,
+      "date": "2026-03-31",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 216,
+    "fields": {
+      "event": 72,
+      "date": "2026-02-22",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 217,
+    "fields": {
+      "event": 73,
+      "date": "2026-03-24",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 218,
+    "fields": {
+      "event": 73,
+      "date": "2025-12-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 219,
+    "fields": {
+      "event": 73,
+      "date": "2026-03-09",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 220,
+    "fields": {
+      "event": 74,
+      "date": "2026-01-15",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 221,
+    "fields": {
+      "event": 74,
+      "date": "2025-11-05",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 222,
+    "fields": {
+      "event": 74,
+      "date": "2026-02-13",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 223,
+    "fields": {
+      "event": 75,
+      "date": "2025-11-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 224,
+    "fields": {
+      "event": 75,
+      "date": "2026-04-22",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 225,
+    "fields": {
+      "event": 75,
+      "date": "2026-02-07",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 226,
+    "fields": {
+      "event": 76,
+      "date": "2025-12-01",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 227,
+    "fields": {
+      "event": 76,
+      "date": "2026-01-25",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 228,
+    "fields": {
+      "event": 76,
+      "date": "2025-11-07",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 229,
+    "fields": {
+      "event": 77,
+      "date": "2026-01-06",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 230,
+    "fields": {
+      "event": 77,
+      "date": "2026-03-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 231,
+    "fields": {
+      "event": 77,
+      "date": "2025-10-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 232,
+    "fields": {
+      "event": 78,
+      "date": "2026-01-02",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 233,
+    "fields": {
+      "event": 78,
+      "date": "2025-12-29",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 234,
+    "fields": {
+      "event": 78,
+      "date": "2025-12-14",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 235,
+    "fields": {
+      "event": 79,
+      "date": "2026-01-22",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 236,
+    "fields": {
+      "event": 79,
+      "date": "2026-01-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 237,
+    "fields": {
+      "event": 79,
+      "date": "2025-11-19",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 238,
+    "fields": {
+      "event": 80,
+      "date": "2026-01-09",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 239,
+    "fields": {
+      "event": 80,
+      "date": "2025-11-25",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 240,
+    "fields": {
+      "event": 80,
+      "date": "2026-01-28",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 241,
+    "fields": {
+      "event": 81,
+      "date": "2026-01-19",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 242,
+    "fields": {
+      "event": 81,
+      "date": "2025-12-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 243,
+    "fields": {
+      "event": 81,
+      "date": "2025-11-29",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 244,
+    "fields": {
+      "event": 82,
+      "date": "2025-11-30",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 245,
+    "fields": {
+      "event": 82,
+      "date": "2025-11-10",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 246,
+    "fields": {
+      "event": 82,
+      "date": "2026-02-12",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 247,
+    "fields": {
+      "event": 83,
+      "date": "2026-01-11",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 248,
+    "fields": {
+      "event": 83,
+      "date": "2025-10-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 249,
+    "fields": {
+      "event": 83,
+      "date": "2026-01-14",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 250,
+    "fields": {
+      "event": 84,
+      "date": "2026-01-06",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 251,
+    "fields": {
+      "event": 84,
+      "date": "2026-03-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 252,
+    "fields": {
+      "event": 84,
+      "date": "2026-02-15",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 253,
+    "fields": {
+      "event": 85,
+      "date": "2026-04-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 254,
+    "fields": {
+      "event": 85,
+      "date": "2025-12-12",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 255,
+    "fields": {
+      "event": 85,
+      "date": "2025-12-31",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 256,
+    "fields": {
+      "event": 86,
+      "date": "2026-02-17",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 257,
+    "fields": {
+      "event": 86,
+      "date": "2025-10-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 258,
+    "fields": {
+      "event": 86,
+      "date": "2026-01-07",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 259,
+    "fields": {
+      "event": 87,
+      "date": "2026-02-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 260,
+    "fields": {
+      "event": 87,
+      "date": "2026-02-10",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 261,
+    "fields": {
+      "event": 87,
+      "date": "2026-01-14",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 262,
+    "fields": {
+      "event": 88,
+      "date": "2025-11-29",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 263,
+    "fields": {
+      "event": 88,
+      "date": "2025-11-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 264,
+    "fields": {
+      "event": 88,
+      "date": "2026-04-01",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 265,
+    "fields": {
+      "event": 89,
+      "date": "2025-11-10",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 266,
+    "fields": {
+      "event": 89,
+      "date": "2026-01-21",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 267,
+    "fields": {
+      "event": 89,
+      "date": "2025-12-22",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 268,
+    "fields": {
+      "event": 90,
+      "date": "2025-11-14",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 269,
+    "fields": {
+      "event": 90,
+      "date": "2025-12-20",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 270,
+    "fields": {
+      "event": 90,
+      "date": "2026-03-12",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 271,
+    "fields": {
+      "event": 91,
+      "date": "2026-01-11",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 272,
+    "fields": {
+      "event": 91,
+      "date": "2026-03-02",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 273,
+    "fields": {
+      "event": 91,
+      "date": "2026-01-04",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 274,
+    "fields": {
+      "event": 92,
+      "date": "2026-01-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 275,
+    "fields": {
+      "event": 92,
+      "date": "2026-01-22",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 276,
+    "fields": {
+      "event": 92,
+      "date": "2026-02-18",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 277,
+    "fields": {
+      "event": 93,
+      "date": "2026-03-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 278,
+    "fields": {
+      "event": 93,
+      "date": "2026-01-23",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 279,
+    "fields": {
+      "event": 93,
+      "date": "2025-12-13",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 280,
+    "fields": {
+      "event": 94,
+      "date": "2026-01-07",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 281,
+    "fields": {
+      "event": 94,
+      "date": "2025-12-16",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 282,
+    "fields": {
+      "event": 94,
+      "date": "2026-03-31",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 283,
+    "fields": {
+      "event": 95,
+      "date": "2026-02-08",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 284,
+    "fields": {
+      "event": 95,
+      "date": "2025-12-09",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 285,
+    "fields": {
+      "event": 95,
+      "date": "2025-12-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 286,
+    "fields": {
+      "event": 96,
+      "date": "2026-04-11",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 287,
+    "fields": {
+      "event": 96,
+      "date": "2026-03-30",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 288,
+    "fields": {
+      "event": 96,
+      "date": "2026-01-23",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 289,
+    "fields": {
+      "event": 97,
+      "date": "2025-12-27",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 290,
+    "fields": {
+      "event": 97,
+      "date": "2025-11-14",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 291,
+    "fields": {
+      "event": 97,
+      "date": "2026-03-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 292,
+    "fields": {
+      "event": 98,
+      "date": "2025-12-05",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 293,
+    "fields": {
+      "event": 98,
+      "date": "2025-11-19",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 294,
+    "fields": {
+      "event": 98,
+      "date": "2026-04-11",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 295,
+    "fields": {
+      "event": 99,
+      "date": "2025-12-26",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 296,
+    "fields": {
+      "event": 99,
+      "date": "2026-02-25",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 297,
+    "fields": {
+      "event": 99,
+      "date": "2026-03-31",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 298,
+    "fields": {
+      "event": 100,
+      "date": "2026-01-09",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 299,
+    "fields": {
+      "event": 100,
+      "date": "2026-03-07",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Event.EventSchedule",
+    "pk": 300,
+    "fields": {
+      "event": 100,
+      "date": "2026-04-10",
+      "is_available": true
+    }
+  }
+]

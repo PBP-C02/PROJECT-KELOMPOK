@@ -1,7 +1,5 @@
 from django.db import models
-from Auth_Profile.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
-from django.utils import timezone
 import uuid
 
 class Event(models.Model):
@@ -24,11 +22,10 @@ class Event(models.Model):
     ]
     
     # Basic Info
-    pk_event = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     sport_type = models.CharField(max_length=50, choices=SPORT_CHOICES)
     description = models.TextField(blank=True, null=True)
-    
+    #test
     # Location
     city = models.CharField(max_length=100)
     full_address = models.TextField()
@@ -44,7 +41,7 @@ class Event(models.Model):
     
     # Status & Metadata
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='available')
-    organizer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='organized_events')
+    organizer = models.ForeignKey('Auth_Profile.User', on_delete=models.CASCADE, related_name='organized_events')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -90,7 +87,7 @@ class EventRegistration(models.Model):
     """Join Event functionality"""
     pk_event_regis = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='registrations')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='event_registrations')
+    user = models.ForeignKey('Auth_Profile.User', on_delete=models.CASCADE, related_name='event_registrations')
     schedule = models.ForeignKey(EventSchedule, on_delete=models.CASCADE, related_name='registrations')
     registered_at = models.DateTimeField(auto_now_add=True)
     
@@ -100,4 +97,3 @@ class EventRegistration(models.Model):
     
     def __str__(self):
         return f"{self.user.username} - {self.event.name} ({self.schedule.date})"
-
