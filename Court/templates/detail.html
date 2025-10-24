@@ -1,0 +1,675 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ court.name }} - Court Detail</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .detail-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .court-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .detail-content {
+            padding: 30px;
+        }
+
+        .court-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+
+        .court-title h1 {
+            font-size: 2em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .court-meta {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            font-size: 0.95em;
+            color: #666;
+        }
+
+        .court-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .price-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 180px;
+        }
+
+        .price-box .label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        .price-box .price {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .status-badge.available {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-badge.full {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .section {
+            margin: 30px 0;
+        }
+
+        .section h2 {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .description {
+            line-height: 1.8;
+            color: #666;
+        }
+
+        .facilities {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        .facility-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+
+        .booking-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .booking-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .date-selector {
+            margin-bottom: 20px;
+        }
+
+        .date-selector label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+        }
+
+        .date-selector input {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .btn-whatsapp {
+            width: 100%;
+            padding: 15px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.3s;
+        }
+
+        .btn-whatsapp:hover {
+            background: #20BA5A;
+        }
+
+        .btn-whatsapp:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #5568d3;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        .btn-danger {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .availability-card {
+            margin-top: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .availability-status {
+            font-size: 1.1em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .availability-status.available {
+            color: #2e7d32;
+        }
+
+        .availability-status.unavailable {
+            color: #c62828;
+        }
+
+        .availability-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .owner-info {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .owner-info-text h3 {
+            font-size: 1.1em;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .owner-info-text p {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .loading-slots {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .no-slots {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            background: white;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .court-header {
+                flex-direction: column;
+            }
+
+            .price-box {
+                width: 100%;
+            }
+
+            .court-image {
+                height: 250px;
+            }
+
+            .detail-content {
+                padding: 20px;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'Court:show_main' %}" class="back-btn">
+            Back to Court List
+        </a>
+
+        <div class="detail-card">
+            <img src="{% if court.image %}{{ court.image.url }}{% else %}/static/placeholder-court.jpg{% endif %}" 
+                 alt="{{ court.name }}" 
+                 class="court-image"
+                 onerror="this.src='/static/placeholder-court.jpg'">
+            
+            <div class="detail-content">
+                <div class="court-header">
+                    <div class="court-title">
+                        <span class="status-badge {% if court.is_available %}available{% else %}full{% endif %}">
+                            {% if court.is_available %}Available{% else %}Unavailable{% endif %}
+                        </span>
+                        <h1>{{ court.name }}</h1>
+                        <div class="court-meta">
+                            <span>{{ court.get_sport_type_display }}</span>
+                            <span>Rating: {{ court.rating }}</span>
+                            <span>Location: {{ court.location }}</span>
+                        </div>
+                    </div>
+                    <div class="price-box">
+                        <div class="label">Price per Hour</div>
+                        <div class="price">IDR {{ court.price_per_hour|floatformat:0 }}</div>
+                    </div>
+                </div>
+
+                {% if court.description %}
+                <div class="section">
+                    <h2>Description</h2>
+                    <p class="description">{{ court.description }}</p>
+                </div>
+                {% endif %}
+
+                <div class="section">
+                    <h2>Address</h2>
+                    <p class="description">{{ court.address }}</p>
+                </div>
+
+                <div class="section">
+                    <h2>Facilities</h2>
+                    <div class="facilities">
+                        {% for facility in court.get_facilities_list %}
+                        <div class="facility-item">
+                            <span>✓</span>
+                            <span>{{ facility }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Booking Section -->
+                <div class="booking-section">
+                    <h2>Reserve Court</h2>
+                    
+                    <div class="owner-info">
+                        <div class="owner-info-text">
+                            <h3>{{ court.owner_name }}</h3>
+                            <p>Court Owner</p>
+                        </div>
+                    </div>
+
+                    <div class="date-selector">
+                        <label for="bookingDate">Select Date:</label>
+                        <input type="date" id="bookingDate" onchange="loadAvailability()">
+                    </div>
+
+                    <div id="loadingSlots" class="loading-slots" style="display:none;">
+                        <p>Loading availability...</p>
+                    </div>
+
+                    <div class="availability-card">
+                        <div id="availabilityStatus" class="availability-status">Loading availability...</div>
+                        {% if can_manage_slots %}
+                        <div class="availability-actions">
+                            <button type="button" class="btn-primary" id="markAvailable" onclick="setAvailability(true)">Mark Available</button>
+                            <button type="button" class="btn-danger" id="markUnavailable" onclick="setAvailability(false)">Mark Unavailable</button>
+                            <button type="button" class="btn-secondary" onclick="deleteCourt()">Delete Court</button>
+                            <button type="button" class="btn-primary" onclick="window.location.href='{% url 'Court:edit_court' court.id %}'">Edit Court</button>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <button class="btn-whatsapp" id="btnWhatsApp" onclick="bookViaWhatsApp()" disabled>
+                        <span>Book via WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const courtId = {{ court.id }};
+        const canManageInitial = {{ can_manage_slots|yesno:"true,false" }};
+        const btnWhatsApp = document.getElementById('btnWhatsApp');
+        let selectedDate = null;
+        let currentAvailability = true;
+
+        window.onload = function() {
+            setMinDate();
+        };
+
+        function authFetch(url, options) {
+            return fetch(url, options).then(response => {
+                if (response.status === 401) {
+                    window.location.href = '/login/';
+                    throw new Error('Unauthenticated');
+                }
+                return response;
+            });
+        }
+
+        function setMinDate() {
+            const today = new Date().toISOString().split('T')[0];
+            const dateInput = document.getElementById('bookingDate');
+            dateInput.min = today;
+            dateInput.value = today;
+            selectedDate = today;
+            loadAvailability();
+        }
+
+        function loadAvailability() {
+            const date = document.getElementById('bookingDate').value;
+            if (!date) {
+                return;
+            }
+
+            selectedDate = date;
+            showLoading(true);
+            if (btnWhatsApp) {
+                btnWhatsApp.disabled = true;
+            }
+
+            authFetch(`/court/api/court/${courtId}/availability/?date=${encodeURIComponent(date)}`)
+                .then(response => response.json())
+                .then(data => {
+                    currentAvailability = data ? !!data.available : true;
+                    updateAvailabilityStatus(currentAvailability);
+                    updateManagementButtons(data && data.can_manage ? true : canManageInitial);
+                    showLoading(false);
+                })
+                .catch(error => {
+                    if (error && error.message === 'Unauthenticated') {
+                        return;
+                    }
+                    console.error('Error:', error);
+                    showLoading(false);
+                    alert('Failed to load availability');
+                });
+        }
+
+        function updateAvailabilityStatus(isAvailable) {
+            const statusEl = document.getElementById('availabilityStatus');
+            if (!statusEl) return;
+
+            statusEl.classList.remove('available', 'unavailable');
+            const dateLabel = formatDateForLabel(selectedDate);
+
+            if (isAvailable) {
+                statusEl.classList.add('available');
+                statusEl.innerHTML = `Court available on ${dateLabel}.`;
+                if (btnWhatsApp) {
+                    btnWhatsApp.disabled = false;
+                }
+            } else {
+                statusEl.classList.add('unavailable');
+                statusEl.innerHTML = `Court unavailable on ${dateLabel}.`;
+                if (btnWhatsApp) {
+                    btnWhatsApp.disabled = true;
+                }
+            }
+        }
+
+        function updateManagementButtons(canManage) {
+            const availableBtn = document.getElementById('markAvailable');
+            const unavailableBtn = document.getElementById('markUnavailable');
+            if (!availableBtn || !unavailableBtn) {
+                return;
+            }
+
+            availableBtn.disabled = !canManage || currentAvailability;
+            unavailableBtn.disabled = !canManage || !currentAvailability;
+        }
+
+        function setAvailability(isAvailable) {
+            if (!selectedDate) {
+                alert('Select a date first.');
+                return;
+            }
+
+            authFetch(`/court/api/court/${courtId}/availability/set/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    date: selectedDate,
+                    is_available: isAvailable
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.success) {
+                    currentAvailability = data.available;
+                    updateAvailabilityStatus(currentAvailability);
+                    updateManagementButtons(true);
+                } else {
+                    alert((data && data.error) || 'Failed to update availability');
+                }
+            })
+            .catch(error => {
+                if (error && error.message === 'Unauthenticated') {
+                    return;
+                }
+                console.error('Error:', error);
+                alert('Failed to update availability');
+            });
+        }
+
+        function bookViaWhatsApp() {
+            if (!selectedDate) {
+                alert('Select a date first!');
+                return;
+            }
+            if (!currentAvailability) {
+                alert('Court unavailable on tanggal tersebut.');
+                return;
+            }
+
+            const dateObj = new Date(selectedDate);
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = dateObj.toLocaleDateString('id-ID', options);
+
+            authFetch('/court/api/court/whatsapp/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify({
+                    court_id: courtId,
+                    date: formattedDate,
+                    time: null
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.success) {
+                    window.open(data.whatsapp_link, '_blank');
+                } else {
+                    alert('Failed to generate WhatsApp link: ' + ((data && data.error) || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                if (error && error.message === 'Unauthenticated') {
+                    return;
+                }
+                console.error('Error:', error);
+                alert('Failed to generate WhatsApp link');
+            });
+        }
+
+        function showLoading(show) {
+            const loadingEl = document.getElementById('loadingSlots');
+            if (loadingEl) {
+                loadingEl.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        function formatDateForLabel(dateStr) {
+            const dateObj = new Date(dateStr);
+            return dateObj.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function deleteCourt() {
+            if (!confirm('Hapus lapangan ini beserta seluruh jadwalnya?')) {
+                return;
+            }
+
+            authFetch(`/court/api/court/${courtId}/delete/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.success) {
+                    alert('Court deleted successfully.');
+                    window.location.href = '/court/';
+                } else {
+                    alert((data && data.error) || 'Failed to delete court');
+                }
+            })
+            .catch(error => {
+                if (error && error.message === 'Unauthenticated') {
+                    return;
+                }
+                console.error('Error:', error);
+                alert('Failed to delete court');
+            });
+        }
+    </script>
+</body>
+</html>
