@@ -1,9 +1,7 @@
 from django.db import models
 import uuid
-from django.contrib.auth.models import AbstractUser
 
-#INI GIMN YAHHH THEN: User(models.Model)
-class User(AbstractUser):
+class User(models.Model):
     JENIS_KELAMIN = [
         ('L', 'Laki-laki'),
         ('P', 'Perempuan'),
