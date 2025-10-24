@@ -1,9 +1,82 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block meta %}
-<title>HOMEPAGE</title>
+<title>Home - Move Buddy</title>
 {% endblock meta %}
 
 {% block content %}
-<p>Ini Homepage</p>
-<p>Halo {{ user.nama }}</p>
+{% include 'includes/navbar.html' %}
+
+<div class="absolute inset-0 z-0 opacity-10" style="background-image: url('{% static 'img/pattern_repeatable.png' %}'); background-size: 1920px; background-repeat: repeat-y; background-attachment: fixed;">
+    </div>
+
+<div class="relative z-10">
+    <div class="py-24 text-center">
+        <h1 class="text-5xl font-bold text-gray-800">Hi, {{ user.nama }}!</h1>
+        <p class="mt-4 text-lg text-gray-600">
+            Welcome to <span class="font-bold">Move Buddy</span> - your one-stop platform to find<br>
+            courts, partners, coaches, and events for your favorite sports.
+        </p>
+    </div>
+
+    <div class="mx-auto max-w-7xl px-4 pb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+            <a href="{% url 'Sport_Partner:show_post' %}" class="relative h-80 rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-105">
+                <div class="absolute inset-0 bg-gray-700 bg-cover bg-center" style="background-image: url('URL_GAMBAR_SPORT_PARTNER_KAMU');">
+                    <div class="absolute inset-0 bg-black/50"></div>
+                </div>
+                <div class="relative z-10 flex flex-col justify-end h-full p-8 text-white">
+                    <h2 class="text-3xl font-bold">Mau nyari teman baru<br>dengan hobby yang sama?</h2>
+                    <span class="mt-4 inline-block rounded-full bg-lime/90 px-5 py-2 font-semibold text-grey transition hover:bg-lime">
+                        Cari Teman &rarr;
+                    </span>
+                </div>
+            </a>
+
+            <a href="#" class="relative h-80 rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-105">
+                <div class="absolute inset-0 bg-gray-700 bg-cover bg-center" style="background-image: url('URL_GAMBAR_EVENT_KAMU');">
+                    <div class="absolute inset-0 bg-black/50"></div>
+                </div>
+                <div class="relative z-10 flex flex-col justify-end h-full p-8 text-white">
+                    <h2 class="text-3xl font-bold">Lagi berminat ikut event-<br>event olahraga?</h2>
+                    <span class="mt-4 inline-block rounded-full bg-lime/90 px-5 py-2 font-semibold text-grey transition hover:bg-lime">
+                        Cari Event &rarr;
+                    </span>
+                </div>
+            </a>
+
+            <a href="#" class="relative h-80 rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-105">
+                <div class="absolute inset-0 bg-gray-700 bg-cover bg-center" style="background-image: url('URL_GAMBAR_COACH_KAMU');">
+                    <div class="absolute inset-0 bg-black/50"></div>
+                </div>
+                <div class="relative z-10 flex flex-col justify-end h-full p-8 text-white">
+                    <h2 class="text-3xl font-bold">Butuh coach untuk<br>berlatih secara privat?</h2>
+                    <span class="mt-4 inline-block rounded-full bg-lime/90 px-5 py-2 font-semibold text-grey transition hover:bg-lime">
+                        Cari Coach &rarr;
+                    </span>
+                </div>
+            </a>
+
+            <a href="{% url 'Court:show_main' %}" class="relative h-80 rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-105">
+                <div class="absolute inset-0 bg-gray-700 bg-cover bg-center" style="background-image: url('URL_GAMBAR_COURT_KAMU');">
+                    <div class="absolute inset-0 bg-black/50"></div>
+                </div>
+                <div class="relative z-10 flex flex-col justify-end h-full p-8 text-white">
+                    <h2 class="text-3xl font-bold">Lagi nyari court yang dapat<br>digunakan untuk aktivitas olahraga?</h2>
+                    <span class="mt-4 inline-block rounded-full bg-lime/90 px-5 py-2 font-semibold text-grey transition hover:bg-lime">
+                        Cari Court &rarr;
+                    </span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<footer class="bg-grey py-8 text-center text-light-grey">
+    © 2025 Move Buddy
+</footer>
+
 {% endblock content %}

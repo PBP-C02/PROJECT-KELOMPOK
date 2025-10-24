@@ -6,11 +6,79 @@ import json
 from datetime import datetime
 
 def homepage_view(request):
-    user = User.objects.get(id=request.session['user_id'])
+    if 'user_id' not in request.session:
+        return redirect('Auth_Profile:login')
+    
+    try:
+        user = User.objects.get(id=request.session['user_id'])
+    except User.DoesNotExist:
+        request.session.flush()
+        return redirect('Auth_Profile:login')
+
     context = {
         'user': user
     }
     return render(request, 'homepage.html', context)
+
+def profile_display_view(request):
+    if 'user_id' not in request.session:
+        return redirect('Auth_Profile:login')
+    
+    try:
+        user = User.objects.get(id=request.session['user_id'])
+    except User.DoesNotExist:
+        request.session.flush()
+        return redirect('Auth_Profile:login')
+
+    context = {
+        'user': user
+    }
+    return render(request, 'profile_display.html', context)
+
+def profile_edit_view(request):
+    if 'user_id' not in request.session:
+        return redirect('Auth_Profile:login')
+    
+    try:
+        user = User.objects.get(id=request.session['user_id'])
+    except User.DoesNotExist:
+        request.session.flush()
+        return redirect('Auth_Profile:login')
+
+    if request.method == 'POST':
+        nama = request.POST.get('nama')
+        kelamin = request.POST.get('kelamin')
+        tanggal_lahir = request.POST.get('tanggal_lahir')
+        nomor_handphone = request.POST.get('nomor_handphone')
+        
+        if not all([nama, kelamin, tanggal_lahir, nomor_handphone]):
+            context = {'user': user, 'error_message': 'Semua field harus diisi'}
+            return render(request, 'profile_edit.html', context)
+        
+        try:
+            datetime.strptime(tanggal_lahir, '%Y-%m-%d')
+        except ValueError:
+            context = {'user': user, 'error_message': 'Format tanggal lahir tidak valid'}
+            return render(request, 'profile_edit.html', context)
+        
+        user.nama = nama
+        user.kelamin = kelamin
+        user.tanggal_lahir = tanggal_lahir
+        user.nomor_handphone = nomor_handphone
+        user.save()
+        
+        request.session['nama'] = user.nama
+        request.session['kelamin'] = user.kelamin
+        request.session['tanggal_lahir'] = str(user.tanggal_lahir)
+        request.session['nomor_handphone'] = user.nomor_handphone
+        
+        return redirect('Auth_Profile:profile_display')
+
+    context = {
+        'user': user
+    }
+    return render(request, 'profile_edit.html', context)
+
 def login_view(request):
     if request.method == 'POST':
         data = json.loads(request.body)
