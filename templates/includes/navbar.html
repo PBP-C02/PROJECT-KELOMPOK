@@ -10,7 +10,6 @@
             <span class="text-xl font-semibold uppercase tracking-[0.35em]">Move Buddy</span>
         </div>
 
-        <!
         <!-- Navigation Links - Desktop -->
         <div class="hidden items-center gap-8 text-sm font-semibold uppercase tracking-[0.28em] lg:flex">
             <a href="{% url 'Auth_Profile:homepage' %}" 
@@ -25,8 +24,8 @@
                class="{% if '/Event' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
                 Event
             </a>
-            <a href="" 
-               class="{% if '/coach' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
+            <a href="{% url 'coach:show_main' %}"
+               class="{% if '/coach' in request.path %}text-[#CBED98]{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
                 Coach
             </a>
             <a href="{% url 'Court:show_main' %}" 
@@ -74,11 +73,11 @@
                class="{% if '/sport_partner' in request.path %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
                 Sport Partner
             </a>
-            <a href="" 
+            <a href="{% url 'Event:event_list' %}" 
                class="{% if '/event' in request.path %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
                 Event
             </a>
-            <a href="{% url 'Event:event_list' %}" 
+            <a href="{% url 'coach:show_main' %}" 
                class="{% if '/coach' in request.path %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
                 Coach
             </a>

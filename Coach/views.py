@@ -165,7 +165,7 @@ def show_main(request):
         'view_mode': view_mode,
         'user': request.user,  
     }
-    return render(request, 'main.html', context)
+    return render(request, 'coach/main.html', context)
 
 def coach_detail(request, pk):
     if 'user_id' in request.session:
