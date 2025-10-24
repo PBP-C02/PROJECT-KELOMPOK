@@ -152,9 +152,14 @@ function getCookie(name) {
 
 function bookCoach(coachId) {
   const btn = event.target.closest('button');
-  const originalText = btn.innerHTML;
+  const originalHTML = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = '<span>Processing...</span>';
+  btn.innerHTML = `
+    <svg class="spinner-small" viewBox="0 0 24 24" style="width:14px;height:14px;">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+    </svg>
+    <span>Booking...</span>
+  `;
   
   fetch(`/coach/book-coach/${coachId}/`, {
     method: 'POST',
@@ -174,23 +179,29 @@ function bookCoach(coachId) {
     if (data.success) {
       location.reload();
     } else {
+      alert(data.message || 'Booking failed');
       btn.disabled = false;
-      btn.innerHTML = originalText;
+      btn.innerHTML = originalHTML;
     }
   })
   .catch(error => {
     console.error('Error:', error);
     alert(error.message || 'An error occurred. Please try again.');
     btn.disabled = false;
-    btn.innerHTML = originalText;
+    btn.innerHTML = originalHTML;
   });
 }
 
 function cancelBooking(coachId) {
   const btn = event.target.closest('button');
-  const originalText = btn.innerHTML;
+  const originalHTML = btn.innerHTML;
   btn.disabled = true;
-  btn.innerHTML = '<span>Processing...</span>';
+  btn.innerHTML = `
+    <svg class="spinner-small" viewBox="0 0 24 24" style="width:14px;height:14px;">
+      <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+    </svg>
+    <span>Cancelling...</span>
+  `;
   
   fetch(`/coach/cancel-booking/${coachId}/`, {
     method: 'POST',
@@ -210,15 +221,16 @@ function cancelBooking(coachId) {
     if (data.success) {
       location.reload();
     } else {
+      alert(data.message || 'Cancellation failed');
       btn.disabled = false;
-      btn.innerHTML = originalText;
+      btn.innerHTML = originalHTML;
     }
   })
   .catch(error => {
     console.error('Error:', error);
     alert(error.message || 'An error occurred. Please try again.');
     btn.disabled = false;
-    btn.innerHTML = originalText;
+    btn.innerHTML = originalHTML;
   });
 }
 </script>

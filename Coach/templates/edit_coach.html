@@ -6,6 +6,19 @@
 {% endblock meta %}
 
 {% block content %}
+<!-- Error Message -->
+<div id="errorMessage" class="error-banner" style="display:none;">
+  <div class="error-content">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <span id="errorText"></span>
+    <button onclick="hideError()" class="error-close">×</button>
+  </div>
+</div>
+
 <div class="form-container">
   <div class="form-header">
     <h1>Edit Coach</h1>
@@ -114,7 +127,15 @@
 
     <div class="form-actions">
       <a href="{% url 'coach:coach_detail' coach.pk %}" class="btn-secondary">Cancel</a>
-      <button type="submit" class="btn-primary" id="submitBtn">Save Changes</button>
+      <button type="submit" class="btn-primary" id="submitBtn">
+        <span class="btn-text">Save Changes</span>
+        <span class="btn-spinner" style="display:none;">
+          <svg class="spinner-small" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
+          </svg>
+          Saving...
+        </span>
+      </button>
     </div>
   </form>
 </div>
@@ -135,13 +156,26 @@ function getCookie(name) {
   return cookieValue;
 }
 
+function showError(message) {
+  document.getElementById('errorText').textContent = message;
+  document.getElementById('errorMessage').style.display = 'block';
+  setTimeout(() => hideError(), 5000);
+}
+
+function hideError() {
+  document.getElementById('errorMessage').style.display = 'none';
+}
+
 document.getElementById('editCoachForm').addEventListener('submit', function(e) {
   e.preventDefault();
   
   const submitBtn = document.getElementById('submitBtn');
-  const originalText = submitBtn.textContent;
+  const btnText = submitBtn.querySelector('.btn-text');
+  const btnSpinner = submitBtn.querySelector('.btn-spinner');
+  
   submitBtn.disabled = true;
-  submitBtn.textContent = 'Saving...';
+  btnText.style.display = 'none';
+  btnSpinner.style.display = 'flex';
   
   const formData = new FormData(this);
   
@@ -155,19 +189,20 @@ document.getElementById('editCoachForm').addEventListener('submit', function(e) 
   .then(response => response.json())
   .then(data => {
     if (data.success) {
-      alert(data.message);
       window.location.href = data.redirect_url;
     } else {
-      alert(data.message || 'Failed to update coach');
+      showError(data.message || 'Failed to update coach');
       submitBtn.disabled = false;
-      submitBtn.textContent = originalText;
+      btnText.style.display = 'inline';
+      btnSpinner.style.display = 'none';
     }
   })
   .catch(error => {
     console.error('Error:', error);
-    alert('An error occurred. Please try again.');
+    showError('An error occurred. Please try again.');
     submitBtn.disabled = false;
-    submitBtn.textContent = originalText;
+    btnText.style.display = 'inline';
+    btnSpinner.style.display = 'none';
   });
 });
 </script>

@@ -15,6 +15,27 @@
 
 <div class="container">
 
+<!-- Loading Overlay -->
+<div id="loadingOverlay" class="loading-overlay" style="display:none;">
+  <div class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Loading coaches...</p>
+  </div>
+</div>
+
+<!-- Error Message -->
+<div id="errorMessage" class="error-banner" style="display:none;">
+  <div class="error-content">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="12" r="10"></circle>
+      <line x1="12" y1="8" x2="12" y2="12"></line>
+      <line x1="12" y1="16" x2="12.01" y2="16"></line>
+    </svg>
+    <span id="errorText">An error occurred</span>
+    <button onclick="hideError()" class="error-close">×</button>
+  </div>
+</div>
+
 <form id="filter-form" class="search-bar" method="get" action="{% url 'coach:show_main' %}">
 
   <input type="text" 
@@ -131,7 +152,9 @@
     </label>
   </div>
 </div>
-  <div class="cards">
+
+<div class="cards">
+  {% if coach_list %}
     {% for c in coach_list %}
       <article class="coach-card">
         <a href="{% url 'coach:coach_detail' c.pk %}" class="card-link">
@@ -179,15 +202,46 @@
           </a>
         {% endif %}
       </article>
-    {% empty %}
-      <div class="no-results">
-        <h3>Belum ada coach</h3>
-        <p>Tambahkan coach pertama Anda.</p>
-      </div>
     {% endfor %}
-  </div>
+  {% else %}
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+        <line x1="23" y1="21" x2="1" y2="21"></line>
+      </svg>
+      <h3>No Coaches Found</h3>
+      <p>{% if request.GET %}Try adjusting your search filters{% else %}Be the first to add a coach!{% endif %}</p>
+      <a href="{% url 'coach:create_coach_page' %}" class="btn-add-empty">+ Add First Coach</a>
+    </div>
+  {% endif %}
 </div>
+</div>
+
 <script>
+// Loading & Error handling functions
+function showLoading() {
+  document.getElementById('loadingOverlay').style.display = 'flex';
+}
+
+function hideLoading() {
+  document.getElementById('loadingOverlay').style.display = 'none';
+}
+
+function showError(message) {
+  document.getElementById('errorText').textContent = message;
+  document.getElementById('errorMessage').style.display = 'block';
+  setTimeout(() => hideError(), 5000); // Auto hide after 5s
+}
+
+function hideError() {
+  document.getElementById('errorMessage').style.display = 'none';
+}
+
+// Show loading when form submits
+document.getElementById('filter-form').addEventListener('submit', function() {
+  showLoading();
+});
 
 function changeViewMode(mode) {
   const form = document.getElementById('filter-form');
