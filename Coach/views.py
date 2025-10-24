@@ -136,7 +136,7 @@ def add_coach(request):
     if end_time <= start_time:
         return HttpResponse(b"END TIME MUST BE AFTER START TIME", status=400)
 
-    # rating 
+    # rating
     rating = _to_decimal(request.POST.get("rating"))
     if rating < 0 or rating > 5:
         return HttpResponse(b"RATING MUST BE BETWEEN 0 AND 5", status=400)
@@ -153,8 +153,9 @@ def add_coach(request):
         date=event_dt.date(),
         startTime=start_time,
         endTime=end_time,
-        rating=rating,  
-        instagram_link=request.POST.get("instagram_link") or None, 
+        rating=rating,
+        instagram_link=request.POST.get("instagram_link") or None,
+        mapsLink=request.POST.get("mapsLink") or "",  # NEW
     )
     new_coach.save()
     return redirect('coach:show_main')
@@ -200,15 +201,20 @@ def update_coach(request, pk):
     if end_time:
         coach.endTime = end_time
 
-    # rating (NEW)
+    # rating
     rating_str = request.POST.get("rating")
     if rating_str:
         coach.rating = _to_decimal(rating_str)
     
-    # instagram_link (NEW)
+    # instagram_link
     instagram = request.POST.get("instagram_link")
     if instagram:
         coach.instagram_link = instagram
+    
+    # mapsLink 
+    maps_link = request.POST.get("mapsLink")
+    if maps_link:
+        coach.mapsLink = maps_link
 
     # image
     image = request.FILES.get("image")

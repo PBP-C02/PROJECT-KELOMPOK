@@ -11,11 +11,7 @@ class CourtForm(forms.ModelForm):
         label='Google Maps link',
         help_text='Paste a Google Maps link to automatically fill coordinates.',
     )
-<<<<<<< HEAD
-
-=======
     #Uji push
->>>>>>> 2421d735e02c9f7b3b1461aea5bd2fc3c8dbc5e4
     class Meta:
         model = Court
         fields = [

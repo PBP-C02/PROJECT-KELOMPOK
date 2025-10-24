@@ -29,13 +29,14 @@ class Coach(models.Model):
 
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to="coach/", null=True, blank=True)
-    description = models.TextField()
+    description = models.TextField()                
     price = models.PositiveIntegerField(validators=[MinValueValidator(0)], default=1)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
 
     location = models.CharField(max_length=255)
     address = models.TextField()
-
+    mapsLink = models.URLField()
+                    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -55,13 +56,11 @@ class Coach(models.Model):
         """Validasi custom untuk memastikan data valid"""
         super().clean()
         
-        # Validasi: endTime harus lebih besar dari startTime
         if self.startTime and self.endTime and self.endTime <= self.startTime:
             raise ValidationError({
                 'endTime': 'Waktu selesai harus lebih besar dari waktu mulai.'
             })
         
-        # Validasi: date tidak boleh di masa lalu (untuk booking baru)
         if self.date and self.date < timezone.now().date():
             raise ValidationError({
                 'date': 'Tanggal tidak boleh di masa lalu.'

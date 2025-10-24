@@ -59,6 +59,16 @@
     <div class="detail-section">
       <h2 class="section-title">Address</h2>
       <p class="section-content">{{ coach.address }}</p>
+      {% if coach.mapsLink %}
+        <a href="{{ coach.mapsLink }}" target="_blank" rel="noopener" 
+           style="display:inline-flex; align-items:center; gap:6px; color:#667eea; margin-top:8px; text-decoration:none;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+          Open in Google Maps
+        </a>
+      {% endif %}
     </div>
 
     <!-- Schedule -->

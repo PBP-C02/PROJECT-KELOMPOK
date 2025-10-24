@@ -6,13 +6,14 @@ from django.utils.html import strip_tags
 class CoachForm(ModelForm):
     class Meta: 
         model = Coach
-        fields = ["title", "price", "image", "description", "category", "location", "address", "date", "startTime", "endTime", "rating", "instagram_link"]  
+        fields = ["title", "price", "image", "description", "category", "location", "address", "date", "startTime", "endTime", "rating", "instagram_link", "mapsLink"]  
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'startTime': forms.TimeInput(attrs={'type': 'time'}),
             'endTime': forms.TimeInput(attrs={'type': 'time'}),
-            'rating': forms.NumberInput(attrs={'step': '0.1', 'min': '0', 'max': '5'}),  
-            'instagram_link': forms.URLInput(attrs={'placeholder': 'https://instagram.com/username'}),  
+            'rating': forms.NumberInput(attrs={'step': '0.1', 'min': '0', 'max': '5'}),
+            'instagram_link': forms.URLInput(attrs={'placeholder': 'https://instagram.com/username'}),
+            'mapsLink': forms.URLInput(attrs={'placeholder': 'https://maps.google.com/?q=-6.2,106.8'}), 
         }
 
     def clean_title(self):

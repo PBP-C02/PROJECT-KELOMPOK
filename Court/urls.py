@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # urls.py (di app Court)
 from django.urls import path
 from . import views
@@ -12,21 +11,6 @@ urlpatterns = [
     path('<int:court_id>/edit/', views.edit_court, name='edit_court'),
     
     # API Endpoints untuk AJAX
-=======
-# urls.py (di app Court)
-from django.urls import path
-from . import views
-
-app_name = 'Court'
-
-urlpatterns = [
-    # Main pages
-    path('', views.show_main, name='show_main'),
-    path('<int:court_id>/', views.court_detail, name='court_detail'),
-    path('<int:court_id>/edit/', views.edit_court, name='edit_court'),
-    
-    # API Endpoints untuk AJAX
->>>>>>> 2421d735e02c9f7b3b1461aea5bd2fc3c8dbc5e4
     path('api/court/', views.get_all_Court, name='get_all_Court'),
     path('api/court/search/', views.api_search_court, name='api_search_court'),
     path('api/court/<int:court_id>/', views.get_court_detail, name='get_court_detail'),
