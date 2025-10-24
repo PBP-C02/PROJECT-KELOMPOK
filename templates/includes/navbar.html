@@ -20,7 +20,10 @@
                class="{% if '/sport_partner' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
                 Sport Partner
             </a>
-            <span class="text-white/40">Event</span>
+            <a href="{% url 'Event:event_list' %}" 
+               class="{% if '/Event' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
+                Event
+            </a>
             <a href="" 
                class="{% if '/coach' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
                 Coach
@@ -70,8 +73,11 @@
                class="{% if '/sport_partner' in request.path %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
                 Sport Partner
             </a>
-            <span class="text-white/40 pl-4 py-2 text-sm font-semibold uppercase tracking-[0.28em]">Event</span>
             <a href="" 
+               class="{% if '/event' in request.path %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
+                Event
+            </a>
+            <a href="{% url 'Event:event_list' %}" 
                class="{% if '/coach' in request.path %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
                 Coach
             </a>
