@@ -7,12 +7,13 @@ from unittest.mock import patch
 
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.forms import ValidationError
 from django.test import Client, RequestFactory, TestCase
 from django.urls import reverse
 from django.utils import timezone
 
 from Auth_Profile.models import User
-from .forms import CourtForm
+from .forms import CourtForm, sanitize_phone_input
 from .models import Court, TimeSlot
 import Court.views as views
 
@@ -230,6 +231,7 @@ class CourtViewTests(TestCase):
                 'owner_phone': '0812-3456-7891',
             },
         )
+        self.assertEqual(response.status_code, 200, response.content)
         self.assertTrue(response.json()['success'])
         api_court = Court.objects.get(name='Court API')
         self.assertEqual(api_court.owner_phone, '081234567891')
@@ -249,11 +251,64 @@ class CourtViewTests(TestCase):
         self.assertFalse(response.json()['success'])
         self.assertEqual(response.status_code, 400)
 
+        response = self.client.post(
+            reverse('Court:api_add_court'),
+            data={
+                'name': 'Court API Fallback',
+                'sport_type': 'futsal',
+                'location': 'Jakarta',
+                'address': 'Fallback Street',
+                'price_per_hour': '125000',
+                'rating': '4.1',
+                'facilities': 'Parking',
+                'description': '',
+            },
+        )
+        self.assertEqual(response.status_code, 200, response.content)
+        self.assertTrue(response.json()['success'])
+        fallback_court = Court.objects.get(name='Court API Fallback')
+        self.assertEqual(fallback_court.owner_phone, sanitize_phone_input(self.user.nomor_handphone))
+
+        response = self.client.post(
+            reverse('Court:api_add_court'),
+            data={
+                'name': 'Court API Too Long',
+                'sport_type': 'tennis',
+                'location': 'Bandung',
+                'address': 'API Street',
+                'price_per_hour': '170000',
+                'rating': '4.3',
+                'owner_phone': '9' * 21,
+                'description': '',
+            },
+        )
+        self.assertFalse(response.json()['success'])
+        self.assertEqual(response.status_code, 400)
+
         with patch('Court.views.Court.objects.create', side_effect=Exception('boom')):
             response = self.client.post(reverse('Court:api_add_court'), data={'name': 'X'})
         self.assertEqual(response.status_code, 400)
 
         self.assertEqual(self.client.get(reverse('Court:api_add_court')).status_code, 405)
+
+    def test_api_add_court_requires_contact(self):
+        self.user.nomor_handphone = ''
+        self.user.save(update_fields=['nomor_handphone'])
+
+        response = self.client.post(
+            reverse('Court:api_add_court'),
+            data={
+                'name': 'Court API Missing Contact',
+                'sport_type': 'tennis',
+                'location': 'Bandung',
+                'address': 'API Street',
+                'price_per_hour': '170000',
+                'rating': '4.3',
+                'description': '',
+            },
+        )
+        self.assertFalse(response.json()['success'])
+        self.assertEqual(response.status_code, 400)
 
     def test_get_availability_variants(self):
         url = reverse('Court:get_availability', args=[self.court.id])
@@ -350,9 +405,17 @@ class CourtViewTests(TestCase):
             self.assertEqual(response.status_code, 500)
 
     def test_get_all_court(self):
+        self.court.latitude = Decimal('1.234567')
+        self.court.longitude = Decimal('101.987654')
+        self.court.save()
+
         response = self.client.get(reverse('Court:get_all_Court'))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()['Court']), 2)
+        payload = response.json()['Court']
+        self.assertEqual(len(payload), 2)
+        entry = next(item for item in payload if item['id'] == self.court.id)
+        self.assertAlmostEqual(entry['latitude'], float(self.court.latitude))
+        self.assertAlmostEqual(entry['longitude'], float(self.court.longitude))
 
     def test_is_available_today_logic(self):
         today = timezone.localdate()
@@ -445,6 +508,7 @@ class CourtViewTests(TestCase):
             'image': self._make_image('edit.png'),
             'price_per_hour': '180000',
             'rating': '4.8',
+            'owner_phone': '08111111111',
         })
         self.assertEqual(response.status_code, 302)
         self.court.refresh_from_db()
@@ -463,6 +527,7 @@ class CourtViewTests(TestCase):
             'rating': '4.9',
             'description': 'Direct edit',
             'maps_link': 'https://maps.google.com/?q=-6.3,107.1',
+            'owner_phone': '081234567890',
         }), self.user)
         self.assertEqual(views.edit_court(request, self.court.id).status_code, 302)
 
@@ -538,6 +603,30 @@ class CourtViewTests(TestCase):
         form_phone_short = CourtForm({**base_data, 'owner_phone': '12345'})
         self.assertFalse(form_phone_short.is_valid())
         self.assertIn('owner_phone', form_phone_short.errors)
+
+        form_phone_blank = CourtForm({**base_data, 'owner_phone': ''})
+        self.assertFalse(form_phone_blank.is_valid())
+        self.assertIn('owner_phone', form_phone_blank.errors)
+
+        form_phone_long = CourtForm({**base_data, 'owner_phone': '9' * 21})
+        self.assertFalse(form_phone_long.is_valid())
+        self.assertIn('owner_phone', form_phone_long.errors)
+
+        form_missing_price = CourtForm({**base_data, 'price_per_hour': '', 'owner_phone': '081234567890'})
+        self.assertFalse(form_missing_price.is_valid())
+        self.assertIn('price_per_hour', form_missing_price.errors)
+
+        manual_form = CourtForm()
+        manual_form.cleaned_data = {'price_per_hour': None}
+        self.assertIsNone(manual_form.clean_price_per_hour())
+
+        manual_form.cleaned_data = {'owner_phone': ''}
+        with self.assertRaises(ValidationError):
+            manual_form.clean_owner_phone()
+
+        manual_form.cleaned_data = {'owner_phone': '9' * 21}
+        with self.assertRaises(ValidationError):
+            manual_form.clean_owner_phone()
 
         user, response = views._require_user(self._with_session(self.factory.get('/dummy')), json_mode=True)
         self.assertIsNone(user)
