@@ -5,6 +5,15 @@
 {% endblock meta %}
 
 {% block content %}
+<style>
+  .category-scroll {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .category-scroll::-webkit-scrollbar {
+    display: none;
+  }
+</style>
 <section class="relative min-h-screen w-full overflow-hidden pb-16 pt-6">
   <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'img/bg.png' %}');"></div>
   <div class="absolute inset-0 bg-white/95"></div>
@@ -49,7 +58,7 @@
         </div>
 
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div class="flex min-w-0 flex-nowrap gap-3 overflow-x-auto pb-1 pr-2">
+          <div class="category-scroll flex min-w-0 flex-nowrap gap-3 overflow-x-auto pb-1 pr-2">
             <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="" data-default="true" onclick="filterSport(this, '')">
               All
             </button>
@@ -163,6 +172,8 @@
   let currentPage = 1;
   let totalPages = 1;
   let filteredCourts = [];
+  let hasDisplayedOnce = false;
+  const GRID_SCROLL_OFFSET = 90;
 
   function setChipState(chip, isActive) {
     if (!chip) return;
@@ -355,6 +366,7 @@
 
   // Display Court
   function displayCourt() {
+    const shouldSkipScroll = !hasDisplayedOnce;
     const grid = document.getElementById('CourtGrid');
     const paginationContainer = document.getElementById('paginationContainer');
 
@@ -368,6 +380,7 @@
         </div>
       `;
       paginationContainer.classList.add('hidden');
+      hasDisplayedOnce = true;
       return;
     }
 
@@ -396,13 +409,12 @@
             </h3>
             <div class="space-y-1 text-sm font-medium text-[#6b7280]">
               <p>Olahraga: <span class="text-[#374151]">${formatSportName(court.sport_type)}</span></p>
+              <p>Lokasi: <span class="text-[#374151]">${escapeHtml(court.location || '-')}</span></p>
+              ${court.distance ? `<p>Jarak: <span class="text-[#2f855a] font-semibold">${court.distance} km</span></p>` : ''}
               <div class="flex items-center gap-2">
-                <span>Rating:</span>
                 <span class="inline-flex items-center gap-1" aria-hidden="true">${renderStars(court.rating)}</span>
                 <span class="text-[#374151]">${formatRating(court.rating)} / 5.0</span>
               </div>
-              <p>Lokasi: <span class="text-[#374151]">${escapeHtml(court.location || '-')}</span></p>
-              ${court.distance ? `<p>Jarak: <span class="text-[#2f855a] font-semibold">${court.distance} km</span></p>` : ''}
             </div>
           </div>
           <div class="mt-auto space-y-4">
@@ -417,7 +429,10 @@
 
     updatePagination();
     paginationContainer.classList.remove('hidden');
-    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!shouldSkipScroll) {
+      requestAnimationFrame(() => smoothScrollToGrid(grid));
+    }
+    hasDisplayedOnce = true;
   }
 
   function updatePagination() {
@@ -485,6 +500,13 @@
   // Navigate to detail page
   function goToDetail(courtId) {
     window.location.href = `/court/${courtId}/`;
+  }
+
+  function smoothScrollToGrid(grid) {
+    if (!grid) return;
+    const targetTop = grid.getBoundingClientRect().top + window.scrollY - GRID_SCROLL_OFFSET;
+    const clampedTop = targetTop > 0 ? targetTop : 0;
+    window.scrollTo({ top: clampedTop, behavior: 'smooth' });
   }
 
   // Helper functions
