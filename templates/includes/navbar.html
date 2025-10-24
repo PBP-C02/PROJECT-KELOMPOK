@@ -10,35 +10,35 @@
             <span class="text-xl font-semibold uppercase tracking-[0.35em]">Move Buddy</span>
         </div>
 
-        <!-- Navigation Links -->
+        <!-- Navigation Links - Desktop -->
         <div class="hidden items-center gap-8 text-sm font-semibold uppercase tracking-[0.28em] lg:flex">
             <a href="{% url 'Auth_Profile:homepage' %}" 
-               class="{% if request.path == '/' %}text-[#CBED98]{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
+               class="{% if request.path == '/' %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
                 Home
             </a>
             <a href="{% url 'Sport_Partner:show_post' %}" 
-               class="{% if '/sport_partner' in request.path %}text-[#CBED98]{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
+               class="{% if '/sport_partner' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
                 Sport Partner
             </a>
-            <a href="{% url 'Event:event_list' %}"
-               class="{% if '/event' in request.path %}text-[#CBED98]{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
-                Event
+            <span class="text-white/40">Event</span>
+            <a href="" 
+               class="{% if '/coach' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
+                Coach
             </a>
-            <a href="#" class="text-white/75 hover:text-[#CBED98] transition">Coach</a>
             <a href="{% url 'Court:show_main' %}" 
                class="{% if '/court' in request.path %}text-[#CBED98] border-b-4 border-[#CBED98] pb-1{% else %}text-white/75 hover:text-[#CBED98]{% endif %} transition">
                 Court
             </a>
         </div>
 
-        <!-- User Section -->
-        <div class="flex items-center gap-4 text-sm font-semibold text-white">
+        <!-- User Section - Desktop -->
+        <div class="hidden lg:flex items-center gap-4 text-sm font-semibold text-white">
             {% if user.id %}
                 <a href="{% url 'Auth_Profile:logout' %}" 
                    class="rounded-full border border-white/25 px-5 py-2 uppercase tracking-[0.24em] transition hover:border-[#CBED98] hover:text-[#CBED98]">
                     Logout
                 </a>
-                <div class="hidden h-11 w-11 items-center justify-center rounded-full bg-white/10 text-sm font-semibold uppercase text-white lg:flex">
+                <div class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-sm font-semibold uppercase text-white">
                     {{ user.nama|default:'?'|slice:":1"|upper }}
                 </div>
             {% else %}
@@ -48,6 +48,55 @@
                 </a>
             {% endif %}
         </div>
+
+        <!-- Hamburger Button - Mobile -->
+        <button id="hamburger" class="lg:hidden flex flex-col gap-1.5 w-8 h-8 items-center justify-center">
+            <span class="w-6 h-0.5 bg-white transition-all duration-300"></span>
+            <span class="w-6 h-0.5 bg-white transition-all duration-300"></span>
+            <span class="w-6 h-0.5 bg-white transition-all duration-300"></span>
+        </button>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="lg:hidden hidden bg-gradient-to-b from-[#171717] to-[#040404] border-t border-white/10">
+        <div class="flex flex-col px-8 py-6 gap-6">
+            <!-- Navigation Links - Mobile -->
+            <a href="{% url 'Auth_Profile:homepage' %}" 
+               class="{% if request.path == '/' %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
+                Home
+            </a>
+            <a href="{% url 'Sport_Partner:show_post' %}" 
+               class="{% if '/sport_partner' in request.path %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
+                Sport Partner
+            </a>
+            <span class="text-white/40 pl-4 py-2 text-sm font-semibold uppercase tracking-[0.28em]">Event</span>
+            <a href="" 
+               class="{% if '/coach' in request.path %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
+                Coach
+            </a>
+            <a href="{% url 'Court:show_main' %}" 
+               class="{% if '/court' in request.path %}text-[#CBED98] border-l-4 border-[#CBED98] pl-4{% else %}text-white/75 hover:text-[#CBED98] pl-4{% endif %} py-2 text-sm font-semibold uppercase tracking-[0.28em] transition">
+                Court
+            </a>
+
+            <!-- User Section - Mobile -->
+            <div class="flex items-center gap-4 pt-4 border-t border-white/10">
+                {% if user.id %}
+                    <div class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-sm font-semibold uppercase text-white">
+                        {{ user.nama|default:'?'|slice:":1"|upper }}
+                    </div>
+                    <a href="{% url 'Auth_Profile:logout' %}" 
+                       class="flex-1 text-center rounded-full border border-white/25 px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-white transition hover:border-[#CBED98] hover:text-[#CBED98]">
+                        Logout
+                    </a>
+                {% else %}
+                    <a href="{% url 'Auth_Profile:login' %}" 
+                       class="w-full text-center rounded-full border border-white/25 px-5 py-2 text-sm font-semibold uppercase tracking-[0.24em] text-white transition hover:border-[#CBED98] hover:text-[#CBED98]">
+                        Login
+                    </a>
+                {% endif %}
+            </div>
+        </div>
     </div>
 </nav>
 
@@ -55,14 +104,53 @@
 <div class="h-[84px]"></div>
 
 <style>
-    /* Pastikan body tidak ada margin/padding yang mengganggu */
     body {
         margin: 0;
         padding: 0;
     }
     
-    /* Optional: smooth scroll behavior */
     html {
         scroll-behavior: smooth;
     }
+
+    /* Hamburger animation when active */
+    #hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    
+    #hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    #hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -5px);
+    }
 </style>
+
+<script>
+    // Toggle mobile menu
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    hamburger.addEventListener('click', function() {
+        this.classList.toggle('active');
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const isClickInsideNav = event.target.closest('nav');
+        if (!isClickInsideNav && !mobileMenu.classList.contains('hidden')) {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.add('hidden');
+        }
+    });
+
+    // Close mobile menu when window is resized to desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 1024 && !mobileMenu.classList.contains('hidden')) {
+            hamburger.classList.remove('active');
+            mobileMenu.classList.add('hidden');
+        }
+    });
+</script>
