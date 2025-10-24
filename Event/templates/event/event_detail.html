@@ -1,0 +1,498 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Detail - Move Buddy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Background yang SANGAT subtle - hampir tidak terlihat */
+        body {
+            background-color: #f9fafb;
+            background-image: url('{% static "img/bg.png" %}');
+            background-repeat: repeat;
+            background-size: 300px 300px;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        /* Overlay putih SANGAT kuat agar background hampir tidak terlihat */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.97);
+            z-index: 0;
+        }
+        
+        /* Container untuk konten */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* White container box untuk detail */
+        .detail-box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+        }
+        
+        /* Back button */
+        .btn-back {
+            background: #1a1a1a;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 14px;
+            display: inline-block;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            margin: 24px;
+        }
+        
+        .btn-back:hover {
+            background: #333;
+        }
+        
+        /* Event image */
+        .event-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+        }
+        
+        /* Content padding */
+        .detail-content {
+            padding: 24px 40px 40px 40px;
+        }
+        
+        /* Badge */
+        .badge-available {
+            background: #a3e635;
+            color: #1a1a1a;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        .badge-unavailable {
+            background: #ef4444;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        
+        /* Title and info section */
+        .event-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 24px;
+        }
+        
+        .event-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-top: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .event-meta {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .price-box {
+            background: #1a1a1a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 180px;
+        }
+        
+        .price-label {
+            font-size: 12px;
+            color: #9ca3af;
+        }
+        
+        .price-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        
+        /* Section styling */
+        .section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+        
+        .section-content {
+            color: #4b5563;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+        
+        /* Join event box */
+        .join-box {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .join-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+        }
+        
+        /* Form elements */
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            margin-bottom: 12px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #a3e635;
+        }
+        
+        .info-text {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        /* Button group */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        /* Button styles */
+        .btn-mark-available {
+            background: #a3e635;
+            color: #1a1a1a;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-mark-available:hover {
+            background: #8cc520;
+        }
+        
+        .btn-mark-unavailable {
+            background: #ef4444;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-mark-unavailable:hover {
+            background: #dc2626;
+        }
+        
+        .btn-delete {
+            background: #e5e7eb;
+            color: #374151;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-delete:hover {
+            background: #d1d5db;
+        }
+        
+        .btn-edit {
+            background: #a3e635;
+            color: #1a1a1a;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .btn-edit:hover {
+            background: #8cc520;
+        }
+        
+        /* WhatsApp button */
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-whatsapp:hover {
+            background: #20BA5A;
+        }
+        
+        /* Event holder info */
+        .event-holder {
+            margin-bottom: 16px;
+        }
+        
+        .holder-name {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+        
+        .holder-role {
+            color: #6b7280;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Navbar -->
+    {% include 'includes/navbar.html' %}
+    
+    <div class="content-wrapper">
+        <!-- Main Container -->
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            
+            <!-- White Container Box untuk detail -->
+            <div class="detail-box">
+                
+                <!-- Back Button -->
+                <a href="{% url 'event:event_list' %}" class="btn-back">
+                    Back to Event List
+                </a>
+                
+                <!-- Event Image -->
+                {% if event.photo %}
+                    <img src="{{ event.photo.url }}" alt="{{ event.title }}" class="event-image">
+                {% else %}
+                    <img src="https://via.placeholder.com/800x300?text=Event+Image" alt="{{ event.title }}" class="event-image">
+                {% endif %}
+                
+                <!-- Content -->
+                <div class="detail-content">
+                    
+                    <!-- Header: Badge, Title, Meta + Price Box -->
+                    <div class="event-header">
+                        <div>
+                            <!-- Badge -->
+                            <div class="mb-2">
+                                {% if event.is_available %}
+                                    <span class="badge-available">Available</span>
+                                {% else %}
+                                    <span class="badge-unavailable">Unavailable</span>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Title -->
+                            <h1 class="event-title">{{ event.title }}</h1>
+                            
+                            <!-- Meta Info -->
+                            <div class="event-meta">
+                                {{ event.get_category_display }}  
+                                Rating: {{ event.rating|default:"0.00" }}  
+                                Location: {{ event.city }}
+                            </div>
+                        </div>
+                        
+                        <!-- Price Box -->
+                        <div class="price-box">
+                            <div class="price-label">Price per Hour</div>
+                            <div class="price-value">IDR {{ event.entry_price|floatformat:0 }}</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Address Section -->
+                    <div class="section">
+                        <h2 class="section-title">Address</h2>
+                        <p class="section-content">{{ event.location }}</p>
+                    </div>
+                    
+                    <!-- Category/Description Section -->
+                    <div class="section">
+                        <h2 class="section-title">{ category }</h2>
+                        <p class="section-content">{{ event.description|default:"No description available" }}</p>
+                    </div>
+                    
+                    <!-- Join Event Section -->
+                    <div class="join-box">
+                        <h2 class="join-title">Join Event</h2>
+                        
+                        <!-- Event Holder Info -->
+                        <div class="event-holder">
+                            <div class="holder-name">{{ event.organizer.username }}</div>
+                            <div class="holder-role">Event Holder</div>
+                        </div>
+                        
+                        <!-- Select Date -->
+                        <label class="form-label">Select Date:</label>
+                        <input 
+                            type="date" 
+                            class="form-input" 
+                            value="{{ event.date|date:'Y-m-d' }}"
+                            readonly
+                        />
+                        
+                        <!-- Info Text -->
+                        <p class="info-text">
+                            Event available on {{ event.date|date:"l, d F Y" }}
+                        </p>
+                        
+                        <!-- Action Buttons (Only for organizer) -->
+                        {% if user == event.organizer %}
+                        <div class="button-group">
+                            <button onclick="toggleAvailability(true)" class="btn-mark-available">
+                                Mark Available
+                            </button>
+                            <button onclick="toggleAvailability(false)" class="btn-mark-unavailable">
+                                Mark Unavailable
+                            </button>
+                            <button onclick="deleteEvent()" class="btn-delete">
+                                Delete Event
+                            </button>
+                            <a href="{% url 'event:event_edit' event.id %}" class="btn-edit">
+                                Edit Event
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- WhatsApp Button -->
+                    <a href="https://wa.me/?text=Join%20event%20{{ event.title|urlencode }}" target="_blank" class="btn-whatsapp">
+                        Join via WhatsApp
+                    </a>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        // Toggle availability
+        function toggleAvailability(isAvailable) {
+            const action = isAvailable ? 'available' : 'unavailable';
+            
+            if (confirm(`Mark this event as ${action}?`)) {
+                fetch('/event/{{ event.id }}/toggle-availability/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    },
+                    body: JSON.stringify({
+                        is_available: isAvailable
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(`Event marked as ${action}!`);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + (data.message || 'Failed to update availability'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
+        }
+        
+        // Delete event
+        function deleteEvent() {
+            if (confirm('Are you sure you want to delete this event? This action cannot be undone.')) {
+                fetch('/event/{{ event.id }}/delete/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Event deleted successfully!');
+                        window.location.href = '/event/';
+                    } else {
+                        alert('Error: ' + (data.message || 'Failed to delete event'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

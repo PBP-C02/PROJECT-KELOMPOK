@@ -116,7 +116,7 @@ def ajax_search_events(request):
 
 
 # ==================== ADD EVENT WITH AJAX ====================
-@login_required
+@login_required(login_url='Auth_Profile:login')
 def add_event(request):
     """
     Add new event with AJAX form submission (Image 2)
@@ -152,7 +152,7 @@ def add_event(request):
 
 
 # ==================== AJAX VALIDATE EVENT FORM ====================
-@login_required
+@login_required(login_url='Auth_Profile:login')
 @require_http_methods(["POST"])
 def ajax_validate_event_form(request):
     """
@@ -171,7 +171,7 @@ def ajax_validate_event_form(request):
 
 
 # ==================== EDIT EVENT WITH AJAX ====================
-@login_required
+@login_required(login_url='Auth_Profile:login')
 def edit_event(request, pk):
     """
     Edit existing event with AJAX (Image 3)
@@ -257,7 +257,7 @@ def event_detail(request, pk):
 
 
 # ==================== AJAX JOIN EVENT ====================
-@login_required
+@login_required(login_url='Auth_Profile:login')
 @require_http_methods(["POST"])
 def ajax_join_event(request, pk):
     """
@@ -313,7 +313,7 @@ def ajax_join_event(request, pk):
 
 
 # ==================== AJAX MARK AVAILABLE/UNAVAILABLE ====================
-@login_required
+@login_required(login_url='Auth_Profile:login')
 @require_http_methods(["POST"])
 def ajax_toggle_availability(request, pk):
     """

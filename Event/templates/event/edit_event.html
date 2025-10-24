@@ -1,0 +1,426 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Event - Move Buddy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Background yang SANGAT subtle - hampir tidak terlihat */
+        body {
+            background-color: #f9fafb;
+            background-image: url('{% static "img/bg.png" %}');
+            background-repeat: repeat;
+            background-size: 300px 300px;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        /* Overlay putih SANGAT kuat agar background hampir tidak terlihat */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.97);
+            z-index: 0;
+        }
+        
+        /* Container untuk konten */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* White container box untuk form */
+        .form-box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* Form input styling */
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            transition: all 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #a3e635;
+            box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: #d1d5db;
+        }
+        
+        /* Textarea */
+        textarea.form-input {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        /* Select dropdown */
+        select.form-input {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+        
+        /* Label styling */
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+        
+        /* Button styling */
+        .btn-save {
+            background: #a3e635;
+            color: #1a1a1a;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            width: 100%;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .btn-save:hover {
+            background: #8cc520;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            text-align: center;
+            display: inline-block;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        /* File upload styling */
+        .file-upload {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .file-upload::-webkit-file-upload-button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #f3f4f6;
+            color: #374151;
+            font-weight: 500;
+            cursor: pointer;
+            margin-right: 12px;
+        }
+        
+        .file-upload::-webkit-file-upload-button:hover {
+            background: #e5e7eb;
+        }
+        
+        /* Form group spacing */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        /* Optional text */
+        .optional-text {
+            color: #9ca3af;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+        
+        /* Page title */
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 32px;
+            color: #1a1a1a;
+        }
+        
+        /* Current photo link */
+        .photo-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 14px;
+            word-break: break-all;
+        }
+        
+        .photo-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Checkbox styling */
+        .custom-checkbox {
+            width: 16px;
+            height: 16px;
+            accent-color: #a3e635;
+            cursor: pointer;
+        }
+        
+        /* Button group */
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Navbar -->
+    {% include 'includes/navbar.html' %}
+    
+    <div class="content-wrapper">
+        <!-- Main Container -->
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            
+            <!-- White Container Box untuk form -->
+            <div class="form-box">
+                
+                <h1 class="page-title">Edit Event</h1>
+                
+                <form method="POST" enctype="multipart/form-data" id="eventForm">
+                    {% csrf_token %}
+                    
+                    <!-- Event Name -->
+                    <div class="form-group">
+                        <label class="form-label">Event Name</label>
+                        <input 
+                            type="text" 
+                            name="title" 
+                            class="form-input" 
+                            value="{{ event.title }}"
+                            required
+                        />
+                    </div>
+                    
+                    <!-- Sport Type -->
+                    <div class="form-group">
+                        <label class="form-label">Sport Type</label>
+                        <select name="category" class="form-input" required>
+                            <option value="tennis" {% if event.category == 'tennis' %}selected{% endif %}>Tennis</option>
+                            <option value="basketball" {% if event.category == 'basketball' %}selected{% endif %}>Basketball</option>
+                            <option value="soccer" {% if event.category == 'soccer' %}selected{% endif %}>Soccer</option>
+                            <option value="badminton" {% if event.category == 'badminton' %}selected{% endif %}>Badminton</option>
+                            <option value="volleyball" {% if event.category == 'volleyball' %}selected{% endif %}>Volleyball</option>
+                            <option value="futsal" {% if event.category == 'futsal' %}selected{% endif %}>Futsal</option>
+                            <option value="paddle" {% if event.category == 'paddle' %}selected{% endif %}>Paddle</option>
+                            <option value="table_tennis" {% if event.category == 'table_tennis' %}selected{% endif %}>Table Tennis</option>
+                            <option value="swimming" {% if event.category == 'swimming' %}selected{% endif %}>Swimming</option>
+                        </select>
+                    </div>
+                    
+                    <!-- City -->
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input 
+                            type="text" 
+                            name="city" 
+                            class="form-input" 
+                            value="{{ event.city }}"
+                            required
+                        />
+                    </div>
+                    
+                    <!-- Full Address -->
+                    <div class="form-group">
+                        <label class="form-label">Full Address</label>
+                        <textarea 
+                            name="location" 
+                            class="form-input" 
+                            required
+                        >{{ event.location }}</textarea>
+                    </div>
+                    
+                    <!-- Entry Price -->
+                    <div class="form-group">
+                        <label class="form-label">Entry Price (IDR)</label>
+                        <input 
+                            type="number" 
+                            name="entry_price" 
+                            class="form-input" 
+                            value="{{ event.entry_price }}"
+                            required
+                        />
+                    </div>
+                    
+                    <!-- Activities -->
+                    <div class="form-group">
+                        <label class="form-label">Activities (comma separated)</label>
+                        <input 
+                            type="text" 
+                            name="activities" 
+                            class="form-input" 
+                            placeholder="Facilities (comma separated)"
+                            value="{{ event.activities }}"
+                        />
+                    </div>
+                    
+                    <!-- Rating -->
+                    <div class="form-group">
+                        <label class="form-label">Rating (optional)</label>
+                        <input 
+                            type="number" 
+                            name="rating" 
+                            class="form-input" 
+                            value="{{ event.rating|default:'0.00' }}"
+                            step="0.1"
+                            min="0"
+                            max="5"
+                        />
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="form-group">
+                        <label class="form-label">Description (optional)</label>
+                        <textarea 
+                            name="description" 
+                            class="form-input"
+                        >{{ event.description }}</textarea>
+                    </div>
+                    
+                    <!-- Google Maps Link -->
+                    <div class="form-group">
+                        <label class="form-label">Google Maps link</label>
+                        <input 
+                            type="url" 
+                            name="google_maps_link" 
+                            class="form-input" 
+                            placeholder="https://maps.google.com/?q=8.2,106.8"
+                            value="{{ event.google_maps_link }}"
+                        />
+                        <p class="optional-text">Leave empty to keep the current location</p>
+                    </div>
+                    
+                    <!-- Event Photo -->
+                    <div class="form-group">
+                        <label class="form-label">Event Photo (optional) Currently:</label>
+                        {% if event.photo %}
+                            <a href="{{ event.photo.url }}" target="_blank" class="photo-link">
+                                Event/{{ event.photo.name }}
+                            </a>
+                            
+                            <div class="flex items-center gap-2 mt-3 mb-3">
+                                <input 
+                                    type="checkbox" 
+                                    name="clear_photo" 
+                                    id="clearPhoto"
+                                    class="custom-checkbox"
+                                />
+                                <label for="clearPhoto" class="text-sm text-gray-600 cursor-pointer">Clear</label>
+                            </div>
+                        {% else %}
+                            <p class="text-sm text-gray-500 mb-3">No photo uploaded</p>
+                        {% endif %}
+                        
+                        <label class="form-label mt-4">Change:</label>
+                        <input 
+                            type="file" 
+                            name="photo" 
+                            class="file-upload"
+                            accept="image/*"
+                        />
+                        <p class="optional-text">Upload to replace the current photo. Leave empty to keep it.</p>
+                    </div>
+                    
+                    {% if event.photo %}
+                    <!-- Current Photo Display -->
+                    <div class="form-group">
+                        <label class="form-label">Current photo:</label>
+                        <img src="{{ event.photo.url }}" alt="{{ event.title }}" class="w-full rounded-lg mt-2">
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Save Button -->
+                    <button type="submit" class="btn-save">
+                        Save Changes
+                    </button>
+                    
+                    <!-- Back Buttons -->
+                    <div class="button-group">
+                        <a href="{% url 'event:event_detail' event.id %}" class="btn-secondary">
+                            Back to Detail
+                        </a>
+                        <a href="{% url 'event:event_list' %}" class="btn-secondary">
+                            All Events
+                        </a>
+                    </div>
+                    
+                </form>
+                
+            </div>
+            
+        </div>
+    </div>
+    
+    <script>
+        // Form submission handling
+        document.getElementById('eventForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            
+            fetch('/event/{{ event.id }}/edit/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success message
+                    alert('Event updated successfully!');
+                    // Redirect to event detail page
+                    window.location.href = data.redirect_url || '/event/{{ event.id }}/';
+                } else {
+                    // Show error message
+                    alert('Error: ' + (data.message || 'Failed to update event'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
