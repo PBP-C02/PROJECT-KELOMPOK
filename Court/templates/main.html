@@ -6,162 +6,147 @@
 
 {% block content %}
 <style>
-  .category-scroll {
+  .hide-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .category-scroll::-webkit-scrollbar {
+  .hide-scrollbar::-webkit-scrollbar {
     display: none;
   }
 </style>
-<section class="relative min-h-screen w-full overflow-hidden pb-16 pt-6">
+<section class="relative min-h-screen w-full overflow-hidden pb-12 sm:pb-16 pt-4 sm:pt-6">
   <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'img/bg.png' %}');"></div>
   <div class="absolute inset-0 bg-white/95"></div>
 
   <div class="relative z-10">
     {% include 'includes/navbar.html' %}
 
-    <div class="mx-auto flex w-full max-w-[88rem] flex-col gap-12 px-4 sm:px-10 lg:px-16">
-    <div class="rounded-[32px] bg-white/95 p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur">
-      <div class="flex flex-col gap-6">
-        <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_200px_auto_auto] md:items-center">
-          <label class="relative flex items-center">
-            <input
-              id="searchInput"
-              type="text"
-              placeholder="Cari lapangan atau lokasi..."
-              class="h-[50px] w-full rounded-lg border border-[#d7dae2] bg-white px-5 pr-12 text-sm font-medium text-[#111827] shadow-inner shadow-white/50 outline-none transition focus:border-[#bade7e] focus:ring-4 focus:ring-[#dff7b4]/60"
-            />
-            <svg class="absolute right-4 h-5 w-5 text-[#9ca3af]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
-            </svg>
-          </label>
-          <select
-            id="locationFilter"
-            class="h-[50px] rounded-lg border border-[#d7dae2] bg-white px-5 text-sm font-medium text-[#111827] shadow-inner shadow-white/50 outline-none transition focus:border-[#bade7e] focus:ring-4 focus:ring-[#dff7b4]/60"
-          >
-            <option value="">Semua lokasi</option>
-          </select>
-          <button
-            type="button"
-            onclick="searchCourt()"
-            class="h-[50px] rounded-lg bg-[#bade7e] px-6 text-xs font-semibold uppercase tracking-[0.3em] text-[#1f2b15] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(154,216,97,0.25)]"
-          >
-            Search
-          </button>
-          <a
-            href="{% url 'Court:add_court' %}"
-            class="flex h-[50px] items-center justify-center rounded-lg bg-[#bade7e] px-6 text-xs font-semibold uppercase tracking-[0.3em] text-[#1f2b15] transition hover:-translate-y-0.5 hover:shadow-[0_18px_34px_rgba(154,216,97,0.25)]"
-          >
-            + Add Court
-          </a>
-        </div>
-
-        <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div class="category-scroll flex min-w-0 flex-nowrap gap-3 overflow-x-auto pb-1 pr-2">
-            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="" data-default="true" onclick="filterSport(this, '')">
-              All
-            </button>
-            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="tennis" onclick="filterSport(this, 'tennis')">
-              Tennis
-            </button>
-            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="basketball" onclick="filterSport(this, 'basketball')">
-              Basketball
-            </button>
-            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="soccer" onclick="filterSport(this, 'soccer')">
-              Soccer
-            </button>
-            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="badminton" onclick="filterSport(this, 'badminton')">
-              Badminton
-            </button>
-            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="volleyball" onclick="filterSport(this, 'volleyball')">
-              Volleyball
-            </button>
-            <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900" data-sport="futsal" onclick="filterSport(this, 'futsal')">
-              Futsal
-            </button>
+    <div class="mx-auto flex w-full max-w-[88rem] flex-col gap-8 sm:gap-12 px-4 sm:px-10 lg:px-16">
+      <div class="rounded-2xl sm:rounded-[32px] bg-white/95 p-4 sm:p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur">
+        <div class="flex flex-col gap-4 sm:gap-6">
+          <!-- Welcome Header -->
+          <div class="text-center">
+            <h1 class="text-xl sm:text-3xl font-bold uppercase tracking-[0.12em] sm:tracking-[0.18em] text-slate-900">Find Your Perfect Court</h1>
+            <p class="mt-1 sm:mt-2 text-xs sm:text-sm text-slate-600">Temukan lapangan olahraga terbaik untuk kamu</p>
           </div>
 
-          <label class="flex shrink-0 items-center gap-3 rounded-[18px] bg-white/70 px-4 py-2 text-sm font-semibold text-[#4b5563] shadow-inner shadow-white/70">
-            <input
-              id="availableOnly"
-              type="checkbox"
-              onchange="loadCourt()"
-              class="h-5 w-5 rounded border border-[#bade7e] text-[#89d65c] focus:ring-[#89d65c]"
-            />
-            <span>Hanya tampilkan yang tersedia</span>
-          </label>
+          <!-- Search & Filters -->
+          <div class="flex flex-col gap-3 sm:grid sm:grid-cols-[minmax(0,1fr)_200px_auto] sm:items-center">
+            <label class="relative flex items-center">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Cari lapangan atau lokasi..."
+                class="h-12 sm:h-[50px] w-full rounded-lg border border-slate-300 bg-white px-4 sm:px-5 pr-10 sm:pr-12 text-sm font-medium text-slate-900 shadow-inner outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+              />
+              <svg class="absolute right-3 sm:right-4 h-4 sm:h-5 w-4 sm:w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+              </svg>
+            </label>
+            <select
+              id="locationFilter"
+              class="h-12 sm:h-[50px] rounded-lg border border-slate-300 bg-white px-4 sm:px-5 text-sm font-medium text-slate-900 shadow-inner outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+            >
+              <option value="">Semua lokasi</option>
+            </select>
+            <a
+              href="{% url 'Court:add_court' %}"
+              class="flex h-12 sm:h-[50px] items-center justify-center rounded-lg bg-lime px-4 sm:px-6 text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-grey transition hover:-translate-y-0.5 hover:bg-dark-lime"
+            >
+              + Add Court
+            </a>
+          </div>
+
+          <!-- Sport Filter Chips & Available Only -->
+          <div class="flex flex-col gap-4">
+            <div class="hide-scrollbar flex min-w-0 flex-nowrap gap-2 sm:gap-3 overflow-x-auto pb-1 pr-2">
+              <button class="filter-chip inline-flex min-w-[100px] sm:min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="" data-default="true" onclick="filterSport(this, '')">
+                All
+              </button>
+              <button class="filter-chip inline-flex min-w-[100px] sm:min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="tennis" onclick="filterSport(this, 'tennis')">
+                Tennis
+              </button>
+              <button class="filter-chip inline-flex min-w-[100px] sm:min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="basketball" onclick="filterSport(this, 'basketball')">
+                Basketball
+              </button>
+              <button class="filter-chip inline-flex min-w-[100px] sm:min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="soccer" onclick="filterSport(this, 'soccer')">
+                Soccer
+              </button>
+              <button class="filter-chip inline-flex min-w-[100px] sm:min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="badminton" onclick="filterSport(this, 'badminton')">
+                Badminton
+              </button>
+              <button class="filter-chip inline-flex min-w-[100px] sm:min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="volleyball" onclick="filterSport(this, 'volleyball')">
+                Volleyball
+              </button>
+              <button class="filter-chip inline-flex min-w-[100px] sm:min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="futsal" onclick="filterSport(this, 'futsal')">
+                Futsal
+              </button>
+            </div>
+
+            <label class="flex shrink-0 items-center gap-2 sm:gap-3 rounded-2xl sm:rounded-[18px] bg-white/70 px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-slate-600 shadow-inner shadow-white/70">
+              <input
+                id="availableOnly"
+                type="checkbox"
+                onchange="displayCourt()"
+                class="h-4 w-4 sm:h-5 sm:w-5 rounded border border-lime text-lime focus:ring-lime"
+              />
+              <span>Hanya tampilkan yang tersedia</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div id="loading" class="hidden rounded-2xl sm:rounded-[30px] bg-white/80 py-12 sm:py-16 text-center text-slate-600 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
+        Memuat lapangan...
+      </div>
+
+      <div id="CourtGrid" class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3"></div>
+
+      <!-- Pagination -->
+      <div id="paginationContainer" class="flex flex-col items-center gap-3 sm:gap-4">
+        <!-- Page Info -->
+        <div id="pageInfo" class="text-xs sm:text-sm text-slate-600 text-center"></div>
+        
+        <!-- Pagination Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+          <button
+            id="prevBtn"
+            onclick="goToPage(currentPage - 1)"
+            class="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:border-lime hover:bg-lime/10 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <div id="pageButtons" class="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"></div>
+
+          <button
+            id="nextBtn"
+            onclick="goToPage(currentPage + 1)"
+            class="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:border-lime hover:bg-lime/10 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 sm:h-5 sm:w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
-
-    <div id="loading" class="hidden rounded-[30px] bg-white/80 py-16 text-center text-[#6b7280] shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-      Memuat lapangan...
-    </div>
-
-    <div id="CourtGrid" class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3"></div>
-
-    <!-- Pagination -->
-    <div id="paginationContainer" class="flex flex-col items-center gap-4">
-      <!-- Page Info -->
-      <div id="pageInfo" class="text-sm text-slate-600"></div>
-      
-      <!-- Pagination Buttons -->
-      <div class="flex flex-wrap items-center justify-center gap-2">
-        <button
-          id="prevBtn"
-          onclick="goToPage(currentPage - 1)"
-          class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:border-[#bade7e] hover:bg-[#bade7e]/10 disabled:cursor-not-allowed disabled:opacity-50"
-          disabled
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-          </svg>
-        </button>
-
-        <div id="pageButtons" class="flex flex-wrap items-center justify-center gap-2"></div>
-
-        <button
-          id="nextBtn"
-          onclick="goToPage(currentPage + 1)"
-          class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:border-[#bade7e] hover:bg-[#bade7e]/10 disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </div>
   </div>
 </section>
 
 <script>
   const COURT_PLACEHOLDER =
     "data:image/svg+xml,%3Csvg%20xmlns%3D'http://www.w3.org/2000/svg'%20viewBox%3D'0%200%20320%20200'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'a'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%3Cstop%20offset%3D'0%25'%20stop-color%3D'%23dbeafe'/%3E%3Cstop%20offset%3D'60%25'%20stop-color%3D'%23bfdbfe'/%3E%3Cstop%20offset%3D'100%25'%20stop-color%3D'%2393c5fd'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D'320'%20height%3D'200'%20fill%3D'url(%23a)'/%3E%3Cg%20fill%3D'none'%20stroke%3D'%231e3a8a'%20stroke-width%3D'6'%20opacity%3D'0.35'%3E%3Crect%20x%3D'30'%20y%3D'40'%20width%3D'260'%20height%3D'120'%20rx%3D'18'/%3E%3Cline%20x1%3D'160'%20y1%3D'40'%20x2%3D'160'%20y2%3D'160'/%3E%3Ccircle%20cx%3D'160'%20cy%3D'100'%20r%3D'24'/%3E%3Ccircle%20cx%3D'160'%20cy%3D'100'%20r%3D'8'/%3E%3C/g%3E%3C/svg%3E";
-  const CHIP_BASE_CLASSES =
-    "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-[#d7dae2] bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-[#bade7e] hover:text-slate-900";
-  const CHIP_ACTIVE_CLASSES =
-    "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-transparent bg-[#CBED98] px-6 py-3 text-sm font-semibold text-[#1f2b15] shadow-[0_12px_22px_rgba(186,230,126,0.25)] transition hover:border-[#a9d66f] hover:text-[#1b1b1b]";
+  const CHIP_BASE_CLASSES = "filter-chip inline-flex min-w-[100px] sm:min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900";
+  const CHIP_ACTIVE_CLASSES = "filter-chip inline-flex min-w-[100px] sm:min-w-[120px] items-center justify-center rounded-full border border-transparent bg-lime px-4 sm:px-6 py-2 sm:py-3 text-xs sm:text-sm font-semibold text-grey shadow-[0_12px_22px_rgba(203,237,152,0.25)] transition hover:bg-dark-lime";
   const LOCATION_OPTIONS = [
-    'Jakarta',
-    'Surabaya',
-    'Bandung',
-    'Medan',
-    'Bekasi',
-    'Semarang',
-    'Tangerang',
-    'Depok',
-    'Palembang',
-    'South Tangerang',
-    'Makassar',
-    'Denpasar',
-    'Yogyakarta',
-    'Balikpapan',
-    'Pontianak',
-    'Batam',
-    'Banjarmasin',
-    'Malang',
+    'Jakarta', 'Surabaya', 'Bandung', 'Medan', 'Bekasi', 'Semarang',
+    'Tangerang', 'Depok', 'Palembang', 'South Tangerang', 'Makassar',
+    'Denpasar', 'Yogyakarta', 'Balikpapan', 'Pontianak', 'Batam',
+    'Banjarmasin', 'Malang'
   ];
   const STAR_FULL_ICON =
     `<svg aria-hidden="true" class="h-4 w-4 text-amber-400" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034 1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461z"/></svg>`;
@@ -173,7 +158,7 @@
   let totalPages = 1;
   let filteredCourts = [];
   let hasDisplayedOnce = false;
-  const GRID_SCROLL_OFFSET = 90;
+  let searchTimeout = null;
 
   function setChipState(chip, isActive) {
     if (!chip) return;
@@ -246,13 +231,24 @@
     );
   }
 
-  // Search Court dengan AJAX
-  function searchCourt() {
-    currentFilters.query = document.getElementById('searchInput').value;
-    currentFilters.location = document.getElementById('locationFilter').value;
+  // Realtime search dengan debounce
+  document.getElementById('searchInput').addEventListener('input', function(e) {
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+    searchTimeout = setTimeout(() => {
+      currentFilters.query = e.target.value;
+      currentPage = 1;
+      displayCourt();
+    }, 300);
+  });
+
+  // Realtime filter untuk location
+  document.getElementById('locationFilter').addEventListener('change', function(e) {
+    currentFilters.location = e.target.value;
     currentPage = 1;
-    loadCourt();
-  }
+    displayCourt();
+  });
 
   // Filter by sport
   function filterSport(element, sport) {
@@ -261,7 +257,7 @@
     });
     currentFilters.sport = sport;
     currentPage = 1;
-    loadCourt();
+    displayCourt();
   }
 
   // Load Court dengan AJAX
@@ -290,20 +286,9 @@
 
   function loadCourt(forceRefresh = false) {
     showLoading(true);
-    currentFilters.availableOnly = document.getElementById('availableOnly').checked;
 
     ensureDataLoaded(forceRefresh)
       .then(() => {
-        filteredCourts = applyFilters();
-        totalPages = Math.ceil(filteredCourts.length / COURTS_PER_PAGE);
-        
-        if (currentPage > totalPages && totalPages > 0) {
-          currentPage = totalPages;
-        }
-        if (currentPage < 1) {
-          currentPage = 1;
-        }
-
         displayCourt();
         showLoading(false);
       })
@@ -366,16 +351,26 @@
 
   // Display Court
   function displayCourt() {
-    const shouldSkipScroll = !hasDisplayedOnce;
+    currentFilters.availableOnly = document.getElementById('availableOnly').checked;
+    filteredCourts = applyFilters();
+    totalPages = Math.ceil(filteredCourts.length / COURTS_PER_PAGE);
+    
+    if (currentPage > totalPages && totalPages > 0) {
+      currentPage = totalPages;
+    }
+    if (currentPage < 1) {
+      currentPage = 1;
+    }
+
     const grid = document.getElementById('CourtGrid');
     const paginationContainer = document.getElementById('paginationContainer');
 
     if (!Array.isArray(filteredCourts) || filteredCourts.length === 0) {
       grid.innerHTML = `
         <div class="col-span-full flex justify-center">
-          <div class="w-full max-w-xl rounded-xl bg-white/90 px-6 py-12 text-center shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
-            <h3 class="text-lg font-semibold text-[#1f2937]">Tidak ada lapangan ditemukan</h3>
-            <p class="mt-2 text-sm text-[#6b7280]">Coba ubah filter pencarian kamu.</p>
+          <div class="w-full max-w-xl rounded-xl bg-white/90 px-4 sm:px-6 py-8 sm:py-12 text-center shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+            <h3 class="text-base sm:text-lg font-semibold text-slate-900">Tidak ada lapangan ditemukan</h3>
+            <p class="mt-2 text-xs sm:text-sm text-slate-600">Coba ubah filter pencarian kamu.</p>
           </div>
         </div>
       `;
@@ -389,37 +384,37 @@
     const currentCourts = filteredCourts.slice(startIndex, endIndex);
 
     grid.innerHTML = currentCourts.map(court => `
-      <div class="group flex w-full cursor-pointer flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_22px_50px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-[0_32px_70px_rgba(15,23,42,0.12)]" onclick="goToDetail(${court.id})">
+      <div class="group flex w-full cursor-pointer flex-col overflow-hidden rounded-2xl sm:rounded-[20px] bg-white shadow-[0_22px_50px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-[0_32px_70px_rgba(15,23,42,0.12)]" onclick="goToDetail(${court.id})">
         <div class="overflow-hidden">
           <img src="${court.image || COURT_PLACEHOLDER}"
                alt="${escapeHtml(court.name)}"
-               class="h-52 w-full object-cover transition duration-500 group-hover:scale-105"
+               class="h-48 sm:h-52 w-full object-cover transition duration-500 group-hover:scale-105"
                onerror="this.src='${COURT_PLACEHOLDER}'">
         </div>
-        <div class="flex flex-1 flex-col gap-5 px-6 py-6">
+        <div class="flex flex-1 flex-col gap-4 sm:gap-5 px-4 sm:px-6 py-4 sm:py-6">
           <div class="flex flex-wrap items-center gap-2">
-            <span class="inline-flex items-center rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] ${court.is_available ? 'bg-[#e7f5da] text-[#2d8a41]' : 'bg-[#ffe2e2] text-[#b54141]'}">
+            <span class="inline-flex items-center rounded-full px-3 sm:px-4 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.15em] sm:tracking-[0.18em] ${court.is_available ? 'bg-lime/20 text-green-700' : 'bg-red-100 text-red-700'}">
               ${court.is_available ? 'Tersedia' : 'Penuh'}
             </span>
-            ${court.owned_by_user ? '<span class="inline-flex items-center rounded-full bg-[#ffe8cc] px-4 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-[#a85522]">Court kamu</span>' : ''}
+            ${court.owned_by_user ? '<span class="inline-flex items-center rounded-full bg-orange-100 px-3 sm:px-4 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.15em] sm:tracking-[0.18em] text-orange-700">Court kamu</span>' : ''}
           </div>
-          <div class="space-y-3">
-            <h3 class="text-[1.35rem] font-bold uppercase tracking-[0.08em] text-[#101828]">
+          <div class="space-y-2 sm:space-y-3">
+            <h3 class="text-lg sm:text-[1.35rem] font-bold uppercase tracking-[0.06em] sm:tracking-[0.08em] text-slate-900">
               ${escapeHtml(court.name)}
             </h3>
-            <div class="space-y-1 text-sm font-medium text-[#6b7280]">
-              <p>Olahraga: <span class="text-[#374151]">${formatSportName(court.sport_type)}</span></p>
-              <p>Lokasi: <span class="text-[#374151]">${escapeHtml(court.location || '-')}</span></p>
-              ${court.distance ? `<p>Jarak: <span class="text-[#2f855a] font-semibold">${court.distance} km</span></p>` : ''}
+            <div class="space-y-1 text-xs sm:text-sm font-medium text-slate-600">
+              <p>Olahraga: <span class="text-slate-900">${formatSportName(court.sport_type)}</span></p>
+              <p>Lokasi: <span class="text-slate-900">${escapeHtml(court.location || '-')}</span></p>
+              ${court.distance ? `<p>Jarak: <span class="text-green-600 font-semibold">${court.distance} km</span></p>` : ''}
               <div class="flex items-center gap-2">
                 <span class="inline-flex items-center gap-1" aria-hidden="true">${renderStars(court.rating)}</span>
-                <span class="text-[#374151]">${formatRating(court.rating)} / 5.0</span>
+                <span class="text-slate-900">${formatRating(court.rating)} / 5.0</span>
               </div>
             </div>
           </div>
-          <div class="mt-auto space-y-4">
-            <div class="text-2xl font-bold text-[#1f2937]">Rp ${formatPrice(court.price)} <span class="text-sm font-medium text-[#9ca3af]">/ jam</span></div>
-            <button class="w-full rounded-lg bg-[#111827] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#0a0f1a]" type="button" onclick="event.stopPropagation(); goToDetail(${court.id})">
+          <div class="mt-auto space-y-3 sm:space-y-4">
+            <div class="text-xl sm:text-2xl font-bold text-slate-900">Rp ${formatPrice(court.price)} <span class="text-xs sm:text-sm font-medium text-slate-400">/ jam</span></div>
+            <button class="w-full rounded-lg bg-grey px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white transition hover:bg-slate-800" type="button" onclick="event.stopPropagation(); goToDetail(${court.id})">
               Lihat Detail & Booking
             </button>
           </div>
@@ -429,8 +424,13 @@
 
     updatePagination();
     paginationContainer.classList.remove('hidden');
-    if (!shouldSkipScroll) {
-      requestAnimationFrame(() => smoothScrollToGrid(grid));
+    if (hasDisplayedOnce) {
+      const gridTop = grid.getBoundingClientRect().top + window.scrollY;
+      const offset = 120; // Offset agar tidak kepotong
+      window.scrollTo({ 
+        top: Math.max(0, gridTop - offset), 
+        behavior: 'smooth' 
+      });
     }
     hasDisplayedOnce = true;
   }
@@ -449,7 +449,7 @@
     nextBtn.disabled = currentPage === totalPages;
 
     pageButtons.innerHTML = '';
-    const maxButtons = 5;
+    const maxButtons = window.innerWidth < 640 ? 3 : 5;
     let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
     let endPage = Math.min(totalPages, startPage + maxButtons - 1);
 
@@ -460,7 +460,7 @@
     if (startPage > 1) {
       pageButtons.innerHTML += createPageButton(1);
       if (startPage > 2) {
-        pageButtons.innerHTML += '<span class="flex h-10 items-center px-2 text-slate-400">...</span>';
+        pageButtons.innerHTML += '<span class="flex h-9 sm:h-10 items-center px-1 sm:px-2 text-slate-400 text-xs sm:text-sm">...</span>';
       }
     }
 
@@ -470,7 +470,7 @@
 
     if (endPage < totalPages) {
       if (endPage < totalPages - 1) {
-        pageButtons.innerHTML += '<span class="flex h-10 items-center px-2 text-slate-400">...</span>';
+        pageButtons.innerHTML += '<span class="flex h-9 sm:h-10 items-center px-1 sm:px-2 text-slate-400 text-xs sm:text-sm">...</span>';
       }
       pageButtons.innerHTML += createPageButton(totalPages);
     }
@@ -478,13 +478,13 @@
 
   function createPageButton(pageNum) {
     const isActive = pageNum === currentPage;
-    const activeClasses = 'bg-[#CBED98] text-[#1f2b15] font-bold border-[#CBED98] shadow-[0_4px_12px_rgba(203,237,152,0.25)]';
-    const inactiveClasses = 'bg-white text-slate-700 border-slate-300 hover:border-[#bade7e] hover:bg-[#bade7e]/10';
+    const activeClasses = 'bg-lime text-grey font-bold border-lime shadow-[0_4px_12px_rgba(203,237,152,0.25)]';
+    const inactiveClasses = 'bg-white text-slate-700 border-slate-300 hover:border-lime hover:bg-lime/10';
     
     return `
       <button
         onclick="goToPage(${pageNum})"
-        class="flex h-10 min-w-[40px] items-center justify-center rounded-lg border px-3 text-sm font-semibold transition ${isActive ? activeClasses : inactiveClasses}"
+        class="flex h-9 min-w-[36px] sm:h-10 sm:min-w-[40px] items-center justify-center rounded-lg border px-2 sm:px-3 text-xs sm:text-sm font-semibold transition ${isActive ? activeClasses : inactiveClasses}"
       >
         ${pageNum}
       </button>
@@ -500,13 +500,6 @@
   // Navigate to detail page
   function goToDetail(courtId) {
     window.location.href = `/court/${courtId}/`;
-  }
-
-  function smoothScrollToGrid(grid) {
-    if (!grid) return;
-    const targetTop = grid.getBoundingClientRect().top + window.scrollY - GRID_SCROLL_OFFSET;
-    const clampedTop = targetTop > 0 ? targetTop : 0;
-    window.scrollTo({ top: clampedTop, behavior: 'smooth' });
   }
 
   // Helper functions
@@ -559,11 +552,15 @@
     return Math.round((R * c) * 10) / 10;
   }
 
-  // Enter key untuk search
-  document.getElementById('searchInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-      searchCourt();
-    }
+  // Re-calculate pagination buttons on window resize
+  let resizeTimeout;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+      if (filteredCourts.length > 0) {
+        updatePagination();
+      }
+    }, 250);
   });
 </script>
 {% endblock content %}
