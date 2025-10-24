@@ -2,11 +2,18 @@
 {% load static %}
 {% block meta %}
 <title>{{ court.name }} - MoveBuddy Court Detail</title>
+<style>
+    .bg-detail-main {
+        background-image: url('{% static "img/bg.png" %}');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
 <section class="relative min-h-screen overflow-hidden py-12">
-  <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('{% static 'img/bg.png' %}');"></div>
+  <div class="bg-detail-main absolute inset-0 bg-cover bg-center"></div>
   <div class="absolute inset-0 bg-white/95"></div>
 
   <div class="relative z-10">
@@ -169,8 +176,8 @@
       return stars.join('');
   }
 
-  const courtId = {{ court.id }};
-  const canManageInitial = {{ can_manage_slots|yesno:"true,false" }};
+  const courtId =  "{{ court.id }}" ;
+  const canManageInitial =  "{{ can_manage_slots|yesno:'true,false' }}";
   const btnWhatsApp = document.getElementById('btnWhatsApp');
   let selectedDate = null;
   let currentAvailability = true;
@@ -339,7 +346,7 @@
               'X-CSRFToken': getCookie('csrftoken')
           },
           body: JSON.stringify({
-              court_id: {{ court.id }},
+              court_id: "{{ court.id }}",
               date: selectedDate
           })
       })
