@@ -1,24 +1,60 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.db.models import Q
-from django.core.paginator import Paginator
-from .models import Event, EventSchedule, EventRegistration
-from .forms import EventForm, EventScheduleForm
-import json
 from datetime import datetime
+import json
 
-# ==================== EVENT LIST WITH AJAX SEARCH & FILTER ====================
+from .models import Event, EventSchedule, EventRegistration
+from .forms import EventForm
+
+# ==================== CUSTOM LOGIN DECORATOR ====================
+def custom_login_required(view_func):
+    """Custom decorator that checks session instead of Django auth"""
+    from Auth_Profile.models import User
+
+    def wrapper(request, *args, **kwargs):
+        if 'user_id' not in request.session:
+            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Please login first',
+                    'redirect_url': '/login/'
+                }, status=401)
+            return redirect('/login/')
+        
+        try:
+            request.user = User.objects.get(id=request.session['user_id'])
+        except User.DoesNotExist:
+            request.session.flush()
+            return redirect('/login/')
+        
+        return view_func(request, *args, **kwargs)
+    return wrapper
+
+# ==================== HELPER FUNCTIONS ====================
+def _to_decimal(s):
+    from decimal import Decimal
+    if not s:
+        return Decimal('0')
+    try:
+        return Decimal(s)
+    except:
+        return Decimal('0')
+
+# ==================== EVENT LIST ====================
 def event_list(request):
-    """Halaman listing event dengan search & filter"""
+    try:
+        from Auth_Profile.models import User
+        request.user = User.objects.get(id=request.session['user_id'])
+    except:
+        request.user = None
+
     events = Event.objects.all()
     query = request.GET.get("q", "")
     selected_category = request.GET.get("category", "")
     available_only = request.GET.get("available_only") == "on"
 
-    # 🔍 Search logic
     if query:
         events = events.filter(
             Q(name__icontains=query)
@@ -27,52 +63,39 @@ def event_list(request):
             | Q(sport_type__icontains=query)
         )
 
-    # 🎯 Filter kategori
     if selected_category and selected_category.lower() != "all":
         events = events.filter(sport_type__iexact=selected_category)
 
-    # ✅ Hanya event yang available
     if available_only:
         events = events.filter(status__iexact="Available")
 
-    # 🔄 Urutkan dari terbaru
     events = events.order_by("-created_at")
 
-    # 📋 List pilihan sport untuk filter
     sport_choices = [
-        "All",
-        "Tennis",
-        "Basketball",
-        "Soccer",
-        "Badminton",
-        "Volleyball",
-        "Futsal",
-        "Football",
-        "Running",
-        "Cycling",
-        "Swimming",
-        "Other",
+        "All", "Tennis", "Basketball", "Soccer", "Badminton", "Volleyball",
+        "Futsal", "Football", "Running", "Cycling", "Swimming", "Other"
     ]
 
-    # 📦 Context dikirim ke template
     context = {
         "events": events,
         "query": query,
         "sport_choices": sport_choices,
         "selected_category": selected_category,
         "available_only": available_only,
+        "user": request.user
     }
 
     return render(request, "event/event_list.html", context)
 
-
-
 # ==================== AJAX EVENT SEARCH ====================
 @require_http_methods(["GET"])
 def ajax_search_events(request):
-    """
-    AJAX endpoint for searching events without page reload
-    """
+    try:
+        from Auth_Profile.models import User
+        request.user = User.objects.get(id=request.session['user_id'])
+    except:
+        request.user = None
+
     search_query = request.GET.get('search', '')
     sport_filter = request.GET.get('sport', 'All')
     show_available = request.GET.get('available', 'false') == 'true'
@@ -103,9 +126,9 @@ def ajax_search_events(request):
             'entry_price': str(event.entry_price),
             'status': event.status,
             'photo_url': event.photo.url if event.photo else '/static/images/default-event.jpg',
-            'organizer': event.organizer.get_full_name() if hasattr(event.organizer, 'get_full_name') else event.organizer.username,
+            'organizer': getattr(event.organizer, 'username', 'Unknown'),
             'full_address': event.full_address,
-            'is_organizer': request.user.is_authenticated and request.user == event.organizer,
+            'is_organizer': request.user and request.user.id == event.organizer.id if request.user else False,
         })
     
     return JsonResponse({
@@ -114,27 +137,16 @@ def ajax_search_events(request):
         'count': len(events_data)
     })
 
-
-# ==================== ADD EVENT WITH AJAX ====================
-@login_required(login_url='Auth_Profile:login')
+# ==================== ADD EVENT ====================
+@custom_login_required
 def add_event(request):
-    """
-    Add new event with AJAX form submission (Image 2)
-    FIX: Handle both regular POST and AJAX POST with/without files
-    """
     if request.method == 'POST':
-        # Check if this is AJAX request
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-        
-        # Handle file upload properly - FILES will be empty dict if no files
         form = EventForm(request.POST, request.FILES if request.FILES else None)
-        
         if form.is_valid():
             event = form.save(commit=False)
             event.organizer = request.user
             event.save()
-            
-            # If AJAX request
             if is_ajax:
                 return JsonResponse({
                     'success': True,
@@ -142,32 +154,178 @@ def add_event(request):
                     'event_id': event.id,
                     'redirect_url': f'/event/{event.id}/'
                 })
-            
-            return redirect('event:event_detail', pk=event.id)
+            return redirect(f'/event/{event.id}/')
         else:
-            # If AJAX request with errors
             if is_ajax:
-                return JsonResponse({
-                    'success': False,
-                    'errors': form.errors
-                }, status=400)
+                return JsonResponse({'success': False, 'errors': form.errors}, status=400)
     else:
         form = EventForm()
-    
     return render(request, 'event/add_event.html', {'form': form})
 
+# ==================== EDIT EVENT ====================
+@custom_login_required
+def edit_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if event.organizer != request.user:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'message': 'Forbidden'}, status=403)
+        return redirect('/event/')
+    
+    if request.method == 'POST':
+        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        if request.POST.get('clear_photo') == 'true' and event.photo:
+            event.photo.delete()
+            event.photo = None
+        form = EventForm(request.POST, request.FILES if request.FILES else None, instance=event)
+        if form.is_valid():
+            form.save()
+            if is_ajax:
+                return JsonResponse({'success': True, 'message': 'Event updated successfully!', 'event_id': event.id})
+            return redirect(f'/event/{event.id}/')
+        else:
+            if is_ajax:
+                return JsonResponse({'success': False, 'errors': form.errors}, status=400)
+    else:
+        form = EventForm(instance=event)
+    
+    return render(request, 'event/edit_event.html', {'form': form, 'event': event})
 
-# ==================== AJAX VALIDATE EVENT FORM ====================
-@login_required(login_url='Auth_Profile:login')
+# ==================== DELETE EVENT ====================
+@custom_login_required
+@require_http_methods(["POST"])
+def ajax_delete_event(request, pk):
+    event = get_object_or_404(Event, pk=pk)
+    if event.organizer != request.user:
+        return JsonResponse({'success': False, 'message': 'Forbidden'}, status=403)
+    event.delete()
+    return JsonResponse({'success': True, 'message': 'Event deleted successfully'})
+
+# ==================== EVENT DETAIL ====================
+def event_detail(request, pk):
+    try:
+        from Auth_Profile.models import User
+        request.user = User.objects.get(id=request.session['user_id'])
+    except:
+        request.user = None
+
+    event = get_object_or_404(Event, pk=pk)
+    schedules = event.schedules.filter(is_available=True, date__gte=datetime.now().date())
+    
+    user_registered = False
+    if request.user:
+        user_registered = EventRegistration.objects.filter(event=event, user=request.user).exists()
+    
+    context = {
+        'event': event,
+        'schedules': schedules,
+        'user_registered': user_registered,
+        'organizer': event.organizer,
+        'activities': getattr(event, 'get_activities_list', lambda: [])(),
+        'user': request.user
+    }
+    return render(request, 'event/event_detail.html', context)
+
+# ==================== AJAX JOIN EVENT ====================
+@custom_login_required
+@require_http_methods(["POST"])
+def ajax_join_event(request, pk):
+    try:
+        data = json.loads(request.body)
+        selected_date = data.get('date')
+        if not selected_date:
+            return JsonResponse({'success': False, 'message': 'Please select a date'}, status=400)
+        
+        event = get_object_or_404(Event, pk=pk)
+        date_obj = datetime.strptime(selected_date, '%m / %d / %Y').date()
+        schedule, created = EventSchedule.objects.get_or_create(event=event, date=date_obj, defaults={'is_available': True})
+
+        if EventRegistration.objects.filter(event=event, user=request.user, schedule=schedule).exists():
+            return JsonResponse({'success': False, 'message': 'Already registered'}, status=400)
+
+        registration = EventRegistration.objects.create(event=event, user=request.user, schedule=schedule)
+        return JsonResponse({'success': True, 'message': 'Successfully joined', 'registration_id': str(registration.pk_event_regis)})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
+
+# ==================== AJAX TOGGLE AVAILABILITY ====================
+@custom_login_required
+@require_http_methods(["POST"])
+def ajax_toggle_availability(request, pk):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            is_available = data.get('is_available')
+
+            if type(is_available) is not bool:
+                return JsonResponse({'success': False, 'message': 'Invalid status'})
+
+            event = get_object_or_404(Event, pk=pk)
+
+            # Update field status sesuai boolean
+            event.status = 'available' if is_available else 'unavailable'
+            event.save()
+
+            return JsonResponse({
+                'success': True,
+                'message': f'Event marked as {"available" if is_available else "unavailable"}'
+            })
+
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'message': 'Invalid JSON'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+    else:
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+@require_http_methods(["GET"])
+def ajax_filter_sport(request):
+    try:
+        from Auth_Profile.models import User
+        request.user = User.objects.get(id=request.session['user_id'])
+    except:
+        request.user = None
+
+    sport = request.GET.get('sport', 'All')
+    if sport == 'All':
+        events = Event.objects.all()
+    else:
+        events = Event.objects.filter(sport_type=sport)
+
+    events_data = []
+    for event in events:
+        events_data.append({
+            'id': event.id,
+            'name': event.name,
+            'sport_type': event.sport_type,
+            'city': event.city,
+            'rating': str(event.rating),
+            'entry_price': str(event.entry_price),
+            'status': event.status,
+            'photo_url': event.photo.url if event.photo else '/static/images/default-event.jpg',
+            'organizer': getattr(event.organizer, 'username', 'Unknown'),
+            'full_address': event.full_address,
+            'is_organizer': request.user and request.user.id == event.organizer.id if request.user else False,
+        })
+
+    return JsonResponse({
+        'success': True,
+        'events': events_data,
+        'sport': sport
+    })
+
+@custom_login_required
 @require_http_methods(["POST"])
 def ajax_validate_event_form(request):
     """
-    Validate event form fields via AJAX
+    Validate event form fields via AJAX without using Django auth
     """
     try:
         data = json.loads(request.body)
+
+        # Import EventForm hanya untuk validasi
+        from .forms import EventForm
         form = EventForm(data)
-        
+
         if form.is_valid():
             return JsonResponse({'success': True})
         else:
@@ -181,252 +339,24 @@ def ajax_validate_event_form(request):
             'message': str(e)
         }, status=500)
 
+from django.http import JsonResponse
+from .models import EventSchedule
 
-# ==================== EDIT EVENT WITH AJAX ====================
-@login_required(login_url='Auth_Profile:login')
-def edit_event(request, pk):
-    """
-    Edit existing event with AJAX (Image 3)
-    FIX: Handle both regular POST and AJAX POST with/without files
-    """
-    event = get_object_or_404(Event, pk=pk, organizer=request.user)
-    
-    if request.method == 'POST':
-        # Check if this is AJAX request
-        is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-        
-        # Check if clear photo
-        if request.POST.get('clear_photo') == 'true':
-            if event.photo:
-                event.photo.delete()
-                event.photo = None
-        
-        # Handle file upload properly - FILES will be empty dict if no files
-        form = EventForm(
-            request.POST, 
-            request.FILES if request.FILES else None, 
-            instance=event
-        )
-        
-        if form.is_valid():
-            form.save()
-            
-            # If AJAX request
-            if is_ajax:
-                return JsonResponse({
-                    'success': True,
-                    'message': 'Event updated successfully!',
-                    'event_id': event.id
-                })
-            
-            return redirect('event:event_detail', pk=event.id)
-        else:
-            if is_ajax:
-                return JsonResponse({
-                    'success': False,
-                    'errors': form.errors
-                }, status=400)
-    else:
-        form = EventForm(instance=event)
-    
-    context = {
-        'form': form,
-        'event': event
-    }
-    
-    return render(request, 'event/edit_event.html', context)
-
-
-# ==================== DELETE EVENT WITH AJAX ====================
-@login_required
-@require_http_methods(["POST"])
-def ajax_delete_event(request, pk):
-    """
-    Delete event via AJAX
-    """
-    event = get_object_or_404(Event, pk=pk, organizer=request.user)
-    event.delete()
-    
-    return JsonResponse({
-        'success': True,
-        'message': 'Event deleted successfully!'
-    })
-
-
-# ==================== EVENT DETAIL ====================
-def event_detail(request, pk):
-    """
-    Display event detail with join functionality (Image 4)
-    """
-    event = get_object_or_404(Event, pk=pk)
-    schedules = event.schedules.filter(is_available=True, date__gte=datetime.now().date())
-    
-    user_registered = False
-    if request.user.is_authenticated:
-        user_registered = EventRegistration.objects.filter(
-            event=event,
-            user=request.user
-        ).exists()
-    
-    context = {
-        'event': event,
-        'schedules': schedules,
-        'user_registered': user_registered,
-        'organizer': event.organizer,
-        'activities': event.get_activities_list(),
-    }
-    
-    return render(request, 'event/event_detail.html', context)
-
-
-# ==================== AJAX JOIN EVENT ====================
-@login_required(login_url='Auth_Profile:login')
-@require_http_methods(["POST"])
-def ajax_join_event(request, pk):
-    """
-    Join event via AJAX (from Image 4)
-    """
-    try:
-        data = json.loads(request.body)
-        event = get_object_or_404(Event, pk=pk)
-        
-        # Get date from request
-        selected_date = data.get('date')
-        if not selected_date:
-            return JsonResponse({
-                'success': False,
-                'message': 'Please select a date'
-            }, status=400)
-        
-        # Parse date
-        date_obj = datetime.strptime(selected_date, '%m / %d / %Y').date()
-        
-        # Get or create schedule
-        schedule, created = EventSchedule.objects.get_or_create(
-            event=event,
-            date=date_obj,
-            defaults={'is_available': True}
-        )
-        
-        # Check if already registered
-        if EventRegistration.objects.filter(event=event, user=request.user, schedule=schedule).exists():
-            return JsonResponse({
-                'success': False,
-                'message': 'You have already registered for this event on this date'
-            }, status=400)
-        
-        # Create registration
-        registration = EventRegistration.objects.create(
-            event=event,
-            user=request.user,
-            schedule=schedule
-        )
-        
-        return JsonResponse({
-            'success': True,
-            'message': 'Successfully joined the event!',
-            'registration_id': str(registration.pk_event_regis)
-        })
-        
-    except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'message': str(e)
-        }, status=500)
-
-
-# ==================== AJAX MARK AVAILABLE/UNAVAILABLE ====================
-@login_required(login_url='Auth_Profile:login')
-@require_http_methods(["POST"])
-def ajax_toggle_availability(request, pk):
-    """
-    Toggle event availability (Mark Available/Unavailable buttons from Image 4)
-    """
-    event = get_object_or_404(Event, pk=pk, organizer=request.user)
-    
-    try:
-        data = json.loads(request.body)
-        new_status = data.get('status')
-        
-        if new_status not in ['available', 'unavailable']:
-            return JsonResponse({
-                'success': False,
-                'message': 'Invalid status'
-            }, status=400)
-        
-        event.status = new_status
-        event.save()
-        
-        return JsonResponse({
-            'success': True,
-            'message': f'Event marked as {new_status}',
-            'status': event.status
-        })
-        
-    except Exception as e:
-        return JsonResponse({
-            'success': False,
-            'message': str(e)
-        }, status=500)
-
-
-# ==================== AJAX GET EVENT SCHEDULES ====================
-@require_http_methods(["GET"])
 def ajax_get_schedules(request, pk):
     """
-    Get available schedules for an event via AJAX
+    Mengambil semua schedule untuk Event tertentu (berdasarkan pk) dan mengembalikannya sebagai JSON
     """
-    event = get_object_or_404(Event, pk=pk)
-    schedules = event.schedules.filter(
-        is_available=True, 
-        date__gte=datetime.now().date()
-    ).order_by('date')
-    
-    schedules_data = []
-    for schedule in schedules:
-        schedules_data.append({
-            'id': str(schedule.pk_event_sched),
-            'date': schedule.date.strftime('%m / %d / %Y'),
-            'formatted_date': schedule.date.strftime('%A, %B %d, %Y')
-        })
-    
-    return JsonResponse({
-        'success': True,
-        'schedules': schedules_data
-    })
-
-
-# ==================== AJAX FILTER BY SPORT ====================
-@require_http_methods(["GET"])
-def ajax_filter_sport(request):
-    """
-    Filter events by sport type via AJAX
-    """
-    sport = request.GET.get('sport', 'All')
-    
-    if sport == 'All':
-        events = Event.objects.all()
-    else:
-        events = Event.objects.filter(sport_type=sport)
-    
-    events_data = []
-    for event in events:
-        events_data.append({
-            'id': event.id,
-            'name': event.name,
-            'sport_type': event.sport_type,
-            'city': event.city,
-            'rating': str(event.rating),
-            'entry_price': str(event.entry_price),
-            'status': event.status,
-            'photo_url': event.photo.url if event.photo else '/static/images/default-event.jpg',
-            'organizer': event.organizer.get_full_name() if hasattr(event.organizer, 'get_full_name') else event.organizer.username,
-            'full_address': event.full_address,
-            'is_organizer': request.user.is_authenticated and request.user == event.organizer,
-        })
-    
-    return JsonResponse({
-        'success': True,
-        'events': events_data,
-        'sport': sport
-    })
+    try:
+        schedules = EventSchedule.objects.filter(event_id=pk)
+        data = [
+            {
+                "id": schedule.id,
+                "date": schedule.date.strftime("%Y-%m-%d"),
+                "start_time": schedule.start_time.strftime("%H:%M"),
+                "end_time": schedule.end_time.strftime("%H:%M"),
+            }
+            for schedule in schedules
+        ]
+        return JsonResponse({"success": True, "schedules": data})
+    except EventSchedule.DoesNotExist:
+        return JsonResponse({"success": False, "message": "Schedules not found"}, status=404)
