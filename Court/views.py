@@ -12,7 +12,7 @@ from django.views.decorators.http import require_http_methods
 
 from Auth_Profile.models import User as ProfileUser
 
-from .forms import CourtForm
+from .forms import CourtForm, sanitize_phone_input
 from .models import Court, TimeSlot
 
 
@@ -166,7 +166,7 @@ def add_court(request):
         if form.is_valid():
             court = form.save(commit=False)
             court.owner_name = _get_user_name(current_user)
-            court.owner_phone = _get_user_phone(current_user)
+            court.owner_phone = form.cleaned_data.get('owner_phone') or sanitize_phone_input(_get_user_phone(current_user))
             court.created_by = current_user
 
             maps_link = form.cleaned_data.get('maps_link')
@@ -180,7 +180,9 @@ def add_court(request):
             court.save()
             return redirect('Court:show_main')
     else:
-        form = CourtForm()
+        form = CourtForm(initial={
+            'owner_phone': sanitize_phone_input(_get_user_phone(current_user)),
+        })
 
     return render(request, 'add_court.html', {'form': form, 'user': current_user})
 
@@ -210,6 +212,13 @@ def api_add_court(request):
             latitude = sanitize_coordinate(link_lat, "latitude") if link_lat else None
             longitude = sanitize_coordinate(link_lng, "longitude") if link_lng else None
 
+            submitted_phone = data.get('owner_phone')
+            owner_phone = sanitize_phone_input(submitted_phone) or sanitize_phone_input(_get_user_phone(current_user))
+            if not owner_phone:
+                return JsonResponse({"success": False, "error": "Nomor kontak wajib diisi."}, status=400)
+            if len(owner_phone) < 8 or len(owner_phone) > 20:
+                return JsonResponse({"success": False, "error": "Nomor kontak harus berisi 8-20 digit."}, status=400)
+
             Court.objects.create(
                 name=data.get('name'),
                 sport_type=data.get('sport_type'),
@@ -220,7 +229,7 @@ def api_add_court(request):
                 rating=rating,
                 description=data.get('description'),
                 owner_name=_get_user_name(current_user),
-                owner_phone=_get_user_phone(current_user),
+                owner_phone=owner_phone,
                 latitude=latitude,
                 longitude=longitude,
                 image=image,
@@ -272,7 +281,7 @@ def edit_court(request, court_id):
         if form.is_valid():
             court = form.save(commit=False)
             court.owner_name = _get_user_name(current_user)
-            court.owner_phone = _get_user_phone(current_user)
+            court.owner_phone = form.cleaned_data.get('owner_phone') or sanitize_phone_input(_get_user_phone(current_user))
 
             maps_link = form.cleaned_data.get('maps_link')
             if maps_link:

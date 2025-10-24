@@ -97,6 +97,38 @@
       </div>
 
       <div id="PostGrid" class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3"></div>
+
+      <!-- Pagination -->
+      <div id="paginationContainer" class="flex flex-col items-center gap-4">
+        <!-- Page Info -->
+        <div id="pageInfo" class="text-sm text-slate-600"></div>
+        
+        <!-- Pagination Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-2">
+          <button
+            id="prevBtn"
+            onclick="goToPage(currentPage - 1)"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:border-lime hover:bg-lime/10 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <div id="pageButtons" class="flex flex-wrap items-center justify-center gap-2"></div>
+
+          <button
+            id="nextBtn"
+            onclick="goToPage(currentPage + 1)"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:border-lime hover:bg-lime/10 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -104,6 +136,11 @@
 <script>
   const CHIP_BASE_CLASSES = "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900";
   const CHIP_ACTIVE_CLASSES = "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-transparent bg-lime px-6 py-3 text-sm font-semibold text-grey shadow-[0_12px_22px_rgba(203,237,152,0.25)] transition hover:bg-dark-lime";
+
+  const POSTS_PER_PAGE = 15;
+  let currentPage = 1;
+  let totalPages = 1;
+  let filteredPosts = [];
 
   function setChipState(chip, isActive) {
     if (!chip) return;
@@ -148,6 +185,7 @@
   function searchPosts() {
     currentFilters.query = document.getElementById('searchInput').value;
     currentFilters.location = document.getElementById('locationFilter').value;
+    currentPage = 1; // Reset to first page
     displayPosts();
   }
 
@@ -156,6 +194,7 @@
       setChipState(chip, chip === element);
     });
     currentFilters.sport = sport;
+    currentPage = 1; // Reset to first page
     displayPosts();
   }
 
@@ -183,10 +222,21 @@
   }
 
   function displayPosts() {
-    const filtered = applyFilters();
-    const grid = document.getElementById('PostGrid');
+    filteredPosts = applyFilters();
+    totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+    
+    // Ensure current page is valid
+    if (currentPage > totalPages && totalPages > 0) {
+      currentPage = totalPages;
+    }
+    if (currentPage < 1) {
+      currentPage = 1;
+    }
 
-    if (filtered.length === 0) {
+    const grid = document.getElementById('PostGrid');
+    const paginationContainer = document.getElementById('paginationContainer');
+
+    if (filteredPosts.length === 0) {
       grid.innerHTML = `
         <div class="col-span-full flex justify-center">
           <div class="w-full max-w-xl rounded-xl bg-white/90 px-6 py-12 text-center shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
@@ -195,10 +245,17 @@
           </div>
         </div>
       `;
+      paginationContainer.classList.add('hidden');
       return;
     }
 
-    grid.innerHTML = filtered.map(post => `
+    // Calculate pagination
+    const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+    const endIndex = Math.min(startIndex + POSTS_PER_PAGE, filteredPosts.length);
+    const currentPosts = filteredPosts.slice(startIndex, endIndex);
+
+    // Display posts
+    grid.innerHTML = currentPosts.map(post => `
       <a href="/sport_partner/post/${post.post_id}/" class="group flex w-full cursor-pointer flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_22px_50px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-[0_32px_70px_rgba(15,23,42,0.12)]">
         <div class="bg-gradient-to-br from-lime to-yellow p-8 text-center">
           <div class="inline-flex items-center justify-center rounded-full bg-white/90 px-6 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-grey shadow-lg">
@@ -237,6 +294,82 @@
         </div>
       </a>
     `).join('');
+
+    // Update pagination
+    updatePagination();
+    paginationContainer.classList.remove('hidden');
+
+    // Scroll to top of grid
+    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function updatePagination() {
+    const pageInfo = document.getElementById('pageInfo');
+    const pageButtons = document.getElementById('pageButtons');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Update page info
+    const startIndex = (currentPage - 1) * POSTS_PER_PAGE + 1;
+    const endIndex = Math.min(currentPage * POSTS_PER_PAGE, filteredPosts.length);
+    pageInfo.textContent = `Menampilkan ${startIndex}-${endIndex} dari ${filteredPosts.length} aktivitas`;
+
+    // Update prev/next buttons
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+
+    // Generate page buttons
+    pageButtons.innerHTML = '';
+    const maxButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    // Adjust start if we're near the end
+    if (endPage - startPage < maxButtons - 1) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    // First page button
+    if (startPage > 1) {
+      pageButtons.innerHTML += createPageButton(1);
+      if (startPage > 2) {
+        pageButtons.innerHTML += '<span class="flex h-10 items-center px-2 text-slate-400">...</span>';
+      }
+    }
+
+    // Page number buttons
+    for (let i = startPage; i <= endPage; i++) {
+      pageButtons.innerHTML += createPageButton(i);
+    }
+
+    // Last page button
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pageButtons.innerHTML += '<span class="flex h-10 items-center px-2 text-slate-400">...</span>';
+      }
+      pageButtons.innerHTML += createPageButton(totalPages);
+    }
+  }
+
+  function createPageButton(pageNum) {
+    const isActive = pageNum === currentPage;
+    const activeClasses = 'bg-lime text-grey font-bold border-lime shadow-[0_4px_12px_rgba(203,237,152,0.25)]';
+    const inactiveClasses = 'bg-white text-slate-700 border-slate-300 hover:border-lime hover:bg-lime/10';
+    
+    return `
+      <button
+        onclick="goToPage(${pageNum})"
+        class="flex h-10 min-w-[40px] items-center justify-center rounded-lg border px-3 text-sm font-semibold transition ${isActive ? activeClasses : inactiveClasses}"
+      >
+        ${pageNum}
+      </button>
+    `;
+  }
+
+  function goToPage(page) {
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    displayPosts();
   }
 
   function formatCategory(cat) {
