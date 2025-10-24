@@ -7,6 +7,16 @@ body {
   padding-bottom: 2rem;
 }
 
+/* ========== Background Wrapper dengan CSS Variable ========== */
+.coach-bg-wrapper {
+  min-height: 100vh;
+  background-image: var(--bg-image); /* Ambil dari inline style */
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  padding: 2rem 0;
+}
+
 .container { 
   max-width: 1200px; 
   margin: 0 auto; 
