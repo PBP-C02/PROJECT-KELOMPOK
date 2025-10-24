@@ -9,6 +9,16 @@
         background-size: cover;
         background-position: center;
     }
+    
+    /* Hide scrollbar untuk category chips */
+    .hide-scrollbar {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;  /* Chrome, Safari and Opera */
+    }
 </style>
 {% endblock meta %}
 
@@ -30,7 +40,7 @@
           </div>
 
           <!-- Search & Filters -->
-          <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_200px_auto_auto] md:items-center">
+          <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_200px_auto] md:items-center">
             <label class="relative flex items-center">
               <input
                 id="searchInput"
@@ -48,13 +58,6 @@
             >
               <option value="">Semua lokasi</option>
             </select>
-            <button
-              type="button"
-              onclick="searchPosts()"
-              class="h-[50px] rounded-lg bg-lime px-6 text-xs font-semibold uppercase tracking-[0.3em] text-grey transition hover:-translate-y-0.5 hover:bg-dark-lime"
-            >
-              Search
-            </button>
             <a
               href="{% url 'Sport_Partner:create_post' %}"
               class="flex h-[50px] items-center justify-center rounded-lg bg-lime px-6 text-xs font-semibold uppercase tracking-[0.3em] text-grey transition hover:-translate-y-0.5 hover:bg-dark-lime"
@@ -65,7 +68,7 @@
 
           <!-- Sport Filter Chips -->
           <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-            <div class="flex min-w-0 flex-nowrap gap-3 overflow-x-auto pb-1 pr-2">
+            <div class="hide-scrollbar flex min-w-0 flex-nowrap gap-3 overflow-x-auto pb-1 pr-2">
               <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="" data-default="true" onclick="filterSport(this, '')">
                 All
               </button>
@@ -141,6 +144,7 @@
   let currentPage = 1;
   let totalPages = 1;
   let filteredPosts = [];
+  let searchTimeout = null;
 
   function setChipState(chip, isActive) {
     if (!chip) return;
@@ -182,19 +186,34 @@
     locationSelect.appendChild(option);
   });
 
-  function searchPosts() {
-    currentFilters.query = document.getElementById('searchInput').value;
-    currentFilters.location = document.getElementById('locationFilter').value;
-    currentPage = 1; // Reset to first page
+  // Realtime search dengan debounce
+  document.getElementById('searchInput').addEventListener('input', function(e) {
+    // Clear timeout sebelumnya
+    if (searchTimeout) {
+      clearTimeout(searchTimeout);
+    }
+    
+    // Set timeout baru untuk debounce (300ms)
+    searchTimeout = setTimeout(() => {
+      currentFilters.query = e.target.value;
+      currentPage = 1;
+      displayPosts();
+    }, 300);
+  });
+
+  // Realtime filter untuk location
+  document.getElementById('locationFilter').addEventListener('change', function(e) {
+    currentFilters.location = e.target.value;
+    currentPage = 1;
     displayPosts();
-  }
+  });
 
   function filterSport(element, sport) {
     document.querySelectorAll('.filter-chip').forEach(chip => {
       setChipState(chip, chip === element);
     });
     currentFilters.sport = sport;
-    currentPage = 1; // Reset to first page
+    currentPage = 1;
     displayPosts();
   }
 
@@ -391,10 +410,6 @@
     div.textContent = text;
     return div.innerHTML;
   }
-
-  document.getElementById('searchInput').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') searchPosts();
-  });
 
   // Initial display
   displayPosts();
