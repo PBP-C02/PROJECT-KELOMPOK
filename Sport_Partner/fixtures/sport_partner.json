@@ -1,0 +1,1402 @@
+[
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "75f8ecd1-a383-47f4-9b94-2823e17621ff",
+    "fields": {
+      "creator": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "title": "Join Our Badminton Team",
+      "description": "Casual game at GOR Cempaka Putih, come and enjoy badminton together.",
+      "category": "badminton",
+      "tanggal": "2025-10-28",
+      "jam_mulai": "10:30:00",
+      "jam_selesai": "12:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "433e466d-06d0-4c80-8647-0f573daa0dc1",
+    "fields": {
+      "creator": "5c85725d-5779-438b-96ea-bd359afbf270",
+      "title": "Weekend Badminton Game",
+      "description": "Looking for partners to play badminton around GOR Cempaka Putih. All levels welcome!",
+      "category": "badminton",
+      "tanggal": "2025-10-26",
+      "jam_mulai": "18:30:00",
+      "jam_selesai": "20:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "71222527-ef8d-468e-a460-d01f5dce84a0",
+    "fields": {
+      "creator": "024635b7-b2fa-4e83-a9bc-3b954f38a889",
+      "title": "Weekend Table Tennis Game",
+      "description": "Casual game at GOR Ragunan, come and enjoy table tennis together.",
+      "category": "table_tennis",
+      "tanggal": "2025-10-29",
+      "jam_mulai": "10:00:00",
+      "jam_selesai": "12:00:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "08a47896-22f1-471b-b51c-d966331c89ea",
+    "fields": {
+      "creator": "98b02dc1-1f0a-4437-9950-dd31f324cb0e",
+      "title": "Friendly Futsal Meetup",
+      "description": "Casual game at Lapangan Futsal Pancoran, come and enjoy futsal together.",
+      "category": "futsal",
+      "tanggal": "2025-11-18",
+      "jam_mulai": "12:00:00",
+      "jam_selesai": "14:00:00",
+      "lokasi": "Lapangan Futsal Pancoran, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "f6bb083c-3f17-460f-9a73-1b7d60994f67",
+    "fields": {
+      "creator": "9b66c55b-8947-4d4f-b142-f585d372dc36",
+      "title": "Friendly Tennis Meetup",
+      "description": "Let's have a friendly tennis meetup and stay active!",
+      "category": "tennis",
+      "tanggal": "2025-11-15",
+      "jam_mulai": "12:30:00",
+      "jam_selesai": "14:30:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "f4f4a7a7-2315-4ed8-98af-f0bf5a602773",
+    "fields": {
+      "creator": "8f37fae5-0065-40a4-a433-ece187bb91ef",
+      "title": "Friendly Tennis Meetup",
+      "description": "Casual game at Lapangan Tenis UI, come and enjoy tennis together.",
+      "category": "tennis",
+      "tanggal": "2025-11-25",
+      "jam_mulai": "18:00:00",
+      "jam_selesai": "20:00:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "3bbf2e61-0173-4092-a624-b63e2ade2f50",
+    "fields": {
+      "creator": "65d8e4a9-25a6-4cd3-aa99-fff2eaa7128a",
+      "title": "Looking for Table Tennis Partner",
+      "description": "Join us for a fun and relaxed table tennis match this week.",
+      "category": "table_tennis",
+      "tanggal": "2025-10-20",
+      "jam_mulai": "11:00:00",
+      "jam_selesai": "13:00:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "3620f6bf-1368-4fb8-80af-7b3c37af5a85",
+    "fields": {
+      "creator": "dc9496d9-50c4-4ee8-8df6-def5e6b119ed",
+      "title": "Join Our Jogging Team",
+      "description": "Looking for partners to play jogging around Gelora Bung Karno. All levels welcome!",
+      "category": "jogging",
+      "tanggal": "2025-10-25",
+      "jam_mulai": "09:30:00",
+      "jam_selesai": "11:30:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "6c994743-9f5a-46bc-8e69-341759033742",
+    "fields": {
+      "creator": "ddeb3735-ab4f-4925-b089-98bedc6c9756",
+      "title": "Weekend Badminton Game",
+      "description": "Let's have a friendly badminton meetup and stay active!",
+      "category": "badminton",
+      "tanggal": "2025-10-20",
+      "jam_mulai": "06:30:00",
+      "jam_selesai": "08:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "91bf3e72-a11c-4246-87f1-dd7d9da37f8d",
+    "fields": {
+      "creator": "d1146444-6633-4b06-8069-d57a78195b6d",
+      "title": "Friendly Soccer Meetup",
+      "description": "Casual game at Lapangan Bola Kukusan, come and enjoy soccer together.",
+      "category": "soccer",
+      "tanggal": "2025-11-02",
+      "jam_mulai": "07:30:00",
+      "jam_selesai": "09:30:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "c02535ee-33e1-4a5a-a330-ee0ecd641224",
+    "fields": {
+      "creator": "86cc918c-508d-4355-88ca-eb4a9c625b8d",
+      "title": "Friendly Badminton Meetup",
+      "description": "Looking for partners to play badminton around GOR Cempaka Putih. All levels welcome!",
+      "category": "badminton",
+      "tanggal": "2025-11-24",
+      "jam_mulai": "06:30:00",
+      "jam_selesai": "08:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "7d2a8a2e-e77e-477e-bda7-11d2a599585a",
+    "fields": {
+      "creator": "ee0b63ab-a9a5-4d4e-b44e-fba164862ae6",
+      "title": "Casual Basketball Match",
+      "description": "Casual game at GOR UI, come and enjoy basketball together.",
+      "category": "basketball",
+      "tanggal": "2025-11-22",
+      "jam_mulai": "09:00:00",
+      "jam_selesai": "11:00:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "eedf569a-d1ca-45c9-ac3c-b41edacfe2f2",
+    "fields": {
+      "creator": "5b307a42-dca4-40e7-860a-81464acd8ee0",
+      "title": "Looking for Table Tennis Partner",
+      "description": "Casual game at GOR Ragunan, come and enjoy table tennis together.",
+      "category": "table_tennis",
+      "tanggal": "2025-11-23",
+      "jam_mulai": "12:00:00",
+      "jam_selesai": "14:00:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "7e3c7453-5f96-4449-b4e7-7f8d0ab1b24e",
+    "fields": {
+      "creator": "2a74759f-28fc-4c3d-a3fb-47ffed1132d3",
+      "title": "Join Our Tennis Team",
+      "description": "Casual game at Lapangan Tenis UI, come and enjoy tennis together.",
+      "category": "tennis",
+      "tanggal": "2025-11-26",
+      "jam_mulai": "17:00:00",
+      "jam_selesai": "19:00:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "8e10176a-609b-4527-aacf-59720c758dc1",
+    "fields": {
+      "creator": "e75b3cd8-c298-45d3-8074-065914cf72d9",
+      "title": "Weekend Table Tennis Game",
+      "description": "Looking for partners to play table tennis around GOR Ragunan. All levels welcome!",
+      "category": "table_tennis",
+      "tanggal": "2025-11-09",
+      "jam_mulai": "15:00:00",
+      "jam_selesai": "17:00:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "d046dd55-c411-4248-9ab7-c391fd742617",
+    "fields": {
+      "creator": "e71c2fe8-3241-482a-966d-c64653619413",
+      "title": "Friendly Paddle Meetup",
+      "description": "Casual game at Paddle Arena, come and enjoy paddle together.",
+      "category": "paddle",
+      "tanggal": "2025-10-28",
+      "jam_mulai": "07:30:00",
+      "jam_selesai": "09:30:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "2d14a84a-9490-4145-a584-d55d95d2acad",
+    "fields": {
+      "creator": "98b02dc1-1f0a-4437-9950-dd31f324cb0e",
+      "title": "Friendly Soccer Meetup",
+      "description": "Looking for partners to play soccer around Lapangan Bola Kukusan. All levels welcome!",
+      "category": "soccer",
+      "tanggal": "2025-10-31",
+      "jam_mulai": "16:30:00",
+      "jam_selesai": "18:30:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "2b652a31-637f-4bea-a7ce-05d1a5c84a26",
+    "fields": {
+      "creator": "8f37fae5-0065-40a4-a433-ece187bb91ef",
+      "title": "Morning Paddle Session",
+      "description": "Let's have a friendly paddle meetup and stay active!",
+      "category": "paddle",
+      "tanggal": "2025-11-28",
+      "jam_mulai": "17:00:00",
+      "jam_selesai": "19:00:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "0dc361bf-b61e-45b3-b46d-4f948bbf2a1c",
+    "fields": {
+      "creator": "572b081b-2ecf-4455-b8bc-c9813414c65c",
+      "title": "Casual Basketball Match",
+      "description": "Join us for a fun and relaxed basketball match this week.",
+      "category": "basketball",
+      "tanggal": "2025-11-17",
+      "jam_mulai": "12:00:00",
+      "jam_selesai": "14:00:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "373d5c5b-fb17-43ec-ad6a-c39ac5a34c9a",
+    "fields": {
+      "creator": "b9988e76-68f0-423d-a45e-65a8ff49a2ae",
+      "title": "Morning Futsal Session",
+      "description": "Join us for a fun and relaxed futsal match this week.",
+      "category": "futsal",
+      "tanggal": "2025-11-14",
+      "jam_mulai": "15:00:00",
+      "jam_selesai": "17:00:00",
+      "lokasi": "Lapangan Futsal Pancoran, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "5d61eb68-f397-47c8-916e-d53995611b0e",
+    "fields": {
+      "creator": "2137bd35-44c0-4545-a117-2b6835381110",
+      "title": "Looking for Jogging Partner",
+      "description": "Let's have a friendly jogging meetup and stay active!",
+      "category": "jogging",
+      "tanggal": "2025-11-10",
+      "jam_mulai": "11:30:00",
+      "jam_selesai": "13:30:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "d7f0ab50-aa76-494c-a10b-1b6db56c4c69",
+    "fields": {
+      "creator": "a5146f4b-fe97-4c5f-adf3-4bbb29637505",
+      "title": "Weekend Paddle Game",
+      "description": "Looking for partners to play paddle around Paddle Arena. All levels welcome!",
+      "category": "paddle",
+      "tanggal": "2025-10-24",
+      "jam_mulai": "17:00:00",
+      "jam_selesai": "19:00:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "8d5e22ca-4840-460f-a7c6-8e927dc0c579",
+    "fields": {
+      "creator": "5cb2dd94-0d41-449c-ae57-c9fde2bf90c4",
+      "title": "Morning Table Tennis Session",
+      "description": "Let's have a friendly table tennis meetup and stay active!",
+      "category": "table_tennis",
+      "tanggal": "2025-11-17",
+      "jam_mulai": "10:30:00",
+      "jam_selesai": "12:30:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "8fbe18ec-4ff8-40bc-99b6-b1c57e44ac8d",
+    "fields": {
+      "creator": "ee0b63ab-a9a5-4d4e-b44e-fba164862ae6",
+      "title": "Morning Badminton Session",
+      "description": "Let's have a friendly badminton meetup and stay active!",
+      "category": "badminton",
+      "tanggal": "2025-11-06",
+      "jam_mulai": "06:00:00",
+      "jam_selesai": "08:00:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "2bbe01a9-751a-4dd9-8aaf-ccec5bce7963",
+    "fields": {
+      "creator": "2137bd35-44c0-4545-a117-2b6835381110",
+      "title": "Friendly Basketball Meetup",
+      "description": "Let's have a friendly basketball meetup and stay active!",
+      "category": "basketball",
+      "tanggal": "2025-11-23",
+      "jam_mulai": "13:00:00",
+      "jam_selesai": "15:00:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "ba1a2e63-556f-404d-b31e-58307d2f0136",
+    "fields": {
+      "creator": "cd27997d-1e21-4a50-a026-e310e7c2f549",
+      "title": "Weekend Tennis Game",
+      "description": "Casual game at Lapangan Tenis UI, come and enjoy tennis together.",
+      "category": "tennis",
+      "tanggal": "2025-11-15",
+      "jam_mulai": "12:30:00",
+      "jam_selesai": "14:30:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "70f27154-b1fb-4344-8dfc-d65e67e85295",
+    "fields": {
+      "creator": "a5249c0b-b13e-4018-adff-309efc262349",
+      "title": "Weekend Volleyball Game",
+      "description": "Casual game at GOR Bulungan, come and enjoy volleyball together.",
+      "category": "volleyball",
+      "tanggal": "2025-11-21",
+      "jam_mulai": "16:00:00",
+      "jam_selesai": "18:00:00",
+      "lokasi": "GOR Bulungan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "a25b1506-c79b-4eff-b043-1ae8bb22447a",
+    "fields": {
+      "creator": "ddeb3735-ab4f-4925-b089-98bedc6c9756",
+      "title": "Looking for Table Tennis Partner",
+      "description": "Join us for a fun and relaxed table tennis match this week.",
+      "category": "table_tennis",
+      "tanggal": "2025-11-20",
+      "jam_mulai": "07:00:00",
+      "jam_selesai": "09:00:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "cba681e1-0282-423c-a334-91b8cc564737",
+    "fields": {
+      "creator": "98b02dc1-1f0a-4437-9950-dd31f324cb0e",
+      "title": "Looking for Tennis Partner",
+      "description": "Let's have a friendly tennis meetup and stay active!",
+      "category": "tennis",
+      "tanggal": "2025-10-21",
+      "jam_mulai": "10:00:00",
+      "jam_selesai": "12:00:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "2b7dacf9-2d52-4d26-bb08-e6453beb52cf",
+    "fields": {
+      "creator": "5cb2dd94-0d41-449c-ae57-c9fde2bf90c4",
+      "title": "Join Our Soccer Team",
+      "description": "Let's have a friendly soccer meetup and stay active!",
+      "category": "soccer",
+      "tanggal": "2025-11-16",
+      "jam_mulai": "10:30:00",
+      "jam_selesai": "12:30:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "bb6da266-b03c-46c7-81eb-9c4312f3e8cb",
+    "fields": {
+      "creator": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "title": "Join Our Soccer Team",
+      "description": "Casual game at Lapangan Bola Kukusan, come and enjoy soccer together.",
+      "category": "soccer",
+      "tanggal": "2025-11-17",
+      "jam_mulai": "10:00:00",
+      "jam_selesai": "12:00:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "0a462e76-8538-4f9e-8334-95e6c69a7ee4",
+    "fields": {
+      "creator": "7c873c74-18bf-42c4-9515-f12834eb51e8",
+      "title": "Join Our Volleyball Team",
+      "description": "Looking for partners to play volleyball around GOR Bulungan. All levels welcome!",
+      "category": "volleyball",
+      "tanggal": "2025-10-29",
+      "jam_mulai": "09:00:00",
+      "jam_selesai": "11:00:00",
+      "lokasi": "GOR Bulungan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "b58d9ae9-f4cc-4981-ac87-97f4f63186b6",
+    "fields": {
+      "creator": "b1cd0140-c9dd-4e32-82bd-5525c290b515",
+      "title": "Casual Soccer Match",
+      "description": "Casual game at Lapangan Bola Kukusan, come and enjoy soccer together.",
+      "category": "soccer",
+      "tanggal": "2025-11-14",
+      "jam_mulai": "12:30:00",
+      "jam_selesai": "14:30:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "43a9e762-101e-480e-b11e-9ae4f8170e86",
+    "fields": {
+      "creator": "00ac1c10-0f02-47a8-8263-72410deb5622",
+      "title": "Join Our Paddle Team",
+      "description": "Join us for a fun and relaxed paddle match this week.",
+      "category": "paddle",
+      "tanggal": "2025-10-27",
+      "jam_mulai": "13:30:00",
+      "jam_selesai": "15:30:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "27f6d6a2-a408-40fc-bcef-593b7c7f89f2",
+    "fields": {
+      "creator": "9ae5e8d6-df75-45b4-8fc4-c30c1f095ee7",
+      "title": "Morning Jogging Session",
+      "description": "Looking for partners to play jogging around Gelora Bung Karno. All levels welcome!",
+      "category": "jogging",
+      "tanggal": "2025-10-29",
+      "jam_mulai": "06:00:00",
+      "jam_selesai": "08:00:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "38589c66-9ad4-4dfc-b2b7-344a87aa29ca",
+    "fields": {
+      "creator": "e3d81f2c-dd47-4e6c-be88-3a627b70d831",
+      "title": "Weekend Paddle Game",
+      "description": "Let's have a friendly paddle meetup and stay active!",
+      "category": "paddle",
+      "tanggal": "2025-11-13",
+      "jam_mulai": "14:30:00",
+      "jam_selesai": "16:30:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "62955bdb-81af-4c90-a1ed-b9bf334358e2",
+    "fields": {
+      "creator": "cbafd4e4-67ac-4d5a-b449-e57456e5da2b",
+      "title": "Join Our Paddle Team",
+      "description": "Looking for partners to play paddle around Paddle Arena. All levels welcome!",
+      "category": "paddle",
+      "tanggal": "2025-11-06",
+      "jam_mulai": "16:00:00",
+      "jam_selesai": "18:00:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "ced45b8b-4984-4191-8be4-12a4d0360285",
+    "fields": {
+      "creator": "86cc918c-508d-4355-88ca-eb4a9c625b8d",
+      "title": "Casual Badminton Match",
+      "description": "Join us for a fun and relaxed badminton match this week.",
+      "category": "badminton",
+      "tanggal": "2025-11-16",
+      "jam_mulai": "16:30:00",
+      "jam_selesai": "18:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "8d99ab5b-883a-49ad-ad3f-eb55fc27050d",
+    "fields": {
+      "creator": "1f68bd25-017f-4782-b203-3b760d837a3a",
+      "title": "Looking for Jogging Partner",
+      "description": "Casual game at Gelora Bung Karno, come and enjoy jogging together.",
+      "category": "jogging",
+      "tanggal": "2025-10-26",
+      "jam_mulai": "13:30:00",
+      "jam_selesai": "15:30:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "15e31a22-d016-42cd-8a19-9871e7e9f399",
+    "fields": {
+      "creator": "b9988e76-68f0-423d-a45e-65a8ff49a2ae",
+      "title": "Weekend Futsal Game",
+      "description": "Join us for a fun and relaxed futsal match this week.",
+      "category": "futsal",
+      "tanggal": "2025-11-07",
+      "jam_mulai": "06:30:00",
+      "jam_selesai": "08:30:00",
+      "lokasi": "Lapangan Futsal Pancoran, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "748ea1a3-26e7-46da-a6ed-acce5eaeb160",
+    "fields": {
+      "creator": "4b17bd76-bbaa-4c24-a920-3649400c02db",
+      "title": "Weekend Futsal Game",
+      "description": "Let's have a friendly futsal meetup and stay active!",
+      "category": "futsal",
+      "tanggal": "2025-11-20",
+      "jam_mulai": "08:30:00",
+      "jam_selesai": "10:30:00",
+      "lokasi": "Lapangan Futsal Pancoran, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "e1e43b8c-56f4-48f9-b6a5-903040c6edff",
+    "fields": {
+      "creator": "208dab4b-fb61-4236-9c02-43f165af7184",
+      "title": "Looking for Paddle Partner",
+      "description": "Let's have a friendly paddle meetup and stay active!",
+      "category": "paddle",
+      "tanggal": "2025-11-26",
+      "jam_mulai": "10:30:00",
+      "jam_selesai": "12:30:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "149cc01a-f472-436a-b02a-fe157fea24cf",
+    "fields": {
+      "creator": "b9988e76-68f0-423d-a45e-65a8ff49a2ae",
+      "title": "Friendly Soccer Meetup",
+      "description": "Casual game at Lapangan Bola Kukusan, come and enjoy soccer together.",
+      "category": "soccer",
+      "tanggal": "2025-11-20",
+      "jam_mulai": "11:30:00",
+      "jam_selesai": "13:30:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "761980b1-3087-4ab8-b3c1-2a575d245057",
+    "fields": {
+      "creator": "08c2dd34-49f1-49bd-abf3-f69d3f640b02",
+      "title": "Join Our Table Tennis Team",
+      "description": "Looking for partners to play table tennis around GOR Ragunan. All levels welcome!",
+      "category": "table_tennis",
+      "tanggal": "2025-11-25",
+      "jam_mulai": "18:30:00",
+      "jam_selesai": "20:30:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "2a7739e9-f905-4a95-8a50-b59131cabbae",
+    "fields": {
+      "creator": "65d8e4a9-25a6-4cd3-aa99-fff2eaa7128a",
+      "title": "Casual Basketball Match",
+      "description": "Join us for a fun and relaxed basketball match this week.",
+      "category": "basketball",
+      "tanggal": "2025-10-30",
+      "jam_mulai": "18:30:00",
+      "jam_selesai": "20:30:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "7b46821b-285b-443f-b8d5-7b6d04340fba",
+    "fields": {
+      "creator": "572b081b-2ecf-4455-b8bc-c9813414c65c",
+      "title": "Morning Paddle Session",
+      "description": "Join us for a fun and relaxed paddle match this week.",
+      "category": "paddle",
+      "tanggal": "2025-11-07",
+      "jam_mulai": "07:00:00",
+      "jam_selesai": "09:00:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "a33adf46-f1be-4ff6-80be-0b742993ba38",
+    "fields": {
+      "creator": "9be34387-b67b-4977-b44e-9c20278c245b",
+      "title": "Morning Tennis Session",
+      "description": "Looking for partners to play tennis around Lapangan Tenis UI. All levels welcome!",
+      "category": "tennis",
+      "tanggal": "2025-11-07",
+      "jam_mulai": "15:30:00",
+      "jam_selesai": "17:30:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "da422e4e-2f74-454b-8e0a-cd8d852d6dd3",
+    "fields": {
+      "creator": "cbafd4e4-67ac-4d5a-b449-e57456e5da2b",
+      "title": "Morning Volleyball Session",
+      "description": "Let's have a friendly volleyball meetup and stay active!",
+      "category": "volleyball",
+      "tanggal": "2025-11-07",
+      "jam_mulai": "15:00:00",
+      "jam_selesai": "17:00:00",
+      "lokasi": "GOR Bulungan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "85bb5b00-80b0-4d79-ace1-388dc5096d6f",
+    "fields": {
+      "creator": "dc9496d9-50c4-4ee8-8df6-def5e6b119ed",
+      "title": "Casual Volleyball Match",
+      "description": "Let's have a friendly volleyball meetup and stay active!",
+      "category": "volleyball",
+      "tanggal": "2025-10-28",
+      "jam_mulai": "06:00:00",
+      "jam_selesai": "08:00:00",
+      "lokasi": "GOR Bulungan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "f24af1c5-6539-47a2-9cc9-797869c45eff",
+    "fields": {
+      "creator": "08c2dd34-49f1-49bd-abf3-f69d3f640b02",
+      "title": "Casual Soccer Match",
+      "description": "Looking for partners to play soccer around Lapangan Bola Kukusan. All levels welcome!",
+      "category": "soccer",
+      "tanggal": "2025-11-20",
+      "jam_mulai": "15:00:00",
+      "jam_selesai": "17:00:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "18de9d97-dca2-42e4-a8ae-ff1ff4b4b844",
+    "fields": {
+      "creator": "65d8e4a9-25a6-4cd3-aa99-fff2eaa7128a",
+      "title": "Morning Paddle Session",
+      "description": "Join us for a fun and relaxed paddle match this week.",
+      "category": "paddle",
+      "tanggal": "2025-10-21",
+      "jam_mulai": "10:00:00",
+      "jam_selesai": "12:00:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "f2b5e136-ee4a-422a-9215-922f5d2e30e5",
+    "fields": {
+      "creator": "0123e465-074f-4b59-b3c8-d93ebddf9183",
+      "title": "Weekend Basketball Game",
+      "description": "Casual game at GOR UI, come and enjoy basketball together.",
+      "category": "basketball",
+      "tanggal": "2025-11-15",
+      "jam_mulai": "08:00:00",
+      "jam_selesai": "10:00:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "e792fe7d-5215-47e3-a23e-a6eedfed72ed",
+    "fields": {
+      "creator": "91413b85-fa82-4503-af2b-9cae0c22b01c",
+      "title": "Morning Badminton Session",
+      "description": "Join us for a fun and relaxed badminton match this week.",
+      "category": "badminton",
+      "tanggal": "2025-11-07",
+      "jam_mulai": "17:30:00",
+      "jam_selesai": "19:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "c12d317c-f5e8-452e-89a1-3a9827c52aec",
+    "fields": {
+      "creator": "a8ef2613-896f-40ea-9841-3c5bcbc8f749",
+      "title": "Weekend Badminton Game",
+      "description": "Let's have a friendly badminton meetup and stay active!",
+      "category": "badminton",
+      "tanggal": "2025-11-22",
+      "jam_mulai": "15:00:00",
+      "jam_selesai": "17:00:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "71789b7f-46e6-4b70-b6ad-e59959a30471",
+    "fields": {
+      "creator": "ddeb3735-ab4f-4925-b089-98bedc6c9756",
+      "title": "Weekend Paddle Game",
+      "description": "Let's have a friendly paddle meetup and stay active!",
+      "category": "paddle",
+      "tanggal": "2025-11-28",
+      "jam_mulai": "07:30:00",
+      "jam_selesai": "09:30:00",
+      "lokasi": "Paddle Arena, BSD City"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "d6648260-4f93-4a42-9be7-5787546f4a05",
+    "fields": {
+      "creator": "b1cd0140-c9dd-4e32-82bd-5525c290b515",
+      "title": "Join Our Futsal Team",
+      "description": "Let's have a friendly futsal meetup and stay active!",
+      "category": "futsal",
+      "tanggal": "2025-11-19",
+      "jam_mulai": "11:30:00",
+      "jam_selesai": "13:30:00",
+      "lokasi": "Lapangan Futsal Pancoran, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "04c64fb5-e6cb-4caa-a528-ebbc02b1438c",
+    "fields": {
+      "creator": "aa2e074a-3392-479f-afbd-e2de87494170",
+      "title": "Looking for Table Tennis Partner",
+      "description": "Looking for partners to play table tennis around GOR Ragunan. All levels welcome!",
+      "category": "table_tennis",
+      "tanggal": "2025-10-22",
+      "jam_mulai": "17:00:00",
+      "jam_selesai": "19:00:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "5ca10714-4722-4ad6-8246-1362887f69f3",
+    "fields": {
+      "creator": "00ac1c10-0f02-47a8-8263-72410deb5622",
+      "title": "Friendly Badminton Meetup",
+      "description": "Looking for partners to play badminton around GOR Cempaka Putih. All levels welcome!",
+      "category": "badminton",
+      "tanggal": "2025-11-01",
+      "jam_mulai": "13:00:00",
+      "jam_selesai": "15:00:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "e5d10837-3864-41e2-b392-f1e568a0f420",
+    "fields": {
+      "creator": "ee0b63ab-a9a5-4d4e-b44e-fba164862ae6",
+      "title": "Casual Badminton Match",
+      "description": "Looking for partners to play badminton around GOR Cempaka Putih. All levels welcome!",
+      "category": "badminton",
+      "tanggal": "2025-11-22",
+      "jam_mulai": "07:00:00",
+      "jam_selesai": "09:00:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "7e59ecd6-9ced-44e4-abc8-5e7d849fce28",
+    "fields": {
+      "creator": "5b307a42-dca4-40e7-860a-81464acd8ee0",
+      "title": "Looking for Jogging Partner",
+      "description": "Casual game at Gelora Bung Karno, come and enjoy jogging together.",
+      "category": "jogging",
+      "tanggal": "2025-10-23",
+      "jam_mulai": "08:00:00",
+      "jam_selesai": "10:00:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "08c36950-7e3d-45b3-9d52-62e704cd20c1",
+    "fields": {
+      "creator": "74dd0156-a232-48d9-b5e1-57eb34dc0ffc",
+      "title": "Casual Badminton Match",
+      "description": "Casual game at GOR Cempaka Putih, come and enjoy badminton together.",
+      "category": "badminton",
+      "tanggal": "2025-10-26",
+      "jam_mulai": "11:00:00",
+      "jam_selesai": "13:00:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "ffb53236-1d71-4d9d-b460-93672eddcd63",
+    "fields": {
+      "creator": "03547844-cc31-4f11-829b-da81f7497204",
+      "title": "Friendly Tennis Meetup",
+      "description": "Join us for a fun and relaxed tennis match this week.",
+      "category": "tennis",
+      "tanggal": "2025-11-25",
+      "jam_mulai": "08:30:00",
+      "jam_selesai": "10:30:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "e6881439-3f6b-45ee-bd55-eb9996e328db",
+    "fields": {
+      "creator": "f002a650-5566-44f7-8ec2-d36664ac9b5e",
+      "title": "Morning Basketball Session",
+      "description": "Let's have a friendly basketball meetup and stay active!",
+      "category": "basketball",
+      "tanggal": "2025-11-18",
+      "jam_mulai": "13:30:00",
+      "jam_selesai": "15:30:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "ae043725-edc3-4353-ac51-ddaaabc6b99a",
+    "fields": {
+      "creator": "03547844-cc31-4f11-829b-da81f7497204",
+      "title": "Casual Jogging Match",
+      "description": "Casual game at Gelora Bung Karno, come and enjoy jogging together.",
+      "category": "jogging",
+      "tanggal": "2025-11-04",
+      "jam_mulai": "08:00:00",
+      "jam_selesai": "10:00:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "e2389d69-c708-4ab9-b02c-ea8eabd50c0f",
+    "fields": {
+      "creator": "dc9496d9-50c4-4ee8-8df6-def5e6b119ed",
+      "title": "Looking for Tennis Partner",
+      "description": "Looking for partners to play tennis around Lapangan Tenis UI. All levels welcome!",
+      "category": "tennis",
+      "tanggal": "2025-10-23",
+      "jam_mulai": "11:30:00",
+      "jam_selesai": "13:30:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "9030c197-187d-4332-87e1-1dffd4206b84",
+    "fields": {
+      "creator": "f18636db-f82d-4450-bf92-bbdaa07fb767",
+      "title": "Casual Badminton Match",
+      "description": "Join us for a fun and relaxed badminton match this week.",
+      "category": "badminton",
+      "tanggal": "2025-11-28",
+      "jam_mulai": "13:30:00",
+      "jam_selesai": "15:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "a5fa69c0-633f-4ac4-9078-57f62694a413",
+    "fields": {
+      "creator": "e3d81f2c-dd47-4e6c-be88-3a627b70d831",
+      "title": "Looking for Table Tennis Partner",
+      "description": "Join us for a fun and relaxed table tennis match this week.",
+      "category": "table_tennis",
+      "tanggal": "2025-11-19",
+      "jam_mulai": "16:30:00",
+      "jam_selesai": "18:30:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "00153f02-dc0a-44f2-8599-9890984a8e5c",
+    "fields": {
+      "creator": "498ff68b-61d6-471c-90be-c0fc7b881598",
+      "title": "Friendly Volleyball Meetup",
+      "description": "Casual game at GOR Bulungan, come and enjoy volleyball together.",
+      "category": "volleyball",
+      "tanggal": "2025-10-23",
+      "jam_mulai": "14:30:00",
+      "jam_selesai": "16:30:00",
+      "lokasi": "GOR Bulungan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "7520eb05-e4b6-4424-8597-369d0a54ca37",
+    "fields": {
+      "creator": "0654fd39-2c99-442e-a104-dff938f26682",
+      "title": "Casual Tennis Match",
+      "description": "Casual game at Lapangan Tenis UI, come and enjoy tennis together.",
+      "category": "tennis",
+      "tanggal": "2025-10-31",
+      "jam_mulai": "13:30:00",
+      "jam_selesai": "15:30:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "c6cafe02-ab24-43a8-a4b7-3bd3fff29adc",
+    "fields": {
+      "creator": "ae27e20d-7fff-4c00-a1ce-fbc3bc19bdea",
+      "title": "Looking for Badminton Partner",
+      "description": "Looking for partners to play badminton around GOR Cempaka Putih. All levels welcome!",
+      "category": "badminton",
+      "tanggal": "2025-11-27",
+      "jam_mulai": "17:30:00",
+      "jam_selesai": "19:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "1d8c7e32-7043-41cc-a5f7-09aae71302c7",
+    "fields": {
+      "creator": "2a74759f-28fc-4c3d-a3fb-47ffed1132d3",
+      "title": "Looking for Futsal Partner",
+      "description": "Looking for partners to play futsal around Lapangan Futsal Pancoran. All levels welcome!",
+      "category": "futsal",
+      "tanggal": "2025-10-28",
+      "jam_mulai": "08:30:00",
+      "jam_selesai": "10:30:00",
+      "lokasi": "Lapangan Futsal Pancoran, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "30f79d6f-ff26-4fb1-be8c-9e0968c76c46",
+    "fields": {
+      "creator": "943a399c-bda8-4298-a31c-11576eaf95ce",
+      "title": "Casual Badminton Match",
+      "description": "Looking for partners to play badminton around GOR Cempaka Putih. All levels welcome!",
+      "category": "badminton",
+      "tanggal": "2025-10-20",
+      "jam_mulai": "06:00:00",
+      "jam_selesai": "08:00:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "09f6c4cd-5aa1-43c9-9dcf-497911b77664",
+    "fields": {
+      "creator": "99bfee5a-a205-4e1b-bfbc-f36d6fed8d24",
+      "title": "Weekend Tennis Game",
+      "description": "Let's have a friendly tennis meetup and stay active!",
+      "category": "tennis",
+      "tanggal": "2025-11-29",
+      "jam_mulai": "13:00:00",
+      "jam_selesai": "15:00:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "16417eff-8f25-4399-8074-be5d9cb519cf",
+    "fields": {
+      "creator": "bc3f178d-51f4-4eea-ba3f-6f88c722875c",
+      "title": "Weekend Badminton Game",
+      "description": "Let's have a friendly badminton meetup and stay active!",
+      "category": "badminton",
+      "tanggal": "2025-11-15",
+      "jam_mulai": "10:30:00",
+      "jam_selesai": "12:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "1be2c7fb-d99d-4de1-9824-e0a1af17b639",
+    "fields": {
+      "creator": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "title": "Casual Jogging Match",
+      "description": "Looking for partners to play jogging around Gelora Bung Karno. All levels welcome!",
+      "category": "jogging",
+      "tanggal": "2025-11-10",
+      "jam_mulai": "11:00:00",
+      "jam_selesai": "13:00:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "fa87631c-28e6-43a2-ab23-0cc291a68d50",
+    "fields": {
+      "creator": "baaf776f-464f-414a-a68e-687821fe3382",
+      "title": "Looking for Soccer Partner",
+      "description": "Let's have a friendly soccer meetup and stay active!",
+      "category": "soccer",
+      "tanggal": "2025-11-16",
+      "jam_mulai": "08:30:00",
+      "jam_selesai": "10:30:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "188309f0-ba79-4e38-97f3-f0e2a55e3861",
+    "fields": {
+      "creator": "49ca7cba-0967-4552-897e-ca50ce40be2e",
+      "title": "Looking for Futsal Partner",
+      "description": "Looking for partners to play futsal around Lapangan Futsal Pancoran. All levels welcome!",
+      "category": "futsal",
+      "tanggal": "2025-10-27",
+      "jam_mulai": "13:00:00",
+      "jam_selesai": "15:00:00",
+      "lokasi": "Lapangan Futsal Pancoran, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "bb9ebe5c-406c-4e18-83cf-3afe31a4e7ae",
+    "fields": {
+      "creator": "a5249c0b-b13e-4018-adff-309efc262349",
+      "title": "Morning Futsal Session",
+      "description": "Let's have a friendly futsal meetup and stay active!",
+      "category": "futsal",
+      "tanggal": "2025-10-29",
+      "jam_mulai": "18:00:00",
+      "jam_selesai": "20:00:00",
+      "lokasi": "Lapangan Futsal Pancoran, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "71a968ad-da8e-414f-b10d-69d10b577082",
+    "fields": {
+      "creator": "943a399c-bda8-4298-a31c-11576eaf95ce",
+      "title": "Looking for Badminton Partner",
+      "description": "Casual game at GOR Cempaka Putih, come and enjoy badminton together.",
+      "category": "badminton",
+      "tanggal": "2025-11-28",
+      "jam_mulai": "06:30:00",
+      "jam_selesai": "08:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "ba0c1600-355b-4748-909e-5f7e415675de",
+    "fields": {
+      "creator": "9be26c1e-f4a0-4532-88fc-647c1848898f",
+      "title": "Casual Badminton Match",
+      "description": "Looking for partners to play badminton around GOR Cempaka Putih. All levels welcome!",
+      "category": "badminton",
+      "tanggal": "2025-11-07",
+      "jam_mulai": "08:30:00",
+      "jam_selesai": "10:30:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "59ae58c2-9db5-42f0-9959-ec390f82f833",
+    "fields": {
+      "creator": "f002a650-5566-44f7-8ec2-d36664ac9b5e",
+      "title": "Looking for Jogging Partner",
+      "description": "Casual game at Gelora Bung Karno, come and enjoy jogging together.",
+      "category": "jogging",
+      "tanggal": "2025-10-22",
+      "jam_mulai": "17:30:00",
+      "jam_selesai": "19:30:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "88941209-d48c-4279-8540-dadb2a02e44a",
+    "fields": {
+      "creator": "1271c979-922f-45e6-b4df-f7fa4d283e70",
+      "title": "Join Our Volleyball Team",
+      "description": "Looking for partners to play volleyball around GOR Bulungan. All levels welcome!",
+      "category": "volleyball",
+      "tanggal": "2025-11-11",
+      "jam_mulai": "12:00:00",
+      "jam_selesai": "14:00:00",
+      "lokasi": "GOR Bulungan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "6c82cfbf-5193-4abe-8796-543b633ffa79",
+    "fields": {
+      "creator": "2a74759f-28fc-4c3d-a3fb-47ffed1132d3",
+      "title": "Join Our Volleyball Team",
+      "description": "Casual game at GOR Bulungan, come and enjoy volleyball together.",
+      "category": "volleyball",
+      "tanggal": "2025-11-06",
+      "jam_mulai": "10:00:00",
+      "jam_selesai": "12:00:00",
+      "lokasi": "GOR Bulungan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "a4e7c90c-55e0-44f6-b53e-533684c9a1a1",
+    "fields": {
+      "creator": "74dd0156-a232-48d9-b5e1-57eb34dc0ffc",
+      "title": "Join Our Basketball Team",
+      "description": "Casual game at GOR UI, come and enjoy basketball together.",
+      "category": "basketball",
+      "tanggal": "2025-11-21",
+      "jam_mulai": "18:30:00",
+      "jam_selesai": "20:30:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "0690887e-143e-40d8-8828-50610cee1f5a",
+    "fields": {
+      "creator": "74dd0156-a232-48d9-b5e1-57eb34dc0ffc",
+      "title": "Weekend Soccer Game",
+      "description": "Join us for a fun and relaxed soccer match this week.",
+      "category": "soccer",
+      "tanggal": "2025-11-28",
+      "jam_mulai": "10:00:00",
+      "jam_selesai": "12:00:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "50fc1f59-c2b4-42db-85f8-0e2e89cd4704",
+    "fields": {
+      "creator": "498ff68b-61d6-471c-90be-c0fc7b881598",
+      "title": "Friendly Jogging Meetup",
+      "description": "Join us for a fun and relaxed jogging match this week.",
+      "category": "jogging",
+      "tanggal": "2025-11-18",
+      "jam_mulai": "15:00:00",
+      "jam_selesai": "17:00:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "ec26aad0-e25f-4e70-a3ff-c7fc77c54a90",
+    "fields": {
+      "creator": "a8ef2613-896f-40ea-9841-3c5bcbc8f749",
+      "title": "Friendly Tennis Meetup",
+      "description": "Join us for a fun and relaxed tennis match this week.",
+      "category": "tennis",
+      "tanggal": "2025-11-24",
+      "jam_mulai": "13:00:00",
+      "jam_selesai": "15:00:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "604c3c87-6bb2-4e5e-a8fb-ef2d39e890fc",
+    "fields": {
+      "creator": "40cd1349-fa82-4505-a581-fee0b98045b7",
+      "title": "Morning Basketball Session",
+      "description": "Looking for partners to play basketball around GOR UI. All levels welcome!",
+      "category": "basketball",
+      "tanggal": "2025-11-17",
+      "jam_mulai": "16:00:00",
+      "jam_selesai": "18:00:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "38ba45b7-4eff-4950-9937-728ad9abe27f",
+    "fields": {
+      "creator": "f18636db-f82d-4450-bf92-bbdaa07fb767",
+      "title": "Join Our Tennis Team",
+      "description": "Join us for a fun and relaxed tennis match this week.",
+      "category": "tennis",
+      "tanggal": "2025-11-06",
+      "jam_mulai": "15:00:00",
+      "jam_selesai": "17:00:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "cd1c759e-e37c-4d39-8df1-5e2f295c90fe",
+    "fields": {
+      "creator": "0654fd39-2c99-442e-a104-dff938f26682",
+      "title": "Weekend Futsal Game",
+      "description": "Looking for partners to play futsal around Lapangan Futsal Pancoran. All levels welcome!",
+      "category": "futsal",
+      "tanggal": "2025-11-10",
+      "jam_mulai": "07:00:00",
+      "jam_selesai": "09:00:00",
+      "lokasi": "Lapangan Futsal Pancoran, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "7453c921-5904-4fed-9965-a6899972508a",
+    "fields": {
+      "creator": "8c59104f-448a-496b-8d72-b6c3870b950e",
+      "title": "Looking for Tennis Partner",
+      "description": "Looking for partners to play tennis around Lapangan Tenis UI. All levels welcome!",
+      "category": "tennis",
+      "tanggal": "2025-11-20",
+      "jam_mulai": "08:30:00",
+      "jam_selesai": "10:30:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "e0c55575-db7a-4a62-970f-d473b09bd1cf",
+    "fields": {
+      "creator": "03547844-cc31-4f11-829b-da81f7497204",
+      "title": "Morning Tennis Session",
+      "description": "Casual game at Lapangan Tenis UI, come and enjoy tennis together.",
+      "category": "tennis",
+      "tanggal": "2025-11-22",
+      "jam_mulai": "12:30:00",
+      "jam_selesai": "14:30:00",
+      "lokasi": "Lapangan Tenis UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "1f3398e1-408e-413f-b54f-2c6681486a34",
+    "fields": {
+      "creator": "2137bd35-44c0-4545-a117-2b6835381110",
+      "title": "Morning Badminton Session",
+      "description": "Let's have a friendly badminton meetup and stay active!",
+      "category": "badminton",
+      "tanggal": "2025-11-04",
+      "jam_mulai": "15:00:00",
+      "jam_selesai": "17:00:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "22c89efe-cfeb-40d9-9caf-7f0e22956aa1",
+    "fields": {
+      "creator": "b16d65a0-12df-4205-94e8-211785f1f44f",
+      "title": "Casual Badminton Match",
+      "description": "Let's have a friendly badminton meetup and stay active!",
+      "category": "badminton",
+      "tanggal": "2025-11-10",
+      "jam_mulai": "11:00:00",
+      "jam_selesai": "13:00:00",
+      "lokasi": "GOR Cempaka Putih, Jakarta"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "5ce22ddc-7390-4d98-a85f-ed11b19a7ab1",
+    "fields": {
+      "creator": "bc3f178d-51f4-4eea-ba3f-6f88c722875c",
+      "title": "Looking for Basketball Partner",
+      "description": "Join us for a fun and relaxed basketball match this week.",
+      "category": "basketball",
+      "tanggal": "2025-11-27",
+      "jam_mulai": "17:30:00",
+      "jam_selesai": "19:30:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "f389f5aa-5536-40f4-b40e-e52cb911e357",
+    "fields": {
+      "creator": "0123e465-074f-4b59-b3c8-d93ebddf9183",
+      "title": "Looking for Jogging Partner",
+      "description": "Join us for a fun and relaxed jogging match this week.",
+      "category": "jogging",
+      "tanggal": "2025-11-22",
+      "jam_mulai": "17:00:00",
+      "jam_selesai": "19:00:00",
+      "lokasi": "Gelora Bung Karno, Jakarta Pusat"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "a86aa23a-0a0a-4dcb-b607-c2395b13e46a",
+    "fields": {
+      "creator": "9b66c55b-8947-4d4f-b142-f585d372dc36",
+      "title": "Morning Basketball Session",
+      "description": "Join us for a fun and relaxed basketball match this week.",
+      "category": "basketball",
+      "tanggal": "2025-11-06",
+      "jam_mulai": "14:00:00",
+      "jam_selesai": "16:00:00",
+      "lokasi": "GOR UI, Depok"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "3a17b3ff-fca5-405a-bbf2-23b4cea7a900",
+    "fields": {
+      "creator": "a8ef2613-896f-40ea-9841-3c5bcbc8f749",
+      "title": "Morning Table Tennis Session",
+      "description": "Looking for partners to play table tennis around GOR Ragunan. All levels welcome!",
+      "category": "table_tennis",
+      "tanggal": "2025-11-15",
+      "jam_mulai": "18:00:00",
+      "jam_selesai": "20:00:00",
+      "lokasi": "GOR Ragunan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "0edfb668-8425-484e-b0e7-41b26a826637",
+    "fields": {
+      "creator": "679c96ba-ef84-4570-8e02-11ca497ab995",
+      "title": "Weekend Volleyball Game",
+      "description": "Casual game at GOR Bulungan, come and enjoy volleyball together.",
+      "category": "volleyball",
+      "tanggal": "2025-10-25",
+      "jam_mulai": "13:30:00",
+      "jam_selesai": "15:30:00",
+      "lokasi": "GOR Bulungan, Jakarta Selatan"
+    }
+  },
+  {
+    "model": "Sport_Partner.partnerpost",
+    "pk": "dc39ec55-c08f-4113-b040-79cb2cd53285",
+    "fields": {
+      "creator": "cbafd4e4-67ac-4d5a-b449-e57456e5da2b",
+      "title": "Join Our Soccer Team",
+      "description": "Join us for a fun and relaxed soccer match this week.",
+      "category": "soccer",
+      "tanggal": "2025-10-31",
+      "jam_mulai": "16:30:00",
+      "jam_selesai": "18:30:00",
+      "lokasi": "Lapangan Bola Kukusan, Depok"
+    }
+  }
+]
