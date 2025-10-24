@@ -190,11 +190,12 @@ class CourtViewTests(TestCase):
             'rating': '4.0',
             'description': 'Form submit',
             'maps_link': 'https://maps.google.com/?q=-6.2,106.8',
+            'owner_phone': '0812 3456 7890',
         })
         self.assertEqual(response.status_code, 302)
         new_court = Court.objects.get(name='Court Form')
         self.assertEqual(new_court.created_by, self.user)
-        self.assertEqual(new_court.owner_phone, self.user.nomor_handphone)
+        self.assertEqual(new_court.owner_phone, '081234567890')
 
         payload = {
             'name': 'Court Exception',
@@ -206,6 +207,7 @@ class CourtViewTests(TestCase):
             'rating': '4',
             'description': 'Exception case',
             'maps_link': 'https://maps.google.com/?q=-6.2,106.8',
+            'owner_phone': '081234567890',
         }
         with patch('Court.views.urlparse', side_effect=Exception('boom')):
             response = self.client.post(reverse('Court:add_court'), data=payload)
@@ -225,9 +227,27 @@ class CourtViewTests(TestCase):
                 'description': 'Via API',
                 'maps_link': 'https://maps.google.com/?q=-6.21,106.81',
                 'image': self._make_image('api.png'),
+                'owner_phone': '0812-3456-7891',
             },
         )
         self.assertTrue(response.json()['success'])
+        api_court = Court.objects.get(name='Court API')
+        self.assertEqual(api_court.owner_phone, '081234567891')
+
+        response = self.client.post(
+            reverse('Court:api_add_court'),
+            data={
+                'name': 'Court API Invalid',
+                'sport_type': 'tennis',
+                'location': 'Bandung',
+                'address': 'API Street',
+                'price_per_hour': '170000',
+                'rating': '4.3',
+                'owner_phone': '123',
+            },
+        )
+        self.assertFalse(response.json()['success'])
+        self.assertEqual(response.status_code, 400)
 
         with patch('Court.views.Court.objects.create', side_effect=Exception('boom')):
             response = self.client.post(reverse('Court:api_add_court'), data={'name': 'X'})
@@ -484,6 +504,7 @@ class CourtViewTests(TestCase):
             'facilities': 'Parking',
             'description': 'Nice court',
             'maps_link': 'https://maps.google.com/?q=-6.2,106.8',
+            'owner_phone': '081234567890',
         }
 
         form = CourtForm({**base_data, 'rating': '4.5'})
@@ -505,6 +526,18 @@ class CourtViewTests(TestCase):
         form_blank_facilities = CourtForm({**base_data, 'rating': '3', 'facilities': ''})
         self.assertTrue(form_blank_facilities.is_valid(), form_blank_facilities.errors)
         self.assertEqual(form_blank_facilities.cleaned_data['facilities'], '')
+
+        form_negative_price = CourtForm({**base_data, 'price_per_hour': '-150000', 'rating': '3'})
+        self.assertFalse(form_negative_price.is_valid())
+        self.assertIn('price_per_hour', form_negative_price.errors)
+
+        form_phone_spaces = CourtForm({**base_data, 'owner_phone': '0812 3456 7890'})
+        self.assertTrue(form_phone_spaces.is_valid(), form_phone_spaces.errors)
+        self.assertEqual(form_phone_spaces.cleaned_data['owner_phone'], '081234567890')
+
+        form_phone_short = CourtForm({**base_data, 'owner_phone': '12345'})
+        self.assertFalse(form_phone_short.is_valid())
+        self.assertIn('owner_phone', form_phone_short.errors)
 
         user, response = views._require_user(self._with_session(self.factory.get('/dummy')), json_mode=True)
         self.assertIsNone(user)
