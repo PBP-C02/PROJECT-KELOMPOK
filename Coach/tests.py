@@ -51,15 +51,13 @@ def make_user(nama: str = "Nama", phone: str = "081234567890", email: str | None
     if tanggal_lahir is None:
         tanggal_lahir = dt.date(2000, 1, 1)
 
-    # Custom User model has these fields:
-    # id, nama, email, kelamin, tanggal_lahir, nomor_handphone, password
     user = User.objects.create(
         nama=nama,
         email=email,
         kelamin=kelamin,
         tanggal_lahir=tanggal_lahir,
         nomor_handphone=phone,
-        password=make_password("xpass123")  # Hashed password
+        password=make_password("xpass123") 
     )
     
     return user
@@ -70,7 +68,7 @@ def manual_login(client, user):
     Manually log in a user by setting session variables.
     Compatible with custom User model and custom auth system.
     """
-    # Set custom user_id in session (your views check this)
+
     session = client.session
     session['user_id'] = str(user.id)
     session.save()
