@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Find Your Sport Partner Now!</title>
+{% endblock meta %}
+
+{% block content %}
+<h1>This is Sport partner Page</h1>
+<p class="">Welcome {{ user_now.nama }}!</p>
+<hr>
+
+{% for post in post_list %}
+<a href="{% url 'Sport_Partner:post-detail' post.post_id %}">
+    <div>
+        <p>{{ post.title }}</p>
+        <p>{{ post.description }}</p>
+        <p>{{ post.lokasi }}</p>
+    </div>
+</a>
+{% endfor %}
+
+<a href="/sport-partner/create-post">TAMBAH POST</a>
+{% endblock content %}
