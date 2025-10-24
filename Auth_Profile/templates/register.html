@@ -1,59 +1,131 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block meta %}
 <title>Register</title>
+<style>
+    .bg-register {
+        background-image: url('{% static "img/Pattern.png" %}');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
-<h1>REGISTER</h1>
-
-<div id="error-message" style="color: red; margin-bottom: 10px;"></div>
-<div id="success-message" style="color: green; margin-bottom: 10px;"></div>
-
-<form id="registerForm" method="POST">
-    {% csrf_token %}
-    <div>
-        <label for="nama">Nama:</label><br>
-        <input type="text" id="nama" name="nama" required>
+<div class="bg-register flex justify-center items-center w-full min-h-screen py-10 bg-dark-lime">
+    <div class="flex flex-col justify-center items-center gap-[30px] w-[626px] rounded-[42px] px-14 py-12 shadow-2xl bg-white">
+        <div class="flex flex-col justify-center items-center gap-[15px]">
+            <h1 class="font-raleway font-bold text-5xl text-grey">Register</h1>
+            <p class="font-raleway font-regular text-2xl text-light-grey">Join <span class="text-lime font-bold"><i>MOVE BUDDY</i></span> today!</p>
+        </div>
+        
+        <div id="error-message" class="text-red-600 font-raleway text-lg text-center hidden"></div>
+        <div id="success-message" class="text-green-600 font-raleway text-lg text-center hidden"></div>
+        
+        <form id="registerForm" method="POST" class="w-full flex flex-col justify-center gap-[30px]">
+            {% csrf_token %}
+            
+            <!-- Nama -->
+            <div class="flex flex-col justify-center gap-[8px]">
+                <label for="nama" class="font-raleway font-medium text-xl text-grey">Nama Lengkap:</label>
+                <input 
+                    type="text" 
+                    id="nama" 
+                    name="nama" 
+                    class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[60px] font-raleway font-regular text-xl px-6 py-4 focus:outline-none focus:border-lime"
+                    placeholder="Masukkan nama lengkap"
+                    required
+                >
+            </div>
+            
+            <!-- Email -->
+            <div class="flex flex-col justify-center gap-[8px]">
+                <label for="email" class="font-raleway font-medium text-xl text-grey">Email:</label>
+                <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[60px] font-raleway font-regular text-xl px-6 py-4 focus:outline-none focus:border-lime"
+                    placeholder="Masukkan email"
+                    required
+                >
+            </div>
+            
+            <!-- Kelamin & Tanggal Lahir (Row) -->
+            <div class="flex gap-4">
+                <div class="flex flex-col justify-center gap-[8px] flex-1">
+                    <label for="kelamin" class="font-raleway font-medium text-xl text-grey">Kelamin:</label>
+                    <select 
+                        id="kelamin" 
+                        name="kelamin" 
+                        class="border-light-grey border-[3px] border-solid rounded-[20px] bg-white w-full h-[60px] font-raleway font-regular text-xl px-6 py-4 focus:outline-none focus:border-lime"
+                        required
+                    >
+                        <option value="">Pilih</option>
+                        <option value="L">Laki-laki</option>
+                        <option value="P">Perempuan</option>
+                    </select>
+                </div>
+                
+                <div class="flex flex-col justify-center gap-[8px] flex-1">
+                    <label for="tanggal_lahir" class="font-raleway font-medium text-xl text-grey">Tanggal Lahir:</label>
+                    <input 
+                        type="date" 
+                        id="tanggal_lahir" 
+                        name="tanggal_lahir" 
+                        class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[60px] font-raleway font-regular text-xl px-6 py-4 focus:outline-none focus:border-lime"
+                        required
+                    >
+                </div>
+            </div>
+            
+            <!-- Nomor Handphone -->
+            <div class="flex flex-col justify-center gap-[8px]">
+                <label for="nomor_handphone" class="font-raleway font-medium text-xl text-grey">Nomor Handphone:</label>
+                <input 
+                    type="text" 
+                    id="nomor_handphone" 
+                    name="nomor_handphone" 
+                    class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[60px] font-raleway font-regular text-xl px-6 py-4 focus:outline-none focus:border-lime"
+                    placeholder="08xxxxxxxxxx"
+                    required
+                >
+            </div>
+            
+            <!-- Password -->
+            <div class="flex flex-col justify-center gap-[8px]">
+                <label for="password" class="font-raleway font-medium text-xl text-grey">Password:</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[60px] font-raleway font-regular text-xl px-6 py-4 focus:outline-none focus:border-lime"
+                    placeholder="Minimal 8 karakter"
+                    required
+                >
+            </div>
+            
+            <!-- Konfirmasi Password -->
+            <div class="flex flex-col justify-center gap-[8px]">
+                <label for="password2" class="font-raleway font-medium text-xl text-grey">Konfirmasi Password:</label>
+                <input 
+                    type="password" 
+                    id="password2" 
+                    name="password2" 
+                    class="border-light-grey border-[3px] border-solid rounded-[20px] w-full h-[60px] font-raleway font-regular text-xl px-6 py-4 focus:outline-none focus:border-lime"
+                    placeholder="Ulangi password"
+                    required
+                >
+            </div>
+            
+            <button type="submit" class="bg-lime font-raleway font-medium text-2xl text-grey w-full h-[66px] rounded-[20px] hover:bg-dark-lime transition-colors">Register</button>
+        </form>
+        
+        <hr class="border-none h-[1px] bg-light-grey w-full">
+        <p class="font-raleway font-regular text-2xl text-grey">Sudah punya akun? <a href="/login/" class="font-bold text-lime hover:text-dark-lime transition-colors">Login di sini</a></p>
     </div>
-    <br>
-    <div>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email" required>
-    </div>
-    <br>
-    <div>
-        <label for="kelamin">Kelamin:</label><br>
-        <select id="kelamin" name="kelamin" required>
-            <option value="">Pilih Kelamin</option>
-            <option value="L">Laki-laki</option>
-            <option value="P">Perempuan</option>
-        </select>
-    </div>
-    <br>
-    <div>
-        <label for="tanggal_lahir">Tanggal Lahir:</label><br>
-        <input type="date" id="tanggal_lahir" name="tanggal_lahir" required>
-    </div>
-    <br>
-    <div>
-        <label for="nomor_handphone">Nomor Handphone:</label><br>
-        <input type="text" id="nomor_handphone" name="nomor_handphone" required>
-    </div>
-    <br>
-    <div>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <br>
-    <div>
-        <label for="password2">Konfirmasi Password:</label><br>
-        <input type="password" id="password2" name="password2" required>
-    </div>
-    <br>
-    <button type="submit">Register</button>
-</form>
-
-<p>Sudah punya akun? <a href="/login/">Login di sini</a></p>
+</div>
 
 <script>
     document.getElementById('registerForm').addEventListener('submit', async function(e) {
@@ -72,6 +144,8 @@
         
         errorDiv.textContent = '';
         successDiv.textContent = '';
+        errorDiv.classList.add('hidden');
+        successDiv.classList.add('hidden');
         
         try {
             const response = await fetch('/register/', {
@@ -95,14 +169,17 @@
             
             if (data.success) {
                 successDiv.textContent = data.message;
+                successDiv.classList.remove('hidden');
                 setTimeout(function() {
                     window.location.href = data.redirect_url;
                 }, 1500);
             } else {
                 errorDiv.textContent = data.message;
+                errorDiv.classList.remove('hidden');
             }
         } catch (error) {
             errorDiv.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
+            errorDiv.classList.remove('hidden');
         }
     });
 </script>
