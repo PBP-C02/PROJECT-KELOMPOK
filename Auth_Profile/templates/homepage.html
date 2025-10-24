@@ -2,78 +2,85 @@
 {% load static %}
 
 {% block meta %}
-<title>Home - Move Buddy</title>
+<title>Home</title>
 {% endblock meta %}
 
 {% block content %}
 {% include 'includes/navbar.html' %}
 
-<div class="absolute inset-0 z-0 opacity-10" style="background-image: url('{% static 'img/pattern_repeatable.png' %}'); background-size: 1920px; background-repeat: repeat-y; background-attachment: fixed;">
+<section class="relative w-full py-24 text-center overflow-hidden">
+    <div class="absolute inset-0 z-0 opacity-10" 
+         style="background-image: url('{% static 'img/pattern_repeatable.png' %}'); background-size: 1920px; background-repeat: repeat;">
     </div>
-
-<div class="relative z-10">
-    <div class="py-24 text-center">
-        <h1 class="text-5xl font-bold text-gray-800">Hi, {{ user.nama }}!</h1>
-        <p class="mt-4 text-lg text-gray-600">
-            Welcome to <span class="font-bold">Move Buddy</span> - your one-stop platform to find<br>
-            courts, partners, coaches, and events for your favorite sports.
-        </p>
-    </div>
-
-    <div class="mx-auto max-w-7xl px-4 pb-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            <a href="{% url 'Sport_Partner:show_post' %}" class="relative h-80 rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-105">
-                <div class="absolute inset-0 bg-gray-700 bg-cover bg-center" style="background-image: url('URL_GAMBAR_SPORT_PARTNER_KAMU');">
-                    <div class="absolute inset-0 bg-black/50"></div>
-                </div>
-                <div class="relative z-10 flex flex-col justify-end h-full p-8 text-white">
-                    <h2 class="text-3xl font-bold">Mau nyari teman baru<br>dengan hobby yang sama?</h2>
-                    <span class="mt-4 inline-block rounded-full bg-lime/90 px-5 py-2 font-semibold text-grey transition hover:bg-lime">
-                        Cari Teman &rarr;
-                    </span>
-                </div>
-            </a>
-
-            <a href="#" class="relative h-80 rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-105">
-                <div class="absolute inset-0 bg-gray-700 bg-cover bg-center" style="background-image: url('URL_GAMBAR_EVENT_KAMU');">
-                    <div class="absolute inset-0 bg-black/50"></div>
-                </div>
-                <div class="relative z-10 flex flex-col justify-end h-full p-8 text-white">
-                    <h2 class="text-3xl font-bold">Lagi berminat ikut event-<br>event olahraga?</h2>
-                    <span class="mt-4 inline-block rounded-full bg-lime/90 px-5 py-2 font-semibold text-grey transition hover:bg-lime">
-                        Cari Event &rarr;
-                    </span>
-                </div>
-            </a>
-
-            <a href="#" class="relative h-80 rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-105">
-                <div class="absolute inset-0 bg-gray-700 bg-cover bg-center" style="background-image: url('URL_GAMBAR_COACH_KAMU');">
-                    <div class="absolute inset-0 bg-black/50"></div>
-                </div>
-                <div class="relative z-10 flex flex-col justify-end h-full p-8 text-white">
-                    <h2 class="text-3xl font-bold">Butuh coach untuk<br>berlatih secara privat?</h2>
-                    <span class="mt-4 inline-block rounded-full bg-lime/90 px-5 py-2 font-semibold text-grey transition hover:bg-lime">
-                        Cari Coach &rarr;
-                    </span>
-                </div>
-            </a>
-
-            <a href="{% url 'Court:show_main' %}" class="relative h-80 rounded-2xl overflow-hidden shadow-xl transition-transform hover:scale-105">
-                <div class="absolute inset-0 bg-gray-700 bg-cover bg-center" style="background-image: url('URL_GAMBAR_COURT_KAMU');">
-                    <div class="absolute inset-0 bg-black/50"></div>
-                </div>
-                <div class="relative z-10 flex flex-col justify-end h-full p-8 text-white">
-                    <h2 class="text-3xl font-bold">Lagi nyari court yang dapat<br>digunakan untuk aktivitas olahraga?</h2>
-                    <span class="mt-4 inline-block rounded-full bg-lime/90 px-5 py-2 font-semibold text-grey transition hover:bg-lime">
-                        Cari Court &rarr;
-                    </span>
-                </div>
-            </a>
-
+    
+    <div class="relative z-10 px-4">
+        <div class="bg-white max-w-3xl mx-auto p-10 rounded-2xl shadow-lg">
+            <h1 class="text-5xl font-bold text-gray-800">Hi, {{ user.nama }}!</h1>
+            <p class="mt-4 text-lg text-gray-600">
+                Welcome to <span class="font-bold text-lime">Move Buddy</span> - your one-stop platform to find<br>
+                courts, partners, coaches, and events for your favorite sports.
+            </p>
         </div>
     </div>
-</div>
+</section>
+
+<section class="relative h-[900px] w-full text-white">
+    <div class="absolute inset-0 bg-cover bg-center" 
+         style="background-image: url('{% static 'img/sport_partner_thumbnail.png' %}');">
+         </div>
+    <div class="absolute inset-0 bg-black/50"></div>
+    
+    <div class="relative z-10 h-full flex flex-col justify-center items-start p-12 md:p-16">
+        <h2 class="text-5xl font-bold">Mau nyari teman baru<br>dengan hobby yang sama?</h2>
+        <a href="{% url 'Sport_Partner:show_post' %}" 
+           class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
+            Cari Sport Partner &rarr;
+        </a>
+    </div>
+</section>
+
+<section class="relative h-[700px] w-full text-white">
+    <div class="absolute inset-0 bg-cover bg-center" 
+         style="background-image: url('{% static 'img/event_thumbnail.png' %}');">
+         </div>
+    <div class="absolute inset-0 bg-black/50"></div>
+    
+    <div class="relative z-10 h-full flex flex-col justify-center items-end text-right p-12 md:p-16">
+        <h2 class="text-5xl font-bold">Lagi berminat ikut event-<br>event olahraga?</h2>
+        <a href="#" class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
+            Cari Event &rarr;
+        </a>
+    </div>
+</section>
+
+<section class="relative h-[700px] w-full text-white">
+    <div class="absolute inset-0 bg-cover bg-center" 
+         style="background-image: url('{% static 'img/coach_thumbnail.png' %}');">
+         </div>
+    <div class="absolute inset-0 bg-black/50"></div>
+    
+    <div class="relative z-10 h-full flex flex-col justify-center items-start p-12 md:p-16">
+        <h2 class="text-5xl font-bold">Butuh coach untuk<br>berlatih secara privat?</h2>
+        <a href="#" class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
+            Cari Coach &rarr;
+        </a>
+    </div>
+</section>
+
+<section class="relative h-[700px] w-full text-white">
+    <div class="absolute inset-0 bg-cover bg-center" 
+         style="background-image: url('{% static 'img/court_thumbnail.png' %}');">
+         </div>
+    <div class="absolute inset-0 bg-black/50"></div>
+    
+    <div class="relative z-10 h-full flex flex-col justify-center items-end text-right p-12 md:p-16">
+        <h2 class="text-5xl font-bold">Lagi nyari court yang dapat<br>digunakan untuk aktivitas olahraga?</h2>
+        <a href="{% url 'Court:show_main' %}" 
+           class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
+            Cari Court &rarr;
+        </a>
+    </div>
+</section>
 
 <footer class="bg-grey py-8 text-center text-light-grey">
     © 2025 Move Buddy
