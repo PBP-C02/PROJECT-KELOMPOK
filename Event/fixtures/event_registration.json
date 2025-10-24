@@ -1,0 +1,4002 @@
+[
+  {
+    "model": "Event.EventRegistration",
+    "pk": 1,
+    "fields": {
+      "event": 1,
+      "user": "9be26c1e-f4a0-4532-88fc-647c1848898f",
+      "schedule": 2,
+      "registered_at": "2025-09-24T07:30:57.774928"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 2,
+    "fields": {
+      "event": 1,
+      "user": "9b66c55b-8947-4d4f-b142-f585d372dc36",
+      "schedule": 3,
+      "registered_at": "2025-10-03T07:30:57.774940"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 3,
+    "fields": {
+      "event": 1,
+      "user": "2a995ac5-7acd-486e-b68f-986fc51dce24",
+      "schedule": 2,
+      "registered_at": "2025-10-22T07:30:57.774945"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 4,
+    "fields": {
+      "event": 1,
+      "user": "e3d81f2c-dd47-4e6c-be88-3a627b70d831",
+      "schedule": 1,
+      "registered_at": "2025-10-08T07:30:57.774949"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 5,
+    "fields": {
+      "event": 2,
+      "user": "9be26c1e-f4a0-4532-88fc-647c1848898f",
+      "schedule": 6,
+      "registered_at": "2025-10-18T07:30:57.774958"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 6,
+    "fields": {
+      "event": 2,
+      "user": "81425e76-5651-415e-bcdf-88e24bbfdc75",
+      "schedule": 5,
+      "registered_at": "2025-10-09T07:30:57.774963"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 7,
+    "fields": {
+      "event": 2,
+      "user": "e75b3cd8-c298-45d3-8074-065914cf72d9",
+      "schedule": 5,
+      "registered_at": "2025-10-08T07:30:57.774968"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 8,
+    "fields": {
+      "event": 3,
+      "user": "2a995ac5-7acd-486e-b68f-986fc51dce24",
+      "schedule": 8,
+      "registered_at": "2025-10-02T07:30:57.774979"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 9,
+    "fields": {
+      "event": 3,
+      "user": "9ae5e8d6-df75-45b4-8fc4-c30c1f095ee7",
+      "schedule": 9,
+      "registered_at": "2025-10-16T07:30:57.774983"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 10,
+    "fields": {
+      "event": 3,
+      "user": "a5146f4b-fe97-4c5f-adf3-4bbb29637505",
+      "schedule": 7,
+      "registered_at": "2025-10-09T07:30:57.774987"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 11,
+    "fields": {
+      "event": 3,
+      "user": "2a983975-2008-4fe4-a781-8fa9f7a80b2c",
+      "schedule": 7,
+      "registered_at": "2025-09-30T07:30:57.774991"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 12,
+    "fields": {
+      "event": 4,
+      "user": "5c68a2b9-f957-4527-92f3-ccb14c2561b7",
+      "schedule": 11,
+      "registered_at": "2025-10-17T07:30:57.775000"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 13,
+    "fields": {
+      "event": 4,
+      "user": "99bfee5a-a205-4e1b-bfbc-f36d6fed8d24",
+      "schedule": 12,
+      "registered_at": "2025-09-25T07:30:57.775004"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 14,
+    "fields": {
+      "event": 4,
+      "user": "4b17bd76-bbaa-4c24-a920-3649400c02db",
+      "schedule": 11,
+      "registered_at": "2025-10-05T07:30:57.775007"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 15,
+    "fields": {
+      "event": 4,
+      "user": "aa2e074a-3392-479f-afbd-e2de87494170",
+      "schedule": 10,
+      "registered_at": "2025-09-27T07:30:57.775011"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 16,
+    "fields": {
+      "event": 4,
+      "user": "9db5cf83-f527-473a-8513-7fc5b7d871c4",
+      "schedule": 12,
+      "registered_at": "2025-10-06T07:30:57.775015"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 17,
+    "fields": {
+      "event": 5,
+      "user": "49ca7cba-0967-4552-897e-ca50ce40be2e",
+      "schedule": 14,
+      "registered_at": "2025-10-14T07:30:57.775022"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 18,
+    "fields": {
+      "event": 5,
+      "user": "5b307a42-dca4-40e7-860a-81464acd8ee0",
+      "schedule": 15,
+      "registered_at": "2025-10-09T07:30:57.775026"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 19,
+    "fields": {
+      "event": 5,
+      "user": "bc3f178d-51f4-4eea-ba3f-6f88c722875c",
+      "schedule": 14,
+      "registered_at": "2025-09-29T07:30:57.775030"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 20,
+    "fields": {
+      "event": 5,
+      "user": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "schedule": 13,
+      "registered_at": "2025-10-11T07:30:57.775034"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 21,
+    "fields": {
+      "event": 6,
+      "user": "8c427c0f-b0a0-4c3f-9195-ece06d6248bc",
+      "schedule": 18,
+      "registered_at": "2025-10-19T07:30:57.775042"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 22,
+    "fields": {
+      "event": 6,
+      "user": "5c85725d-5779-438b-96ea-bd359afbf270",
+      "schedule": 17,
+      "registered_at": "2025-10-15T07:30:57.775045"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 23,
+    "fields": {
+      "event": 6,
+      "user": "d6080083-a41b-4f98-8e37-f52afe05127f",
+      "schedule": 17,
+      "registered_at": "2025-10-07T07:30:57.775049"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 24,
+    "fields": {
+      "event": 6,
+      "user": "b4160e6f-47a6-4594-9393-54b11329b3e2",
+      "schedule": 18,
+      "registered_at": "2025-10-03T07:30:57.775053"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 25,
+    "fields": {
+      "event": 6,
+      "user": "99bfee5a-a205-4e1b-bfbc-f36d6fed8d24",
+      "schedule": 17,
+      "registered_at": "2025-10-13T07:30:57.775056"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 26,
+    "fields": {
+      "event": 7,
+      "user": "f18636db-f82d-4450-bf92-bbdaa07fb767",
+      "schedule": 21,
+      "registered_at": "2025-10-21T07:30:57.775064"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 27,
+    "fields": {
+      "event": 7,
+      "user": "b4160e6f-47a6-4594-9393-54b11329b3e2",
+      "schedule": 19,
+      "registered_at": "2025-09-26T07:30:57.775068"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 28,
+    "fields": {
+      "event": 7,
+      "user": "a8ef2613-896f-40ea-9841-3c5bcbc8f749",
+      "schedule": 21,
+      "registered_at": "2025-10-16T07:30:57.775071"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 29,
+    "fields": {
+      "event": 7,
+      "user": "2a995ac5-7acd-486e-b68f-986fc51dce24",
+      "schedule": 19,
+      "registered_at": "2025-10-22T07:30:57.775075"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 30,
+    "fields": {
+      "event": 8,
+      "user": "2a995ac5-7acd-486e-b68f-986fc51dce24",
+      "schedule": 24,
+      "registered_at": "2025-10-15T07:30:57.775082"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 31,
+    "fields": {
+      "event": 8,
+      "user": "baaf776f-464f-414a-a68e-687821fe3382",
+      "schedule": 23,
+      "registered_at": "2025-10-20T07:30:57.775086"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 32,
+    "fields": {
+      "event": 8,
+      "user": "99073a07-8625-4fc2-be46-defd5cf55f12",
+      "schedule": 22,
+      "registered_at": "2025-09-29T07:30:57.775089"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 33,
+    "fields": {
+      "event": 8,
+      "user": "d7de3b10-3eed-4eb1-bc2e-f0f63adfa08f",
+      "schedule": 24,
+      "registered_at": "2025-09-27T07:30:57.775093"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 34,
+    "fields": {
+      "event": 9,
+      "user": "9db5cf83-f527-473a-8513-7fc5b7d871c4",
+      "schedule": 26,
+      "registered_at": "2025-10-06T07:30:57.775101"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 35,
+    "fields": {
+      "event": 9,
+      "user": "2a74759f-28fc-4c3d-a3fb-47ffed1132d3",
+      "schedule": 25,
+      "registered_at": "2025-10-24T07:30:57.775104"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 36,
+    "fields": {
+      "event": 9,
+      "user": "99073a07-8625-4fc2-be46-defd5cf55f12",
+      "schedule": 25,
+      "registered_at": "2025-09-24T07:30:57.775108"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 37,
+    "fields": {
+      "event": 10,
+      "user": "208dab4b-fb61-4236-9c02-43f165af7184",
+      "schedule": 28,
+      "registered_at": "2025-10-03T07:30:57.775116"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 38,
+    "fields": {
+      "event": 10,
+      "user": "cd27997d-1e21-4a50-a026-e310e7c2f549",
+      "schedule": 28,
+      "registered_at": "2025-09-27T07:30:57.775120"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 39,
+    "fields": {
+      "event": 10,
+      "user": "baaf776f-464f-414a-a68e-687821fe3382",
+      "schedule": 28,
+      "registered_at": "2025-09-25T07:30:57.775124"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 40,
+    "fields": {
+      "event": 10,
+      "user": "7c873c74-18bf-42c4-9515-f12834eb51e8",
+      "schedule": 28,
+      "registered_at": "2025-09-30T07:30:57.775128"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 41,
+    "fields": {
+      "event": 10,
+      "user": "5c85725d-5779-438b-96ea-bd359afbf270",
+      "schedule": 29,
+      "registered_at": "2025-10-19T07:30:57.775131"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 42,
+    "fields": {
+      "event": 11,
+      "user": "00ac1c10-0f02-47a8-8263-72410deb5622",
+      "schedule": 31,
+      "registered_at": "2025-10-15T07:30:57.775139"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 43,
+    "fields": {
+      "event": 11,
+      "user": "98b02dc1-1f0a-4437-9950-dd31f324cb0e",
+      "schedule": 31,
+      "registered_at": "2025-10-06T07:30:57.775143"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 44,
+    "fields": {
+      "event": 11,
+      "user": "4b17bd76-bbaa-4c24-a920-3649400c02db",
+      "schedule": 31,
+      "registered_at": "2025-10-06T07:30:57.775147"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 45,
+    "fields": {
+      "event": 11,
+      "user": "9be26c1e-f4a0-4532-88fc-647c1848898f",
+      "schedule": 33,
+      "registered_at": "2025-09-26T07:30:57.775151"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 46,
+    "fields": {
+      "event": 11,
+      "user": "03547844-cc31-4f11-829b-da81f7497204",
+      "schedule": 32,
+      "registered_at": "2025-10-09T07:30:57.775155"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 47,
+    "fields": {
+      "event": 12,
+      "user": "a8ef2613-896f-40ea-9841-3c5bcbc8f749",
+      "schedule": 35,
+      "registered_at": "2025-10-09T07:30:57.775162"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 48,
+    "fields": {
+      "event": 12,
+      "user": "cbafd4e4-67ac-4d5a-b449-e57456e5da2b",
+      "schedule": 36,
+      "registered_at": "2025-10-19T07:30:57.775166"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 49,
+    "fields": {
+      "event": 12,
+      "user": "5cb2dd94-0d41-449c-ae57-c9fde2bf90c4",
+      "schedule": 34,
+      "registered_at": "2025-10-10T07:30:57.775170"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 50,
+    "fields": {
+      "event": 12,
+      "user": "2a74759f-28fc-4c3d-a3fb-47ffed1132d3",
+      "schedule": 35,
+      "registered_at": "2025-09-29T07:30:57.775173"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 51,
+    "fields": {
+      "event": 13,
+      "user": "d1146444-6633-4b06-8069-d57a78195b6d",
+      "schedule": 38,
+      "registered_at": "2025-10-10T07:30:57.775181"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 52,
+    "fields": {
+      "event": 13,
+      "user": "d7de3b10-3eed-4eb1-bc2e-f0f63adfa08f",
+      "schedule": 39,
+      "registered_at": "2025-10-24T07:30:57.775185"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 53,
+    "fields": {
+      "event": 13,
+      "user": "08c2dd34-49f1-49bd-abf3-f69d3f640b02",
+      "schedule": 37,
+      "registered_at": "2025-10-14T07:30:57.775189"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 54,
+    "fields": {
+      "event": 13,
+      "user": "584a0357-685f-4b0c-a617-d23a2da84360",
+      "schedule": 39,
+      "registered_at": "2025-10-14T07:30:57.775193"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 55,
+    "fields": {
+      "event": 13,
+      "user": "922c8e67-8505-427b-b466-816c09f4d3f6",
+      "schedule": 37,
+      "registered_at": "2025-09-27T07:30:57.775197"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 56,
+    "fields": {
+      "event": 14,
+      "user": "daebf1a6-4f9f-4e90-b11c-7da6ff98c6ee",
+      "schedule": 41,
+      "registered_at": "2025-09-26T07:30:57.775204"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 57,
+    "fields": {
+      "event": 14,
+      "user": "0f23f24b-e835-408c-b95c-2d87efed0fe9",
+      "schedule": 41,
+      "registered_at": "2025-10-21T07:30:57.775208"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 58,
+    "fields": {
+      "event": 14,
+      "user": "fa717310-39bb-48c3-840f-fd37a67701ec",
+      "schedule": 40,
+      "registered_at": "2025-10-16T07:30:57.775212"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 59,
+    "fields": {
+      "event": 15,
+      "user": "a5249c0b-b13e-4018-adff-309efc262349",
+      "schedule": 43,
+      "registered_at": "2025-10-20T07:30:57.775220"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 60,
+    "fields": {
+      "event": 15,
+      "user": "d6080083-a41b-4f98-8e37-f52afe05127f",
+      "schedule": 44,
+      "registered_at": "2025-10-09T07:30:57.775224"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 61,
+    "fields": {
+      "event": 15,
+      "user": "f002a650-5566-44f7-8ec2-d36664ac9b5e",
+      "schedule": 45,
+      "registered_at": "2025-10-24T07:30:57.775227"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 62,
+    "fields": {
+      "event": 15,
+      "user": "be539eb2-eb0e-4cd5-a560-0f2ad0b9a460",
+      "schedule": 45,
+      "registered_at": "2025-10-14T07:30:57.775231"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 63,
+    "fields": {
+      "event": 15,
+      "user": "cad91051-cb2a-44eb-bff2-c8882dd34b3d",
+      "schedule": 44,
+      "registered_at": "2025-09-27T07:30:57.775236"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 64,
+    "fields": {
+      "event": 16,
+      "user": "9be34387-b67b-4977-b44e-9c20278c245b",
+      "schedule": 48,
+      "registered_at": "2025-09-28T07:30:57.775245"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 65,
+    "fields": {
+      "event": 16,
+      "user": "943a399c-bda8-4298-a31c-11576eaf95ce",
+      "schedule": 46,
+      "registered_at": "2025-10-05T07:30:57.775249"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 66,
+    "fields": {
+      "event": 16,
+      "user": "2a995ac5-7acd-486e-b68f-986fc51dce24",
+      "schedule": 48,
+      "registered_at": "2025-10-23T07:30:57.775253"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 67,
+    "fields": {
+      "event": 16,
+      "user": "0123e465-074f-4b59-b3c8-d93ebddf9183",
+      "schedule": 48,
+      "registered_at": "2025-10-20T07:30:57.775257"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 68,
+    "fields": {
+      "event": 16,
+      "user": "40cd1349-fa82-4505-a581-fee0b98045b7",
+      "schedule": 48,
+      "registered_at": "2025-10-19T07:30:57.775260"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 69,
+    "fields": {
+      "event": 17,
+      "user": "acdaeea4-705f-467c-b440-e90465c2909d",
+      "schedule": 50,
+      "registered_at": "2025-10-11T07:30:57.775268"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 70,
+    "fields": {
+      "event": 17,
+      "user": "e71c2fe8-3241-482a-966d-c64653619413",
+      "schedule": 50,
+      "registered_at": "2025-10-10T07:30:57.775271"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 71,
+    "fields": {
+      "event": 17,
+      "user": "1c2db2bc-b42c-4f4c-88ad-43c1200cc694",
+      "schedule": 51,
+      "registered_at": "2025-10-22T07:30:57.775275"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 72,
+    "fields": {
+      "event": 17,
+      "user": "922c8e67-8505-427b-b466-816c09f4d3f6",
+      "schedule": 51,
+      "registered_at": "2025-10-22T07:30:57.775279"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 73,
+    "fields": {
+      "event": 18,
+      "user": "660c0c84-f4a8-43c5-8a61-807540981782",
+      "schedule": 54,
+      "registered_at": "2025-10-13T07:30:57.775287"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 74,
+    "fields": {
+      "event": 18,
+      "user": "40cd1349-fa82-4505-a581-fee0b98045b7",
+      "schedule": 52,
+      "registered_at": "2025-10-10T07:30:57.775291"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 75,
+    "fields": {
+      "event": 18,
+      "user": "2a995ac5-7acd-486e-b68f-986fc51dce24",
+      "schedule": 52,
+      "registered_at": "2025-10-03T07:30:57.775294"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 76,
+    "fields": {
+      "event": 18,
+      "user": "ae27e20d-7fff-4c00-a1ce-fbc3bc19bdea",
+      "schedule": 54,
+      "registered_at": "2025-10-21T07:30:57.775298"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 77,
+    "fields": {
+      "event": 18,
+      "user": "5b307a42-dca4-40e7-860a-81464acd8ee0",
+      "schedule": 54,
+      "registered_at": "2025-09-24T07:30:57.775302"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 78,
+    "fields": {
+      "event": 19,
+      "user": "e75b3cd8-c298-45d3-8074-065914cf72d9",
+      "schedule": 57,
+      "registered_at": "2025-10-12T07:30:57.775310"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 79,
+    "fields": {
+      "event": 19,
+      "user": "81f001c4-35a9-4e22-9ec5-cdf4c2ca23cb",
+      "schedule": 56,
+      "registered_at": "2025-09-29T07:30:57.775315"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 80,
+    "fields": {
+      "event": 19,
+      "user": "e8e807b1-32ab-43c9-abc5-b0805de203f1",
+      "schedule": 56,
+      "registered_at": "2025-10-18T07:30:57.775319"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 81,
+    "fields": {
+      "event": 19,
+      "user": "07d311cc-9050-49c3-aefd-5e5645deac3d",
+      "schedule": 55,
+      "registered_at": "2025-10-02T07:30:57.775322"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 82,
+    "fields": {
+      "event": 19,
+      "user": "ee0b63ab-a9a5-4d4e-b44e-fba164862ae6",
+      "schedule": 57,
+      "registered_at": "2025-09-24T07:30:57.775326"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 83,
+    "fields": {
+      "event": 20,
+      "user": "ae27e20d-7fff-4c00-a1ce-fbc3bc19bdea",
+      "schedule": 58,
+      "registered_at": "2025-10-08T07:30:57.775334"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 84,
+    "fields": {
+      "event": 20,
+      "user": "ddeb3735-ab4f-4925-b089-98bedc6c9756",
+      "schedule": 60,
+      "registered_at": "2025-10-21T07:30:57.775338"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 85,
+    "fields": {
+      "event": 20,
+      "user": "5c85725d-5779-438b-96ea-bd359afbf270",
+      "schedule": 59,
+      "registered_at": "2025-10-21T07:30:57.775342"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 86,
+    "fields": {
+      "event": 20,
+      "user": "440e0a90-63d1-411a-8772-9de511099a3c",
+      "schedule": 59,
+      "registered_at": "2025-10-10T07:30:57.775348"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 87,
+    "fields": {
+      "event": 20,
+      "user": "4b17bd76-bbaa-4c24-a920-3649400c02db",
+      "schedule": 60,
+      "registered_at": "2025-10-21T07:30:57.775352"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 88,
+    "fields": {
+      "event": 21,
+      "user": "7f73b68b-0a90-4c50-8a71-05a592541e31",
+      "schedule": 63,
+      "registered_at": "2025-10-18T07:30:57.775360"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 89,
+    "fields": {
+      "event": 21,
+      "user": "584a0357-685f-4b0c-a617-d23a2da84360",
+      "schedule": 61,
+      "registered_at": "2025-10-09T07:30:57.775363"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 90,
+    "fields": {
+      "event": 21,
+      "user": "572b081b-2ecf-4455-b8bc-c9813414c65c",
+      "schedule": 62,
+      "registered_at": "2025-09-28T07:30:57.775367"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 91,
+    "fields": {
+      "event": 21,
+      "user": "74dd0156-a232-48d9-b5e1-57eb34dc0ffc",
+      "schedule": 62,
+      "registered_at": "2025-10-23T07:30:57.775371"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 92,
+    "fields": {
+      "event": 21,
+      "user": "440e0a90-63d1-411a-8772-9de511099a3c",
+      "schedule": 61,
+      "registered_at": "2025-09-27T07:30:57.775375"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 93,
+    "fields": {
+      "event": 22,
+      "user": "be53a2c4-d676-499b-ad39-4b1c962cc4b1",
+      "schedule": 66,
+      "registered_at": "2025-10-18T07:30:57.775382"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 94,
+    "fields": {
+      "event": 22,
+      "user": "d1146444-6633-4b06-8069-d57a78195b6d",
+      "schedule": 65,
+      "registered_at": "2025-10-13T07:30:57.775386"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 95,
+    "fields": {
+      "event": 22,
+      "user": "a5146f4b-fe97-4c5f-adf3-4bbb29637505",
+      "schedule": 66,
+      "registered_at": "2025-10-21T07:30:57.775391"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 96,
+    "fields": {
+      "event": 22,
+      "user": "8f37fae5-0065-40a4-a433-ece187bb91ef",
+      "schedule": 64,
+      "registered_at": "2025-09-28T07:30:57.775394"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 97,
+    "fields": {
+      "event": 22,
+      "user": "cad91051-cb2a-44eb-bff2-c8882dd34b3d",
+      "schedule": 66,
+      "registered_at": "2025-10-17T07:30:57.775398"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 98,
+    "fields": {
+      "event": 23,
+      "user": "86cc918c-508d-4355-88ca-eb4a9c625b8d",
+      "schedule": 68,
+      "registered_at": "2025-10-08T07:30:57.775408"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 99,
+    "fields": {
+      "event": 23,
+      "user": "1271c979-922f-45e6-b4df-f7fa4d283e70",
+      "schedule": 69,
+      "registered_at": "2025-10-19T07:30:57.775412"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 100,
+    "fields": {
+      "event": 23,
+      "user": "715576d0-831c-47e8-b80b-f61c40ec2b8b",
+      "schedule": 68,
+      "registered_at": "2025-10-20T07:30:57.775415"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 101,
+    "fields": {
+      "event": 23,
+      "user": "81425e76-5651-415e-bcdf-88e24bbfdc75",
+      "schedule": 67,
+      "registered_at": "2025-09-27T07:30:57.775419"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 102,
+    "fields": {
+      "event": 23,
+      "user": "943a399c-bda8-4298-a31c-11576eaf95ce",
+      "schedule": 68,
+      "registered_at": "2025-10-10T07:30:57.775423"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 103,
+    "fields": {
+      "event": 24,
+      "user": "b9c12521-a299-4939-a356-c16486558d66",
+      "schedule": 72,
+      "registered_at": "2025-10-10T07:30:57.775430"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 104,
+    "fields": {
+      "event": 24,
+      "user": "498ff68b-61d6-471c-90be-c0fc7b881598",
+      "schedule": 71,
+      "registered_at": "2025-10-04T07:30:57.775434"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 105,
+    "fields": {
+      "event": 24,
+      "user": "ddeb3735-ab4f-4925-b089-98bedc6c9756",
+      "schedule": 72,
+      "registered_at": "2025-10-22T07:30:57.775437"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 106,
+    "fields": {
+      "event": 24,
+      "user": "1f68bd25-017f-4782-b203-3b760d837a3a",
+      "schedule": 71,
+      "registered_at": "2025-10-09T07:30:57.775441"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 107,
+    "fields": {
+      "event": 25,
+      "user": "6e4dbae0-f323-404e-b43d-2dfbea6daaa6",
+      "schedule": 74,
+      "registered_at": "2025-10-08T07:30:57.775448"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 108,
+    "fields": {
+      "event": 25,
+      "user": "cbafd4e4-67ac-4d5a-b449-e57456e5da2b",
+      "schedule": 75,
+      "registered_at": "2025-10-16T07:30:57.775452"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 109,
+    "fields": {
+      "event": 25,
+      "user": "baaf776f-464f-414a-a68e-687821fe3382",
+      "schedule": 73,
+      "registered_at": "2025-09-24T07:30:57.775456"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 110,
+    "fields": {
+      "event": 26,
+      "user": "0654fd39-2c99-442e-a104-dff938f26682",
+      "schedule": 77,
+      "registered_at": "2025-10-21T07:30:57.775464"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 111,
+    "fields": {
+      "event": 26,
+      "user": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "schedule": 77,
+      "registered_at": "2025-10-17T07:30:57.775469"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 112,
+    "fields": {
+      "event": 26,
+      "user": "57cd45a5-35fd-4172-829c-034cbcbb8fb1",
+      "schedule": 76,
+      "registered_at": "2025-09-26T07:30:57.775472"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 113,
+    "fields": {
+      "event": 26,
+      "user": "9b66c55b-8947-4d4f-b142-f585d372dc36",
+      "schedule": 77,
+      "registered_at": "2025-10-13T07:30:57.775476"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 114,
+    "fields": {
+      "event": 26,
+      "user": "679c96ba-ef84-4570-8e02-11ca497ab995",
+      "schedule": 76,
+      "registered_at": "2025-10-03T07:30:57.775480"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 115,
+    "fields": {
+      "event": 27,
+      "user": "2a995ac5-7acd-486e-b68f-986fc51dce24",
+      "schedule": 81,
+      "registered_at": "2025-10-03T07:30:57.775487"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 116,
+    "fields": {
+      "event": 27,
+      "user": "a5249c0b-b13e-4018-adff-309efc262349",
+      "schedule": 81,
+      "registered_at": "2025-10-20T07:30:57.775490"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 117,
+    "fields": {
+      "event": 27,
+      "user": "81f001c4-35a9-4e22-9ec5-cdf4c2ca23cb",
+      "schedule": 79,
+      "registered_at": "2025-10-21T07:30:57.775494"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 118,
+    "fields": {
+      "event": 28,
+      "user": "440e0a90-63d1-411a-8772-9de511099a3c",
+      "schedule": 84,
+      "registered_at": "2025-10-16T07:30:57.775502"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 119,
+    "fields": {
+      "event": 28,
+      "user": "81425e76-5651-415e-bcdf-88e24bbfdc75",
+      "schedule": 83,
+      "registered_at": "2025-09-30T07:30:57.775506"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 120,
+    "fields": {
+      "event": 28,
+      "user": "86cc918c-508d-4355-88ca-eb4a9c625b8d",
+      "schedule": 83,
+      "registered_at": "2025-09-29T07:30:57.775510"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 121,
+    "fields": {
+      "event": 28,
+      "user": "81f001c4-35a9-4e22-9ec5-cdf4c2ca23cb",
+      "schedule": 84,
+      "registered_at": "2025-10-15T07:30:57.775514"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 122,
+    "fields": {
+      "event": 28,
+      "user": "4b17bd76-bbaa-4c24-a920-3649400c02db",
+      "schedule": 83,
+      "registered_at": "2025-10-16T07:30:57.775518"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 123,
+    "fields": {
+      "event": 29,
+      "user": "f8d243bb-f917-4e6d-bc0e-6f8273383268",
+      "schedule": 86,
+      "registered_at": "2025-10-02T07:30:57.775524"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 124,
+    "fields": {
+      "event": 29,
+      "user": "baaf776f-464f-414a-a68e-687821fe3382",
+      "schedule": 86,
+      "registered_at": "2025-09-25T07:30:57.775528"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 125,
+    "fields": {
+      "event": 29,
+      "user": "fa717310-39bb-48c3-840f-fd37a67701ec",
+      "schedule": 86,
+      "registered_at": "2025-09-24T07:30:57.775532"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 126,
+    "fields": {
+      "event": 30,
+      "user": "99073a07-8625-4fc2-be46-defd5cf55f12",
+      "schedule": 88,
+      "registered_at": "2025-10-09T07:30:57.775539"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 127,
+    "fields": {
+      "event": 30,
+      "user": "40cd1349-fa82-4505-a581-fee0b98045b7",
+      "schedule": 88,
+      "registered_at": "2025-10-13T07:30:57.775544"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 128,
+    "fields": {
+      "event": 30,
+      "user": "584a0357-685f-4b0c-a617-d23a2da84360",
+      "schedule": 88,
+      "registered_at": "2025-10-20T07:30:57.775548"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 129,
+    "fields": {
+      "event": 30,
+      "user": "a5249c0b-b13e-4018-adff-309efc262349",
+      "schedule": 90,
+      "registered_at": "2025-10-07T07:30:57.775551"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 130,
+    "fields": {
+      "event": 31,
+      "user": "5cb2dd94-0d41-449c-ae57-c9fde2bf90c4",
+      "schedule": 93,
+      "registered_at": "2025-10-06T07:30:57.775559"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 131,
+    "fields": {
+      "event": 31,
+      "user": "baaf776f-464f-414a-a68e-687821fe3382",
+      "schedule": 91,
+      "registered_at": "2025-10-05T07:30:57.775563"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 132,
+    "fields": {
+      "event": 31,
+      "user": "6e4dbae0-f323-404e-b43d-2dfbea6daaa6",
+      "schedule": 93,
+      "registered_at": "2025-10-08T07:30:57.775567"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 133,
+    "fields": {
+      "event": 31,
+      "user": "1271c979-922f-45e6-b4df-f7fa4d283e70",
+      "schedule": 93,
+      "registered_at": "2025-10-18T07:30:57.775572"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 134,
+    "fields": {
+      "event": 31,
+      "user": "b9c12521-a299-4939-a356-c16486558d66",
+      "schedule": 92,
+      "registered_at": "2025-09-26T07:30:57.775576"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 135,
+    "fields": {
+      "event": 32,
+      "user": "cd27997d-1e21-4a50-a026-e310e7c2f549",
+      "schedule": 95,
+      "registered_at": "2025-10-16T07:30:57.775583"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 136,
+    "fields": {
+      "event": 32,
+      "user": "7f73b68b-0a90-4c50-8a71-05a592541e31",
+      "schedule": 94,
+      "registered_at": "2025-10-21T07:30:57.775587"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 137,
+    "fields": {
+      "event": 32,
+      "user": "99073a07-8625-4fc2-be46-defd5cf55f12",
+      "schedule": 94,
+      "registered_at": "2025-10-21T07:30:57.775591"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 138,
+    "fields": {
+      "event": 33,
+      "user": "8f37fae5-0065-40a4-a433-ece187bb91ef",
+      "schedule": 97,
+      "registered_at": "2025-09-27T07:30:57.775598"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 139,
+    "fields": {
+      "event": 33,
+      "user": "982ba35c-9ac4-4adb-9ae3-ab41c1defd53",
+      "schedule": 99,
+      "registered_at": "2025-10-09T07:30:57.775602"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 140,
+    "fields": {
+      "event": 33,
+      "user": "b1cd0140-c9dd-4e32-82bd-5525c290b515",
+      "schedule": 98,
+      "registered_at": "2025-10-16T07:30:57.775605"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 141,
+    "fields": {
+      "event": 34,
+      "user": "a5146f4b-fe97-4c5f-adf3-4bbb29637505",
+      "schedule": 102,
+      "registered_at": "2025-09-24T07:30:57.775613"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 142,
+    "fields": {
+      "event": 34,
+      "user": "49ca7cba-0967-4552-897e-ca50ce40be2e",
+      "schedule": 101,
+      "registered_at": "2025-09-24T07:30:57.775617"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 143,
+    "fields": {
+      "event": 34,
+      "user": "86cc918c-508d-4355-88ca-eb4a9c625b8d",
+      "schedule": 102,
+      "registered_at": "2025-10-21T07:30:57.775621"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 144,
+    "fields": {
+      "event": 34,
+      "user": "b1cd0140-c9dd-4e32-82bd-5525c290b515",
+      "schedule": 100,
+      "registered_at": "2025-10-15T07:30:57.775625"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 145,
+    "fields": {
+      "event": 34,
+      "user": "584a0357-685f-4b0c-a617-d23a2da84360",
+      "schedule": 101,
+      "registered_at": "2025-10-10T07:30:57.775629"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 146,
+    "fields": {
+      "event": 35,
+      "user": "74dd0156-a232-48d9-b5e1-57eb34dc0ffc",
+      "schedule": 103,
+      "registered_at": "2025-10-21T07:30:57.775636"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 147,
+    "fields": {
+      "event": 35,
+      "user": "943a399c-bda8-4298-a31c-11576eaf95ce",
+      "schedule": 105,
+      "registered_at": "2025-10-03T07:30:57.775640"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 148,
+    "fields": {
+      "event": 35,
+      "user": "c5e93169-2084-4f3d-81ba-df4937a4a0b4",
+      "schedule": 104,
+      "registered_at": "2025-10-11T07:30:57.775644"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 149,
+    "fields": {
+      "event": 36,
+      "user": "d6080083-a41b-4f98-8e37-f52afe05127f",
+      "schedule": 106,
+      "registered_at": "2025-10-02T07:30:57.775651"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 150,
+    "fields": {
+      "event": 36,
+      "user": "6c5f5fdd-212f-47a0-9743-536de28a40ef",
+      "schedule": 107,
+      "registered_at": "2025-10-01T07:30:57.775655"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 151,
+    "fields": {
+      "event": 36,
+      "user": "9be26c1e-f4a0-4532-88fc-647c1848898f",
+      "schedule": 107,
+      "registered_at": "2025-10-21T07:30:57.775659"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 152,
+    "fields": {
+      "event": 37,
+      "user": "a5249c0b-b13e-4018-adff-309efc262349",
+      "schedule": 109,
+      "registered_at": "2025-10-09T07:30:57.775667"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 153,
+    "fields": {
+      "event": 37,
+      "user": "be53a2c4-d676-499b-ad39-4b1c962cc4b1",
+      "schedule": 110,
+      "registered_at": "2025-09-29T07:30:57.775671"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 154,
+    "fields": {
+      "event": 37,
+      "user": "74dd0156-a232-48d9-b5e1-57eb34dc0ffc",
+      "schedule": 110,
+      "registered_at": "2025-10-05T07:30:57.775675"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 155,
+    "fields": {
+      "event": 37,
+      "user": "aa2e074a-3392-479f-afbd-e2de87494170",
+      "schedule": 111,
+      "registered_at": "2025-09-24T07:30:57.775678"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 156,
+    "fields": {
+      "event": 37,
+      "user": "1271c979-922f-45e6-b4df-f7fa4d283e70",
+      "schedule": 110,
+      "registered_at": "2025-10-15T07:30:57.775682"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 157,
+    "fields": {
+      "event": 38,
+      "user": "ddeb3735-ab4f-4925-b089-98bedc6c9756",
+      "schedule": 114,
+      "registered_at": "2025-10-23T07:30:57.775690"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 158,
+    "fields": {
+      "event": 38,
+      "user": "7f73b68b-0a90-4c50-8a71-05a592541e31",
+      "schedule": 112,
+      "registered_at": "2025-10-03T07:30:57.775694"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 159,
+    "fields": {
+      "event": 38,
+      "user": "03547844-cc31-4f11-829b-da81f7497204",
+      "schedule": 113,
+      "registered_at": "2025-10-08T07:30:57.775698"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 160,
+    "fields": {
+      "event": 38,
+      "user": "8c427c0f-b0a0-4c3f-9195-ece06d6248bc",
+      "schedule": 112,
+      "registered_at": "2025-10-12T07:30:57.775702"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 161,
+    "fields": {
+      "event": 39,
+      "user": "aa2e074a-3392-479f-afbd-e2de87494170",
+      "schedule": 115,
+      "registered_at": "2025-10-05T07:30:57.775708"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 162,
+    "fields": {
+      "event": 39,
+      "user": "c5e93169-2084-4f3d-81ba-df4937a4a0b4",
+      "schedule": 117,
+      "registered_at": "2025-10-19T07:30:57.775712"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 163,
+    "fields": {
+      "event": 39,
+      "user": "b1cd0140-c9dd-4e32-82bd-5525c290b515",
+      "schedule": 115,
+      "registered_at": "2025-10-10T07:30:57.775716"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 164,
+    "fields": {
+      "event": 40,
+      "user": "74dd0156-a232-48d9-b5e1-57eb34dc0ffc",
+      "schedule": 120,
+      "registered_at": "2025-10-16T07:30:57.775723"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 165,
+    "fields": {
+      "event": 40,
+      "user": "922c8e67-8505-427b-b466-816c09f4d3f6",
+      "schedule": 119,
+      "registered_at": "2025-10-20T07:30:57.775740"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 166,
+    "fields": {
+      "event": 40,
+      "user": "e8e807b1-32ab-43c9-abc5-b0805de203f1",
+      "schedule": 119,
+      "registered_at": "2025-10-16T07:30:57.775743"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 167,
+    "fields": {
+      "event": 40,
+      "user": "2137bd35-44c0-4545-a117-2b6835381110",
+      "schedule": 118,
+      "registered_at": "2025-10-04T07:30:57.775747"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 168,
+    "fields": {
+      "event": 41,
+      "user": "660c0c84-f4a8-43c5-8a61-807540981782",
+      "schedule": 122,
+      "registered_at": "2025-10-10T07:30:57.775755"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 169,
+    "fields": {
+      "event": 41,
+      "user": "daebf1a6-4f9f-4e90-b11c-7da6ff98c6ee",
+      "schedule": 121,
+      "registered_at": "2025-09-25T07:30:57.775758"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 170,
+    "fields": {
+      "event": 41,
+      "user": "b1cd0140-c9dd-4e32-82bd-5525c290b515",
+      "schedule": 121,
+      "registered_at": "2025-10-20T07:30:57.775762"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 171,
+    "fields": {
+      "event": 42,
+      "user": "e75b3cd8-c298-45d3-8074-065914cf72d9",
+      "schedule": 126,
+      "registered_at": "2025-10-03T07:30:57.775770"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 172,
+    "fields": {
+      "event": 42,
+      "user": "f8d243bb-f917-4e6d-bc0e-6f8273383268",
+      "schedule": 125,
+      "registered_at": "2025-10-14T07:30:57.775774"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 173,
+    "fields": {
+      "event": 42,
+      "user": "40cd1349-fa82-4505-a581-fee0b98045b7",
+      "schedule": 124,
+      "registered_at": "2025-09-25T07:30:57.775777"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 174,
+    "fields": {
+      "event": 42,
+      "user": "b1cd0140-c9dd-4e32-82bd-5525c290b515",
+      "schedule": 126,
+      "registered_at": "2025-10-06T07:30:57.775782"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 175,
+    "fields": {
+      "event": 43,
+      "user": "a9a55e89-a76e-46f0-9b31-0bbf38698917",
+      "schedule": 127,
+      "registered_at": "2025-10-14T07:30:57.775792"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 176,
+    "fields": {
+      "event": 43,
+      "user": "8c427c0f-b0a0-4c3f-9195-ece06d6248bc",
+      "schedule": 129,
+      "registered_at": "2025-09-29T07:30:57.775796"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 177,
+    "fields": {
+      "event": 43,
+      "user": "b9c12521-a299-4939-a356-c16486558d66",
+      "schedule": 127,
+      "registered_at": "2025-10-18T07:30:57.775800"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 178,
+    "fields": {
+      "event": 43,
+      "user": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "schedule": 129,
+      "registered_at": "2025-10-20T07:30:57.775804"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 179,
+    "fields": {
+      "event": 43,
+      "user": "a8ef2613-896f-40ea-9841-3c5bcbc8f749",
+      "schedule": 128,
+      "registered_at": "2025-10-02T07:30:57.775807"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 180,
+    "fields": {
+      "event": 44,
+      "user": "572b081b-2ecf-4455-b8bc-c9813414c65c",
+      "schedule": 131,
+      "registered_at": "2025-09-24T07:30:57.775814"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 181,
+    "fields": {
+      "event": 44,
+      "user": "99073a07-8625-4fc2-be46-defd5cf55f12",
+      "schedule": 130,
+      "registered_at": "2025-10-05T07:30:57.775818"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 182,
+    "fields": {
+      "event": 44,
+      "user": "a9a55e89-a76e-46f0-9b31-0bbf38698917",
+      "schedule": 130,
+      "registered_at": "2025-10-04T07:30:57.775823"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 183,
+    "fields": {
+      "event": 45,
+      "user": "fa717310-39bb-48c3-840f-fd37a67701ec",
+      "schedule": 135,
+      "registered_at": "2025-10-20T07:30:57.775830"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 184,
+    "fields": {
+      "event": 45,
+      "user": "7c873c74-18bf-42c4-9515-f12834eb51e8",
+      "schedule": 135,
+      "registered_at": "2025-10-10T07:30:57.775834"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 185,
+    "fields": {
+      "event": 45,
+      "user": "03547844-cc31-4f11-829b-da81f7497204",
+      "schedule": 134,
+      "registered_at": "2025-10-20T07:30:57.775837"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 186,
+    "fields": {
+      "event": 46,
+      "user": "715576d0-831c-47e8-b80b-f61c40ec2b8b",
+      "schedule": 138,
+      "registered_at": "2025-10-06T07:30:57.775845"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 187,
+    "fields": {
+      "event": 46,
+      "user": "7f73b68b-0a90-4c50-8a71-05a592541e31",
+      "schedule": 138,
+      "registered_at": "2025-10-08T07:30:57.775849"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 188,
+    "fields": {
+      "event": 46,
+      "user": "1f68bd25-017f-4782-b203-3b760d837a3a",
+      "schedule": 137,
+      "registered_at": "2025-10-12T07:30:57.775852"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 189,
+    "fields": {
+      "event": 46,
+      "user": "584a0357-685f-4b0c-a617-d23a2da84360",
+      "schedule": 138,
+      "registered_at": "2025-09-26T07:30:57.775856"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 190,
+    "fields": {
+      "event": 47,
+      "user": "715576d0-831c-47e8-b80b-f61c40ec2b8b",
+      "schedule": 140,
+      "registered_at": "2025-10-01T07:30:57.775864"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 191,
+    "fields": {
+      "event": 47,
+      "user": "99bfee5a-a205-4e1b-bfbc-f36d6fed8d24",
+      "schedule": 139,
+      "registered_at": "2025-10-04T07:30:57.775869"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 192,
+    "fields": {
+      "event": 47,
+      "user": "208dab4b-fb61-4236-9c02-43f165af7184",
+      "schedule": 139,
+      "registered_at": "2025-09-27T07:30:57.775873"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 193,
+    "fields": {
+      "event": 47,
+      "user": "99073a07-8625-4fc2-be46-defd5cf55f12",
+      "schedule": 141,
+      "registered_at": "2025-10-19T07:30:57.775877"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 194,
+    "fields": {
+      "event": 47,
+      "user": "7c873c74-18bf-42c4-9515-f12834eb51e8",
+      "schedule": 139,
+      "registered_at": "2025-10-09T07:30:57.775881"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 195,
+    "fields": {
+      "event": 48,
+      "user": "8c427c0f-b0a0-4c3f-9195-ece06d6248bc",
+      "schedule": 142,
+      "registered_at": "2025-10-17T07:30:57.775888"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 196,
+    "fields": {
+      "event": 48,
+      "user": "2137bd35-44c0-4545-a117-2b6835381110",
+      "schedule": 142,
+      "registered_at": "2025-09-30T07:30:57.775892"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 197,
+    "fields": {
+      "event": 48,
+      "user": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "schedule": 142,
+      "registered_at": "2025-10-23T07:30:57.775896"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 198,
+    "fields": {
+      "event": 48,
+      "user": "9b66c55b-8947-4d4f-b142-f585d372dc36",
+      "schedule": 144,
+      "registered_at": "2025-10-10T07:30:57.775899"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 199,
+    "fields": {
+      "event": 49,
+      "user": "ea0cb3d8-fe1d-425f-871c-b773634fdc94",
+      "schedule": 147,
+      "registered_at": "2025-10-09T07:30:57.775906"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 200,
+    "fields": {
+      "event": 49,
+      "user": "8c427c0f-b0a0-4c3f-9195-ece06d6248bc",
+      "schedule": 145,
+      "registered_at": "2025-10-08T07:30:57.775910"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 201,
+    "fields": {
+      "event": 49,
+      "user": "208dab4b-fb61-4236-9c02-43f165af7184",
+      "schedule": 146,
+      "registered_at": "2025-10-02T07:30:57.775914"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 202,
+    "fields": {
+      "event": 50,
+      "user": "1c2db2bc-b42c-4f4c-88ad-43c1200cc694",
+      "schedule": 149,
+      "registered_at": "2025-10-16T07:30:57.775922"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 203,
+    "fields": {
+      "event": 50,
+      "user": "fa717310-39bb-48c3-840f-fd37a67701ec",
+      "schedule": 149,
+      "registered_at": "2025-09-27T07:30:57.775926"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 204,
+    "fields": {
+      "event": 50,
+      "user": "be539eb2-eb0e-4cd5-a560-0f2ad0b9a460",
+      "schedule": 149,
+      "registered_at": "2025-10-21T07:30:57.775930"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 205,
+    "fields": {
+      "event": 50,
+      "user": "d7de3b10-3eed-4eb1-bc2e-f0f63adfa08f",
+      "schedule": 149,
+      "registered_at": "2025-10-15T07:30:57.775933"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 206,
+    "fields": {
+      "event": 51,
+      "user": "1c2db2bc-b42c-4f4c-88ad-43c1200cc694",
+      "schedule": 153,
+      "registered_at": "2025-10-13T07:30:57.775940"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 207,
+    "fields": {
+      "event": 51,
+      "user": "74dd0156-a232-48d9-b5e1-57eb34dc0ffc",
+      "schedule": 152,
+      "registered_at": "2025-10-20T07:30:57.775945"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 208,
+    "fields": {
+      "event": 51,
+      "user": "ddeb3735-ab4f-4925-b089-98bedc6c9756",
+      "schedule": 153,
+      "registered_at": "2025-10-17T07:30:57.775949"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 209,
+    "fields": {
+      "event": 51,
+      "user": "660c0c84-f4a8-43c5-8a61-807540981782",
+      "schedule": 152,
+      "registered_at": "2025-10-12T07:30:57.775953"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 210,
+    "fields": {
+      "event": 52,
+      "user": "0f23f24b-e835-408c-b95c-2d87efed0fe9",
+      "schedule": 155,
+      "registered_at": "2025-10-20T07:30:57.775960"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 211,
+    "fields": {
+      "event": 52,
+      "user": "81425e76-5651-415e-bcdf-88e24bbfdc75",
+      "schedule": 154,
+      "registered_at": "2025-10-18T07:30:57.775964"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 212,
+    "fields": {
+      "event": 52,
+      "user": "584a0357-685f-4b0c-a617-d23a2da84360",
+      "schedule": 156,
+      "registered_at": "2025-10-01T07:30:57.775968"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 213,
+    "fields": {
+      "event": 52,
+      "user": "d6080083-a41b-4f98-8e37-f52afe05127f",
+      "schedule": 154,
+      "registered_at": "2025-10-09T07:30:57.775971"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 214,
+    "fields": {
+      "event": 53,
+      "user": "f002a650-5566-44f7-8ec2-d36664ac9b5e",
+      "schedule": 157,
+      "registered_at": "2025-10-18T07:30:57.775981"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 215,
+    "fields": {
+      "event": 53,
+      "user": "8c427c0f-b0a0-4c3f-9195-ece06d6248bc",
+      "schedule": 158,
+      "registered_at": "2025-10-18T07:30:57.775985"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 216,
+    "fields": {
+      "event": 53,
+      "user": "8c59104f-448a-496b-8d72-b6c3870b950e",
+      "schedule": 157,
+      "registered_at": "2025-09-24T07:30:57.775989"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 217,
+    "fields": {
+      "event": 54,
+      "user": "6c5f5fdd-212f-47a0-9743-536de28a40ef",
+      "schedule": 162,
+      "registered_at": "2025-10-22T07:30:57.775997"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 218,
+    "fields": {
+      "event": 54,
+      "user": "715576d0-831c-47e8-b80b-f61c40ec2b8b",
+      "schedule": 161,
+      "registered_at": "2025-09-30T07:30:57.776000"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 219,
+    "fields": {
+      "event": 54,
+      "user": "f18636db-f82d-4450-bf92-bbdaa07fb767",
+      "schedule": 160,
+      "registered_at": "2025-10-16T07:30:57.776004"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 220,
+    "fields": {
+      "event": 54,
+      "user": "5b307a42-dca4-40e7-860a-81464acd8ee0",
+      "schedule": 160,
+      "registered_at": "2025-10-19T07:30:57.776008"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 221,
+    "fields": {
+      "event": 55,
+      "user": "ddeb3735-ab4f-4925-b089-98bedc6c9756",
+      "schedule": 164,
+      "registered_at": "2025-10-07T07:30:57.776015"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 222,
+    "fields": {
+      "event": 55,
+      "user": "91413b85-fa82-4503-af2b-9cae0c22b01c",
+      "schedule": 165,
+      "registered_at": "2025-09-25T07:30:57.776019"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 223,
+    "fields": {
+      "event": 55,
+      "user": "b16d65a0-12df-4205-94e8-211785f1f44f",
+      "schedule": 164,
+      "registered_at": "2025-10-22T07:30:57.776023"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 224,
+    "fields": {
+      "event": 55,
+      "user": "9db5cf83-f527-473a-8513-7fc5b7d871c4",
+      "schedule": 164,
+      "registered_at": "2025-10-10T07:30:57.776027"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 225,
+    "fields": {
+      "event": 56,
+      "user": "6c5f5fdd-212f-47a0-9743-536de28a40ef",
+      "schedule": 166,
+      "registered_at": "2025-10-01T07:30:57.776034"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 226,
+    "fields": {
+      "event": 56,
+      "user": "1271c979-922f-45e6-b4df-f7fa4d283e70",
+      "schedule": 168,
+      "registered_at": "2025-09-28T07:30:57.776038"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 227,
+    "fields": {
+      "event": 56,
+      "user": "0f23f24b-e835-408c-b95c-2d87efed0fe9",
+      "schedule": 166,
+      "registered_at": "2025-10-17T07:30:57.776042"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 228,
+    "fields": {
+      "event": 56,
+      "user": "dc9496d9-50c4-4ee8-8df6-def5e6b119ed",
+      "schedule": 167,
+      "registered_at": "2025-10-16T07:30:57.776046"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 229,
+    "fields": {
+      "event": 57,
+      "user": "f18636db-f82d-4450-bf92-bbdaa07fb767",
+      "schedule": 169,
+      "registered_at": "2025-10-23T07:30:57.776052"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 230,
+    "fields": {
+      "event": 57,
+      "user": "a9a55e89-a76e-46f0-9b31-0bbf38698917",
+      "schedule": 171,
+      "registered_at": "2025-10-23T07:30:57.776056"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 231,
+    "fields": {
+      "event": 57,
+      "user": "498ff68b-61d6-471c-90be-c0fc7b881598",
+      "schedule": 170,
+      "registered_at": "2025-09-28T07:30:57.776060"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 232,
+    "fields": {
+      "event": 58,
+      "user": "b4160e6f-47a6-4594-9393-54b11329b3e2",
+      "schedule": 174,
+      "registered_at": "2025-10-05T07:30:57.776067"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 233,
+    "fields": {
+      "event": 58,
+      "user": "81776ee5-7f57-45c5-af08-79401e46232e",
+      "schedule": 173,
+      "registered_at": "2025-10-15T07:30:57.776071"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 234,
+    "fields": {
+      "event": 58,
+      "user": "81425e76-5651-415e-bcdf-88e24bbfdc75",
+      "schedule": 174,
+      "registered_at": "2025-10-24T07:30:57.776075"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 235,
+    "fields": {
+      "event": 58,
+      "user": "91413b85-fa82-4503-af2b-9cae0c22b01c",
+      "schedule": 172,
+      "registered_at": "2025-10-06T07:30:57.776079"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 236,
+    "fields": {
+      "event": 59,
+      "user": "9ae5e8d6-df75-45b4-8fc4-c30c1f095ee7",
+      "schedule": 176,
+      "registered_at": "2025-10-18T07:30:57.776086"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 237,
+    "fields": {
+      "event": 59,
+      "user": "f18636db-f82d-4450-bf92-bbdaa07fb767",
+      "schedule": 176,
+      "registered_at": "2025-10-21T07:30:57.776090"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 238,
+    "fields": {
+      "event": 59,
+      "user": "6e4dbae0-f323-404e-b43d-2dfbea6daaa6",
+      "schedule": 177,
+      "registered_at": "2025-10-24T07:30:57.776093"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 239,
+    "fields": {
+      "event": 60,
+      "user": "49c9309e-e1aa-41e4-aa99-be4cc062852e",
+      "schedule": 179,
+      "registered_at": "2025-10-15T07:30:57.776101"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 240,
+    "fields": {
+      "event": 60,
+      "user": "2137bd35-44c0-4545-a117-2b6835381110",
+      "schedule": 179,
+      "registered_at": "2025-10-10T07:30:57.776105"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 241,
+    "fields": {
+      "event": 60,
+      "user": "fa717310-39bb-48c3-840f-fd37a67701ec",
+      "schedule": 180,
+      "registered_at": "2025-10-14T07:30:57.776109"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 242,
+    "fields": {
+      "event": 60,
+      "user": "81425e76-5651-415e-bcdf-88e24bbfdc75",
+      "schedule": 178,
+      "registered_at": "2025-09-25T07:30:57.776113"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 243,
+    "fields": {
+      "event": 61,
+      "user": "cd27997d-1e21-4a50-a026-e310e7c2f549",
+      "schedule": 183,
+      "registered_at": "2025-10-22T07:30:57.776120"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 244,
+    "fields": {
+      "event": 61,
+      "user": "715576d0-831c-47e8-b80b-f61c40ec2b8b",
+      "schedule": 183,
+      "registered_at": "2025-09-27T07:30:57.776123"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 245,
+    "fields": {
+      "event": 61,
+      "user": "b4160e6f-47a6-4594-9393-54b11329b3e2",
+      "schedule": 182,
+      "registered_at": "2025-09-27T07:30:57.776127"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 246,
+    "fields": {
+      "event": 62,
+      "user": "81425e76-5651-415e-bcdf-88e24bbfdc75",
+      "schedule": 184,
+      "registered_at": "2025-10-16T07:30:57.776135"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 247,
+    "fields": {
+      "event": 62,
+      "user": "922c8e67-8505-427b-b466-816c09f4d3f6",
+      "schedule": 186,
+      "registered_at": "2025-10-21T07:30:57.776139"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 248,
+    "fields": {
+      "event": 62,
+      "user": "be53a2c4-d676-499b-ad39-4b1c962cc4b1",
+      "schedule": 184,
+      "registered_at": "2025-09-29T07:30:57.776143"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 249,
+    "fields": {
+      "event": 63,
+      "user": "ae27e20d-7fff-4c00-a1ce-fbc3bc19bdea",
+      "schedule": 187,
+      "registered_at": "2025-10-22T07:30:57.776150"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 250,
+    "fields": {
+      "event": 63,
+      "user": "e3d81f2c-dd47-4e6c-be88-3a627b70d831",
+      "schedule": 188,
+      "registered_at": "2025-10-14T07:30:57.776154"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 251,
+    "fields": {
+      "event": 63,
+      "user": "98b02dc1-1f0a-4437-9950-dd31f324cb0e",
+      "schedule": 187,
+      "registered_at": "2025-10-03T07:30:57.776157"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 252,
+    "fields": {
+      "event": 64,
+      "user": "07d311cc-9050-49c3-aefd-5e5645deac3d",
+      "schedule": 192,
+      "registered_at": "2025-10-21T07:30:57.776164"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 253,
+    "fields": {
+      "event": 64,
+      "user": "98b02dc1-1f0a-4437-9950-dd31f324cb0e",
+      "schedule": 192,
+      "registered_at": "2025-10-04T07:30:57.776168"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 254,
+    "fields": {
+      "event": 64,
+      "user": "9b66c55b-8947-4d4f-b142-f585d372dc36",
+      "schedule": 191,
+      "registered_at": "2025-10-21T07:30:57.776172"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 255,
+    "fields": {
+      "event": 65,
+      "user": "5b307a42-dca4-40e7-860a-81464acd8ee0",
+      "schedule": 194,
+      "registered_at": "2025-10-19T07:30:57.776180"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 256,
+    "fields": {
+      "event": 65,
+      "user": "024635b7-b2fa-4e83-a9bc-3b954f38a889",
+      "schedule": 195,
+      "registered_at": "2025-10-06T07:30:57.776184"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 257,
+    "fields": {
+      "event": 65,
+      "user": "b4160e6f-47a6-4594-9393-54b11329b3e2",
+      "schedule": 193,
+      "registered_at": "2025-10-19T07:30:57.776188"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 258,
+    "fields": {
+      "event": 65,
+      "user": "cad91051-cb2a-44eb-bff2-c8882dd34b3d",
+      "schedule": 193,
+      "registered_at": "2025-10-09T07:30:57.776191"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 259,
+    "fields": {
+      "event": 65,
+      "user": "acdaeea4-705f-467c-b440-e90465c2909d",
+      "schedule": 194,
+      "registered_at": "2025-10-18T07:30:57.776195"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 260,
+    "fields": {
+      "event": 66,
+      "user": "99bfee5a-a205-4e1b-bfbc-f36d6fed8d24",
+      "schedule": 196,
+      "registered_at": "2025-10-04T07:30:57.776203"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 261,
+    "fields": {
+      "event": 66,
+      "user": "cbafd4e4-67ac-4d5a-b449-e57456e5da2b",
+      "schedule": 198,
+      "registered_at": "2025-10-05T07:30:57.776207"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 262,
+    "fields": {
+      "event": 66,
+      "user": "0f23f24b-e835-408c-b95c-2d87efed0fe9",
+      "schedule": 197,
+      "registered_at": "2025-10-23T07:30:57.776211"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 263,
+    "fields": {
+      "event": 66,
+      "user": "ae27e20d-7fff-4c00-a1ce-fbc3bc19bdea",
+      "schedule": 198,
+      "registered_at": "2025-10-04T07:30:57.776214"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 264,
+    "fields": {
+      "event": 67,
+      "user": "9b66c55b-8947-4d4f-b142-f585d372dc36",
+      "schedule": 200,
+      "registered_at": "2025-10-09T07:30:57.776222"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 265,
+    "fields": {
+      "event": 67,
+      "user": "1f68bd25-017f-4782-b203-3b760d837a3a",
+      "schedule": 200,
+      "registered_at": "2025-10-10T07:30:57.776226"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 266,
+    "fields": {
+      "event": 67,
+      "user": "81776ee5-7f57-45c5-af08-79401e46232e",
+      "schedule": 201,
+      "registered_at": "2025-10-23T07:30:57.776230"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 267,
+    "fields": {
+      "event": 67,
+      "user": "0654fd39-2c99-442e-a104-dff938f26682",
+      "schedule": 199,
+      "registered_at": "2025-09-24T07:30:57.776234"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 268,
+    "fields": {
+      "event": 67,
+      "user": "440e0a90-63d1-411a-8772-9de511099a3c",
+      "schedule": 200,
+      "registered_at": "2025-10-02T07:30:57.776238"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 269,
+    "fields": {
+      "event": 68,
+      "user": "a5249c0b-b13e-4018-adff-309efc262349",
+      "schedule": 204,
+      "registered_at": "2025-10-16T07:30:57.776245"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 270,
+    "fields": {
+      "event": 68,
+      "user": "f002a650-5566-44f7-8ec2-d36664ac9b5e",
+      "schedule": 204,
+      "registered_at": "2025-10-15T07:30:57.776249"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 271,
+    "fields": {
+      "event": 68,
+      "user": "0654fd39-2c99-442e-a104-dff938f26682",
+      "schedule": 204,
+      "registered_at": "2025-10-11T07:30:57.776253"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 272,
+    "fields": {
+      "event": 69,
+      "user": "b9c12521-a299-4939-a356-c16486558d66",
+      "schedule": 206,
+      "registered_at": "2025-10-05T07:30:57.776261"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 273,
+    "fields": {
+      "event": 69,
+      "user": "0123e465-074f-4b59-b3c8-d93ebddf9183",
+      "schedule": 207,
+      "registered_at": "2025-10-24T07:30:57.776265"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 274,
+    "fields": {
+      "event": 69,
+      "user": "0f23f24b-e835-408c-b95c-2d87efed0fe9",
+      "schedule": 205,
+      "registered_at": "2025-10-20T07:30:57.776268"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 275,
+    "fields": {
+      "event": 69,
+      "user": "65d8e4a9-25a6-4cd3-aa99-fff2eaa7128a",
+      "schedule": 207,
+      "registered_at": "2025-10-04T07:30:57.776272"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 276,
+    "fields": {
+      "event": 69,
+      "user": "679c96ba-ef84-4570-8e02-11ca497ab995",
+      "schedule": 207,
+      "registered_at": "2025-10-17T07:30:57.776276"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 277,
+    "fields": {
+      "event": 70,
+      "user": "49c9309e-e1aa-41e4-aa99-be4cc062852e",
+      "schedule": 209,
+      "registered_at": "2025-10-07T07:30:57.776283"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 278,
+    "fields": {
+      "event": 70,
+      "user": "b4160e6f-47a6-4594-9393-54b11329b3e2",
+      "schedule": 208,
+      "registered_at": "2025-10-08T07:30:57.776287"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 279,
+    "fields": {
+      "event": 70,
+      "user": "9be26c1e-f4a0-4532-88fc-647c1848898f",
+      "schedule": 209,
+      "registered_at": "2025-10-03T07:30:57.776291"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 280,
+    "fields": {
+      "event": 70,
+      "user": "a9a55e89-a76e-46f0-9b31-0bbf38698917",
+      "schedule": 209,
+      "registered_at": "2025-10-24T07:30:57.776295"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 281,
+    "fields": {
+      "event": 71,
+      "user": "99bfee5a-a205-4e1b-bfbc-f36d6fed8d24",
+      "schedule": 213,
+      "registered_at": "2025-10-14T07:30:57.776301"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 282,
+    "fields": {
+      "event": 71,
+      "user": "91413b85-fa82-4503-af2b-9cae0c22b01c",
+      "schedule": 213,
+      "registered_at": "2025-09-24T07:30:57.776305"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 283,
+    "fields": {
+      "event": 71,
+      "user": "fa717310-39bb-48c3-840f-fd37a67701ec",
+      "schedule": 213,
+      "registered_at": "2025-09-29T07:30:57.776309"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 284,
+    "fields": {
+      "event": 72,
+      "user": "be539eb2-eb0e-4cd5-a560-0f2ad0b9a460",
+      "schedule": 215,
+      "registered_at": "2025-10-12T07:30:57.776316"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 285,
+    "fields": {
+      "event": 72,
+      "user": "bc3f178d-51f4-4eea-ba3f-6f88c722875c",
+      "schedule": 216,
+      "registered_at": "2025-10-10T07:30:57.776320"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 286,
+    "fields": {
+      "event": 72,
+      "user": "943a399c-bda8-4298-a31c-11576eaf95ce",
+      "schedule": 214,
+      "registered_at": "2025-10-15T07:30:57.776323"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 287,
+    "fields": {
+      "event": 72,
+      "user": "679c96ba-ef84-4570-8e02-11ca497ab995",
+      "schedule": 216,
+      "registered_at": "2025-09-24T07:30:57.776328"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 288,
+    "fields": {
+      "event": 73,
+      "user": "cd27997d-1e21-4a50-a026-e310e7c2f549",
+      "schedule": 217,
+      "registered_at": "2025-10-16T07:30:57.776335"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 289,
+    "fields": {
+      "event": 73,
+      "user": "f002a650-5566-44f7-8ec2-d36664ac9b5e",
+      "schedule": 218,
+      "registered_at": "2025-10-13T07:30:57.776339"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 290,
+    "fields": {
+      "event": 73,
+      "user": "982ba35c-9ac4-4adb-9ae3-ab41c1defd53",
+      "schedule": 217,
+      "registered_at": "2025-10-07T07:30:57.776343"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 291,
+    "fields": {
+      "event": 73,
+      "user": "b4160e6f-47a6-4594-9393-54b11329b3e2",
+      "schedule": 218,
+      "registered_at": "2025-10-20T07:30:57.776346"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 292,
+    "fields": {
+      "event": 74,
+      "user": "9be34387-b67b-4977-b44e-9c20278c245b",
+      "schedule": 221,
+      "registered_at": "2025-09-30T07:30:57.776353"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 293,
+    "fields": {
+      "event": 74,
+      "user": "81425e76-5651-415e-bcdf-88e24bbfdc75",
+      "schedule": 222,
+      "registered_at": "2025-10-23T07:30:57.776357"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 294,
+    "fields": {
+      "event": 74,
+      "user": "dc9496d9-50c4-4ee8-8df6-def5e6b119ed",
+      "schedule": 222,
+      "registered_at": "2025-10-19T07:30:57.776361"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 295,
+    "fields": {
+      "event": 75,
+      "user": "b1cd0140-c9dd-4e32-82bd-5525c290b515",
+      "schedule": 225,
+      "registered_at": "2025-10-14T07:30:57.776369"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 296,
+    "fields": {
+      "event": 75,
+      "user": "cd27997d-1e21-4a50-a026-e310e7c2f549",
+      "schedule": 225,
+      "registered_at": "2025-10-08T07:30:57.776373"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 297,
+    "fields": {
+      "event": 75,
+      "user": "81776ee5-7f57-45c5-af08-79401e46232e",
+      "schedule": 223,
+      "registered_at": "2025-10-22T07:30:57.776377"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 298,
+    "fields": {
+      "event": 75,
+      "user": "b9988e76-68f0-423d-a45e-65a8ff49a2ae",
+      "schedule": 223,
+      "registered_at": "2025-10-24T07:30:57.776381"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 299,
+    "fields": {
+      "event": 75,
+      "user": "982ba35c-9ac4-4adb-9ae3-ab41c1defd53",
+      "schedule": 223,
+      "registered_at": "2025-10-23T07:30:57.776384"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 300,
+    "fields": {
+      "event": 76,
+      "user": "4b17bd76-bbaa-4c24-a920-3649400c02db",
+      "schedule": 227,
+      "registered_at": "2025-10-03T07:30:57.776392"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 301,
+    "fields": {
+      "event": 76,
+      "user": "d1146444-6633-4b06-8069-d57a78195b6d",
+      "schedule": 228,
+      "registered_at": "2025-09-28T07:30:57.776396"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 302,
+    "fields": {
+      "event": 76,
+      "user": "baaf776f-464f-414a-a68e-687821fe3382",
+      "schedule": 227,
+      "registered_at": "2025-10-22T07:30:57.776400"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 303,
+    "fields": {
+      "event": 76,
+      "user": "57cd45a5-35fd-4172-829c-034cbcbb8fb1",
+      "schedule": 227,
+      "registered_at": "2025-10-20T07:30:57.776405"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 304,
+    "fields": {
+      "event": 76,
+      "user": "be53a2c4-d676-499b-ad39-4b1c962cc4b1",
+      "schedule": 227,
+      "registered_at": "2025-10-14T07:30:57.776409"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 305,
+    "fields": {
+      "event": 77,
+      "user": "d1146444-6633-4b06-8069-d57a78195b6d",
+      "schedule": 231,
+      "registered_at": "2025-10-06T07:30:57.776416"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 306,
+    "fields": {
+      "event": 77,
+      "user": "f18636db-f82d-4450-bf92-bbdaa07fb767",
+      "schedule": 229,
+      "registered_at": "2025-10-16T07:30:57.776420"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 307,
+    "fields": {
+      "event": 77,
+      "user": "2137bd35-44c0-4545-a117-2b6835381110",
+      "schedule": 229,
+      "registered_at": "2025-10-18T07:30:57.776423"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 308,
+    "fields": {
+      "event": 78,
+      "user": "ea0cb3d8-fe1d-425f-871c-b773634fdc94",
+      "schedule": 233,
+      "registered_at": "2025-10-21T07:30:57.776431"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 309,
+    "fields": {
+      "event": 78,
+      "user": "a9a55e89-a76e-46f0-9b31-0bbf38698917",
+      "schedule": 233,
+      "registered_at": "2025-10-18T07:30:57.776435"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 310,
+    "fields": {
+      "event": 78,
+      "user": "86cc918c-508d-4355-88ca-eb4a9c625b8d",
+      "schedule": 233,
+      "registered_at": "2025-09-28T07:30:57.776440"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 311,
+    "fields": {
+      "event": 78,
+      "user": "9db5cf83-f527-473a-8513-7fc5b7d871c4",
+      "schedule": 233,
+      "registered_at": "2025-10-08T07:30:57.776443"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 312,
+    "fields": {
+      "event": 78,
+      "user": "99073a07-8625-4fc2-be46-defd5cf55f12",
+      "schedule": 234,
+      "registered_at": "2025-09-29T07:30:57.776447"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 313,
+    "fields": {
+      "event": 79,
+      "user": "feaf39d1-0115-43c9-8e8d-571323ea4170",
+      "schedule": 237,
+      "registered_at": "2025-09-25T07:30:57.776455"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 314,
+    "fields": {
+      "event": 79,
+      "user": "498ff68b-61d6-471c-90be-c0fc7b881598",
+      "schedule": 236,
+      "registered_at": "2025-10-15T07:30:57.776459"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 315,
+    "fields": {
+      "event": 79,
+      "user": "d7de3b10-3eed-4eb1-bc2e-f0f63adfa08f",
+      "schedule": 236,
+      "registered_at": "2025-10-11T07:30:57.776463"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 316,
+    "fields": {
+      "event": 79,
+      "user": "ddd774d7-6a4e-4ade-9486-1ef77a6b5704",
+      "schedule": 235,
+      "registered_at": "2025-10-05T07:30:57.776466"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 317,
+    "fields": {
+      "event": 79,
+      "user": "8f37fae5-0065-40a4-a433-ece187bb91ef",
+      "schedule": 237,
+      "registered_at": "2025-10-03T07:30:57.776470"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 318,
+    "fields": {
+      "event": 80,
+      "user": "1f68bd25-017f-4782-b203-3b760d837a3a",
+      "schedule": 240,
+      "registered_at": "2025-10-01T07:30:57.776477"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 319,
+    "fields": {
+      "event": 80,
+      "user": "715576d0-831c-47e8-b80b-f61c40ec2b8b",
+      "schedule": 239,
+      "registered_at": "2025-09-29T07:30:57.776482"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 320,
+    "fields": {
+      "event": 80,
+      "user": "fa717310-39bb-48c3-840f-fd37a67701ec",
+      "schedule": 240,
+      "registered_at": "2025-10-05T07:30:57.776486"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 321,
+    "fields": {
+      "event": 80,
+      "user": "bc3f178d-51f4-4eea-ba3f-6f88c722875c",
+      "schedule": 240,
+      "registered_at": "2025-10-23T07:30:57.776489"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 322,
+    "fields": {
+      "event": 81,
+      "user": "5c85725d-5779-438b-96ea-bd359afbf270",
+      "schedule": 241,
+      "registered_at": "2025-10-09T07:30:57.776497"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 323,
+    "fields": {
+      "event": 81,
+      "user": "cad91051-cb2a-44eb-bff2-c8882dd34b3d",
+      "schedule": 243,
+      "registered_at": "2025-10-02T07:30:57.776501"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 324,
+    "fields": {
+      "event": 81,
+      "user": "40cd1349-fa82-4505-a581-fee0b98045b7",
+      "schedule": 242,
+      "registered_at": "2025-10-17T07:30:57.776505"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 325,
+    "fields": {
+      "event": 81,
+      "user": "5cb2dd94-0d41-449c-ae57-c9fde2bf90c4",
+      "schedule": 241,
+      "registered_at": "2025-10-03T07:30:57.776509"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 326,
+    "fields": {
+      "event": 81,
+      "user": "1c2db2bc-b42c-4f4c-88ad-43c1200cc694",
+      "schedule": 241,
+      "registered_at": "2025-10-09T07:30:57.776512"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 327,
+    "fields": {
+      "event": 82,
+      "user": "e71c2fe8-3241-482a-966d-c64653619413",
+      "schedule": 245,
+      "registered_at": "2025-10-06T07:30:57.776520"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 328,
+    "fields": {
+      "event": 82,
+      "user": "c626e88a-ea71-464a-acb6-37098851360c",
+      "schedule": 246,
+      "registered_at": "2025-10-17T07:30:57.776524"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 329,
+    "fields": {
+      "event": 82,
+      "user": "584a0357-685f-4b0c-a617-d23a2da84360",
+      "schedule": 244,
+      "registered_at": "2025-10-18T07:30:57.776527"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 330,
+    "fields": {
+      "event": 82,
+      "user": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "schedule": 244,
+      "registered_at": "2025-10-03T07:30:57.776531"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 331,
+    "fields": {
+      "event": 83,
+      "user": "7f73b68b-0a90-4c50-8a71-05a592541e31",
+      "schedule": 249,
+      "registered_at": "2025-10-15T07:30:57.776539"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 332,
+    "fields": {
+      "event": 83,
+      "user": "be539eb2-eb0e-4cd5-a560-0f2ad0b9a460",
+      "schedule": 248,
+      "registered_at": "2025-10-07T07:30:57.776543"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 333,
+    "fields": {
+      "event": 83,
+      "user": "b16d65a0-12df-4205-94e8-211785f1f44f",
+      "schedule": 247,
+      "registered_at": "2025-09-26T07:30:57.776548"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 334,
+    "fields": {
+      "event": 83,
+      "user": "572b081b-2ecf-4455-b8bc-c9813414c65c",
+      "schedule": 249,
+      "registered_at": "2025-10-23T07:30:57.776551"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 335,
+    "fields": {
+      "event": 83,
+      "user": "4b17bd76-bbaa-4c24-a920-3649400c02db",
+      "schedule": 247,
+      "registered_at": "2025-10-02T07:30:57.776555"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 336,
+    "fields": {
+      "event": 84,
+      "user": "2a983975-2008-4fe4-a781-8fa9f7a80b2c",
+      "schedule": 252,
+      "registered_at": "2025-10-08T07:30:57.776563"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 337,
+    "fields": {
+      "event": 84,
+      "user": "e71c2fe8-3241-482a-966d-c64653619413",
+      "schedule": 252,
+      "registered_at": "2025-10-06T07:30:57.776567"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 338,
+    "fields": {
+      "event": 84,
+      "user": "91413b85-fa82-4503-af2b-9cae0c22b01c",
+      "schedule": 250,
+      "registered_at": "2025-10-19T07:30:57.776571"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 339,
+    "fields": {
+      "event": 84,
+      "user": "57cd45a5-35fd-4172-829c-034cbcbb8fb1",
+      "schedule": 252,
+      "registered_at": "2025-10-16T07:30:57.776574"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 340,
+    "fields": {
+      "event": 85,
+      "user": "daebf1a6-4f9f-4e90-b11c-7da6ff98c6ee",
+      "schedule": 254,
+      "registered_at": "2025-10-24T07:30:57.776582"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 341,
+    "fields": {
+      "event": 85,
+      "user": "40cd1349-fa82-4505-a581-fee0b98045b7",
+      "schedule": 255,
+      "registered_at": "2025-10-07T07:30:57.776586"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 342,
+    "fields": {
+      "event": 85,
+      "user": "2a995ac5-7acd-486e-b68f-986fc51dce24",
+      "schedule": 253,
+      "registered_at": "2025-10-19T07:30:57.776590"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 343,
+    "fields": {
+      "event": 85,
+      "user": "0654fd39-2c99-442e-a104-dff938f26682",
+      "schedule": 253,
+      "registered_at": "2025-10-14T07:30:57.776594"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 344,
+    "fields": {
+      "event": 86,
+      "user": "922c8e67-8505-427b-b466-816c09f4d3f6",
+      "schedule": 256,
+      "registered_at": "2025-10-24T07:30:57.776601"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 345,
+    "fields": {
+      "event": 86,
+      "user": "679c96ba-ef84-4570-8e02-11ca497ab995",
+      "schedule": 258,
+      "registered_at": "2025-10-23T07:30:57.776604"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 346,
+    "fields": {
+      "event": 86,
+      "user": "feaf39d1-0115-43c9-8e8d-571323ea4170",
+      "schedule": 257,
+      "registered_at": "2025-09-25T07:30:57.776608"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 347,
+    "fields": {
+      "event": 87,
+      "user": "99073a07-8625-4fc2-be46-defd5cf55f12",
+      "schedule": 259,
+      "registered_at": "2025-10-11T07:30:57.776615"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 348,
+    "fields": {
+      "event": 87,
+      "user": "baaf776f-464f-414a-a68e-687821fe3382",
+      "schedule": 259,
+      "registered_at": "2025-10-08T07:30:57.776619"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 349,
+    "fields": {
+      "event": 87,
+      "user": "a5249c0b-b13e-4018-adff-309efc262349",
+      "schedule": 261,
+      "registered_at": "2025-09-25T07:30:57.776623"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 350,
+    "fields": {
+      "event": 87,
+      "user": "2a74759f-28fc-4c3d-a3fb-47ffed1132d3",
+      "schedule": 261,
+      "registered_at": "2025-09-26T07:30:57.776627"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 351,
+    "fields": {
+      "event": 88,
+      "user": "08c2dd34-49f1-49bd-abf3-f69d3f640b02",
+      "schedule": 264,
+      "registered_at": "2025-10-09T07:30:57.776635"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 352,
+    "fields": {
+      "event": 88,
+      "user": "572b081b-2ecf-4455-b8bc-c9813414c65c",
+      "schedule": 264,
+      "registered_at": "2025-09-26T07:30:57.776639"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 353,
+    "fields": {
+      "event": 88,
+      "user": "d1146444-6633-4b06-8069-d57a78195b6d",
+      "schedule": 262,
+      "registered_at": "2025-09-24T07:30:57.776643"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 354,
+    "fields": {
+      "event": 88,
+      "user": "81f001c4-35a9-4e22-9ec5-cdf4c2ca23cb",
+      "schedule": 262,
+      "registered_at": "2025-10-20T07:30:57.776647"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 355,
+    "fields": {
+      "event": 88,
+      "user": "cad91051-cb2a-44eb-bff2-c8882dd34b3d",
+      "schedule": 263,
+      "registered_at": "2025-10-05T07:30:57.776651"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 356,
+    "fields": {
+      "event": 89,
+      "user": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "schedule": 265,
+      "registered_at": "2025-09-27T07:30:57.776658"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 357,
+    "fields": {
+      "event": 89,
+      "user": "b16d65a0-12df-4205-94e8-211785f1f44f",
+      "schedule": 265,
+      "registered_at": "2025-10-05T07:30:57.776662"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 358,
+    "fields": {
+      "event": 89,
+      "user": "208dab4b-fb61-4236-9c02-43f165af7184",
+      "schedule": 267,
+      "registered_at": "2025-10-08T07:30:57.776666"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 359,
+    "fields": {
+      "event": 89,
+      "user": "0123e465-074f-4b59-b3c8-d93ebddf9183",
+      "schedule": 267,
+      "registered_at": "2025-10-22T07:30:57.776670"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 360,
+    "fields": {
+      "event": 90,
+      "user": "aa2e074a-3392-479f-afbd-e2de87494170",
+      "schedule": 268,
+      "registered_at": "2025-10-19T07:30:57.776676"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 361,
+    "fields": {
+      "event": 90,
+      "user": "08c2dd34-49f1-49bd-abf3-f69d3f640b02",
+      "schedule": 269,
+      "registered_at": "2025-09-27T07:30:57.776680"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 362,
+    "fields": {
+      "event": 90,
+      "user": "1c2db2bc-b42c-4f4c-88ad-43c1200cc694",
+      "schedule": 270,
+      "registered_at": "2025-09-24T07:30:57.776684"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 363,
+    "fields": {
+      "event": 91,
+      "user": "daebf1a6-4f9f-4e90-b11c-7da6ff98c6ee",
+      "schedule": 271,
+      "registered_at": "2025-10-17T07:30:57.776691"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 364,
+    "fields": {
+      "event": 91,
+      "user": "b1cd0140-c9dd-4e32-82bd-5525c290b515",
+      "schedule": 271,
+      "registered_at": "2025-10-20T07:30:57.776695"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 365,
+    "fields": {
+      "event": 91,
+      "user": "be53a2c4-d676-499b-ad39-4b1c962cc4b1",
+      "schedule": 273,
+      "registered_at": "2025-10-21T07:30:57.776698"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 366,
+    "fields": {
+      "event": 92,
+      "user": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "schedule": 275,
+      "registered_at": "2025-10-13T07:30:57.776707"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 367,
+    "fields": {
+      "event": 92,
+      "user": "1f68bd25-017f-4782-b203-3b760d837a3a",
+      "schedule": 275,
+      "registered_at": "2025-10-06T07:30:57.776711"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 368,
+    "fields": {
+      "event": 92,
+      "user": "99bfee5a-a205-4e1b-bfbc-f36d6fed8d24",
+      "schedule": 275,
+      "registered_at": "2025-10-20T07:30:57.776715"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 369,
+    "fields": {
+      "event": 92,
+      "user": "7f73b68b-0a90-4c50-8a71-05a592541e31",
+      "schedule": 274,
+      "registered_at": "2025-10-01T07:30:57.776718"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 370,
+    "fields": {
+      "event": 93,
+      "user": "9be26c1e-f4a0-4532-88fc-647c1848898f",
+      "schedule": 279,
+      "registered_at": "2025-10-11T07:30:57.776725"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 371,
+    "fields": {
+      "event": 93,
+      "user": "aa2e074a-3392-479f-afbd-e2de87494170",
+      "schedule": 277,
+      "registered_at": "2025-10-10T07:30:57.776729"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 372,
+    "fields": {
+      "event": 93,
+      "user": "c626e88a-ea71-464a-acb6-37098851360c",
+      "schedule": 277,
+      "registered_at": "2025-10-21T07:30:57.776733"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 373,
+    "fields": {
+      "event": 94,
+      "user": "40cd1349-fa82-4505-a581-fee0b98045b7",
+      "schedule": 280,
+      "registered_at": "2025-10-22T07:30:57.776741"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 374,
+    "fields": {
+      "event": 94,
+      "user": "e8e807b1-32ab-43c9-abc5-b0805de203f1",
+      "schedule": 282,
+      "registered_at": "2025-10-09T07:30:57.776744"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 375,
+    "fields": {
+      "event": 94,
+      "user": "75d348c2-5fa8-4e74-9f61-cfc71854ab35",
+      "schedule": 281,
+      "registered_at": "2025-10-15T07:30:57.776748"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 376,
+    "fields": {
+      "event": 94,
+      "user": "ce2530ab-cfa9-4231-adff-1152ee259041",
+      "schedule": 282,
+      "registered_at": "2025-10-02T07:30:57.776752"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 377,
+    "fields": {
+      "event": 94,
+      "user": "155e3ae7-c559-42b3-aaa6-6cf4713f84f0",
+      "schedule": 280,
+      "registered_at": "2025-10-15T07:30:57.776756"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 378,
+    "fields": {
+      "event": 95,
+      "user": "679c96ba-ef84-4570-8e02-11ca497ab995",
+      "schedule": 284,
+      "registered_at": "2025-10-12T07:30:57.776763"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 379,
+    "fields": {
+      "event": 95,
+      "user": "572b081b-2ecf-4455-b8bc-c9813414c65c",
+      "schedule": 283,
+      "registered_at": "2025-09-26T07:30:57.776767"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 380,
+    "fields": {
+      "event": 95,
+      "user": "81425e76-5651-415e-bcdf-88e24bbfdc75",
+      "schedule": 285,
+      "registered_at": "2025-09-26T07:30:57.776771"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 381,
+    "fields": {
+      "event": 96,
+      "user": "ee0b63ab-a9a5-4d4e-b44e-fba164862ae6",
+      "schedule": 287,
+      "registered_at": "2025-09-29T07:30:57.776778"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 382,
+    "fields": {
+      "event": 96,
+      "user": "922c8e67-8505-427b-b466-816c09f4d3f6",
+      "schedule": 288,
+      "registered_at": "2025-10-21T07:30:57.776781"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 383,
+    "fields": {
+      "event": 96,
+      "user": "ea0cb3d8-fe1d-425f-871c-b773634fdc94",
+      "schedule": 286,
+      "registered_at": "2025-10-09T07:30:57.776786"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 384,
+    "fields": {
+      "event": 97,
+      "user": "8f37fae5-0065-40a4-a433-ece187bb91ef",
+      "schedule": 290,
+      "registered_at": "2025-10-20T07:30:57.776793"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 385,
+    "fields": {
+      "event": 97,
+      "user": "b9c12521-a299-4939-a356-c16486558d66",
+      "schedule": 290,
+      "registered_at": "2025-10-12T07:30:57.776797"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 386,
+    "fields": {
+      "event": 97,
+      "user": "5b307a42-dca4-40e7-860a-81464acd8ee0",
+      "schedule": 290,
+      "registered_at": "2025-10-05T07:30:57.776801"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 387,
+    "fields": {
+      "event": 97,
+      "user": "75d348c2-5fa8-4e74-9f61-cfc71854ab35",
+      "schedule": 291,
+      "registered_at": "2025-10-05T07:30:57.776805"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 388,
+    "fields": {
+      "event": 97,
+      "user": "e75b3cd8-c298-45d3-8074-065914cf72d9",
+      "schedule": 290,
+      "registered_at": "2025-10-06T07:30:57.776809"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 389,
+    "fields": {
+      "event": 98,
+      "user": "922c8e67-8505-427b-b466-816c09f4d3f6",
+      "schedule": 292,
+      "registered_at": "2025-10-22T07:30:57.776899"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 390,
+    "fields": {
+      "event": 98,
+      "user": "cad91051-cb2a-44eb-bff2-c8882dd34b3d",
+      "schedule": 293,
+      "registered_at": "2025-09-24T07:30:57.776904"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 391,
+    "fields": {
+      "event": 98,
+      "user": "7c873c74-18bf-42c4-9515-f12834eb51e8",
+      "schedule": 293,
+      "registered_at": "2025-09-29T07:30:57.776908"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 392,
+    "fields": {
+      "event": 99,
+      "user": "c626e88a-ea71-464a-acb6-37098851360c",
+      "schedule": 297,
+      "registered_at": "2025-10-17T07:30:57.776916"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 393,
+    "fields": {
+      "event": 99,
+      "user": "81f001c4-35a9-4e22-9ec5-cdf4c2ca23cb",
+      "schedule": 295,
+      "registered_at": "2025-10-12T07:30:57.776920"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 394,
+    "fields": {
+      "event": 99,
+      "user": "ddd774d7-6a4e-4ade-9486-1ef77a6b5704",
+      "schedule": 295,
+      "registered_at": "2025-10-18T07:30:57.776923"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 395,
+    "fields": {
+      "event": 99,
+      "user": "d6080083-a41b-4f98-8e37-f52afe05127f",
+      "schedule": 296,
+      "registered_at": "2025-10-05T07:30:57.776927"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 396,
+    "fields": {
+      "event": 99,
+      "user": "208dab4b-fb61-4236-9c02-43f165af7184",
+      "schedule": 295,
+      "registered_at": "2025-10-09T07:30:57.776931"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 397,
+    "fields": {
+      "event": 100,
+      "user": "d7de3b10-3eed-4eb1-bc2e-f0f63adfa08f",
+      "schedule": 298,
+      "registered_at": "2025-09-24T07:30:57.776938"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 398,
+    "fields": {
+      "event": 100,
+      "user": "be53a2c4-d676-499b-ad39-4b1c962cc4b1",
+      "schedule": 298,
+      "registered_at": "2025-10-13T07:30:57.776942"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 399,
+    "fields": {
+      "event": 100,
+      "user": "a9a55e89-a76e-46f0-9b31-0bbf38698917",
+      "schedule": 298,
+      "registered_at": "2025-10-20T07:30:57.776946"
+    }
+  },
+  {
+    "model": "Event.EventRegistration",
+    "pk": 400,
+    "fields": {
+      "event": 100,
+      "user": "2137bd35-44c0-4545-a117-2b6835381110",
+      "schedule": 300,
+      "registered_at": "2025-10-10T07:30:57.776950"
+    }
+  }
+]
