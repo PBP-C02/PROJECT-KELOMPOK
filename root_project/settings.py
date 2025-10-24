@@ -71,10 +71,8 @@ INSTALLED_APPS = [
     'Court',
     'Event',
     'Sport_Partner',
-    'Auth_Profile.apps.AuthProfileConfig',
+    'Auth_Profile',
 ]
-AUTH_USER_MODEL = 'Auth_Profile.User'
-
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
