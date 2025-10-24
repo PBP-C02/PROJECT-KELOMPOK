@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from Coach.models import Coach
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
 import re
@@ -9,6 +9,9 @@ from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from decimal import Decimal
 from django.core.exceptions import ValidationError
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def _to_int(s):
     if not s:
@@ -111,55 +114,65 @@ def create_coach_page(request):
     return render(request, 'create_coach.html')
 
 @login_required(login_url='/login')
+@csrf_exempt
+@require_http_methods(["POST"])
 def add_coach(request):
-    if request.method != 'POST':
-        return HttpResponse(status=405)
+    try:
+        # price
+        price = _to_int(request.POST.get("price"))
+        if price is None or price < 0:
+            return JsonResponse({'success': False, 'message': 'Invalid price'}, status=400)
 
-    # price
-    price = _to_int(request.POST.get("price"))
-    if price is None or price < 0:
-        return HttpResponse(b"INVALID PRICE", status=400)
+        # date
+        date_str = request.POST.get("date")
+        event_dt = _parse_dt_local(date_str)
+        if event_dt is None:
+            return JsonResponse({'success': False, 'message': 'Invalid date'}, status=400)
+        
+        # startTime & endTime
+        start_time = _parse_time(request.POST.get("startTime"))
+        end_time = _parse_time(request.POST.get("endTime"))
+        
+        if not start_time or not end_time:
+            return JsonResponse({'success': False, 'message': 'Invalid time'}, status=400)
+        
+        if end_time <= start_time:
+            return JsonResponse({'success': False, 'message': 'End time must be after start time'}, status=400)
 
-    # date
-    date_str = request.POST.get("date")
-    event_dt = _parse_dt_local(date_str)
-    if event_dt is None:
-        return HttpResponse(b"INVALID DATE", status=400)
-    
-    # startTime & endTime
-    start_time = _parse_time(request.POST.get("startTime"))
-    end_time = _parse_time(request.POST.get("endTime"))
-    
-    if not start_time or not end_time:
-        return HttpResponse(b"INVALID TIME", status=400)
-    
-    if end_time <= start_time:
-        return HttpResponse(b"END TIME MUST BE AFTER START TIME", status=400)
+        # rating
+        rating = _to_decimal(request.POST.get("rating"))
+        if rating < 0 or rating > 5:
+            return JsonResponse({'success': False, 'message': 'Rating must be between 0 and 5'}, status=400)
 
-    # rating
-    rating = _to_decimal(request.POST.get("rating"))
-    if rating < 0 or rating > 5:
-        return HttpResponse(b"RATING MUST BE BETWEEN 0 AND 5", status=400)
+        new_coach = Coach(
+            title=strip_tags(request.POST.get("title")),
+            description=strip_tags(request.POST.get("description")),
+            category=request.POST.get("category"),
+            location=strip_tags(request.POST.get("location")),
+            address=strip_tags(request.POST.get("address")),
+            image=request.FILES.get("image"),
+            user=request.user,
+            price=price,
+            date=event_dt.date(),
+            startTime=start_time,
+            endTime=end_time,
+            rating=rating,
+            instagram_link=request.POST.get("instagram_link") or None,
+            mapsLink=request.POST.get("mapsLink") or "",
+        )
+        new_coach.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Coach created successfully!',
+            'coach_id': str(new_coach.pk),
+            'redirect_url': f'/coach/{new_coach.pk}/'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
-    new_coach = Coach(
-        title=strip_tags(request.POST.get("title")),
-        description=strip_tags(request.POST.get("description")),
-        category=request.POST.get("category"),
-        location=strip_tags(request.POST.get("location")),
-        address=strip_tags(request.POST.get("address")),
-        image=request.FILES.get("image"),
-        user=request.user,
-        price=price,
-        date=event_dt.date(),
-        startTime=start_time,
-        endTime=end_time,
-        rating=rating,
-        instagram_link=request.POST.get("instagram_link") or None,
-        mapsLink=request.POST.get("mapsLink") or "",  # NEW
-    )
-    new_coach.save()
-    return redirect('coach:show_main')
-
+@login_required(login_url='/login')
 def edit_coach_page(request, pk):
     coach = get_object_or_404(Coach, pk=pk)
     if coach.user_id != request.user.id:
@@ -167,95 +180,117 @@ def edit_coach_page(request, pk):
     return render(request, "edit_coach.html", {"coach": coach})
 
 @login_required(login_url='/login')
+@csrf_exempt
+@require_http_methods(["POST"])
 def update_coach(request, pk):
-    if request.method != 'POST':
-        return HttpResponse(status=405)
+    try:
+        coach = get_object_or_404(Coach, pk=pk)
+        if coach.user_id != request.user.id:
+            return JsonResponse({'success': False, 'message': 'Forbidden'}, status=403)
 
-    coach = get_object_or_404(Coach, pk=pk)
-    if coach.user_id != request.user.id:
-        return HttpResponse(b"FORBIDDEN", status=403)
+        # price
+        price = _to_int(request.POST.get("price"))
+        if price is not None and price >= 0:
+            coach.price = price
 
-    # price
-    price = _to_int(request.POST.get("price"))
-    if price is not None and price >= 0:
-        coach.price = price
+        # fields text
+        coach.title = strip_tags(request.POST.get("title", coach.title))
+        coach.description = strip_tags(request.POST.get("description", coach.description))
+        coach.category = request.POST.get("category", coach.category) or coach.category
+        coach.location = strip_tags(request.POST.get("location", coach.location))
+        coach.address = strip_tags(request.POST.get("address", coach.address))
 
-    # fields text
-    coach.title = strip_tags(request.POST.get("title", coach.title))
-    coach.description = strip_tags(request.POST.get("description", coach.description))
-    coach.category = request.POST.get("category", coach.category) or coach.category
-    coach.location = strip_tags(request.POST.get("location", coach.location))
-    coach.address = strip_tags(request.POST.get("address", coach.address))
+        # date
+        date_str = request.POST.get("date")
+        event_dt = _parse_dt_local(date_str)
+        if event_dt:
+            coach.date = event_dt.date()
+        
+        # time
+        start_time = _parse_time(request.POST.get("startTime"))
+        end_time = _parse_time(request.POST.get("endTime"))
+        if start_time:
+            coach.startTime = start_time
+        if end_time:
+            coach.endTime = end_time
 
-    # date
-    date_str = request.POST.get("date")
-    event_dt = _parse_dt_local(date_str)
-    if event_dt:
-        coach.date = event_dt.date()
-    
-    # time
-    start_time = _parse_time(request.POST.get("startTime"))
-    end_time = _parse_time(request.POST.get("endTime"))
-    if start_time:
-        coach.startTime = start_time
-    if end_time:
-        coach.endTime = end_time
+        # rating
+        rating_str = request.POST.get("rating")
+        if rating_str:
+            coach.rating = _to_decimal(rating_str)
+        
+        # instagram_link
+        instagram = request.POST.get("instagram_link")
+        if instagram:
+            coach.instagram_link = instagram
+        
+        # mapsLink
+        maps_link = request.POST.get("mapsLink")
+        if maps_link:
+            coach.mapsLink = maps_link
 
-    # rating
-    rating_str = request.POST.get("rating")
-    if rating_str:
-        coach.rating = _to_decimal(rating_str)
-    
-    # instagram_link
-    instagram = request.POST.get("instagram_link")
-    if instagram:
-        coach.instagram_link = instagram
-    
-    # mapsLink 
-    maps_link = request.POST.get("mapsLink")
-    if maps_link:
-        coach.mapsLink = maps_link
+        # image
+        image = request.FILES.get("image")
+        if image:
+            coach.image = image
 
-    # image
-    image = request.FILES.get("image")
-    if image:
-        coach.image = image
-
-    coach.save()
-    return redirect("coach:coach_detail", pk=coach.pk)
+        coach.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Coach updated successfully!',
+            'redirect_url': f'/coach/{coach.pk}/'
+        })
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
 @login_required(login_url='/login')
+@csrf_exempt  # ADD: Bypass CSRF untuk testing (atau handle di fetch)
+@require_http_methods(["POST"])
 def book_coach(request, pk):
-    if request.method != 'POST':
-        return HttpResponse(status=405)
-    
     coach = get_object_or_404(Coach, pk=pk)
     
     if coach.user == request.user:
-        return HttpResponse(b"Cannot book your own coach", status=400)
+        return JsonResponse({'success': False, 'message': 'Cannot book your own coach'}, status=400)
     
     if coach.isBooked:
-        return HttpResponse(b"Coach already booked", status=400)
+        return JsonResponse({'success': False, 'message': 'Coach already booked'}, status=400)
     
     try:
         coach.peserta = request.user
         coach.isBooked = True
         coach.save()
-        return redirect('coach:coach_detail', pk=pk)
+        return JsonResponse({
+            'success': True,
+            'message': 'Booking successful!',
+            'coach': {
+                'isBooked': True,
+                'peserta_name': request.user.nama
+            }
+        })
     except ValidationError as e:
-        return HttpResponse(str(e).encode(), status=400)
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
 
 @login_required(login_url='/login')
+@csrf_exempt  # ADD: Bypass CSRF untuk testing
+@require_http_methods(["POST"])
 def cancel_booking(request, pk):
-    if request.method != 'POST':
-        return HttpResponse(status=405)
-    
     coach = get_object_or_404(Coach, pk=pk)
     
     if coach.peserta != request.user:
-        return HttpResponse(b"FORBIDDEN", status=403)
+        return JsonResponse({'success': False, 'message': 'Forbidden'}, status=403)
     
-    coach.peserta = None
-    coach.isBooked = False
-    coach.save()
-    return redirect('coach:coach_detail', pk=pk)
+    try:
+        coach.peserta = None
+        coach.isBooked = False
+        coach.save()
+        return JsonResponse({
+            'success': True,
+            'message': 'Booking cancelled successfully',
+            'coach': {'isBooked': False}
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)

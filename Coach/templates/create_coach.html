@@ -12,7 +12,7 @@
     <p>Fill in the details to create your sports coach</p>
   </div>
 
-  <form action="{% url 'coach:add_coach' %}" method="post" enctype="multipart/form-data" class="coach-form">
+  <form id="createCoachForm" enctype="multipart/form-data" class="coach-form">
     {% csrf_token %}
 
     <div class="form-grid">
@@ -51,7 +51,7 @@
         <input id="id_location" name="location" type="text" required>
       </div>
 
-      <!-- Address (full address) -->
+      <!-- Address -->
       <div class="form-group full-width">
         <label for="id_address">Address</label>
         <textarea id="id_address" name="address" rows="3" required></textarea>
@@ -63,13 +63,13 @@
         <input id="id_date" name="date" type="date" required>
       </div>
 
-      <!-- Start Time (NEW) -->
+      <!-- Start Time -->
       <div class="form-group">
         <label for="id_startTime">Waktu Mulai</label>
         <input id="id_startTime" name="startTime" type="time" required>
       </div>
 
-      <!-- End Time (NEW) -->
+      <!-- End Time -->
       <div class="form-group">
         <label for="id_endTime">Waktu Selesai</label>
         <input id="id_endTime" name="endTime" type="time" required>
@@ -81,7 +81,7 @@
         <input id="id_price" name="price" type="number" min="0" step="1" required>
       </div>
 
-      <!-- Rating (NEW) -->
+      <!-- Rating -->
       <div class="form-group">
         <label for="id_rating">Rating (0-5)</label>
         <input id="id_rating" name="rating" type="number" min="0" max="5" step="0.1" value="0">
@@ -93,13 +93,13 @@
         <input id="id_instagram_link" name="instagram_link" type="url" placeholder="https://instagram.com/username">
       </div>
 
-      <!-- Maps Link (NEW) -->
+      <!-- Maps Link -->
       <div class="form-group full-width">
         <label for="id_mapsLink">Google Maps Link</label>
         <input id="id_mapsLink" name="mapsLink" type="url" placeholder="https://maps.google.com/?q=-6.2,106.8" required>
       </div>
 
-      <!-- Image (optional) -->
+      <!-- Image -->
       <div class="form-group full-width">
         <label for="id_image">Image</label>
         <input id="id_image" name="image" type="file" accept="image/*">
@@ -108,8 +108,61 @@
 
     <div class="form-actions">
       <a href="{% url 'coach:show_main' %}" class="btn-secondary">Cancel</a>
-      <button type="submit" class="btn-primary">Create Coach</button>
+      <button type="submit" class="btn-primary" id="submitBtn">Create Coach</button>
     </div>
   </form>
 </div>
+
+<script>
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+document.getElementById('createCoachForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const submitBtn = document.getElementById('submitBtn');
+  const originalText = submitBtn.textContent;
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Creating...';
+  
+  const formData = new FormData(this);
+  
+  fetch('{% url "coach:add_coach" %}', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      alert(data.message);
+      window.location.href = data.redirect_url;
+    } else {
+      alert(data.message || 'Failed to create coach');
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('An error occurred. Please try again.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = originalText;
+  });
+});
+</script>
 {% endblock %}

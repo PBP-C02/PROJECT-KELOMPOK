@@ -393,6 +393,17 @@ body {
   box-shadow: 0 6px 16px rgba(37, 211, 102, 0.5);
 }
 
+.btn-book-small:disabled,
+.btn-cancel-small:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-book-small:disabled:hover,
+.btn-cancel-small:disabled:hover {
+  transform: none;
+}
+
 .btn-cancel-small {
   background: #dc3545;
   color: white;

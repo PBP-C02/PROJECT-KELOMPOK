@@ -33,9 +33,9 @@ class Coach(models.Model):
     price = models.PositiveIntegerField(validators=[MinValueValidator(0)], default=1)
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
 
-    location = models.CharField(max_length=255)
+    location = models.CharField(max_length=400)
     address = models.TextField()
-    mapsLink = models.URLField()
+    mapsLink = models.URLField(max_length=400)
                     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

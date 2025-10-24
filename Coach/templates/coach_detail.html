@@ -18,7 +18,7 @@
       </div>
     {% endif %}
     
-    <!-- Ribbon Booked (NEW) -->
+    <!-- Ribbon Booked -->
     {% if coach.isBooked %}
     <div class="ribbon-wrapper">
       <div class="ribbon">BOOKED</div>
@@ -114,29 +114,112 @@
       <a href="{% url 'coach:show_main' %}" class="btn-back">← Back to Coach List</a>
       
       {% if request.user != coach.user and not coach.isBooked %}
-        <form method="post" action="{% url 'coach:book_coach' coach.pk %}" style="display: inline-block;">
-          {% csrf_token %}
-          <button type="submit" class="btn-book-small">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            Book
-          </button>
-        </form>
+        <button type="button" class="btn-book-small" onclick="bookCoach('{{ coach.pk }}')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+          Book
+        </button>
       {% elif coach.peserta == request.user %}
-        <form method="post" action="{% url 'coach:cancel_booking' coach.pk %}" style="display: inline-block;">
-          {% csrf_token %}
-          <button type="submit" class="btn-cancel-small">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-            Cancel
-          </button>
-        </form>
+        <button type="button" class="btn-cancel-small" onclick="cancelBooking('{{ coach.pk }}')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          Cancel
+        </button>
       {% endif %}
     </div>
   </div>
 </div>
+
+<script>
+function getCookie(name) {
+  let cookieValue = null;
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+  return cookieValue;
+}
+
+function bookCoach(coachId) {
+  const btn = event.target.closest('button');
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span>Processing...</span>';
+  
+  fetch(`/coach/book-coach/${coachId}/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({})
+  })
+  .then(response => {
+    if (!response.ok) {
+      return response.json().then(err => Promise.reject(err));
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.success) {
+      location.reload();
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert(error.message || 'An error occurred. Please try again.');
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  });
+}
+
+function cancelBooking(coachId) {
+  const btn = event.target.closest('button');
+  const originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span>Processing...</span>';
+  
+  fetch(`/coach/cancel-booking/${coachId}/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCookie('csrftoken')
+    },
+    body: JSON.stringify({})
+  })
+  .then(response => {
+    if (!response.ok) {
+      return response.json().then(err => Promise.reject(err));
+    }
+    return response.json();
+  })
+  .then(data => {
+    if (data.success) {
+      location.reload();
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = originalText;
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert(error.message || 'An error occurred. Please try again.');
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+  });
+}
+</script>
 {% endblock %}
