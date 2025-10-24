@@ -172,6 +172,8 @@
   let currentPage = 1;
   let totalPages = 1;
   let filteredCourts = [];
+  let hasDisplayedOnce = false;
+  const GRID_SCROLL_OFFSET = 90;
 
   function setChipState(chip, isActive) {
     if (!chip) return;
@@ -364,6 +366,7 @@
 
   // Display Court
   function displayCourt() {
+    const shouldSkipScroll = !hasDisplayedOnce;
     const grid = document.getElementById('CourtGrid');
     const paginationContainer = document.getElementById('paginationContainer');
 
@@ -377,6 +380,7 @@
         </div>
       `;
       paginationContainer.classList.add('hidden');
+      hasDisplayedOnce = true;
       return;
     }
 
@@ -425,7 +429,10 @@
 
     updatePagination();
     paginationContainer.classList.remove('hidden');
-    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (!shouldSkipScroll) {
+      requestAnimationFrame(() => smoothScrollToGrid(grid));
+    }
+    hasDisplayedOnce = true;
   }
 
   function updatePagination() {
@@ -493,6 +500,13 @@
   // Navigate to detail page
   function goToDetail(courtId) {
     window.location.href = `/court/${courtId}/`;
+  }
+
+  function smoothScrollToGrid(grid) {
+    if (!grid) return;
+    const targetTop = grid.getBoundingClientRect().top + window.scrollY - GRID_SCROLL_OFFSET;
+    const clampedTop = targetTop > 0 ? targetTop : 0;
+    window.scrollTo({ top: clampedTop, behavior: 'smooth' });
   }
 
   // Helper functions
