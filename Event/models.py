@@ -1,4 +1,5 @@
 from django.db import models
+from Auth_Profile.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 import uuid
 

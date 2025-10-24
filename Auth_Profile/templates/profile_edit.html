@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block meta %}
+<title>Edit Profile</title>
+{% endblock meta %}
+
+{% block content %}
+{% include 'includes/navbar.html' %}
+
+<div class="absolute inset-0 z-0 opacity-10" style="background-image: url('{% static 'img/pattern_repeatable.png' %}'); background-size: 500px; background-repeat: repeat;"></div>
+
+<div class="relative z-10 flex min-h-[calc(100vh-84px)] items-center justify-center py-12 px-4">
+    <div class="w-full max-w-4xl rounded-2xl bg-white p-8 md:p-12 shadow-2xl">
+        
+        <h2 class="text-center text-4xl font-bold text-gray-800 mb-10">
+            Edit Profile Kamu
+        </h2>
+
+        {% if error_message %}
+            <div class="mb-6 rounded-lg p-4 text-sm bg-red-100 text-red-700">
+                {{ error_message }}
+            </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'Auth_Profile:profile_edit' %}" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            
+            {% csrf_token %}
+
+            <div>
+                <label for="nama" class="block text-sm font-semibold text-gray-600 mb-2">Nama</label>
+                <input type="text" id="nama" name="nama" 
+                       value="{{ user.nama }}"
+                       class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-lime focus:ring-lime"
+                       required>
+            </div>
+
+            <div>
+                <label for="tanggal_lahir" class="block text-sm font-semibold text-gray-600 mb-2">Tanggal Lahir</label>
+                <input type="date" id="tanggal_lahir" name="tanggal_lahir" 
+                       value="{{ user.tanggal_lahir|date:'Y-m-d' }}"
+                       class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-lime focus:ring-lime"
+                       required>
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-semibold text-gray-600 mb-2">Email</label>
+                <input type="email" id="email" name="email" 
+                       value="{{ user.email }}"
+                       readonly 
+                       class="w-full rounded-lg border border-gray-200 bg-gray-100 px-4 py-3 text-gray-500 cursor-not-allowed">
+            </div>
+
+            <div>
+                <label for="nomor_handphone" class="block text-sm font-semibold text-gray-600 mb-2">Nomor Handphone</label>
+                <input type="tel" id="nomor_handphone" name="nomor_handphone" 
+                       value="{{ user.nomor_handphone }}"
+                       class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-lime focus:ring-lime"
+                       required>
+            </div>
+
+            <div class="md:col-span-2">
+                <label for="kelamin" class="block text-sm font-semibold text-gray-600 mb-2">Jenis Kelamin</label>
+                <select id="kelamin" name="kelamin" 
+                        class="w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-lime focus:ring-lime"
+                        required>
+                    <option value="L" {% if user.kelamin == 'L' %}selected{% endif %}>Laki-laki</option>
+                    <option value="P" {% if user.kelamin == 'P' %}selected{% endif %}>Perempuan</option>
+                </select>
+            </div>
+
+            <div class="md:col-span-2 mt-6">
+                <button type="submit" 
+                        class="w-full rounded-lg bg-lime py-4 text-lg font-bold text-grey transition hover:bg-dark-lime focus:outline-none focus:ring-2 focus:ring-lime focus:ring-offset-2">
+                    Simpan Perubahan
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}
