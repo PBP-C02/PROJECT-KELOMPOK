@@ -5,6 +5,19 @@ from django import forms
 from .models import Court
 
 
+BASE_INPUT_CLASSES = (
+    "w-full rounded-2xl border border-slate-200 bg-white/90 px-4 py-3 text-sm "
+    "text-slate-800 shadow-inner outline-none transition focus:border-lime-300 "
+    "focus:ring-4 focus:ring-lime-200/60"
+)
+TEXTAREA_CLASSES = BASE_INPUT_CLASSES + " min-h-[8rem] resize-y"
+FILE_INPUT_CLASSES = (
+    "block w-full text-sm text-slate-700 file:mr-4 file:rounded-full file:border-0 "
+    "file:bg-lime-200/80 file:px-4 file:py-2 file:text-sm file:font-semibold "
+    "file:text-slate-900 hover:file:bg-lime-200"
+)
+
+
 class CourtForm(forms.ModelForm):
     maps_link = forms.URLField(
         required=False,
@@ -29,13 +42,44 @@ class CourtForm(forms.ModelForm):
             'image': forms.FileField,
         }
         widgets = {
-            'description': forms.Textarea(attrs={'rows': 4}),
-            'name': forms.TextInput(attrs={'placeholder': 'Court name'}),
-            'location': forms.TextInput(attrs={'placeholder': 'City'}),
-            'address': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Complete address'}),
-            'price_per_hour': forms.NumberInput(attrs={'placeholder': 'Price per hour (IDR)', 'step': '0.01'}),
-            'facilities': forms.TextInput(attrs={'placeholder': 'Facilities (comma separated)'}),
-            'rating': forms.NumberInput(attrs={'placeholder': 'Rating (optional)', 'step': '0.1', 'min': '0', 'max': '5'}),
+            'name': forms.TextInput(attrs={
+                'placeholder': 'Nama lapangan',
+                'class': BASE_INPUT_CLASSES,
+            }),
+            'sport_type': forms.Select(attrs={
+                'class': BASE_INPUT_CLASSES,
+            }),
+            'location': forms.TextInput(attrs={
+                'placeholder': 'Kota',
+                'class': BASE_INPUT_CLASSES,
+            }),
+            'address': forms.Textarea(attrs={
+                'placeholder': 'Alamat lengkap',
+                'class': TEXTAREA_CLASSES,
+            }),
+            'price_per_hour': forms.NumberInput(attrs={
+                'placeholder': 'Harga per jam (IDR)',
+                'step': '0.01',
+                'class': BASE_INPUT_CLASSES,
+            }),
+            'facilities': forms.TextInput(attrs={
+                'placeholder': 'Lapangan indoor, Ruang ganti, Parkir luas',
+                'class': BASE_INPUT_CLASSES,
+            }),
+            'rating': forms.NumberInput(attrs={
+                'placeholder': 'Nilai 1 - 5',
+                'step': '0.1',
+                'min': '1',
+                'max': '5',
+                'class': BASE_INPUT_CLASSES,
+            }),
+            'description': forms.Textarea(attrs={
+                'placeholder': 'Deskripsi singkat, keunggulan, dsb.',
+                'class': TEXTAREA_CLASSES,
+            }),
+            'image': forms.ClearableFileInput(attrs={
+                'class': FILE_INPUT_CLASSES,
+            }),
         }
 
     def __init__(self, *args, **kwargs):
@@ -44,12 +88,17 @@ class CourtForm(forms.ModelForm):
         for field in optional_fields:
             self.fields[field].required = False
         self.fields['maps_link'].widget.attrs.update({
-            'placeholder': 'https://maps.google.com/?q=-6.2,106.8'
+            'placeholder': 'https://maps.google.com/?q=-6.2,106.8',
+            'class': BASE_INPUT_CLASSES,
         })
 
     def clean_rating(self):
         rating = self.cleaned_data.get('rating')
-        return rating if rating is not None else Decimal('0')
+        if rating in (None, ''):
+            return Decimal('0')
+        if rating < Decimal('1') or rating > Decimal('5'):
+            raise forms.ValidationError('Rating harus berada di antara 1 dan 5.')
+        return rating
 
     def clean_facilities(self):
         return self.cleaned_data.get('facilities') or ''

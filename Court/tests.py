@@ -1,6 +1,6 @@
 import json
 import uuid
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 from decimal import Decimal
 from urllib.parse import unquote
 from unittest.mock import patch
@@ -12,6 +12,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from Auth_Profile.models import User
+from .forms import CourtForm
 from .models import Court, TimeSlot
 import Court.views as views
 
@@ -333,10 +334,41 @@ class CourtViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(response.json()['Court']), 2)
 
+    def test_is_available_today_logic(self):
+        today = timezone.localdate()
+        tomorrow = today + timedelta(days=1)
+
+        # Unavailability tomorrow should not affect today's availability
+        TimeSlot.objects.create(
+            court=self.court,
+            date=tomorrow,
+            start_time=time(0, 0),
+            end_time=time(23, 59),
+            is_available=False,
+        )
+        self.assertTrue(self.court.is_available_today())
+        payload = self.client.get(reverse('Court:get_all_Court')).json()['Court']
+        today_entry = next(item for item in payload if item['id'] == self.court.id)
+        self.assertTrue(today_entry['is_available'])
+
+        # Mark today as unavailable, expect API & helper to follow suit
+        TimeSlot.objects.create(
+            court=self.court,
+            date=today,
+            start_time=time(0, 0),
+            end_time=time(23, 59),
+            is_available=False,
+        )
+        self.assertFalse(Court.objects.get(id=self.court.id).is_available_today())
+        payload = self.client.get(reverse('Court:get_all_Court')).json()['Court']
+        today_entry = next(item for item in payload if item['id'] == self.court.id)
+        self.assertFalse(today_entry['is_available'])
+
     def test_api_court_whatsapp_variants(self):
         url = reverse('Court:api_court_whatsapp')
         payload = {'court_id': self.court.id, 'date': 'Monday', 'time': '10:00'}
-        self.assertTrue(self.client.post(url, json.dumps(payload), content_type='application/json').json()['success'])
+        response_data = self.client.post(url, json.dumps(payload), content_type='application/json').json()
+        self.assertTrue(response_data['success'])
 
         self.assertEqual(self.client.get(url).status_code, 400)
         self.assertEqual(self.client.post(url, 'oops', content_type='application/json').status_code, 400)
@@ -352,7 +384,10 @@ class CourtViewTests(TestCase):
     def test_get_whatsapp_link_variants(self):
         url = reverse('Court:get_whatsapp_link')
         payload = {'court_id': self.court.id, 'date': 'Tuesday', 'time': '09:00'}
-        self.assertTrue(self.client.post(url, json.dumps(payload), content_type='application/json').json()['success'])
+        response_data = self.client.post(url, json.dumps(payload), content_type='application/json').json()
+        self.assertTrue(response_data['success'])
+        self.assertIn('whatsapp_link', response_data)
+        self.assertIn('wa.me', response_data['whatsapp_link'])
 
         self.assertEqual(self.client.get(url).status_code, 405)
         self.assertEqual(
@@ -438,6 +473,38 @@ class CourtViewTests(TestCase):
         request.session['user_id'] = str(uuid.uuid4())
         request.session.save()
         self.assertIsNone(views._get_current_user(request))
+
+    def test_court_form_rating_validation(self):
+        base_data = {
+            'name': 'Form Court',
+            'sport_type': 'tennis',
+            'location': 'Bandung',
+            'address': 'Alamat lengkap',
+            'price_per_hour': '150000',
+            'facilities': 'Parking',
+            'description': 'Nice court',
+            'maps_link': 'https://maps.google.com/?q=-6.2,106.8',
+        }
+
+        form = CourtForm({**base_data, 'rating': '4.5'})
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(form.cleaned_data['rating'], Decimal('4.5'))
+
+        form_zero = CourtForm({**base_data, 'rating': '0'})
+        self.assertFalse(form_zero.is_valid())
+        self.assertIn('rating', form_zero.errors)
+
+        form_high = CourtForm({**base_data, 'rating': '6'})
+        self.assertFalse(form_high.is_valid())
+        self.assertIn('rating', form_high.errors)
+
+        form_empty = CourtForm({**base_data, 'rating': ''})
+        self.assertTrue(form_empty.is_valid(), form_empty.errors)
+        self.assertEqual(form_empty.cleaned_data['rating'], Decimal('0'))
+
+        form_blank_facilities = CourtForm({**base_data, 'rating': '3', 'facilities': ''})
+        self.assertTrue(form_blank_facilities.is_valid(), form_blank_facilities.errors)
+        self.assertEqual(form_blank_facilities.cleaned_data['facilities'], '')
 
         user, response = views._require_user(self._with_session(self.factory.get('/dummy')), json_mode=True)
         self.assertIsNone(user)
