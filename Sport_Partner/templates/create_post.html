@@ -1,134 +1,228 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block meta %}
-<title>Make Many Friend!</title>
+<title>Create Sport Partner Post</title>
+<style>
+    .bg-create-post {
+        background-image: url('{% static "img/bg.png" %}');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
-<h1>ONE STEP AHEAD TO FIND YOUR FRIEND</h1>
+<section class="relative min-h-screen overflow-hidden py-12">
+  <div class="absolute inset-0 bg-create-post"></div>
+  <div class="absolute inset-0 bg-white/95"></div>
 
-<div id="error-message" style="color: red; margin-bottom: 10px;"></div>
-<div id="success-message" style="color: green; margin-bottom: 10px;"></div>
+  <div class="relative z-10">
+    {% include 'includes/navbar.html' %}
+    <div class="mx-auto flex w-full max-w-6xl justify-center px-5 sm:px-8">
+      <div class="w-full max-w-4xl rounded-[2.5rem] bg-white/95 px-8 py-10 shadow-[0_32px_80px_rgba(15,23,42,0.12)] backdrop-blur sm:px-12">
+        <div class="mb-8 text-center">
+          <span class="inline-flex items-center justify-center rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-500 shadow">
+            Create Post
+          </span>
+          <h1 class="mt-4 text-3xl font-semibold uppercase tracking-[0.18em] text-slate-900">Find Your Sport Partner</h1>
+          <p class="mt-2 text-sm text-slate-500">
+            Buat aktivitas olahraga dan ajak teman untuk bergabung!
+          </p>
+        </div>
 
-<form id="createPostForm" method="POST">
-    {% csrf_token %}
-    <div>
-        <label for="title">Title:</label><br>
-        <input type="text" id="title" name="title" required>
+        <div id="error-message" class="mb-4 hidden rounded-2xl border border-rose-200 bg-rose-100 px-4 py-3 text-sm font-semibold text-rose-700"></div>
+        <div id="success-message" class="mb-4 hidden rounded-2xl border border-emerald-200 bg-emerald-100 px-4 py-3 text-sm font-semibold text-emerald-700"></div>
+
+        <form id="createPostForm" method="POST" class="space-y-6">
+          {% csrf_token %}
+
+          <div class="grid gap-5 md:grid-cols-2">
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
+              <span>Judul Aktivitas</span>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+                placeholder="Contoh: Main Futsal Sore"
+                required
+              />
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
+              <span>Deskripsi</span>
+              <textarea
+                id="description"
+                name="description"
+                rows="4"
+                class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+                placeholder="Jelaskan tentang aktivitas ini..."
+                required
+              ></textarea>
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Kategori Olahraga</span>
+              <select
+                id="category"
+                name="category"
+                class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+                required
+              >
+                <option value="">Pilih Kategori</option>
+                <option value="tennis">Tennis</option>
+                <option value="basketball">Basketball</option>
+                <option value="soccer">Soccer</option>
+                <option value="badminton">Badminton</option>
+                <option value="volleyball">Volleyball</option>
+                <option value="paddle">Paddle</option>
+                <option value="futsal">Futsal</option>
+                <option value="table_tennis">Table Tennis</option>
+                <option value="jogging">Jogging</option>
+              </select>
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Tanggal</span>
+              <input
+                type="date"
+                id="tanggal"
+                name="tanggal"
+                class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+                required
+              />
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Jam Mulai</span>
+              <input
+                type="time"
+                id="jam_mulai"
+                name="jam_mulai"
+                class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+                required
+              />
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Jam Selesai</span>
+              <input
+                type="time"
+                id="jam_selesai"
+                name="jam_selesai"
+                class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+                required
+              />
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
+              <span>Lokasi</span>
+              <input
+                type="text"
+                id="lokasi"
+                name="lokasi"
+                class="rounded-2xl border border-slate-200 bg-white px-5 py-3 text-sm outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+                placeholder="Contoh: GOR Senayan, Jakarta"
+                required
+              />
+            </label>
+          </div>
+
+          <button
+            type="submit"
+            id="submitBtn"
+            class="w-full rounded-2xl bg-gradient-to-r from-lime to-yellow px-6 py-4 text-xs font-semibold uppercase tracking-[0.3em] text-grey shadow-[0_20px_40px_rgba(203,237,152,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_28px_60px_rgba(203,237,152,0.35)]"
+          >
+            Buat Post
+          </button>
+
+          <a
+            href="{% url 'Sport_Partner:show_post' %}"
+            class="flex w-full items-center justify-center rounded-2xl border border-slate-200 bg-white/80 px-6 py-3 text-sm font-semibold text-slate-600 transition hover:border-slate-300 hover:text-slate-800"
+          >
+            Batal
+          </a>
+        </form>
+      </div>
     </div>
-    <br>
-    <div>
-        <label for="description">Description:</label><br>
-        <textarea id="description" name="description" rows="4" required></textarea>
-    </div>
-    <br>
-    <div>
-        <label for="category">Category:</label><br>
-        <select id="category" name="category" required>
-            <option value="">Pilih Kategori Olahraga</option>
-            <option value="tennis">Tennis</option>
-            <option value="basketball">Basketball</option>
-            <option value="soccer">Soccer</option>
-            <option value="badminton">Badminton</option>
-            <option value="volleyball">Volleyball</option>
-            <option value="paddle">Paddle</option>
-            <option value="futsal">Futsal</option>
-            <option value="table_tennis">Table Tennis</option>
-            <option value="jogging">Jogging</option>
-        </select>
-    </div>
-    <br>
-    <div>
-        <label for="tanggal">Tanggal:</label><br>
-        <input type="date" id="tanggal" name="tanggal" required>
-    </div>
-    <br>
-    <div>
-        <label for="jam_mulai">Jam Mulai:</label><br>
-        <input type="time" id="jam_mulai" name="jam_mulai" required>
-    </div>
-    <br>
-    <div>
-        <label for="jam_selesai">Jam Selesai:</label><br>
-        <input type="time" id="jam_selesai" name="jam_selesai" required>
-    </div>
-    <br>
-    <div>
-        <label for="lokasi">Lokasi:</label><br>
-        <input type="text" id="lokasi" name="lokasi" required>
-    </div>
-    <br>
-    <button type="submit" id="submitBtn">TAMBAH!</button>
-    <a href="{% url 'Sport_Partner:show_post' %}">Batal</a>
-</form>
+  </div>
+</section>
 
 <script>
-    // Set min date to today
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('tanggal').setAttribute('min', today);
-    
-    document.getElementById('createPostForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const title = document.getElementById('title').value;
-        const description = document.getElementById('description').value;
-        const category = document.getElementById('category').value;
-        const tanggal = document.getElementById('tanggal').value;
-        const jam_mulai = document.getElementById('jam_mulai').value;
-        const jam_selesai = document.getElementById('jam_selesai').value;
-        const lokasi = document.getElementById('lokasi').value;
-        const errorDiv = document.getElementById('error-message');
-        const successDiv = document.getElementById('success-message');
-        const submitBtn = document.getElementById('submitBtn');
-        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        
-        errorDiv.textContent = '';
-        successDiv.textContent = '';
-        
-        // Validasi jam selesai harus lebih besar dari jam mulai
-        if (jam_mulai >= jam_selesai) {
-            errorDiv.textContent = 'Jam selesai harus lebih besar dari jam mulai';
-            return;
-        }
-        
-        // Disable button saat submit
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Loading...';
-        
-        try {
-            const response = await fetch('/sport-partner/create-post/', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': csrftoken
-                },
-                body: JSON.stringify({
-                    title: title,
-                    description: description,
-                    category: category,
-                    tanggal: tanggal,
-                    jam_mulai: jam_mulai,
-                    jam_selesai: jam_selesai,
-                    lokasi: lokasi,
-                })
-            });
-            
-            const data = await response.json();
-            
-            if (data.success) {
-                successDiv.textContent = data.message;
-                setTimeout(function() {
-                    window.location.href = data.redirect_url;
-                }, 1500);
-            } else {
-                errorDiv.textContent = data.message;
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'TAMBAH!';
-            }
-        } catch (error) {
-            errorDiv.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'TAMBAH!';
-        }
-    });
+  // Set min date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('tanggal').setAttribute('min', today);
+
+  document.getElementById('createPostForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById('title').value;
+    const description = document.getElementById('description').value;
+    const category = document.getElementById('category').value;
+    const tanggal = document.getElementById('tanggal').value;
+    const jam_mulai = document.getElementById('jam_mulai').value;
+    const jam_selesai = document.getElementById('jam_selesai').value;
+    const lokasi = document.getElementById('lokasi').value;
+    const errorDiv = document.getElementById('error-message');
+    const successDiv = document.getElementById('success-message');
+    const submitBtn = document.getElementById('submitBtn');
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    errorDiv.textContent = '';
+    successDiv.textContent = '';
+    errorDiv.classList.add('hidden');
+    successDiv.classList.add('hidden');
+
+    // Validasi jam selesai harus lebih besar dari jam mulai
+    if (jam_mulai >= jam_selesai) {
+      errorDiv.textContent = 'Jam selesai harus lebih besar dari jam mulai';
+      errorDiv.classList.remove('hidden');
+      return;
+    }
+
+    // Disable button saat submit
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Loading...';
+
+    try {
+      const response = await fetch('/sport-partner/create-post/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+          category: category,
+          tanggal: tanggal,
+          jam_mulai: jam_mulai,
+          jam_selesai: jam_selesai,
+          lokasi: lokasi,
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        successDiv.textContent = data.message;
+        successDiv.classList.remove('hidden');
+        setTimeout(function() {
+          window.location.href = data.redirect_url;
+        }, 1500);
+      } else {
+        errorDiv.textContent = data.message;
+        errorDiv.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Buat Post';
+      }
+    } catch (error) {
+      errorDiv.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
+      errorDiv.classList.remove('hidden');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Buat Post';
+    }
+  });
 </script>
 {% endblock content %}

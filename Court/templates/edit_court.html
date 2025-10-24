@@ -56,6 +56,15 @@
               {% endfor %}
             </label>
 
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Nomor Kontak</span>
+              {{ form.owner_phone }}
+              <span class="text-xs font-medium text-slate-500">Gunakan angka saja, contoh 081234567890.</span>
+              {% for error in form.owner_phone.errors %}
+                <span class="text-xs font-semibold text-rose-600">{{ error }}</span>
+              {% endfor %}
+            </label>
+
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
               <span>Full Address</span>
               {{ form.address }}
@@ -97,24 +106,26 @@
             {% endfor %}
           </label>
 
-          <div class="grid gap-5 md:grid-cols-2">
-            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>Google Maps link</span>
-              {{ form.maps_link }}
+          <div class="grid gap-6 md:grid-cols-2">
+            <div class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <label for="{{ form.maps_link.id_for_label }}" class="flex flex-col gap-2">
+                <span>Google Maps link</span>
+                {{ form.maps_link }}
+              </label>
               <span class="text-xs font-medium text-slate-500">Kosongkan untuk mempertahankan lokasi saat ini.</span>
               {% for error in form.maps_link.errors %}
                 <span class="text-xs font-semibold text-rose-600">{{ error }}</span>
               {% endfor %}
-            </label>
+            </div>
 
-            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+            <div class="flex flex-col gap-3 text-sm font-semibold text-slate-700">
               <span>Court Photo (optional)</span>
               {{ form.image }}
               <span class="text-xs font-medium text-slate-500">Unggah untuk mengganti foto saat ini. Biarkan kosong untuk mempertahankannya.</span>
               {% for error in form.image.errors %}
                 <span class="text-xs font-semibold text-rose-600">{{ error }}</span>
               {% endfor %}
-            </label>
+            </div>
           </div>
 
           {% if court.image %}

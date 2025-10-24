@@ -1,0 +1,6162 @@
+[
+  {
+    "model": "Court.timeslot",
+    "pk": 1,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 2,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 3,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 4,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 5,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 6,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 7,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 8,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 9,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 10,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 11,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 12,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 13,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 14,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 15,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 16,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 17,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 18,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 19,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 20,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 21,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 22,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 23,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 24,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 25,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 26,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 27,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 28,
+    "fields": {
+      "court": 1,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 29,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 30,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 31,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 32,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 33,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 34,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 35,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 36,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 37,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 38,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 39,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 40,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 41,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 42,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 43,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 44,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 45,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 46,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 47,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 48,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 49,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 50,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 51,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 52,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 53,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 54,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 55,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 56,
+    "fields": {
+      "court": 2,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 57,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 58,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 59,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 60,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 61,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 62,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 63,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 64,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 65,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 66,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 67,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 68,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 69,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 70,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 71,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 72,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 73,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 74,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 75,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 76,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 77,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 78,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 79,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 80,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 81,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 82,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 83,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 84,
+    "fields": {
+      "court": 3,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 85,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 86,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 87,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 88,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 89,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 90,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 91,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 92,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 93,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 94,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 95,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 96,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 97,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 98,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 99,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 100,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 101,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 102,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 103,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 104,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 105,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 106,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 107,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 108,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 109,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 110,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 111,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 112,
+    "fields": {
+      "court": 4,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 113,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 114,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 115,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 116,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 117,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 118,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 119,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 120,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 121,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 122,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 123,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 124,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 125,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 126,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 127,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 128,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 129,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 130,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 131,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 132,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 133,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 134,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 135,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 136,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 137,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 138,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 139,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 140,
+    "fields": {
+      "court": 5,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 141,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 142,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 143,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 144,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 145,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 146,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 147,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 148,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 149,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 150,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 151,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 152,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 153,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 154,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 155,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 156,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 157,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 158,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 159,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 160,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 161,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 162,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 163,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 164,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 165,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 166,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 167,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 168,
+    "fields": {
+      "court": 6,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 169,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 170,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 171,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 172,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 173,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 174,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 175,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 176,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 177,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 178,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 179,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 180,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 181,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 182,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 183,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 184,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 185,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 186,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 187,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 188,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 189,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 190,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 191,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 192,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 193,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 194,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 195,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 196,
+    "fields": {
+      "court": 7,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 197,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 198,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 199,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 200,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 201,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 202,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 203,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 204,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 205,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 206,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 207,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 208,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 209,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 210,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 211,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 212,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 213,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 214,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 215,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 216,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 217,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 218,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 219,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 220,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 221,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 222,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 223,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 224,
+    "fields": {
+      "court": 8,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 225,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 226,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 227,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 228,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 229,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 230,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 231,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 232,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 233,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 234,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 235,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 236,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 237,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 238,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 239,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 240,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 241,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 242,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 243,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 244,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 245,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 246,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 247,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 248,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 249,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 250,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 251,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 252,
+    "fields": {
+      "court": 9,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 253,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 254,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 255,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 256,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 257,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 258,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 259,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 260,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 261,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 262,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 263,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 264,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 265,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 266,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 267,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 268,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 269,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 270,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 271,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 272,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 273,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 274,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 275,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 276,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 277,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 278,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 279,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 280,
+    "fields": {
+      "court": 10,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 281,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 282,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 283,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 284,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 285,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 286,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 287,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 288,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 289,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 290,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 291,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 292,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 293,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 294,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 295,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 296,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 297,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 298,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 299,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 300,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 301,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 302,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 303,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 304,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 305,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 306,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 307,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 308,
+    "fields": {
+      "court": 11,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 309,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 310,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 311,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 312,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 313,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 314,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 315,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 316,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 317,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 318,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 319,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 320,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 321,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 322,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 323,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 324,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 325,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 326,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 327,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 328,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 329,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 330,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 331,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 332,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 333,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 334,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 335,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 336,
+    "fields": {
+      "court": 12,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 337,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 338,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 339,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 340,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 341,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 342,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 343,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 344,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 345,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 346,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 347,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 348,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 349,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 350,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 351,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 352,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 353,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 354,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 355,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 356,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 357,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 358,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 359,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 360,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 361,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 362,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 363,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 364,
+    "fields": {
+      "court": 13,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 365,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 366,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 367,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 368,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 369,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 370,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 371,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 372,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 373,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 374,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 375,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 376,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 377,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 378,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 379,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 380,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 381,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 382,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 383,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 384,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 385,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 386,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 387,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 388,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 389,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 390,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 391,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 392,
+    "fields": {
+      "court": 14,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 393,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 394,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 395,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 396,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 397,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 398,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 399,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 400,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 401,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 402,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 403,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 404,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 405,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 406,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 407,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 408,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 409,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 410,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 411,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 412,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 413,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 414,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 415,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 416,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 417,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 418,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 419,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 420,
+    "fields": {
+      "court": 15,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 421,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 422,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 423,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 424,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 425,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 426,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 427,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 428,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 429,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 430,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 431,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 432,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 433,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 434,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 435,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 436,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 437,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 438,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 439,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 440,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 441,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 442,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 443,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 444,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 445,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 446,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 447,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 448,
+    "fields": {
+      "court": 16,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 449,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 450,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 451,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 452,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 453,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 454,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 455,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 456,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 457,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 458,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 459,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 460,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 461,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 462,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 463,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 464,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 465,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 466,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 467,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 468,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 469,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 470,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 471,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 472,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 473,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 474,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 475,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 476,
+    "fields": {
+      "court": 17,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 477,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 478,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 479,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 480,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 481,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 482,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 483,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 484,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 485,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 486,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 487,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 488,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 489,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 490,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 491,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 492,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 493,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 494,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 495,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 496,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 497,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 498,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 499,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 500,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 501,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 502,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 503,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 504,
+    "fields": {
+      "court": 18,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 505,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 506,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 507,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 508,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 509,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 510,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 511,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 512,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 513,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 514,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 515,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 516,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 517,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 518,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 519,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 520,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 521,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 522,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 523,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 524,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 525,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 526,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 527,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 528,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 529,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 530,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 531,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 532,
+    "fields": {
+      "court": 19,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 533,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-25",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 534,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-25",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 535,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-25",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 536,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-25",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 537,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-26",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 538,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-26",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 539,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-26",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 540,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-26",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 541,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-27",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 542,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-27",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 543,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-27",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 544,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-27",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 545,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-28",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 546,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-28",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 547,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-28",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 548,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-28",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 549,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-29",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 550,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-29",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 551,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-29",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 552,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-29",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 553,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-30",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 554,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-30",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 555,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-30",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": false
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 556,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-30",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 557,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-31",
+      "start_time": "08:00:00",
+      "end_time": "10:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 558,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-31",
+      "start_time": "10:00:00",
+      "end_time": "12:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 559,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-31",
+      "start_time": "14:00:00",
+      "end_time": "16:00:00",
+      "is_available": true
+    }
+  },
+  {
+    "model": "Court.timeslot",
+    "pk": 560,
+    "fields": {
+      "court": 20,
+      "date": "2025-10-31",
+      "start_time": "16:00:00",
+      "end_time": "18:00:00",
+      "is_available": true
+    }
+  }
+]

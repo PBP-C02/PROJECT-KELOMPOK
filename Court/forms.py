@@ -18,6 +18,14 @@ FILE_INPUT_CLASSES = (
 )
 
 
+def sanitize_phone_input(value):
+    """Normalize phone number string to digits only."""
+    if value in (None, '', 'null'):
+        return ''
+    digits = ''.join(ch for ch in str(value).strip() if ch.isdigit())
+    return digits
+
+
 class CourtForm(forms.ModelForm):
     maps_link = forms.URLField(
         required=False,
@@ -36,6 +44,7 @@ class CourtForm(forms.ModelForm):
             'facilities',
             'rating',
             'description',
+            'owner_phone',
             'image',
         ]
         field_classes = {
@@ -59,6 +68,7 @@ class CourtForm(forms.ModelForm):
             }),
             'price_per_hour': forms.NumberInput(attrs={
                 'placeholder': 'Harga per jam (IDR)',
+                'min': '0',
                 'step': '0.01',
                 'class': BASE_INPUT_CLASSES,
             }),
@@ -76,6 +86,12 @@ class CourtForm(forms.ModelForm):
             'description': forms.Textarea(attrs={
                 'placeholder': 'Deskripsi singkat, keunggulan, dsb.',
                 'class': TEXTAREA_CLASSES,
+            }),
+            'owner_phone': forms.TextInput(attrs={
+                'placeholder': 'Contoh: 081234567890',
+                'type': 'tel',
+                'inputmode': 'numeric',
+                'class': BASE_INPUT_CLASSES,
             }),
             'image': forms.ClearableFileInput(attrs={
                 'class': FILE_INPUT_CLASSES,
@@ -99,6 +115,25 @@ class CourtForm(forms.ModelForm):
         if rating < Decimal('1') or rating > Decimal('5'):
             raise forms.ValidationError('Rating harus berada di antara 1 dan 5.')
         return rating
+
+    def clean_price_per_hour(self):
+        price = self.cleaned_data.get('price_per_hour')
+        if price is None:
+            return price
+        if price < Decimal('0'):
+            raise forms.ValidationError('Harga per jam tidak boleh bernilai negatif.')
+        return price
+
+    def clean_owner_phone(self):
+        phone_raw = self.cleaned_data.get('owner_phone', '')
+        phone = sanitize_phone_input(phone_raw)
+        if not phone:
+            raise forms.ValidationError('Nomor kontak wajib diisi.')
+        if len(phone) < 8:
+            raise forms.ValidationError('Nomor telepon terlalu pendek.')
+        if len(phone) > 20:
+            raise forms.ValidationError('Nomor telepon terlalu panjang.')
+        return phone
 
     def clean_facilities(self):
         return self.cleaned_data.get('facilities') or ''

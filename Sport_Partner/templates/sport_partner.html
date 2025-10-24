@@ -1,23 +1,402 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block meta %}
 <title>Find Your Sport Partner Now!</title>
+<style>
+    .bg-sport-partner {
+        background-image: url('{% static "img/bg.png" %}');
+        background-size: cover;
+        background-position: center;
+    }
+</style>
 {% endblock meta %}
 
 {% block content %}
-<h1>This is Sport partner Page</h1>
-<p class="">Welcome {{ user_now.nama }}!</p>
-<hr>
+<section class="relative min-h-screen w-full overflow-hidden pb-16 pt-6">
+  <div class="absolute inset-0 bg-sport-partner"></div>
+  <div class="absolute inset-0 bg-white/95"></div>
 
-{% for post in post_list %}
-<a href="{% url 'Sport_Partner:post-detail' post.post_id %}">
-    <div>
-        <p>{{ post.title }}</p>
-        <p>{{ post.description }}</p>
-        <p>{{ post.lokasi }}</p>
+  <div class="relative z-10">
+    {% include 'includes/navbar.html' %}
+
+    <div class="mx-auto flex w-full max-w-[88rem] flex-col gap-12 px-4 sm:px-10 lg:px-16">
+      <div class="rounded-[32px] bg-white/95 p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur">
+        <div class="flex flex-col gap-6">
+          <!-- Welcome Header -->
+          <div class="text-center">
+            <h1 class="text-3xl font-bold uppercase tracking-[0.18em] text-slate-900">Find Your Sport Partner</h1>
+            <p class="mt-2 text-sm text-slate-600">Welcome, <span class="font-semibold text-lime">{{ user_now.nama }}</span>!</p>
+          </div>
+
+          <!-- Search & Filters -->
+          <div class="grid gap-3 md:grid-cols-[minmax(0,1fr)_200px_auto_auto] md:items-center">
+            <label class="relative flex items-center">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Cari aktivitas atau lokasi..."
+                class="h-[50px] w-full rounded-lg border border-slate-300 bg-white px-5 pr-12 text-sm font-medium text-slate-900 shadow-inner outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+              />
+              <svg class="absolute right-4 h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+              </svg>
+            </label>
+            <select
+              id="locationFilter"
+              class="h-[50px] rounded-lg border border-slate-300 bg-white px-5 text-sm font-medium text-slate-900 shadow-inner outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+            >
+              <option value="">Semua lokasi</option>
+            </select>
+            <button
+              type="button"
+              onclick="searchPosts()"
+              class="h-[50px] rounded-lg bg-lime px-6 text-xs font-semibold uppercase tracking-[0.3em] text-grey transition hover:-translate-y-0.5 hover:bg-dark-lime"
+            >
+              Search
+            </button>
+            <a
+              href="{% url 'Sport_Partner:create_post' %}"
+              class="flex h-[50px] items-center justify-center rounded-lg bg-lime px-6 text-xs font-semibold uppercase tracking-[0.3em] text-grey transition hover:-translate-y-0.5 hover:bg-dark-lime"
+            >
+              + Create Post
+            </a>
+          </div>
+
+          <!-- Sport Filter Chips -->
+          <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div class="flex min-w-0 flex-nowrap gap-3 overflow-x-auto pb-1 pr-2">
+              <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="" data-default="true" onclick="filterSport(this, '')">
+                All
+              </button>
+              <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="tennis" onclick="filterSport(this, 'tennis')">
+                Tennis
+              </button>
+              <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="basketball" onclick="filterSport(this, 'basketball')">
+                Basketball
+              </button>
+              <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="soccer" onclick="filterSport(this, 'soccer')">
+                Soccer
+              </button>
+              <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="badminton" onclick="filterSport(this, 'badminton')">
+                Badminton
+              </button>
+              <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="futsal" onclick="filterSport(this, 'futsal')">
+                Futsal
+              </button>
+              <button class="filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900" data-sport="jogging" onclick="filterSport(this, 'jogging')">
+                Jogging
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="loading" class="hidden rounded-[30px] bg-white/80 py-16 text-center text-slate-600 shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
+        Memuat aktivitas...
+      </div>
+
+      <div id="PostGrid" class="grid gap-6 sm:grid-cols-2 xl:grid-cols-3"></div>
+
+      <!-- Pagination -->
+      <div id="paginationContainer" class="flex flex-col items-center gap-4">
+        <!-- Page Info -->
+        <div id="pageInfo" class="text-sm text-slate-600"></div>
+        
+        <!-- Pagination Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-2">
+          <button
+            id="prevBtn"
+            onclick="goToPage(currentPage - 1)"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:border-lime hover:bg-lime/10 disabled:cursor-not-allowed disabled:opacity-50"
+            disabled
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          <div id="pageButtons" class="flex flex-wrap items-center justify-center gap-2"></div>
+
+          <button
+            id="nextBtn"
+            onclick="goToPage(currentPage + 1)"
+            class="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:border-lime hover:bg-lime/10 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
     </div>
-</a>
-{% endfor %}
+  </div>
+</section>
 
-<a href="/sport-partner/create-post">TAMBAH POST</a>
+<script>
+  const CHIP_BASE_CLASSES = "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-lime hover:text-slate-900";
+  const CHIP_ACTIVE_CLASSES = "filter-chip inline-flex min-w-[120px] items-center justify-center rounded-full border border-transparent bg-lime px-6 py-3 text-sm font-semibold text-grey shadow-[0_12px_22px_rgba(203,237,152,0.25)] transition hover:bg-dark-lime";
+
+  const POSTS_PER_PAGE = 15;
+  let currentPage = 1;
+  let totalPages = 1;
+  let filteredPosts = [];
+
+  function setChipState(chip, isActive) {
+    if (!chip) return;
+    chip.className = isActive ? CHIP_ACTIVE_CLASSES : CHIP_BASE_CLASSES;
+  }
+
+  document.querySelectorAll('.filter-chip').forEach(chip => {
+    setChipState(chip, chip.dataset.default === 'true');
+  });
+
+  let currentFilters = {
+    query: '',
+    sport: '',
+    location: ''
+  };
+
+  let cachedPosts = [
+    {% for post in post_list %}
+    {
+      post_id: "{{ post.post_id }}",
+      title: "{{ post.title|escapejs }}",
+      description: "{{ post.description|escapejs }}",
+      category: "{{ post.category }}",
+      tanggal: "{{ post.tanggal|date:'Y-m-d' }}",
+      jam_mulai: "{{ post.jam_mulai|time:'H:i' }}",
+      jam_selesai: "{{ post.jam_selesai|time:'H:i' }}",
+      lokasi: "{{ post.lokasi|escapejs }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+  
+  // Populate location options
+  const locations = [...new Set(cachedPosts.map(p => p.lokasi))];
+  const locationSelect = document.getElementById('locationFilter');
+  locations.forEach(loc => {
+    const option = document.createElement('option');
+    option.value = loc;
+    option.textContent = loc;
+    locationSelect.appendChild(option);
+  });
+
+  function searchPosts() {
+    currentFilters.query = document.getElementById('searchInput').value;
+    currentFilters.location = document.getElementById('locationFilter').value;
+    currentPage = 1; // Reset to first page
+    displayPosts();
+  }
+
+  function filterSport(element, sport) {
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+      setChipState(chip, chip === element);
+    });
+    currentFilters.sport = sport;
+    currentPage = 1; // Reset to first page
+    displayPosts();
+  }
+
+  function applyFilters() {
+    let result = cachedPosts.slice();
+
+    const query = (currentFilters.query || '').trim().toLowerCase();
+    if (query) {
+      result = result.filter(p => 
+        p.title.toLowerCase().includes(query) ||
+        p.description.toLowerCase().includes(query) ||
+        p.lokasi.toLowerCase().includes(query)
+      );
+    }
+
+    if (currentFilters.sport) {
+      result = result.filter(p => p.category === currentFilters.sport);
+    }
+
+    if (currentFilters.location) {
+      result = result.filter(p => p.lokasi === currentFilters.location);
+    }
+
+    return result;
+  }
+
+  function displayPosts() {
+    filteredPosts = applyFilters();
+    totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
+    
+    // Ensure current page is valid
+    if (currentPage > totalPages && totalPages > 0) {
+      currentPage = totalPages;
+    }
+    if (currentPage < 1) {
+      currentPage = 1;
+    }
+
+    const grid = document.getElementById('PostGrid');
+    const paginationContainer = document.getElementById('paginationContainer');
+
+    if (filteredPosts.length === 0) {
+      grid.innerHTML = `
+        <div class="col-span-full flex justify-center">
+          <div class="w-full max-w-xl rounded-xl bg-white/90 px-6 py-12 text-center shadow-[0_24px_60px_rgba(15,23,42,0.08)]">
+            <h3 class="text-lg font-semibold text-slate-900">Tidak ada aktivitas ditemukan</h3>
+            <p class="mt-2 text-sm text-slate-600">Coba ubah filter pencarian.</p>
+          </div>
+        </div>
+      `;
+      paginationContainer.classList.add('hidden');
+      return;
+    }
+
+    // Calculate pagination
+    const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+    const endIndex = Math.min(startIndex + POSTS_PER_PAGE, filteredPosts.length);
+    const currentPosts = filteredPosts.slice(startIndex, endIndex);
+
+    // Display posts
+    grid.innerHTML = currentPosts.map(post => `
+      <a href="/sport_partner/post/${post.post_id}/" class="group flex w-full cursor-pointer flex-col overflow-hidden rounded-[20px] bg-white shadow-[0_22px_50px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-[0_32px_70px_rgba(15,23,42,0.12)]">
+        <div class="bg-gradient-to-br from-lime to-yellow p-8 text-center">
+          <div class="inline-flex items-center justify-center rounded-full bg-white/90 px-6 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-grey shadow-lg">
+            ${formatCategory(post.category)}
+          </div>
+        </div>
+        <div class="flex flex-1 flex-col gap-5 px-6 py-6">
+          <div class="space-y-3">
+            <h3 class="text-xl font-bold uppercase tracking-[0.08em] text-slate-900">${escapeHtml(post.title)}</h3>
+            <p class="text-sm text-slate-600 line-clamp-2">${escapeHtml(post.description)}</p>
+          </div>
+          <div class="space-y-2 text-sm font-medium text-slate-600">
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-lime" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span>${formatDate(post.tanggal)}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-lime" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>${post.jam_mulai} - ${post.jam_selesai}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-lime" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span>${escapeHtml(post.lokasi)}</span>
+            </div>
+          </div>
+          <button class="mt-auto w-full rounded-lg bg-grey px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800" type="button">
+            Lihat Detail
+          </button>
+        </div>
+      </a>
+    `).join('');
+
+    // Update pagination
+    updatePagination();
+    paginationContainer.classList.remove('hidden');
+
+    // Scroll to top of grid
+    grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function updatePagination() {
+    const pageInfo = document.getElementById('pageInfo');
+    const pageButtons = document.getElementById('pageButtons');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Update page info
+    const startIndex = (currentPage - 1) * POSTS_PER_PAGE + 1;
+    const endIndex = Math.min(currentPage * POSTS_PER_PAGE, filteredPosts.length);
+    pageInfo.textContent = `Menampilkan ${startIndex}-${endIndex} dari ${filteredPosts.length} aktivitas`;
+
+    // Update prev/next buttons
+    prevBtn.disabled = currentPage === 1;
+    nextBtn.disabled = currentPage === totalPages;
+
+    // Generate page buttons
+    pageButtons.innerHTML = '';
+    const maxButtons = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+    let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+
+    // Adjust start if we're near the end
+    if (endPage - startPage < maxButtons - 1) {
+      startPage = Math.max(1, endPage - maxButtons + 1);
+    }
+
+    // First page button
+    if (startPage > 1) {
+      pageButtons.innerHTML += createPageButton(1);
+      if (startPage > 2) {
+        pageButtons.innerHTML += '<span class="flex h-10 items-center px-2 text-slate-400">...</span>';
+      }
+    }
+
+    // Page number buttons
+    for (let i = startPage; i <= endPage; i++) {
+      pageButtons.innerHTML += createPageButton(i);
+    }
+
+    // Last page button
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pageButtons.innerHTML += '<span class="flex h-10 items-center px-2 text-slate-400">...</span>';
+      }
+      pageButtons.innerHTML += createPageButton(totalPages);
+    }
+  }
+
+  function createPageButton(pageNum) {
+    const isActive = pageNum === currentPage;
+    const activeClasses = 'bg-lime text-grey font-bold border-lime shadow-[0_4px_12px_rgba(203,237,152,0.25)]';
+    const inactiveClasses = 'bg-white text-slate-700 border-slate-300 hover:border-lime hover:bg-lime/10';
+    
+    return `
+      <button
+        onclick="goToPage(${pageNum})"
+        class="flex h-10 min-w-[40px] items-center justify-center rounded-lg border px-3 text-sm font-semibold transition ${isActive ? activeClasses : inactiveClasses}"
+      >
+        ${pageNum}
+      </button>
+    `;
+  }
+
+  function goToPage(page) {
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    displayPosts();
+  }
+
+  function formatCategory(cat) {
+    const map = {
+      tennis: 'Tennis', basketball: 'Basketball', soccer: 'Soccer',
+      badminton: 'Badminton', volleyball: 'Volleyball', paddle: 'Paddle',
+      futsal: 'Futsal', table_tennis: 'Table Tennis', jogging: 'Jogging'
+    };
+    return map[cat] || cat;
+  }
+
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+  }
+
+  document.getElementById('searchInput').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') searchPosts();
+  });
+
+  // Initial display
+  displayPosts();
+</script>
 {% endblock content %}
