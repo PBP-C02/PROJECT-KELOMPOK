@@ -5,9 +5,6 @@ from Auth_Profile.models import User
 import json
 from datetime import datetime
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-
 def homepage_view(request):
     user_id = request.session.get('user_id')
     if not user_id:
