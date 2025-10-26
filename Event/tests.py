@@ -776,3 +776,150 @@ class FilterSportViewTest(TestCase):
         data = json.loads(response.content)
         self.assertTrue(data['success'])
         self.assertEqual(len(data['events']), 2)
+
+class EventViewsEdgeCaseTest(TestCase):
+    """Tests tambahan untuk views agar coverage naik"""
+
+    def setUp(self):
+        self.client = Client()
+        self.user = User.objects.create_user(
+            username='user1', email='user1@test.com', password='pass123'
+        )
+        self.other_user = User.objects.create_user(
+            username='user2', email='user2@test.com', password='pass123'
+        )
+        self.client.login(username='user1', password='pass123')
+        self.event = Event.objects.create(
+            name='Edge Event',
+            sport_type='tennis',
+            city='City',
+            full_address='Address',
+            entry_price=Decimal('50000'),
+            activities='Court, Shower',
+            status='available',
+            organizer=self.user
+        )
+        self.schedule = EventSchedule.objects.create(
+            event=self.event,
+            date=date.today() + timedelta(days=5),
+            is_available=True
+        )
+
+    def test_ajax_toggle_availability_invalid_status(self):
+        """Test AJAX toggle availability dengan status invalid"""
+        data = {'status': 'invalid_status'}
+        response = self.client.post(
+            reverse('Event:ajax_toggle_availability', kwargs={'pk': self.event.pk}),
+            json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_edit_event_by_non_organizer(self):
+        """Test edit event oleh user bukan organizer harus 404"""
+        self.client.logout()
+        self.client.login(username='user2', password='pass123')
+        response = self.client.get(
+            reverse('Event:edit_event', kwargs={'pk': self.event.pk})
+        )
+        self.assertEqual(response.status_code, 404)
+
+    def test_delete_event_by_non_organizer(self):
+        """Test delete event oleh user bukan organizer"""
+        self.client.logout()
+        self.client.login(username='user2', password='pass123')
+        response = self.client.post(
+            reverse('Event:ajax_delete', kwargs={'pk': self.event.pk})
+        )
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(Event.objects.count(), 1)
+
+    def test_join_event_without_schedule(self):
+        """Test join event tanpa schedule (data kosong)"""
+        response = self.client.post(
+            reverse('Event:ajax_join', kwargs={'pk': self.event.pk}),
+            json.dumps({}),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_join_event_duplicate_registration(self):
+        """Test join event yang sama 2x harus error"""
+        EventRegistration.objects.create(
+            event=self.event,
+            user=self.user,
+            schedule=self.schedule
+        )
+        data = {'date': self.schedule.date.strftime('%m / %d / %Y')}
+        response = self.client.post(
+            reverse('Event:ajax_join', kwargs={'pk': self.event.pk}),
+            json.dumps(data),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 400)
+
+    def test_get_schedules_no_schedule(self):
+        """Test get schedules jika tidak ada schedule"""
+        EventSchedule.objects.all().delete()
+        response = self.client.get(
+            reverse('Event:ajax_schedules', kwargs={'pk': self.event.pk})
+        )
+        self.assertEqual(response.status_code, 200)
+        data = json.loads(response.content)
+        self.assertEqual(len(data['schedules']), 0)
+
+    def test_filter_sport_all_and_specific(self):
+        """Test ajax_filter dengan All dan sport spesifik"""
+        Event.objects.create(
+            name='Basket Event',
+            sport_type='basketball',
+            city='City2',
+            full_address='Address2',
+            entry_price=Decimal('60000'),
+            activities='Court',
+            status='available',
+            organizer=self.user
+        )
+
+        # Filter specific sport
+        response = self.client.get(reverse('Event:ajax_filter'), {'sport': 'tennis'})
+        data = json.loads(response.content)
+        self.assertEqual(len(data['events']), 1)
+
+        # Filter All
+        response = self.client.get(reverse('Event:ajax_filter'), {'sport': 'All'})
+        data = json.loads(response.content)
+        self.assertEqual(len(data['events']), 2)
+
+
+class EventModelEdgeCaseTest(TestCase):
+    """Tests tambahan untuk models edge case"""
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username='user1', email='user1@test.com', password='pass123'
+        )
+
+    def test_get_activities_list_empty_and_none(self):
+        """Test get_activities_list dengan string kosong dan None"""
+        event_empty = Event.objects.create(
+            name='Empty Act',
+            sport_type='soccer',
+            city='City',
+            full_address='Addr',
+            entry_price=Decimal('50000'),
+            activities='',
+            organizer=self.user
+        )
+        self.assertEqual(event_empty.get_activities_list(), [''])
+
+        event_none = Event.objects.create(
+            name='None Act',
+            sport_type='soccer',
+            city='City',
+            full_address='Addr',
+            entry_price=Decimal('50000'),
+            activities=None,
+            organizer=self.user
+        )
+        self.assertEqual(event_none.get_activities_list(), [])
