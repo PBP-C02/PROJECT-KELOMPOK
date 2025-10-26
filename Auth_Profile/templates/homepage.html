@@ -45,7 +45,7 @@
     
     <div class="relative z-10 flex flex-col justify-center items-center text-center md:items-end md:text-right p-12 md:p-16">
         <h2 class="text-4xl md:text-5xl font-bold">Lagi berminat ikut event-<br>event olahraga?</h2>
-        <a href="#" class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
+        <a href="{% url 'Event:event_list' %}" class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
             Cari Event &rarr;
         </a>
     </div>
@@ -59,7 +59,7 @@
     
     <div class="relative z-10 flex flex-col justify-center items-center text-center md:items-start md:text-left p-12 md:p-16">
         <h2 class="text-4xl md:text-5xl font-bold">Butuh coach untuk<br>berlatih secara privat?</h2>
-        <a href="#" class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
+        <a href="{% url 'coach:show_main' %}" class="mt-5 rounded-full bg-lime px-6 py-3 font-semibold text-grey transition hover:bg-dark-lime">
             Cari Coach &rarr;
         </a>
     </div>
