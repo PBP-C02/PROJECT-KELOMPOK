@@ -109,6 +109,25 @@
             background: #8cc520;
         }
         
+        .btn-add-date {
+            background: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .btn-add-date:hover {
+            background: #2563eb;
+        }
+        
         /* File upload styling */
         .file-upload {
             width: 100%;
@@ -154,6 +173,78 @@
             text-align: center;
             margin-bottom: 32px;
             color: #1a1a1a;
+        }
+        
+        /* Schedule box styling */
+        .schedule-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .schedule-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .schedule-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        
+        /* Date item styling */
+        .date-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .date-text {
+            flex: 1;
+            color: #374151;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .btn-remove-date {
+            background: #ef4444;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-remove-date:hover {
+            background: #dc2626;
+        }
+        
+        .dates-list {
+            margin-bottom: 12px;
+        }
+        
+        .empty-dates {
+            color: #9ca3af;
+            font-size: 14px;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
         }
     </style>
 </head>
@@ -318,6 +409,37 @@
                         />
                     </div>
                     
+                    <!-- Event Schedules Section -->
+                    <div class="schedule-box">
+                        <h3 class="schedule-title">
+                            📅 Event Schedules
+                        </h3>
+                        <p class="schedule-description">
+                            Add or remove dates when this event will be held
+                        </p>
+                        
+                        <!-- Dates List -->
+                        <div id="datesList" class="dates-list">
+                            <div class="empty-dates">No dates added yet</div>
+                        </div>
+                        
+                        <!-- Add Date Input -->
+                        <div style="display: flex; gap: 8px;">
+                            <input 
+                                type="date" 
+                                id="newDateInput"
+                                class="form-input"
+                                style="flex: 1;"
+                            />
+                            <button type="button" onclick="addDate()" class="btn-add-date">
+                                + Add Another Date
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Hidden input to store dates -->
+                    <input type="hidden" name="schedule_dates" id="scheduleDates" value="[]">
+                    
                     <!-- Save Button -->
                     <button type="submit" class="btn-save">
                         Save Event
@@ -331,11 +453,89 @@
     </div>
     
     <script>
+        // Store dates array
+        let eventDates = [];
+        
+        // Add date function
+        function addDate() {
+            const dateInput = document.getElementById('newDateInput');
+            const dateValue = dateInput.value;
+            
+            if (!dateValue) {
+                alert('Please select a date');
+                return;
+            }
+            
+            // Check if date already exists
+            if (eventDates.includes(dateValue)) {
+                alert('This date has already been added');
+                return;
+            }
+            
+            // Add to array
+            eventDates.push(dateValue);
+            
+            // Update UI
+            renderDates();
+            
+            // Clear input
+            dateInput.value = '';
+        }
+        
+        // Remove date function
+        function removeDate(date) {
+            eventDates = eventDates.filter(d => d !== date);
+            renderDates();
+        }
+        
+        // Render dates list
+        function renderDates() {
+            const datesList = document.getElementById('datesList');
+            const scheduleDatesInput = document.getElementById('scheduleDates');
+            
+            if (eventDates.length === 0) {
+                datesList.innerHTML = '<div class="empty-dates">No dates added yet</div>';
+            } else {
+                datesList.innerHTML = eventDates.map(date => {
+                    const formattedDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    });
+                    
+                    return `
+                        <div class="date-item">
+                            <span class="date-text">${formattedDate}</span>
+                            <button type="button" onclick="removeDate('${date}')" class="btn-remove-date">
+                                Remove
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Update hidden input with JSON
+            scheduleDatesInput.value = JSON.stringify(eventDates);
+        }
+        
         // Form submission handling
         document.getElementById('eventForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
             const formData = new FormData(this);
+            
+            // Debug: Log schedule dates
+            console.log('Schedule dates being sent:', eventDates);
+            console.log('Schedule dates JSON:', JSON.stringify(eventDates));
+            
+            // Make sure schedule_dates is set correctly
+            formData.set('schedule_dates', JSON.stringify(eventDates));
+            
+            // Debug: Log all form data
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
             
             fetch('{% url "event:add_event" %}', {
                 method: 'POST',

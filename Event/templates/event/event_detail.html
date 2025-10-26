@@ -1,4 +1,5 @@
 {% load static %}
+{% load event_extras %}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -64,6 +65,53 @@
             background: #333;
         }
         
+        /* Colorful header based on sport type */
+        .sport-header {
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+        }
+        
+        /* Sport colors */
+        .sport-tennis { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
+        .sport-basketball { background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%); }
+        .sport-soccer { background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); }
+        .sport-badminton { background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%); }
+        .sport-volleyball { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); }
+        .sport-futsal { background: linear-gradient(135deg, #facc15 0%, #eab308 100%); }
+        .sport-paddle { background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%); }
+        .sport-table_tennis { background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%); }
+        .sport-swimming { background: linear-gradient(135deg, #67e8f9 0%, #06b6d4 100%); }
+        
+        /* Sport badge */
+        .sport-badge {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a1a;
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        
+        /* Event title in header */
+        .event-title-header {
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 8px;
+        }
+        
+        /* Sport emoji/icon */
+        .sport-emoji {
+            font-size: 64px;
+            margin-bottom: 12px;
+        }
+        
         /* Event image */
         .event-image {
             width: 100%;
@@ -106,14 +154,6 @@
             gap: 20px;
         }
         
-        .event-title {
-            font-size: 36px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-top: 8px;
-            margin-bottom: 8px;
-        }
-        
         .event-meta {
             color: #6b7280;
             font-size: 14px;
@@ -135,9 +175,17 @@
         }
         
         .price-value {
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
             margin-top: 4px;
+            color: white;
+        }
+        
+        .price-unit {
+            font-size: 14px;
+            font-weight: 400;
+            color: #9ca3af;
+            margin-left: 4px;
         }
         
         /* Section styling */
@@ -320,6 +368,25 @@
             cursor: not-allowed;
         }
         
+        .btn-cancel {
+            background: #ef4444;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            width: 100%;
+            text-align: center;
+            display: block;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-cancel:hover {
+            background: #dc2626;
+        }
+        
         /* Event holder info */
         .event-holder {
             margin-bottom: 16px;
@@ -346,6 +413,53 @@
         .activities-list li {
             margin-bottom: 4px;
         }
+        
+        /* Organizer info box */
+        .organizer-info-box {
+            text-align: center;
+            padding: 16px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            margin-top: 12px;
+            color: #374151;
+            font-size: 15px;
+        }
+        
+        /* Registered dates box */
+        .registered-dates-box {
+            background: #dcfce7;
+            border: 2px solid #86efac;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .registered-dates-title {
+            font-weight: 600;
+            color: #166534;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+        
+        .registered-date-item {
+            background: white;
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #166534;
+            font-size: 14px;
+        }
+        
+        .registered-date-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .date-icon {
+            font-size: 18px;
+        }
     </style>
 </head>
 <body>
@@ -364,17 +478,22 @@
                     ← Back to Event List
                 </a>
                 
-                <!-- Event Image -->
+                <!-- Colorful Header with Sport Type (SAMA SEPERTI EVENT LIST) -->
+                <div class="sport-header sport-{{ event.sport_type }}">
+                    <div class="sport-emoji">{{ event.sport_type|get_sport_emoji }}</div>
+                    <div class="sport-badge">{{ event.get_sport_type_display }}</div>
+                    <h1 class="event-title-header">{{ event.name }}</h1>
+                </div>
+                
+                <!-- Event Image (Optional - bisa di bawah header) -->
                 {% if event.photo %}
                     <img src="{{ event.photo.url }}" alt="{{ event.name }}" class="event-image">
-                {% else %}
-                    <img src="https://via.placeholder.com/800x300?text=Event+Image" alt="{{ event.name }}" class="event-image">
                 {% endif %}
                 
                 <!-- Content -->
                 <div class="detail-content">
                     
-                    <!-- Header: Badge, Title, Meta + Price Box -->
+                    <!-- Header: Badge + Price Box (Judul sudah ada di header berwarna di atas) -->
                     <div class="event-header">
                         <div style="flex: 1;">
                             <!-- Badge -->
@@ -385,9 +504,6 @@
                                     <span class="badge-unavailable">Unavailable</span>
                                 {% endif %}
                             </div>
-                            
-                            <!-- Title -->
-                            <h1 class="event-title">{{ event.name }}</h1>
                             
                             <!-- Meta Info -->
                             <div class="event-meta">
@@ -400,7 +516,9 @@
                         <!-- Price Box -->
                         <div class="price-box">
                             <div class="price-label">Price per Hour</div>
-                            <div class="price-value">Rp {{ event.entry_price|floatformat:0 }}</div>
+                            <div class="price-value">
+                                Rp {{ event.entry_price|floatformat:0 }}<span class="price-unit">/jam</span>
+                            </div>
                         </div>
                     </div>
                     
@@ -441,9 +559,22 @@
                         
                         <!-- Event Holder Info -->
                         <div class="event-holder">
-                            <div class="holder-name">{{ event.organizer.username }}</div>
+                            <div class="holder-name">{{ event.organizer.username|default:event.organizer.email|default:"Event Organizer" }}</div>
                             <div class="holder-role">Event Organizer</div>
                         </div>
+                        
+                        <!-- Show registered dates if user has registrations -->
+                        {% if user_registered and user_registrations %}
+                        <div class="registered-dates-box">
+                            <div class="registered-dates-title">✅ You are registered for:</div>
+                            {% for registration in user_registrations %}
+                            <div class="registered-date-item">
+                                <span class="date-icon">📅</span>
+                                <span>{{ registration.schedule.date|date:"l, d F Y" }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                         
                         {% if schedules %}
                         <!-- Select Date -->
@@ -459,17 +590,29 @@
                         
                         <p class="info-text" id="dateInfo">Please select a date to join the event</p>
                         
-                        <!-- Join Button (for non-organizer) -->
-                        {% if user.is_authenticated and user != event.organizer %}
-                            {% if user_registered %}
-                                <button class="btn-join" disabled>Already Registered</button>
+                        <!-- Join Button - Updated logic -->
+                        {% if user %}
+                            {% if user.id == event.organizer.id %}
+                                <!-- User is the organizer -->
+                                <div class="organizer-info-box">
+                                    ✨ You are the organizer of this event
+                                </div>
                             {% else %}
+                                <!-- User can join more dates -->
                                 <button id="joinBtn" class="btn-join" onclick="joinEvent()" disabled>
                                     Join Event
                                 </button>
+                                
+                                <!-- Cancel button if user has any registrations -->
+                                {% if user_registered %}
+                                <button class="btn-cancel" onclick="cancelRegistration()" style="margin-top: 12px;">
+                                    Cancel All Registrations
+                                </button>
+                                {% endif %}
                             {% endif %}
-                        {% elif not user.is_authenticated %}
-                            <a href="{% url 'Auth_Profile:login' %}" class="btn-join" style="background: #6b7280;">
+                        {% else %}
+                            <!-- User not logged in -->
+                            <a href="{% url 'Auth_Profile:login' %}?next={{ request.path }}" class="btn-join" style="background: #6b7280; text-decoration: none;">
                                 Login to Join
                             </a>
                         {% endif %}
@@ -479,8 +622,8 @@
                         {% endif %}
                         
                         <!-- Action Buttons (Only for organizer) -->
-                        {% if user == event.organizer %}
-                        <div class="button-group">
+                        {% if user and user.id == event.organizer.id %}
+                        <div class="button-group" style="margin-top: 20px;">
                             <button onclick="toggleAvailability(true)" class="btn-mark-available">
                                 Mark Available
                             </button>
@@ -556,6 +699,33 @@
                         location.reload();
                     } else {
                         alert('Error: ' + (data.message || 'Failed to join event'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
+        }
+        
+        // Cancel registration function
+        function cancelRegistration() {
+            if (confirm('Are you sure you want to cancel your registration for this event?')) {
+                fetch('/event/{{ event.id }}/ajax/cancel/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + (data.message || 'Failed to cancel registration'));
                     }
                 })
                 .catch(error => {
