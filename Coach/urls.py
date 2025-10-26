@@ -8,6 +8,9 @@ app_name = 'coach'
 urlpatterns = [
     path('', show_main, name='show_main'),
 
+    # AJAX endpoints
+    path('api/search/', ajax_search_coaches, name='ajax_search'),
+
     path('create-coach/', create_coach_page, name='create_coach_page'),  
     path('create-coach/submit/', add_coach, name='add_coach'),           
 
@@ -21,6 +24,5 @@ urlpatterns = [
     path('mark-unavailable/<uuid:pk>/', mark_unavailable, name='mark_unavailable'),
     path('delete-coach/<uuid:pk>/', delete_coach, name='delete_coach'),
 
-    path('<uuid:pk>/', coach_detail, name='coach_detail'),       
-    
+    path('<uuid:pk>/', coach_detail, name='coach_detail'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

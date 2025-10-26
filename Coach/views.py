@@ -13,6 +13,8 @@ from django.views.decorators.http import require_http_methods
 import json
 from PIL import Image
 import os
+from django.db.models import Q
+from Auth_Profile.models import User
 
 # ==================== CUSTOM LOGIN DECORATOR ====================
 def custom_login_required(view_func):
@@ -29,7 +31,6 @@ def custom_login_required(view_func):
             return redirect('/login/')
         
         try:
-            from Auth_Profile.models import User
             request.user = User.objects.get(id=request.session['user_id'])
         except User.DoesNotExist:
             request.session.flush()
@@ -101,71 +102,36 @@ def validate_image(file):
     
     return file
 
+def _get_current_user(request):
+    """Return authenticated user from session-managed Auth_Profile.User."""
+    user_id = request.session.get('user_id')
+    if not user_id:
+        return None
+
+    try:
+        return User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        return None
+
+def _require_user(request, *, json_mode=False):
+    """
+    Ensure request has authenticated user.
+    Returns tuple (user, error_response). If user is None, error_response contains redirect/JSON response.
+    """
+    user = _get_current_user(request)
+    if user:
+        return user, None
+
+    if json_mode:
+        return None, JsonResponse({'success': False, 'error': 'Authentication required'}, status=401)
+    return None, redirect('/login/')
+
 # ==================== VIEWS ====================
 def show_main(request):
-    coach_list = Coach.objects.all()
-
-    if 'user_id' in request.session:
-        try:
-            from Auth_Profile.models import User
-            request.user = User.objects.get(id=request.session['user_id'])
-        except User.DoesNotExist:
-            request.session.flush()
-            request.user = None
-    else:
-        request.user = None
-
-    nama_coach = (request.GET.get('nama_coach') or '').strip()
-    location = request.GET.get('location') or ''
-    category = request.GET.get('category')
-    min_p    = _to_int(request.GET.get('min_price'))
-    max_p    = _to_int(request.GET.get('max_price'))
-    sort     = request.GET.get('sort', 'date_asc')
-    view_mode = request.GET.get('view', 'all')  
-
-    # --- Filter by view mode ---
-    if view_mode == 'my_bookings' and request.user:
-        coach_list = coach_list.filter(peserta=request.user)
-    elif view_mode == 'my_coaches' and request.user:
-        coach_list = coach_list.filter(user=request.user)
-
-    # --- filters ---
-    if nama_coach:
-        coach_list = coach_list.filter(user__nama__icontains=nama_coach)
-
-    if location:
-        coach_list = coach_list.filter(location__icontains=location)
-
-    if category:
-        coach_list = coach_list.filter(category=category)
-    if min_p is not None:
-        coach_list = coach_list.filter(price__gte=min_p)
-    if max_p is not None:
-        coach_list = coach_list.filter(price__lte=max_p)
-
-    available_only = request.GET.get('available') in ['1', 'on', 'true', 'True']
-    if available_only:
-        today = timezone.now().date()
-        coach_list = coach_list.filter(isBooked=False, date__gte=today)
-
-    # --- sorting ---
-    if sort == 'price_asc':
-        coach_list = coach_list.order_by('price')
-    elif sort == 'price_desc':
-        coach_list = coach_list.order_by('-price')
-    elif sort == 'date_desc':
-        coach_list = coach_list.order_by('-date')
-    else:  
-        coach_list = coach_list.order_by('date')
-
-    context = {
-        'coach_list': coach_list, 
-        'count': coach_list.count(),
-        'nama_coach': nama_coach,
-        'view_mode': view_mode,
-        'user': request.user,  
-    }
-    return render(request, 'coach/main.html', context)
+    current_user, error_response = _require_user(request)
+    if error_response:
+        return error_response
+    return render(request, 'coach/main.html', {'user': current_user})
 
 def coach_detail(request, pk):
     if 'user_id' in request.session:
@@ -463,3 +429,108 @@ def delete_coach(request, pk):
             'success': False,
             'message': str(e)
         }, status=500)
+
+@require_http_methods(["GET"])
+def ajax_search_coaches(request):
+    """AJAX endpoint for searching and filtering coaches"""
+    try:
+        from Auth_Profile.models import User
+        if 'user_id' in request.session:
+            request.user = User.objects.get(id=request.session['user_id'])
+        else:
+            request.user = None
+    except User.DoesNotExist:
+        request.user = None
+
+    # Get filter parameters
+    search_query = request.GET.get('q', '').strip()
+    location = request.GET.get('location', '')
+    category = request.GET.get('category', '')
+    min_price = _to_int(request.GET.get('min_price'))
+    max_price = _to_int(request.GET.get('max_price'))
+    available_only = request.GET.get('available', 'false') == 'true'
+    view_mode = request.GET.get('view', 'all')
+    sort_by = request.GET.get('sort', 'date_asc')
+
+    # Start with all coaches
+    coaches = Coach.objects.all()
+
+    # View mode filters
+    if view_mode == 'my_bookings' and request.user:
+        coaches = coaches.filter(peserta=request.user)
+    elif view_mode == 'my_coaches' and request.user:
+        coaches = coaches.filter(user=request.user)
+
+    # Search filter (search in title, description, location, and coach name)
+    if search_query:
+        coaches = coaches.filter(
+            Q(title__icontains=search_query) |
+            Q(description__icontains=search_query) |
+            Q(location__icontains=search_query) |
+            Q(user__nama__icontains=search_query)
+        )
+
+    # Location filter
+    if location:
+        coaches = coaches.filter(location__icontains=location)
+
+    # Category filter
+    if category:
+        coaches = coaches.filter(category=category)
+
+    # Price range filter
+    if min_price is not None:
+        coaches = coaches.filter(price__gte=min_price)
+    if max_price is not None:
+        coaches = coaches.filter(price__lte=max_price)
+
+    # Available only filter
+    if available_only:
+        today = timezone.now().date()
+        coaches = coaches.filter(isBooked=False, date__gte=today)
+
+    # Sorting
+    sort_map = {
+        'date_asc': ['date', 'startTime'],
+        'date_desc': ['-date', '-startTime'],
+        'price_asc': 'price',
+        'price_desc': '-price',
+    }
+    order_by = sort_map.get(sort_by, ['date', 'startTime'])
+    if isinstance(order_by, list):
+        coaches = coaches.order_by(*order_by)
+    else:
+        coaches = coaches.order_by(order_by)
+
+    # Serialize coaches data
+    coaches_data = []
+    for coach in coaches:
+        coaches_data.append({
+            'id': str(coach.pk),
+            'title': coach.title,
+            'description': coach.description,
+            'category': coach.category,
+            'category_display': coach.get_category_display(),
+            'location': coach.location,
+            'address': coach.address,
+            'price': coach.price,
+            'price_formatted': coach.price_formatted,
+            'date': coach.date.strftime('%Y-%m-%d'),
+            'date_formatted': coach.date.strftime('%d %b %Y'),
+            'start_time': coach.startTime.strftime('%H:%M'),
+            'end_time': coach.endTime.strftime('%H:%M'),
+            'rating': float(coach.rating),
+            'is_booked': coach.isBooked,
+            'image_url': coach.image.url if coach.image else None,
+            'user_name': coach.user.nama,
+            'user_id': str(coach.user.id),
+            'is_owner': request.user and str(request.user.id) == str(coach.user.id),
+            'detail_url': f'/coach/{coach.pk}/',
+            'edit_url': f'/coach/edit-coach/{coach.pk}/',
+        })
+
+    return JsonResponse({
+        'success': True,
+        'coaches': coaches_data,
+        'count': len(coaches_data)
+    })
