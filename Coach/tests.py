@@ -364,7 +364,6 @@ class CoachJSONViewTests(TestCase):
         self.owner = make_user(nama="Owner", phone="081234567890", email="owner@test.com")
         self.other = make_user(nama="Other", phone="082233445566", email="other@test.com")
         
-        # Use manual login
         manual_login(self.client, self.owner)
 
         fut = make_future_datetime(days=4, hour=9)
@@ -384,6 +383,15 @@ class CoachJSONViewTests(TestCase):
             endTime=dt.time(10, 0),
             rating=Decimal("4.00"),
         )
+    
+    def test_show_main_renders(self):
+        """Test show_main returns template"""
+        url = reverse("coach:show_main")
+        resp = self.client.get(url)
+        
+        self.assertEqual(resp.status_code, 200)
+        self.assertTemplateUsed(resp, 'coach/main.html')
+        self.assertIn('user', resp.context)
 
     def test_add_coach_success(self):
         url = reverse("coach:add_coach")
@@ -552,11 +560,247 @@ class CoachJSONViewTests(TestCase):
         self.assertFalse(Coach.objects.filter(pk=self.coach.pk).exists())
 
 
-# ---------- URL smoke tests ----------
+# ==================== ADD NEW TEST CLASS FOR AJAX SEARCH ====================
+
+@override_settings(
+    AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend'],
+    MIDDLEWARE=[m for m in __import__('django.conf', fromlist=['settings']).settings.MIDDLEWARE 
+                if 'SessionMiddleware' in m or 'AuthenticationMiddleware' in m]
+)
+class AjaxSearchCoachesTests(TestCase):
+    """Test ajax_search_coaches endpoint"""
+    
+    def setUp(self):
+        self.owner = make_user(nama="Owner", phone="081234567890", email="owner@test.com")
+        self.other = make_user(nama="Other", phone="082233445566", email="other@test.com")
+        
+        manual_login(self.client, self.owner)
+        
+        fut = make_future_datetime(days=4, hour=9)
+        
+        # Create multiple coaches for testing
+        self.coach1 = Coach.objects.create(
+            user=self.owner,
+            title="Tennis Coach Jakarta",
+            description="Professional tennis coaching",
+            price=50000,
+            category="tennis",
+            location="Jakarta",
+            address="Jl. Sudirman",
+            mapsLink="https://maps.google.com/?q=-6.2,106.8",
+            date=fut.date(),
+            startTime=dt.time(9, 0),
+            endTime=dt.time(10, 0),
+            rating=Decimal("4.50"),
+        )
+        
+        self.coach2 = Coach.objects.create(
+            user=self.other,
+            title="Basketball Coach",
+            description="Expert basketball training",
+            price=75000,
+            category="basketball",
+            location="Bandung",
+            address="Jl. Dago",
+            mapsLink="https://maps.google.com/?q=-6.9,107.6",
+            date=fut.date(),
+            startTime=dt.time(10, 0),
+            endTime=dt.time(11, 0),
+            rating=Decimal("4.20"),
+            isBooked=True,
+        )
+        
+        self.coach3 = Coach.objects.create(
+            user=self.owner,
+            title="Soccer Coach Jakarta",
+            description="Youth soccer training",
+            price=100000,
+            category="soccer",
+            location="Jakarta",
+            address="Jl. Gatot Subroto",
+            mapsLink="https://maps.google.com/?q=-6.2,106.8",
+            date=fut.date(),
+            startTime=dt.time(14, 0),
+            endTime=dt.time(15, 0),
+            rating=Decimal("3.80"),
+        )
+    
+    def test_ajax_search_all_coaches(self):
+        """Test search without filters returns all coaches"""
+        url = reverse("coach:ajax_search")
+        resp = self.client.get(url)
+        
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+        self.assertTrue(data['success'])
+        self.assertEqual(data['count'], 3)
+        self.assertEqual(len(data['coaches']), 3)
+    
+    def test_ajax_search_by_query(self):
+        """Test search by text query"""
+        url = reverse("coach:ajax_search")
+        
+        # Search by title
+        resp = self.client.get(url, {'q': 'Tennis'})
+        data = resp.json()
+        self.assertEqual(data['count'], 1)
+        self.assertEqual(data['coaches'][0]['title'], 'Tennis Coach Jakarta')
+        
+        # Search by location
+        resp = self.client.get(url, {'q': 'Bandung'})
+        data = resp.json()
+        self.assertEqual(data['count'], 1)
+        
+        # Search by description
+        resp = self.client.get(url, {'q': 'Expert'})
+        data = resp.json()
+        self.assertEqual(data['count'], 1)
+    
+    def test_ajax_search_by_location(self):
+        """Test filter by location"""
+        url = reverse("coach:ajax_search")
+        resp = self.client.get(url, {'location': 'Jakarta'})
+        
+        data = resp.json()
+        self.assertEqual(data['count'], 2)
+        for coach in data['coaches']:
+            self.assertEqual(coach['location'], 'Jakarta')
+    
+    def test_ajax_search_by_category(self):
+        """Test filter by category"""
+        url = reverse("coach:ajax_search")
+        resp = self.client.get(url, {'category': 'tennis'})
+        
+        data = resp.json()
+        self.assertEqual(data['count'], 1)
+        self.assertEqual(data['coaches'][0]['category'], 'tennis')
+    
+    def test_ajax_search_by_price_range(self):
+        """Test filter by price range"""
+        url = reverse("coach:ajax_search")
+        
+        # Min price only
+        resp = self.client.get(url, {'min_price': '60000'})
+        data = resp.json()
+        self.assertEqual(data['count'], 2)
+        
+        # Max price only
+        resp = self.client.get(url, {'max_price': '60000'})
+        data = resp.json()
+        self.assertEqual(data['count'], 1)
+        
+        # Both min and max
+        resp = self.client.get(url, {'min_price': '50000', 'max_price': '80000'})
+        data = resp.json()
+        self.assertEqual(data['count'], 2)
+    
+    def test_ajax_search_available_only(self):
+        """Test filter available only"""
+        url = reverse("coach:ajax_search")
+        resp = self.client.get(url, {'available': 'true'})
+        
+        data = resp.json()
+        self.assertEqual(data['count'], 2)
+        for coach in data['coaches']:
+            self.assertFalse(coach['is_booked'])
+    
+    def test_ajax_search_view_mode_my_bookings(self):
+        """Test view mode: my bookings"""
+        # Owner books coach2
+        self.coach2.peserta = self.owner
+        self.coach2.save()
+        
+        url = reverse("coach:ajax_search")
+        resp = self.client.get(url, {'view': 'my_bookings'})
+        
+        data = resp.json()
+        self.assertEqual(data['count'], 1)
+        self.assertEqual(data['coaches'][0]['id'], str(self.coach2.pk))
+    
+    def test_ajax_search_view_mode_my_coaches(self):
+        """Test view mode: my coaches"""
+        url = reverse("coach:ajax_search")
+        resp = self.client.get(url, {'view': 'my_coaches'})
+        
+        data = resp.json()
+        self.assertEqual(data['count'], 2)
+        for coach in data['coaches']:
+            self.assertTrue(coach['is_owner'])
+    
+    def test_ajax_search_sorting(self):
+        """Test sorting"""
+        url = reverse("coach:ajax_search")
+        
+        # Sort by price ascending
+        resp = self.client.get(url, {'sort': 'price_asc'})
+        data = resp.json()
+        prices = [coach['price'] for coach in data['coaches']]
+        self.assertEqual(prices, sorted(prices))
+        
+        # Sort by price descending
+        resp = self.client.get(url, {'sort': 'price_desc'})
+        data = resp.json()
+        prices = [coach['price'] for coach in data['coaches']]
+        self.assertEqual(prices, sorted(prices, reverse=True))
+    
+    def test_ajax_search_combined_filters(self):
+        """Test multiple filters combined"""
+        url = reverse("coach:ajax_search")
+        resp = self.client.get(url, {
+            'location': 'Jakarta',
+            'category': 'tennis',
+            'available': 'true',
+            'max_price': '60000'
+        })
+        
+        data = resp.json()
+        self.assertEqual(data['count'], 1)
+        coach = data['coaches'][0]
+        self.assertEqual(coach['location'], 'Jakarta')
+        self.assertEqual(coach['category'], 'tennis')
+        self.assertFalse(coach['is_booked'])
+        self.assertLessEqual(coach['price'], 60000)
+    
+    def test_ajax_search_no_results(self):
+        """Test search with no matching results"""
+        url = reverse("coach:ajax_search")
+        resp = self.client.get(url, {'q': 'NonexistentCoach'})
+        
+        data = resp.json()
+        self.assertTrue(data['success'])
+        self.assertEqual(data['count'], 0)
+        self.assertEqual(len(data['coaches']), 0)
+    
+    def test_ajax_search_response_structure(self):
+        """Test response data structure"""
+        url = reverse("coach:ajax_search")
+        resp = self.client.get(url)
+        
+        data = resp.json()
+        self.assertIn('success', data)
+        self.assertIn('coaches', data)
+        self.assertIn('count', data)
+        
+        # Check coach object structure
+        coach = data['coaches'][0]
+        required_fields = [
+            'id', 'title', 'description', 'category', 'category_display',
+            'location', 'address', 'price', 'price_formatted', 'date',
+            'date_formatted', 'start_time', 'end_time', 'rating',
+            'is_booked', 'image_url', 'user_name', 'user_id',
+            'is_owner', 'detail_url', 'edit_url'
+        ]
+        for field in required_fields:
+            self.assertIn(field, coach)
+
+
+# ==================== URL RESOLUTION TESTS ====================
 
 class URLResolutionTests(TestCase):
     def test_named_urls_reverse(self):
         self.assertTrue(reverse("coach:show_main").startswith("/"))
+        self.assertTrue(reverse("coach:ajax_search").startswith("/"))
+        
         fake_pk = uuid.uuid4()
         reverse("coach:create_coach_page")
         reverse("coach:add_coach")
