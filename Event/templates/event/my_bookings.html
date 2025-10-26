@@ -1,0 +1,429 @@
+{% load static %}
+{% load event_extras %}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings - Move Buddy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Background yang SANGAT subtle */
+        body {
+            background-color: #f9fafb;
+            background-image: url('{% static "img/bg.png" %}');
+            background-repeat: repeat;
+            background-size: 300px 300px;
+            background-attachment: fixed;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.97);
+            z-index: 0;
+        }
+        
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Tab navigation */
+        .tab-nav {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            display: inline-flex;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+        
+        .tab-button {
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #6b7280;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .tab-button:hover {
+            color: #374151;
+            background: #f3f4f6;
+        }
+        
+        .tab-button.active {
+            background: #a3e635;
+            color: #1a1a1a;
+        }
+        
+        /* Page header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .page-title {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            font-size: 16px;
+            color: #6b7280;
+        }
+        
+        /* Stats box */
+        .stats-box {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 32px;
+            display: inline-block;
+        }
+        
+        .stats-number {
+            font-size: 48px;
+            font-weight: 700;
+            color: #a3e635;
+            margin-bottom: 4px;
+        }
+        
+        .stats-label {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        /* Booking card */
+        .booking-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .booking-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+        
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            gap: 20px;
+        }
+        
+        .booking-info {
+            flex: 1;
+        }
+        
+        .booking-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .sport-emoji-small {
+            font-size: 28px;
+        }
+        
+        .booking-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .sport-badge-small {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        /* Dates section */
+        .dates-section {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .dates-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 12px;
+        }
+        
+        .date-item {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .date-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .date-icon {
+            font-size: 20px;
+        }
+        
+        .date-text {
+            flex: 1;
+            font-size: 15px;
+            color: #1a1a1a;
+            font-weight: 500;
+        }
+        
+        /* Action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .btn-view {
+            background: #1a1a1a;
+            color: white;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-view:hover {
+            background: #333;
+        }
+        
+        .btn-cancel {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-cancel:hover {
+            background: #fecaca;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+        
+        .empty-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        
+        .empty-text {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 24px;
+        }
+        
+        .btn-browse {
+            background: #a3e635;
+            color: #1a1a1a;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-browse:hover {
+            background: #8cc520;
+        }
+    </style>
+</head>
+<body>
+    <!-- Include Navbar -->
+    {% include 'includes/navbar.html' %}
+    
+    <div class="content-wrapper">
+        <div class="max-w-7xl mx-auto px-4 py-8">
+            
+            <!-- Tab Navigation -->
+            <div class="flex justify-center">
+                <div class="tab-nav">
+                    <a href="{% url 'event:event_list' %}" class="tab-button">All</a>
+                    <a href="{% url 'event:my_bookings' %}" class="tab-button active">My Bookings</a>
+                </div>
+            </div>
+            
+            <!-- Page Header -->
+            <div class="page-header">
+                <h1 class="page-title">My Bookings</h1>
+                <p class="page-subtitle">View and manage your event registrations</p>
+            </div>
+            
+            {% if bookings %}
+                <!-- Stats -->
+                <div class="text-center mb-8">
+                    <div class="stats-box">
+                        <div class="stats-number">{{ total_bookings }}</div>
+                        <div class="stats-label">Total Events Booked</div>
+                    </div>
+                </div>
+                
+                <!-- Bookings List -->
+                <div class="max-w-4xl mx-auto">
+                    {% for booking in bookings %}
+                    <div class="booking-card">
+                        <!-- Header -->
+                        <div class="booking-header">
+                            <div class="booking-info">
+                                <h2 class="booking-title">
+                                    <span class="sport-emoji-small">{{ booking.event.sport_type|get_sport_emoji }}</span>
+                                    {{ booking.event.name }}
+                                </h2>
+                                <div class="booking-meta">
+                                    <span class="sport-badge-small">{{ booking.event.get_sport_type_display }}</span>
+                                    <div class="meta-item">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                        </svg>
+                                        {{ booking.event.city }}
+                                    </div>
+                                    <div class="meta-item">
+                                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                        {{ booking.event.rating|default:"0.00" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Registered Dates -->
+                        <div class="dates-section">
+                            <div class="dates-title">📅 Your Registered Dates:</div>
+                            {% for schedule in booking.schedules %}
+                            <div class="date-item">
+                                <span class="date-icon">🗓️</span>
+                                <span class="date-text">{{ schedule.date|date:"l, d F Y" }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="action-buttons">
+                            <a href="{% url 'event:event_detail' pk=booking.event.id %}" class="btn-view">
+                                View Event Details
+                            </a>
+                            <button onclick="cancelBooking({{ booking.event.id }})" class="btn-cancel">
+                                Cancel Registration
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+            {% else %}
+                <!-- Empty State -->
+                <div class="empty-state">
+                    <div class="empty-icon">📅</div>
+                    <h2 class="empty-title">No Bookings Yet</h2>
+                    <p class="empty-text">You haven't registered for any events. Start exploring and join exciting sports events!</p>
+                    <a href="{% url 'event:event_list' %}" class="btn-browse">
+                        Browse Events
+                    </a>
+                </div>
+            {% endif %}
+            
+        </div>
+    </div>
+    
+    <script>
+        function cancelBooking(eventId) {
+            if (confirm('Are you sure you want to cancel all registrations for this event?')) {
+                fetch(`/event/${eventId}/ajax/cancel/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + (data.message || 'Failed to cancel registration'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

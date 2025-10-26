@@ -1,4 +1,5 @@
 {% load static %}
+{% load event_extras %}
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -35,6 +36,41 @@
             z-index: 1;
         }
         
+        /* Tab navigation */
+        .tab-nav {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            display: inline-flex;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+        
+        .tab-button {
+            padding: 12px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            color: #6b7280;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .tab-button:hover {
+            color: #374151;
+            background: #f3f4f6;
+        }
+        
+        .tab-button.active {
+            background: #a3e635;
+            color: #1a1a1a;
+        }
+        
         /* White container box untuk semua controls */
         .controls-box {
             background: white;
@@ -44,11 +80,13 @@
             margin-bottom: 24px;
         }
         
-        /* Card styling */
+        /* Card styling with colorful header */
         .event-card {
             background: white;
             transition: all 0.3s ease;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
         }
         
         .event-card:hover {
@@ -56,34 +94,102 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
-        /* Filter pills */
-        .filter-pill {
-            padding: 12px 28px;
+        /* Colorful header based on sport type */
+        .sport-header {
+            padding: 32px 24px;
+            text-align: center;
+            position: relative;
+        }
+        
+        /* Sport colors */
+        .sport-tennis { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
+        .sport-basketball { background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%); }
+        .sport-soccer { background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); }
+        .sport-badminton { background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%); }
+        .sport-volleyball { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); }
+        .sport-futsal { background: linear-gradient(135deg, #facc15 0%, #eab308 100%); }
+        .sport-paddle { background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%); }
+        .sport-table_tennis { background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%); }
+        .sport-swimming { background: linear-gradient(135deg, #67e8f9 0%, #06b6d4 100%); }
+        
+        /* Sport badge */
+        .sport-badge {
+            background: rgba(255, 255, 255, 0.95);
+            color: #1a1a1a;
+            padding: 8px 20px;
             border-radius: 50px;
-            border: 1px solid #e5e7eb;
-            background: white;
-            color: #374151;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        
+        /* Event title in header */
+        .event-title-header {
+            font-size: 28px;
+            font-weight: 800;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 8px;
+        }
+        
+        /* Event content */
+        .event-content {
+            padding: 24px;
+        }
+        
+        /* Date and time info */
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #4b5563;
             font-size: 15px;
         }
         
-        .filter-pill:hover {
-            background: #f3f4f6;
+        .info-icon {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        
+        /* Sport filter dropdown */
+        .sport-select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            background: white;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+        
+        .sport-select:hover {
             border-color: #d1d5db;
         }
         
-        .filter-pill.active {
-            background: #a3e635;
-            color: #1a1a1a;
+        .sport-select:focus {
+            outline: none;
             border-color: #a3e635;
+            box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.1);
         }
         
         /* Badge styling */
         .badge-available {
-            background: #a3e635;
-            color: #1a1a1a;
+            background: #dcfce7;
+            color: #16a34a;
             padding: 4px 12px;
             border-radius: 6px;
             font-size: 12px;
@@ -92,8 +198,8 @@
         }
         
         .badge-unavailable {
-            background: #ef4444;
-            color: white;
+            background: #fee2e2;
+            color: #dc2626;
             padding: 4px 12px;
             border-radius: 6px;
             font-size: 12px;
@@ -110,6 +216,9 @@
             font-weight: 600;
             width: 100%;
             transition: all 0.2s ease;
+            text-align: center;
+            display: block;
+            text-decoration: none;
         }
         
         .btn-primary:hover {
@@ -163,18 +272,19 @@
             background: white;
         }
         
-        /* Image styling */
-        .event-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 8px 8px 0 0;
+        /* Price display */
+        .price-display {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 16px 0;
         }
         
-        /* Green text */
-        .text-green {
-            color: #16a34a;
-            font-weight: 600;
+        .price-unit {
+            font-size: 16px;
+            font-weight: 400;
+            color: #9ca3af;
+            margin-left: 4px;
         }
         
         /* Checkbox styling */
@@ -183,6 +293,12 @@
             height: 18px;
             accent-color: #a3e635;
             cursor: pointer;
+        }
+        
+        /* Sport emoji/icon */
+        .sport-emoji {
+            font-size: 48px;
+            margin-bottom: 12px;
         }
     </style>
 </head>
@@ -193,6 +309,14 @@
     <div class="content-wrapper">
         <!-- Main Container -->
         <div class="max-w-7xl mx-auto px-4 py-8">
+            
+            <!-- Tab Navigation -->
+            <div class="flex justify-center">
+                <div class="tab-nav">
+                    <a href="{% url 'event:event_list' %}" class="tab-button active">All</a>
+                    <a href="{% url 'event:my_bookings' %}" class="tab-button">My Bookings</a>
+                </div>
+            </div>
             
             <!-- White Container Box untuk semua controls -->
             <div class="controls-box">
@@ -211,15 +335,21 @@
                     </button>
                 </div>
                 
-                <!-- Filter Pills -->
-                <div class="flex gap-3 flex-wrap mb-6">
-                    <button class="filter-pill {% if not selected_category or selected_category == 'All' %}active{% endif %}" data-category="all">All</button>
-                    <button class="filter-pill {% if selected_category == 'tennis' %}active{% endif %}" data-category="tennis">Tennis</button>
-                    <button class="filter-pill {% if selected_category == 'basketball' %}active{% endif %}" data-category="basketball">Basketball</button>
-                    <button class="filter-pill {% if selected_category == 'soccer' %}active{% endif %}" data-category="soccer">Soccer</button>
-                    <button class="filter-pill {% if selected_category == 'badminton' %}active{% endif %}" data-category="badminton">Badminton</button>
-                    <button class="filter-pill {% if selected_category == 'volleyball' %}active{% endif %}" data-category="volleyball">Volleyball</button>
-                    <button class="filter-pill {% if selected_category == 'futsal' %}active{% endif %}" data-category="futsal">Futsal</button>
+                <!-- Sport Filter Dropdown -->
+                <div class="mb-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Sport</label>
+                    <select id="sportFilter" class="sport-select">
+                        <option value="all" {% if not selected_category or selected_category == 'all' %}selected{% endif %}>All Sports</option>
+                        <option value="tennis" {% if selected_category == 'tennis' %}selected{% endif %}>🎾 Tennis</option>
+                        <option value="basketball" {% if selected_category == 'basketball' %}selected{% endif %}>🏀 Basketball</option>
+                        <option value="soccer" {% if selected_category == 'soccer' %}selected{% endif %}>⚽ Soccer</option>
+                        <option value="badminton" {% if selected_category == 'badminton' %}selected{% endif %}>🏸 Badminton</option>
+                        <option value="volleyball" {% if selected_category == 'volleyball' %}selected{% endif %}>🏐 Volleyball</option>
+                        <option value="paddle" {% if selected_category == 'paddle' %}selected{% endif %}>🏓 Paddle</option>
+                        <option value="futsal" {% if selected_category == 'futsal' %}selected{% endif %}>⚽ Futsal</option>
+                        <option value="table_tennis" {% if selected_category == 'table_tennis' %}selected{% endif %}>🏓 Table Tennis</option>
+                        <option value="swimming" {% if selected_category == 'swimming' %}selected{% endif %}>🏊 Swimming</option>
+                    </select>
                 </div>
                 
                 <!-- Checkbox + Add Event Button -->
@@ -246,37 +376,56 @@
             <div id="eventGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Initial server-side rendered events -->
                 {% for event in events %}
-                <div class="event-card rounded-lg overflow-hidden">
-                    {% if event.photo %}
-                    <img src="{{ event.photo.url }}" alt="{{ event.name }}" class="event-image" onerror="this.src='https://via.placeholder.com/400x200?text=Event+Image'">
-                    {% else %}
-                    <img src="https://via.placeholder.com/400x200?text=Event+Image" alt="{{ event.name }}" class="event-image">
-                    {% endif %}
+                <div class="event-card">
+                    <!-- Colorful Header with Sport Type -->
+                    <div class="sport-header sport-{{ event.sport_type }}">
+                        <div class="sport-emoji">{{ event.sport_type|get_sport_emoji }}</div>
+                        <div class="sport-badge">{{ event.get_sport_type_display }}</div>
+                        <h3 class="event-title-header">{{ event.name }}</h3>
+                    </div>
                     
-                    <div class="p-5">
-                        <!-- Badge -->
+                    <div class="event-content">
+                        <!-- Status Badge -->
                         <div class="mb-3">
                             <span class="badge-{{ event.status }}">
                                 {% if event.status == 'available' %}Tersedia{% else %}Tidak Tersedia{% endif %}
                             </span>
                         </div>
                         
-                        <!-- Title -->
-                        <h3 class="text-xl font-bold mb-3">{{ event.name }}</h3>
+                        <!-- Date & Time Info -->
+                        {% if event.schedules.all.first %}
+                        <div class="info-item">
+                            <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
+                            <span>{{ event.schedules.all.first.date|date:"d M Y" }}</span>
+                        </div>
+                        {% endif %}
                         
-                        <!-- Details -->
-                        <div class="space-y-2 text-sm text-gray-600 mb-4">
-                            <p>Jenis olahraga: {{ event.get_sport_type_display }}</p>
-                            <p>Rating: {{ event.rating|default:"0.00" }}</p>
-                            <p>Lokasi: {{ event.city }}</p>
-                            <p class="text-green">Jarak: Tidak diketahui</p>
+                        <!-- Location Info -->
+                        <div class="info-item">
+                            <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                            <span>{{ event.city }}</span>
+                        </div>
+                        
+                        <!-- Rating Info -->
+                        <div class="info-item">
+                            <svg class="info-icon" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <span>Rating: {{ event.rating|default:"0.00" }}</span>
                         </div>
                         
                         <!-- Price -->
-                        <p class="text-2xl font-bold mb-4">Rp {{ event.entry_price|floatformat:0 }} /jam</p>
+                        <div class="price-display">
+                            Rp {{ event.entry_price|floatformat:0 }}<span class="price-unit">/jam</span>
+                        </div>
                         
                         <!-- Button -->
-                        <a href="{% url 'event:event_detail' pk=event.id %}" class="btn-primary block text-center">
+                        <a href="{% url 'event:event_detail' pk=event.id %}" class="btn-primary">
                             Lihat Detail & Booking
                         </a>
                     </div>
@@ -306,18 +455,24 @@
         let currentCategory = '{{ selected_category|default:"all" }}';
         let availableOnly = {{ available_only|yesno:"true,false" }};
         
-        // Setup filter buttons
-        const filterButtons = document.querySelectorAll('.filter-pill');
-        filterButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                // Update active state
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Update category and load events
-                currentCategory = this.dataset.category;
-                loadEvents();
-            });
+        // Sport emoji mapping
+        const sportEmojis = {
+            'tennis': '🎾',
+            'basketball': '🏀',
+            'soccer': '⚽',
+            'badminton': '🏸',
+            'volleyball': '🏐',
+            'futsal': '⚽',
+            'paddle': '🏓',
+            'table_tennis': '🏓',
+            'swimming': '🏊'
+        };
+        
+        // Setup sport filter dropdown
+        const sportFilter = document.getElementById('sportFilter');
+        sportFilter.addEventListener('change', function() {
+            currentCategory = this.value;
+            loadEvents();
         });
         
         // Setup available checkbox
@@ -407,10 +562,7 @@
         // Create event card
         function createEventCard(event) {
             const card = document.createElement('div');
-            card.className = 'event-card rounded-lg overflow-hidden';
-            
-            // Get image URL or use placeholder
-            const imageUrl = event.photo_url || 'https://via.placeholder.com/400x200?text=Event+Image';
+            card.className = 'event-card';
             
             // Badge class
             const badgeClass = event.status === 'available' ? 'badge-available' : 'badge-unavailable';
@@ -418,32 +570,46 @@
             
             // Format sport type
             const sportType = formatSportType(event.sport_type);
+            const sportEmoji = sportEmojis[event.sport_type] || '🏃';
             
             card.innerHTML = `
-                <img src="${imageUrl}" alt="${event.name}" class="event-image" onerror="this.src='https://via.placeholder.com/400x200?text=Event+Image'">
+                <!-- Colorful Header with Sport Type -->
+                <div class="sport-header sport-${event.sport_type}">
+                    <div class="sport-emoji">${sportEmoji}</div>
+                    <div class="sport-badge">${sportType}</div>
+                    <h3 class="event-title-header">${event.name}</h3>
+                </div>
                 
-                <div class="p-5">
-                    <!-- Badge -->
+                <div class="event-content">
+                    <!-- Status Badge -->
                     <div class="mb-3">
                         <span class="${badgeClass}">${badgeText}</span>
                     </div>
                     
-                    <!-- Title -->
-                    <h3 class="text-xl font-bold mb-3">${event.name}</h3>
+                    <!-- Location Info -->
+                    <div class="info-item">
+                        <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        <span>${event.city || 'Jakarta'}</span>
+                    </div>
                     
-                    <!-- Details -->
-                    <div class="space-y-2 text-sm text-gray-600 mb-4">
-                        <p>Jenis olahraga: ${sportType}</p>
-                        <p>Rating: ${event.rating || '0.00'}</p>
-                        <p>Lokasi: ${event.city || 'Jakarta'}</p>
-                        <p class="text-green">Jarak: Tidak diketahui</p>
+                    <!-- Rating Info -->
+                    <div class="info-item">
+                        <svg class="info-icon" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        <span>Rating: ${event.rating || '0.00'}</span>
                     </div>
                     
                     <!-- Price -->
-                    <p class="text-2xl font-bold mb-4">Rp ${formatPrice(event.entry_price || 100000)} /jam</p>
+                    <div class="price-display">
+                        Rp ${formatPrice(event.entry_price || 100000)}<span class="price-unit">/jam</span>
+                    </div>
                     
                     <!-- Button -->
-                    <a href="/event/${event.id}/" class="btn-primary block text-center">
+                    <a href="/event/${event.id}/" class="btn-primary">
                         Lihat Detail & Booking
                     </a>
                 </div>
