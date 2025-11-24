@@ -4,6 +4,7 @@ from Auth_Profile.models import User
 from Sport_Partner.models import PartnerPost, PostParticipants
 import json
 from datetime import datetime
+from django.views.decorators.csrf import csrf_exempt
 
 def show_post(request):
     # Cek login
@@ -20,11 +21,11 @@ def show_post(request):
     
     return render(request, "sport_partner.html", context)
 
-
+@csrf_exempt
 def create_post(request):
     # Cek login
     if 'user_id' not in request.session:
-        return redirect('/login/')
+        return JsonResponse({'success': False, 'message': 'Silakan login terlebih dahulu'}, status=401)
     
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -127,7 +128,7 @@ def get_participants_json(request, post_id):
         'participants': participants
     })
 
-
+@csrf_exempt
 def join_post(request, post_id):
     """User join ke post"""
     # Cek login
@@ -166,7 +167,7 @@ def join_post(request, post_id):
         'message': 'Method tidak valid'
     })
 
-
+@csrf_exempt
 def leave_post(request, post_id):
     """User leave dari post"""
     # Cek login
@@ -192,3 +193,43 @@ def leave_post(request, post_id):
         'success': False,
         'message': 'Method tidak valid'
     })
+
+@csrf_exempt
+def show_json(request):
+    posts = PartnerPost.objects.select_related('creator').all()
+    data = []
+
+    # Cek siapa user yang sedang request (untuk status is_participant)
+    current_user_id = request.session.get('user_id')
+    current_user = None
+    if current_user_id:
+        try:
+            current_user = User.objects.get(id=current_user_id)
+        except User.DoesNotExist:
+            pass
+
+    for post in posts:
+        # Logika cek apakah user sudah join
+        is_participant = False
+        if current_user:
+            is_participant = post.is_participant(current_user)
+
+        data.append({
+            "post_id": str(post.post_id),
+            "title": post.title,
+            "description": post.description,
+            "category": post.category,
+            "tanggal": str(post.tanggal),
+            "jam_mulai": post.jam_mulai.strftime("%H:%M"), # Format jam biar rapi
+            "jam_selesai": post.jam_selesai.strftime("%H:%M"),
+            "lokasi": post.lokasi,
+            
+            # INI KUNCI PERBAIKANNYA:
+            "creator_name": post.creator.nama,  # Ambil nama dari relasi creator
+            "creator_id": str(post.creator.id),
+            
+            "total_participants": post.total_participants,
+            "is_participant": is_participant
+        })
+        
+    return JsonResponse(data, safe=False)
