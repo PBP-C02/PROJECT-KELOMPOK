@@ -114,7 +114,7 @@
             <div class="hide-scrollbar flex items-center gap-2 overflow-x-auto pb-1">
               <button type="button" class="view-toggle" data-default="true" data-view="all" onclick="changeViewMode(this, 'all')">All</button>
               <button type="button" class="view-toggle" data-view="my_bookings" onclick="changeViewMode(this, 'my_bookings')">My Bookings</button>
-              <button type="button" class="view-toggle" data-view="my_coaches" onclick="changeViewMode(this, 'my_coaches')">My Coaches</button>
+              <button type="button" class="view-toggle" data-view="my_coaches" onclick="changeViewMode(this, 'my_coaches')">Created Classes</button>
             </div>
           </div>
           <div class="flex flex-col gap-2 sm:items-end">
@@ -415,12 +415,16 @@ function renderCoaches(coaches) {
           `<img src="${coach.image_url}" alt="${escapeHtml(coach.title)}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" onerror="this.src='${PERSON_PLACEHOLDER}'">` :
           `<img src="${PERSON_PLACEHOLDER}" alt="${escapeHtml(coach.title)}" class="h-full w-full object-cover bg-slate-100 px-12 py-6">`
         }
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-slate-900/25 to-transparent"></div>
         <div class="absolute left-3 top-3 flex flex-wrap gap-2">
           <span class="inline-flex items-center rounded-full px-3 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.15em] ${!coach.is_booked ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
             ${!coach.is_booked ? 'Tersedia' : 'Booked'}
           </span>
           <span class="inline-flex items-center rounded-full bg-white/90 px-3 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.14em] text-slate-700 border border-slate-200">${escapeHtml(coach.category_display)}</span>
-          ${coach.is_owner ? '<span class="inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.14em] text-orange-700">Coach kamu</span>' : ''}
+          ${coach.is_owner ? '<span class="inline-flex items-center rounded-full bg-orange-100 px-3 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.14em] text-orange-700">Created Class</span>' : ''}
+        </div>
+        <div class="absolute right-3 bottom-3 rounded-full bg-white/90 px-3 py-1 text-[11px] font-semibold text-slate-800 shadow-sm">
+          ${coach.price_formatted} <span class="text-slate-500">/sesi</span>
         </div>
       </div>
 
@@ -436,16 +440,17 @@ function renderCoaches(coaches) {
           </div>
         </div>
 
-        <div class="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 text-sm text-slate-700">
-          <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-slate-600 shadow-inner">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="m9.69 18.933.003.001C9.89 19.02 10 19 10 19s.11.02.308-.066l.002-.001.006-.003.018-.008a5.741 5.741 0 0 0 .281-.14c.186-.096.446-.24.757-.433.62-.384 1.445-.966 2.274-1.765C15.302 14.988 17 12.493 17 9A7 7 0 1 0 3 9c0 3.492 1.698 5.988 3.355 7.584a13.731 13.731 0 0 0 2.273 1.765 11.842 11.842 0 0 0 .976.544l.062.029.018.008.006.003ZM10 11.25a2.25 2.25 0 1 0 0-4.5 2.25 2.25 0 0 0 0 4.5Z" clip-rule="evenodd" /></svg>
-            </span>
-            <div>
-              <p class="text-[11px] uppercase tracking-[0.2em] text-slate-500">Lokasi</p>
-              <p class="font-semibold text-slate-900">${escapeHtml(coach.location)}</p>
-            </div>
+        <div class="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-800">
+          <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-slate-600 shadow-inner">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM1.49 15.326a.78.78 0 0 1-.358-.442 3 3 0 0 1 4.308-3.516 6.484 6.484 0 0 0-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 0 1-2.07-.655ZM16.44 15.98a4.97 4.97 0 0 0 2.07-.654.78.78 0 0 0 .357-.442 3 3 0 0 0-4.308-3.517 6.484 6.484 0 0 1 1.907 3.96 2.32 2.32 0 0 1-.026.654ZM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM5.304 16.19a.844.844 0 0 1-.277-.71 5 5 0 0 1 9.947 0 .843.843 0 0 1-.277.71A6.975 6.975 0 0 1 10 18a6.974 6.974 0 0 1-4.696-1.81Z" /></svg>
+          </span>
+          <div>
+            <p class="text-[11px] uppercase tracking-[0.2em] text-slate-500">Coach</p>
+            <p>${escapeHtml(coach.user_name)}</p>
           </div>
+        </div>
+
+        <div class="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 text-sm text-slate-700">
           <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
             <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-slate-600 shadow-inner">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75ZM7.25 5.5a.75.75 0 0 0 0 1.5h5.5a.75.75 0 0 0 0-1.5h-5.5Z" /></svg>
@@ -456,25 +461,13 @@ function renderCoaches(coaches) {
               <p class="text-slate-600 text-xs">${coach.start_time} - ${coach.end_time}</p>
             </div>
           </div>
-          <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 sm:col-span-2">
-            <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-white text-slate-600 shadow-inner">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M10 9a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM6 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM1.49 15.326a.78.78 0 0 1-.358-.442 3 3 0 0 1 4.308-3.516 6.484 6.484 0 0 0-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 0 1-2.07-.655ZM16.44 15.98a4.97 4.97 0 0 0 2.07-.654.78.78 0 0 0 .357-.442 3 3 0 0 0-4.308-3.517 6.484 6.484 0 0 1 1.907 3.96 2.32 2.32 0 0 1-.026.654ZM18 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM5.304 16.19a.844.844 0 0 1-.277-.71 5 5 0 0 1 9.947 0 .843.843 0 0 1-.277.71A6.975 6.975 0 0 1 10 18a6.974 6.974 0 0 1-4.696-1.81Z" /></svg>
-            </span>
-            <div>
-              <p class="text-[11px] uppercase tracking-[0.2em] text-slate-500">Coach</p>
-              <p class="font-semibold text-slate-900">${escapeHtml(coach.user_name)}</p>
-            </div>
-          </div>
         </div>
 
-        <div class="mt-auto flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div class="text-xl sm:text-2xl font-bold text-slate-900">${coach.price_formatted} <span class="text-xs sm:text-sm font-medium text-slate-500">/ sesi</span></div>
-          <div class="flex flex-wrap gap-2 sm:justify-end">
-            ${coach.is_owner ? `<a href="${coach.edit_url}" class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-300">Edit</a>` : ''}
-            <button type="button" class="inline-flex items-center justify-center rounded-xl bg-grey px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-slate-800" onclick="event.stopPropagation(); window.location.href='${coach.detail_url}'">
-              Lihat Detail & Booking
-            </button>
-          </div>
+        <div class="mt-auto flex flex-wrap gap-2 sm:justify-end">
+          ${coach.is_owner ? `<a href="${coach.edit_url}" class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-300">Edit</a>` : ''}
+          <button type="button" class="inline-flex items-center justify-center rounded-xl bg-grey px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-white transition hover:-translate-y-0.5 hover:bg-slate-800" onclick="event.stopPropagation(); window.location.href='${coach.detail_url}'">
+            Lihat Detail & Booking
+          </button>
         </div>
       </div>
     </article>
