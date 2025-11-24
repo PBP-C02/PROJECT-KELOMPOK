@@ -1,180 +1,177 @@
-{% extends 'coach_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
 
 {% block meta %}
-<title>MoveBuddy - {{ coach.title }}</title>
+<title>MoveBuddy | {{ coach.title }}</title>
 <link rel="stylesheet" href="{% static 'coach/coach_detail.css' %}">
 {% endblock meta %}
 
 {% block content %}
-<!-- Include Navbar -->
-{% include 'includes/navbar.html' %}
+<section class="coach-detail-page relative min-h-screen overflow-hidden py-12">
+  <div class="coach-detail-overlay relative z-10">
+    {% include 'includes/navbar.html' %}
+    <div class="mx-auto w-full max-w-7xl space-y-6 px-5 sm:px-10">
+      <a href="{% url 'coach:show_main' %}" class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-600 transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-900">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m15 19-7-7 7-7" />
+        </svg>
+        Back to Coach List
+      </a>
 
-<!-- Background wrapper -->
-<div style="--bg-image: url('{% static 'img/pattern.png' %}');" class="coach-bg-wrapper">
-
-  <div class="back-button-wrapper">
-    <a href="{% url 'coach:show_main' %}" class="btn-back-top">
-      Back to Coach List
-    </a>
-  </div>
-
-  <div class="detail-container">
-    <!-- Header Banner -->
-    <div class="detail-header">
-      {% if coach.image %}
-      <img src="{{ coach.image.url }}" alt="{{ coach.title }}" class="header-image" onerror="this.src='https://www.svgrepo.com/show/506667/person.svg'">
-      {% else %}
-      <img src="https://www.svgrepo.com/show/506667/person.svg" alt="{{ coach.title }}" class="header-image">
-      {% endif %}
-
-      <!-- Ribbon Booked -->
-      {% if coach.isBooked %}
-      <div class="ribbon-wrapper">
-        <div class="ribbon">BOOKED</div>
-      </div>
-      {% endif %}
-    </div>
-
-    <!-- Main Content -->
-    <div class="detail-content">
-      <!-- Status Badge -->
-      <div class="status-badge {% if not coach.isBooked %}available{% else %}booked{% endif %}">
-        {% if not coach.isBooked %}Available{% else %}Booked{% endif %}
-      </div>
-
-      <!-- Title & Price -->
-      <div class="title-price-section">
-        <div>
-          <h1 class="detail-title">{{ coach.title }}</h1>
-          <div class="detail-meta">
-            <span class="meta-item">{{ coach.get_category_display }}</span>
-            <span class="meta-separator">•</span>
-            <span class="meta-item">Rating: {{ coach.rating }}</span>
-            <span class="meta-separator">•</span>
-            <span class="meta-item">Location: {{ coach.location }}</span>
+      <article class="overflow-hidden rounded-[2.5rem] bg-white/95 shadow-[0_32px_80px_rgba(15,23,42,0.12)] backdrop-blur">
+        <div class="relative h-64 bg-gradient-to-br from-lime-200 to-emerald-200">
+          <img
+            src="{% if coach.image %}{{ coach.image.url }}{% else %}https://www.svgrepo.com/show/506667/person.svg{% endif %}"
+            alt="{{ coach.title }}"
+            class="h-full w-full object-cover"
+            onerror="this.src='https://www.svgrepo.com/show/506667/person.svg';"
+          />
+          <div class="absolute left-4 top-4 flex flex-wrap gap-2">
+            <span class="inline-flex items-center justify-center rounded-full border px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.3em] {% if coach.isBooked %}border-rose-200 bg-rose-100 text-rose-700{% else %}border-emerald-200 bg-emerald-100 text-emerald-700{% endif %}">
+              {% if coach.isBooked %}Booked{% else %}Available{% endif %}
+            </span>
+            <span class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white/90 px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.3em] text-slate-600">
+              {{ coach.get_category_display }}
+            </span>
+            <span class="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-[10px] sm:text-xs font-semibold uppercase tracking-[0.3em] text-amber-700">
+              <svg aria-hidden="true" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034 1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292-2.8-2.034c-.783-.57-.38-1.81.588-1.81h3.461z"/></svg>
+              {{ coach.rating|floatformat:1 }}/5
+            </span>
           </div>
         </div>
-        <div class="price-box-inline">
-          <span class="price-label">Price per Hour</span>
-          <span class="price-value">{{ coach.price_formatted }}</span>
+
+        <div class="grid gap-8 px-6 py-8 md:px-10 md:py-10 lg:grid-cols-[1.6fr_1fr]">
+          <div class="space-y-8">
+            <header class="space-y-3">
+              <div class="space-y-1">
+                <h1 class="text-3xl font-bold uppercase tracking-[0.2em] text-slate-900 md:text-4xl">{{ coach.title }}</h1>
+                <p class="text-sm font-semibold uppercase tracking-[0.28em] text-slate-500">
+                  {{ coach.location }} | {{ coach.date|date:"l, d F Y" }} | {{ coach.startTime|time:"H:i" }} - {{ coach.endTime|time:"H:i" }}
+                </p>
+              </div>
+              <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-600">Overview</h2>
+              {% if coach.description %}
+              <p class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-sm leading-relaxed text-slate-700">
+                {{ coach.description }}
+              </p>
+              {% endif %}
+            </header>
+
+            <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-600">Details</h2>
+            <div class="grid gap-6 md:grid-cols-2">
+              <section class="space-y-3">
+                <h3 class="text-sm font-semibold uppercase tracking-[0.26em] text-slate-600">Address</h3>
+                <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-700">
+                  {{ coach.address }}
+                  {% if coach.mapsLink %}
+                  <div class="mt-3">
+                    <a href="{{ coach.mapsLink }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-700 transition hover:-translate-y-0.5 hover:border-lime hover:text-slate-900">
+                      Open in Google Maps
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M12.293 2.293a1 1 0 0 1 1.414 0l4 4a1 1 0 0 1-1.414 1.414L14 5.414V13a1 1 0 1 1-2 0V5.414L8.707 7.707A1 1 0 1 1 7.293 6.293l4-4Z"/><path d="M5 4a3 3 0 0 0-3 3v7a3 3 0 0 0 3 3h7a3 3 0 0 0 3-3v-2a1 1 0 1 1 2 0v2a5 5 0 0 1-5 5H5a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5h2a1 1 0 1 1 0 2H5Z"/></svg>
+                    </a>
+                  </div>
+                  {% endif %}
+                </div>
+              </section>
+
+              <section class="space-y-3">
+                <h3 class="text-sm font-semibold uppercase tracking-[0.26em] text-slate-600">Schedule</h3>
+                <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-700 space-y-2">
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-500">Date</span>
+                    <strong class="text-slate-900">{{ coach.date|date:"l, d F Y" }}</strong>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-500">Time</span>
+                    <strong class="text-slate-900">{{ coach.startTime|time:"H:i" }} - {{ coach.endTime|time:"H:i" }}</strong>
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-600">Coach & Schedule</h2>
+            <div class="grid gap-6 md:grid-cols-2">
+              <section class="space-y-3">
+                <h3 class="text-sm font-semibold uppercase tracking-[0.26em] text-slate-600">Coach Information</h3>
+                <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5 text-sm text-slate-700 space-y-2">
+                  <div class="flex items-center justify-between"><span class="text-slate-500">Name</span><strong class="text-slate-900">{{ coach.user.nama }}</strong></div>
+                  {% if coach.user.nomor_handphone %}
+                  <div class="flex items-center justify-between"><span class="text-slate-500">Phone</span><strong class="text-slate-900">{{ coach.get_formatted_phone }}</strong></div>
+                  {% endif %}
+                  <div class="flex items-center justify-between"><span class="text-slate-500">Rating</span><strong class="text-slate-900">{{ coach.rating|floatformat:1 }}</strong></div>
+                  {% if coach.instagram_link %}
+                  <div class="flex items-center justify-between">
+                    <span class="text-slate-500">Instagram</span>
+                    <a href="{{ coach.instagram_link }}" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-900">
+                      View Instagram
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor"><path d="M7 2a5 5 0 0 0-5 5v6a5 5 0 0 0 5 5h6a5 5 0 0 0 5-5V7a5 5 0 0 0-5-5H7Zm9 5v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3ZM10 7.5A2.5 2.5 0 1 0 10 12a2.5 2.5 0 0 0 0-4.5Zm0 1.5a1 1 0 1 1 0 2 1 1 0 0 1 0-2Zm3-3.75a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5Z"/></svg>
+                    </a>
+                  </div>
+                  {% endif %}
+                </div>
+              </section>
+            </div>
+          </div>
+
+          <aside class="space-y-6">
+            <div class="rounded-3xl bg-gradient-to-br from-slate-900 to-slate-950 px-6 py-6 text-white shadow-lg">
+              <span class="text-xs font-semibold uppercase tracking-[0.3em] text-white/70">Price per session</span>
+              <p class="mt-3 text-3xl font-bold tracking-[0.15em]">{{ coach.price_formatted }}</p>
+            </div>
+
+            {% if user and user.id and coach.user_id == user.id %}
+            <div class="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-[0_18px_40px_rgba(15,23,42,0.06)] space-y-3">
+              <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-600">Manage Coach</p>
+              <div class="flex flex-col gap-2">
+                <button type="button" class="flex items-center justify-center rounded-xl border border-emerald-300 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-700 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-emerald-200/40" onclick="markAvailable()">
+                  Mark Available
+                </button>
+                <button type="button" class="flex items-center justify-center rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-700 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-amber-200/40" onclick="markUnavailable()">
+                  Mark Unavailable
+                </button>
+                <button type="button" class="flex items-center justify-center rounded-xl border border-rose-300 bg-rose-50 px-3 py-2 text-xs font-semibold text-rose-700 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-rose-200/40" onclick="deleteCoach()">
+                  Delete Coach
+                </button>
+                <a href="{% url 'coach:edit_coach_page' coach.pk %}" class="flex items-center justify-center rounded-xl bg-grey px-3 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white transition hover:-translate-y-0.5 hover:bg-slate-800">
+                  Edit Coach
+                </a>
+              </div>
+            </div>
+            {% endif %}
+
+            {% if user and user.id and coach.user_id != user.id %}
+              {% if not coach.isBooked %}
+                <div class="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-[0_18px_40px_rgba(15,23,42,0.06)] space-y-3">
+                  <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-600">Booking</p>
+                  <p class="text-sm text-slate-600">Hubungi langsung via WhatsApp untuk mengamankan jadwalmu.</p>
+                  <button type="button"
+                    class="w-full rounded-2xl bg-emerald-500 px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-white transition hover:-translate-y-0.5 hover:bg-emerald-600"
+                    data-coach-id="{{ coach.pk }}"
+                    data-phone="{{ coach.user.nomor_handphone }}"
+                    data-title="{{ coach.title|escape }}"
+                    data-date="{{ coach.date|date:'l, d F Y' }}"
+                    data-start="{{ coach.startTime|time:'H:i' }}"
+                    data-end="{{ coach.endTime|time:'H:i' }}"
+                    onclick="bookViaWhatsApp(this)">
+                    Book via WhatsApp
+                  </button>
+                </div>
+              {% elif coach.peserta_id == user.id %}
+                <div class="rounded-3xl border border-slate-200 bg-white/95 p-6 shadow-[0_18px_40px_rgba(15,23,42,0.06)] space-y-3">
+                  <p class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-600">Booking Kamu</p>
+                  <p class="text-sm text-slate-600">Kamu sudah memesan coach ini. Batalkan jika tidak jadi hadir.</p>
+                  <button type="button" class="w-full rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-300" data-coach-id="{{ coach.pk }}" onclick="cancelBooking(this)">
+                    Cancel Booking
+                  </button>
+                </div>
+              {% endif %}
+            {% endif %}
+          </aside>
         </div>
-      </div>
-
-      <!-- Address -->
-      <div class="detail-section">
-        <h2 class="section-title">Address</h2>
-        <p class="section-content">{{ coach.address }}</p>
-        {% if coach.mapsLink %}
-        <a href="{{ coach.mapsLink }}" target="_blank" rel="noopener"
-          style="display:inline-flex; align-items:center; gap:6px; color:#667eea; margin-top:8px; text-decoration:none;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-            stroke="currentColor" stroke-width="2">
-            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-            <circle cx="12" cy="10" r="3"></circle>
-          </svg>
-          Open in Google Maps
-        </a>
-        {% endif %}
-      </div>
-
-      <!-- Description -->
-      {% if coach.description %}
-      <div class="detail-section">
-        <h2 class="section-title">Description</h2>
-        <p class="section-content">{{ coach.description }}</p>
-      </div>
-      {% endif %}
-
-      <!-- Schedule -->
-      <div class="detail-section">
-        <h2 class="section-title">Schedule</h2>
-        <div class="schedule-info">
-          <div class="schedule-item">
-            <span class="schedule-label">Date:</span>
-            <span class="schedule-value">{{ coach.date|date:"l, d F Y" }}</span>
-          </div>
-          <div class="schedule-item">
-            <span class="schedule-label">Time:</span>
-            <span class="schedule-value">{{ coach.startTime|time:"H:i" }} - {{ coach.endTime|time:"H:i" }}</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Coach Info -->
-      <div class="detail-section">
-        <h2 class="section-title">Coach Information</h2>
-        <div class="coach-info">
-          <div class="coach-item">
-            <span class="coach-label">Name:</span>
-            <span class="coach-value">{{ coach.user.nama }}</span>
-          </div>
-          {% if coach.user.nomor_handphone %}
-          <div class="coach-item">
-            <span class="coach-label">Phone:</span>
-            <span class="coach-value">{{ coach.get_formatted_phone }}</span>
-          </div>
-          {% endif %}
-          <div class="coach-item">
-            <span class="coach-label">Rating:</span>
-            <span class="coach-value">⭐ {{ coach.rating }}</span>
-          </div>
-          {% if coach.instagram_link %}
-          <div class="coach-item">
-            <span class="coach-label">Instagram:</span>
-            <a href="{{ coach.instagram_link }}" target="_blank" rel="noopener" class="coach-instagram">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="white"></path>
-                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" stroke="white" stroke-width="2"></line>
-              </svg>
-              View Instagram
-            </a>
-          </div>
-          {% endif %}
-        </div>
-      </div>
-
-      <!-- Owner Actions  -->
-      {% if user and user.id and coach.user_id == user.id %}  
-      <div class="owner-action-buttons">
-        <button type="button" class="btn-mark-available {% if not coach.isBooked %}active{% endif %}"
-          onclick="markAvailable()">
-          Mark Available
-        </button>
-        <button type="button" class="btn-mark-unavailable {% if coach.isBooked %}active{% endif %}"
-          onclick="markUnavailable()">
-          Mark Unavailable
-        </button>
-        <button type="button" class="btn-delete-coach" onclick="deleteCoach()">
-          Delete Coach
-        </button>
-        <a href="{% url 'coach:edit_coach_page' coach.pk %}" class="btn-edit-coach">
-          Edit Coach
-        </a>
-      </div>
-      {% endif %}
-
-      <!-- Book via WhatsApp Button -->
-      {% if user and user.id %}  
-        {% if coach.user_id != user.id %}  
-          {% if not coach.isBooked %}
-            <button type="button" class="btn-book-whatsapp-big" data-coach-id="{{ coach.pk }}"
-              data-phone="{{ coach.user.nomor_handphone }}" data-title="{{ coach.title|escape }}"
-              data-date="{{ coach.date|date:'l, d F Y' }}" data-start="{{ coach.startTime|time:'H:i' }}"
-              data-end="{{ coach.endTime|time:'H:i' }}" onclick="bookViaWhatsApp(this)">
-              Book via WhatsApp
-            </button>
-          {% elif coach.peserta_id == user.id %}  
-            <button type="button" class="btn-cancel-booking-big" data-coach-id="{{ coach.pk }}" onclick="cancelBooking(this)">
-              Cancel Booking
-            </button>
-          {% endif %}
-        {% endif %}
-      {% endif %}
+      </article>
     </div>
   </div>
-</div>
+</section>
 
 <script>
   function getCookie(name) {
@@ -192,7 +189,6 @@
     return cookieValue;
   }
 
-  // Mark Available/Unavailable functions
   function markAvailable() {
     if (confirm('Mark this coach as available?')) {
       fetch('/coach/mark-available/{{ coach.pk }}/', {
@@ -207,13 +203,10 @@
           if (data.success) {
             location.reload();
           } else {
-            alert(data.message || 'Failed to mark as available');
+            alert(data.message || 'Failed to mark available');
           }
         })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('An error occurred');
-        });
+        .catch(() => alert('An error occurred. Please try again.'));
     }
   }
 
@@ -231,38 +224,35 @@
           if (data.success) {
             location.reload();
           } else {
-            alert(data.message || 'Failed to mark as unavailable');
+            alert(data.message || 'Failed to mark unavailable');
           }
         })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('An error occurred');
-        });
+        .catch(() => alert('An error occurred. Please try again.'));
     }
   }
 
   function deleteCoach() {
-    if (confirm('Are you sure you want to delete this coach? This action cannot be undone.')) {
-      fetch('/coach/delete-coach/{{ coach.pk }}/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken')
+    if (!confirm('Are you sure you want to delete this coach?')) return;
+
+    fetch('/coach/delete-coach/{{ coach.pk }}/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      }
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          window.location.href = '/coach/';
+        } else {
+          alert(data.message || 'Failed to delete coach');
         }
       })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            window.location.href = '/coach/';
-          } else {
-            alert(data.message || 'Failed to delete coach');
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          alert('An error occurred');
-        });
-    }
+      .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred');
+      });
   }
 
   function bookViaWhatsApp(btnElement) {
@@ -278,27 +268,24 @@
       return;
     }
 
-    let formattedPhone = phoneNumber.trim().replace(/\D/g, '');
-
+    let formattedPhone = phoneNumber.trim().replace(/\\D/g, '');
     if (formattedPhone.startsWith('0')) {
       formattedPhone = '62' + formattedPhone.substring(1);
     }
-
     if (!formattedPhone.startsWith('62')) {
       formattedPhone = '62' + formattedPhone;
     }
 
     const message = `Hello! I would like to book a coaching session:
 
-*${coachTitle}*
-📅 Date: ${date}
-🕐 Time: ${startTime} - ${endTime}
+${coachTitle}
+Date: ${date}
+Time: ${startTime} - ${endTime}
 
 Please confirm my booking. Thank you!`;
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappLink = `https://wa.me/${formattedPhone}?text=${encodedMessage}`;
-
     if (!whatsappLink.startsWith('https://wa.me/')) {
       alert('Invalid WhatsApp link');
       return;
@@ -338,7 +325,6 @@ Please confirm my booking. Thank you!`;
 
   function cancelBooking(btnElement) {
     const coachId = btnElement.dataset.coachId;
-
     const btn = btnElement;
     const originalHTML = btn.innerHTML;
     btn.disabled = true;
@@ -375,4 +361,4 @@ Please confirm my booking. Thank you!`;
       });
   }
 </script>
-{% endblock %}
+{% endblock content %}

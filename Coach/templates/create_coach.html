@@ -1,170 +1,142 @@
-{% extends 'coach_base.html' %}
+{% extends 'base.html' %}
 {% load static %}
+
 {% block meta %}
-<title>MoveBuddy - Add Coach</title>
+<title>MoveBuddy | Add Coach</title>
 <link rel="stylesheet" href="{% static 'coach/create_coach.css' %}">
 {% endblock meta %}
 
 {% block content %}
-<!-- Include Navbar -->
-{% include 'includes/navbar.html' %}
-
-<div style="--bg-image: url('{% static 'img/pattern.png' %}');" class="coach-bg-wrapper">
-
-<!-- Error Message -->
-<div id="errorMessage" class="error-banner" style="display:none;">
-  <div class="error-content">
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="12" r="10"></circle>
-      <line x1="12" y1="8" x2="12" y2="12"></line>
-      <line x1="12" y1="16" x2="12.01" y2="16"></line>
-    </svg>
-    <span id="errorText"></span>
-    <button onclick="hideError()" class="error-close">×</button>
-  </div>
-</div>
-
-<div class="form-container">
-  <div class="form-header">
-    <h1>Add New Coach</h1>
-  </div>
-
-  <form id="createCoachForm" enctype="multipart/form-data" class="coach-form">
-    {% csrf_token %}
-
-    <div class="form-grid-simple">
-      <!-- Title -->
-      <div class="form-group">
-        <label for="id_title">Coach Name</label>
-        <input id="id_title" name="title" type="text" placeholder="Coach name" required>
-      </div>
-
-      <!-- Category -->
-      <div class="form-group">
-        <label for="id_category">Sport Type</label>
-        <select id="id_category" name="category" required>
-          <option value="">------</option>
-          <option value="tennis">Tennis</option>
-          <option value="basketball">Basketball</option>
-          <option value="soccer">Soccer</option>
-          <option value="badminton">Badminton</option>
-          <option value="volleyball">Volleyball</option>
-          <option value="paddle">Paddle</option>
-          <option value="futsal">Futsal</option>
-          <option value="table_tennis">Table Tennis</option>
-          <option value="swimming">Swimming</option>
-        </select>
-      </div>
-
-      <!-- Location -->
-      <div class="form-group">
-        <label for="id_location">City</label>
-        <input id="id_location" name="location" type="text" placeholder="City" required>
-      </div>
-
-      <!-- Address -->
-      <div class="form-group">
-        <label for="id_address">Full Address</label>
-        <textarea id="id_address" name="address" rows="3" placeholder="Complete address" required></textarea>
-      </div>
-
-      <!-- Date (Clickable) -->
-      <div class="form-group">
-        <label for="id_date">Date</label>
-        <div class="date-time-wrapper" onclick="document.getElementById('id_date').showPicker()">
-          <input id="id_date" name="date" type="date" required>
-          <svg class="calendar-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
+<section class="coach-form-page relative min-h-screen overflow-hidden py-12">
+  <div class="coach-form-overlay relative z-10">
+    {% include 'includes/navbar.html' %}
+    <div class="mx-auto w-full max-w-6xl px-5 sm:px-8 flex justify-center">
+      <div class="w-full max-w-4xl rounded-[2.5rem] bg-white/95 px-6 py-8 sm:px-10 sm:py-10 shadow-[0_32px_80px_rgba(15,23,42,0.12)] backdrop-blur">
+        <a href="{% url 'coach:show_main' %}" class="mb-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold uppercase tracking-[0.26em] text-slate-600 transition hover:-translate-y-0.5 hover:border-slate-300 hover:text-slate-900">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m15 19-7-7 7-7" />
           </svg>
+          Back to Coach List
+        </a>
+
+        <div id="errorMessage" class="hidden mb-5 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700">
+          <div class="flex items-start gap-3">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
+            <div class="flex-1">
+              <p id="errorText" class="font-semibold">Terjadi kesalahan</p>
+            </div>
+            <button type="button" class="text-xs font-semibold uppercase tracking-[0.2em] text-rose-700" onclick="hideError()">Close</button>
+          </div>
         </div>
-      </div>
 
-      <!-- Start Time (Clickable) -->
-      <div class="form-group">
-        <label for="id_startTime">Start Time</label>
-        <div class="date-time-wrapper" onclick="document.getElementById('id_startTime').showPicker()">
-          <input id="id_startTime" name="startTime" type="time" required>
-          <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
+        <div class="mb-8 text-center space-y-2">
+          <span class="inline-flex items-center justify-center rounded-full bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.35em] text-slate-500 shadow">Create Coach</span>
+          <h1 class="text-3xl font-semibold uppercase tracking-[0.18em] text-slate-900">Tambah Coach Baru</h1>
+          <p class="text-sm text-slate-500">Isi detail lengkap coach agar pengguna mudah menemukan sesi terbaik.</p>
         </div>
-      </div>
 
-      <!-- End Time (Clickable) -->
-      <div class="form-group">
-        <label for="id_endTime">End Time</label>
-        <div class="date-time-wrapper" onclick="document.getElementById('id_endTime').showPicker()">
-          <input id="id_endTime" name="endTime" type="time" required>
-          <svg class="clock-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 6 12 12 16 14"></polyline>
-          </svg>
-        </div>
-      </div>
+        <form id="createCoachForm" enctype="multipart/form-data" class="space-y-6">
+          {% csrf_token %}
+          <div class="grid gap-5 md:grid-cols-2">
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Coach Name</span>
+              <input id="id_title" name="title" type="text" placeholder="Coach name" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
+            </label>
 
-      <!-- Price -->
-      <div class="form-group">
-        <label for="id_price">Price (Rp)</label>
-        <input id="id_price" name="price" type="number" min="0" step="1" placeholder="0" required>
-      </div>
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Sport Type</span>
+              <select id="id_category" name="category" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20">
+                <option value="">------</option>
+                <option value="tennis">Tennis</option>
+                <option value="basketball">Basketball</option>
+                <option value="soccer">Soccer</option>
+                <option value="badminton">Badminton</option>
+                <option value="volleyball">Volleyball</option>
+                <option value="paddle">Paddle</option>
+                <option value="futsal">Futsal</option>
+                <option value="table_tennis">Table Tennis</option>
+                <option value="swimming">Swimming</option>
+              </select>
+            </label>
 
-      <!-- Rating -->
-      <div class="form-group">
-        <label for="id_rating">Rating (optional)</label>
-        <input id="id_rating" name="rating" type="number" min="0" max="5" step="0.1" placeholder="0" value="0">
-      </div>
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>City</span>
+              <input id="id_location" name="location" type="text" placeholder="City" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
+            </label>
 
-      <!-- Description -->
-      <div class="form-group">
-        <label for="id_description">Short description (optional)</label>
-        <textarea id="id_description" name="description" rows="4" placeholder="Description about the coach"></textarea>
-      </div>
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
+              <span>Full Address</span>
+              <textarea id="id_address" name="address" rows="3" placeholder="Complete address" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20"></textarea>
+            </label>
 
-      <!-- Maps Link -->
-      <div class="form-group">
-        <label for="id_mapsLink">Google Maps link</label>
-        <input id="id_mapsLink" name="mapsLink" type="url" placeholder="https://maps.google.com/?q=-6.2,106.8" required>
-      </div>
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Date</span>
+              <input id="id_date" name="date" type="date" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20">
+            </label>
 
-      <!-- Instagram Link -->
-      <div class="form-group">
-        <label for="id_instagram_link">Instagram Link (optional)</label>
-        <input id="id_instagram_link" name="instagram_link" type="url" placeholder="https://instagram.com/username">
-      </div>
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Start Time</span>
+              <input id="id_startTime" name="startTime" type="time" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20">
+            </label>
 
-      <!-- Image -->
-      <div class="form-group">
-        <label for="id_image">Coach Photo (optional)</label>
-        <input id="id_image" name="image" type="file" accept="image/*">
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>End Time</span>
+              <input id="id_endTime" name="endTime" type="time" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20">
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Price (Rp)</span>
+              <input id="id_price" name="price" type="number" min="0" step="1" placeholder="0" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Rating (optional)</span>
+              <input id="id_rating" name="rating" type="number" min="0" max="5" step="0.1" placeholder="0" value="0" class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
+              <span>Short description (optional)</span>
+              <textarea id="id_description" name="description" rows="4" placeholder="Description about the coach" class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20"></textarea>
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Google Maps link</span>
+              <input id="id_mapsLink" name="mapsLink" type="url" placeholder="https://maps.google.com/?q=-6.2,106.8" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
+            </label>
+
+            <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
+              <span>Instagram Link (optional)</span>
+              <input id="id_instagram_link" name="instagram_link" type="url" placeholder="https://instagram.com/username" class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
+            </label>
+
+            <label class="flex flex-col gap-3 text-sm font-semibold text-slate-700 md:col-span-2">
+              <span>Coach Photo (optional)</span>
+              <input id="id_image" name="image" type="file" accept="image/*" class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-grey file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.16em] file:text-white hover:border-lime">
+              <span class="text-xs font-medium text-slate-500">Upload foto untuk membuat profil coach lebih menarik.</span>
+            </label>
+          </div>
+
+          <div class="flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+            <a href="{% url 'coach:show_main' %}" class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:-translate-y-0.5 hover:border-slate-300">
+              Back
+            </a>
+            <button type="submit" class="inline-flex items-center justify-center rounded-xl bg-lime px-7 py-3 text-sm font-semibold uppercase tracking-[0.22em] text-grey transition hover:-translate-y-0.5 hover:bg-dark-lime" id="submitBtn">
+              <span class="coach-btn__label">Save Coach</span>
+              <span class="coach-btn__loading hidden items-center gap-2">
+                <span class="h-4 w-4 animate-spin rounded-full border-2 border-grey border-t-transparent"></span>
+                Saving...
+              </span>
+            </button>
+          </div>
+        </form>
       </div>
     </div>
-
-    <div class="form-actions-simple">
-      <a href="{% url 'coach:show_main' %}" class="btn-back-form">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="19" y1="12" x2="5" y2="12"></line>
-          <polyline points="12 19 5 12 12 5"></polyline>
-        </svg>
-        Back to Coach List
-      </a>
-      <button type="submit" class="btn-save" id="submitBtn">
-        <span class="btn-text">Save Coach</span>
-        <span class="btn-spinner" style="display:none;">
-          <svg class="spinner-small" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-          </svg>
-          Saving...
-        </span>
-      </button>
-    </div>
-  </form>
-</div>
-
-</div> <!-- End background wrapper -->
+  </div>
+</section>
 
 <script>
 function getCookie(name) {
@@ -183,32 +155,33 @@ function getCookie(name) {
 }
 
 function showError(message) {
+  const errorBox = document.getElementById('errorMessage');
   document.getElementById('errorText').textContent = message;
-  document.getElementById('errorMessage').style.display = 'block';
+  errorBox.classList.remove('hidden');
   setTimeout(() => hideError(), 5000);
 }
 
 function hideError() {
-  document.getElementById('errorMessage').style.display = 'none';
+  document.getElementById('errorMessage').classList.add('hidden');
 }
 
-// Set minimum date to today
 const today = new Date().toISOString().split('T')[0];
-document.getElementById('id_date').setAttribute('min', today);
+const dateInput = document.getElementById('id_date');
+dateInput.setAttribute('min', today);
 
 document.getElementById('createCoachForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  
+
   const submitBtn = document.getElementById('submitBtn');
-  const btnText = submitBtn.querySelector('.btn-text');
-  const btnSpinner = submitBtn.querySelector('.btn-spinner');
-  
+  const btnLabel = submitBtn.querySelector('.coach-btn__label');
+  const btnLoading = submitBtn.querySelector('.coach-btn__loading');
+
   submitBtn.disabled = true;
-  btnText.style.display = 'none';
-  btnSpinner.style.display = 'flex';
-  
+  btnLabel.classList.add('hidden');
+  btnLoading.classList.remove('hidden');
+
   const formData = new FormData(this);
-  
+
   fetch('{% url "coach:add_coach" %}', {
     method: 'POST',
     headers: {
@@ -223,17 +196,17 @@ document.getElementById('createCoachForm').addEventListener('submit', function(e
     } else {
       showError(data.message || 'Failed to create coach');
       submitBtn.disabled = false;
-      btnText.style.display = 'inline';
-      btnSpinner.style.display = 'none';
+      btnLabel.classList.remove('hidden');
+      btnLoading.classList.add('hidden');
     }
   })
   .catch(error => {
     console.error('Error:', error);
     showError('An error occurred. Please try again.');
     submitBtn.disabled = false;
-    btnText.style.display = 'inline';
-    btnSpinner.style.display = 'none';
+    btnLabel.classList.remove('hidden');
+    btnLoading.classList.add('hidden');
   });
 });
 </script>
-{% endblock %}
+{% endblock content %}
