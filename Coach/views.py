@@ -10,11 +10,13 @@ from django.utils.dateparse import parse_datetime
 from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 import json
 from PIL import Image
 import os
 from django.db.models import Q
 from Auth_Profile.models import User
+import requests
 
 # ==================== CUSTOM LOGIN DECORATOR ====================
 def custom_login_required(view_func):
@@ -534,3 +536,101 @@ def ajax_search_coaches(request):
         'coaches': coaches_data,
         'count': len(coaches_data)
     })
+
+
+def proxy_image(request):
+    image_url = request.GET.get('url')
+    if not image_url:
+        return HttpResponse('No URL provided', status=400)
+    
+    try:
+        # Add headers to mimic browser request
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+        
+        # Fetch image from external source
+        response = requests.get(image_url, headers=headers, timeout=10)
+        response.raise_for_status()
+        
+        # Return the image with proper content type
+        return HttpResponse(
+            response.content,
+            content_type=response.headers.get('Content-Type', 'image/jpeg')
+        )
+    except requests.RequestException as e:
+        # Return proper error instead of HTML
+        return HttpResponse(status=404)  # Return 404 instead of 500 with HTML
+    
+@csrf_exempt
+def create_coach_flutter(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+
+        title = strip_tags(data.get("title", ""))
+        description = strip_tags(data.get("description", ""))
+        category = data.get("category", "")
+        location = strip_tags(data.get("location", ""))
+        address = strip_tags(data.get("address", ""))
+        price = int(data.get("price", 0))
+        date_str = data.get("date", "")
+        start_time_str = data.get("startTime", "")
+        end_time_str = data.get("endTime", "")
+        rating = data.get("rating", 0)
+        instagram_link = data.get("instagram_link", "")
+        mapsLink = data.get("mapsLink", "")
+        user = request.user
+        
+        # Parse date and time
+        event_dt = _parse_dt_local(date_str)
+        start_time = _parse_time(start_time_str)
+        end_time = _parse_time(end_time_str)
+        
+        new_coach = Coach(
+            title=title, 
+            description=description,
+            category=category,
+            location=location,
+            address=address,
+            price=price,
+            date=event_dt.date() if event_dt else None,
+            startTime=start_time,
+            endTime=end_time,
+            rating=_to_decimal(rating),
+            instagram_link=instagram_link if instagram_link else None,
+            mapsLink=mapsLink,
+            user=user
+        )
+        new_coach.save()
+        
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
+    
+
+def show_json(request):
+    coach_list = Coach.objects.all()
+    data = [
+        {
+            'id': str(coach.coach_id),
+            'title': coach.title,
+            'description': coach.description,
+            'category': coach.category,
+            'location': coach.location,
+            'address': coach.address,
+            'price': coach.price,
+            'date': coach.date.strftime('%Y-%m-%d'),
+            'startTime': coach.startTime.strftime('%H:%M'),
+            'endTime': coach.endTime.strftime('%H:%M'),
+            'rating': float(coach.rating),
+            'isBooked': coach.isBooked,
+            'user_id': str(coach.user_id),
+            'user_name': coach.user.nama,
+            'image_url': coach.image.url if coach.image else None,
+            'instagram_link': coach.instagram_link,
+            'mapsLink': coach.mapsLink,
+        }
+        for coach in coach_list
+    ]
+
+    return JsonResponse(data, safe=False)
