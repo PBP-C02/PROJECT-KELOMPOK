@@ -642,7 +642,7 @@ def create_booking(request):
             'message': str(e)
         }, status=500)
 
-# Optional: Get all Court (tanpa filter)
+@csrf_exempt
 @require_http_methods(["GET"])
 def get_all_Court(request):
     """
