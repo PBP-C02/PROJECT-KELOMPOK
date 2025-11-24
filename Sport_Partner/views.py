@@ -14,7 +14,7 @@ def show_post(request):
     post_list = PartnerPost.objects.all()
     
     context = {
-        'user_now': user_now,
+        'user': user_now,
         'post_list': post_list
     }
     
@@ -81,7 +81,7 @@ def create_post(request):
             return JsonResponse({
                 'success': True,
                 'message': 'Post berhasil dibuat',
-                'redirect_url': '/sport-partner/'
+                'redirect_url': '/sport_partner/'
             })
         except Exception as e:
             return JsonResponse({
@@ -102,7 +102,7 @@ def post_detail(request, post_id):
     
     context = {
         'post': post,
-        'user_now': user_now,
+        'user': user_now,
         'is_participant': post.is_participant(user_now),
     }
     
