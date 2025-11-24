@@ -201,6 +201,54 @@
             gap: 12px;
             margin-top: 20px;
         }
+        
+        /* Schedule section styling */
+        .schedule-section {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .schedule-item {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        
+        .btn-add-schedule {
+            background: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-add-schedule:hover {
+            background: #2563eb;
+        }
+        
+        .btn-remove-schedule {
+            background: #ef4444;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+        
+        .btn-remove-schedule:hover {
+            background: #dc2626;
+        }
     </style>
 </head>
 <body>
@@ -214,9 +262,11 @@
             <!-- White Container Box untuk form -->
             <div class="form-box">
                 
+                <!-- Page Title -->
                 <h1 class="page-title">Edit Event</h1>
                 
-                <form method="POST" enctype="multipart/form-data" id="eventForm">
+                <!-- Event Form -->
+                <form id="eventForm" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     
                     <!-- Event Name -->
@@ -226,6 +276,7 @@
                             type="text" 
                             name="name" 
                             class="form-input" 
+                            placeholder="Event name"
                             value="{{ event.name }}"
                             required
                         />
@@ -235,8 +286,8 @@
                     <div class="form-group">
                         <label class="form-label">Sport Type</label>
                         <select name="sport_type" class="form-input" required>
-                            <option value="tennis" {% if event.sport_type == 'tennis' %}selected{% endif %}>Tennis</option>
                             <option value="basketball" {% if event.sport_type == 'basketball' %}selected{% endif %}>Basketball</option>
+                            <option value="tennis" {% if event.sport_type == 'tennis' %}selected{% endif %}>Tennis</option>
                             <option value="soccer" {% if event.sport_type == 'soccer' %}selected{% endif %}>Soccer</option>
                             <option value="badminton" {% if event.sport_type == 'badminton' %}selected{% endif %}>Badminton</option>
                             <option value="volleyball" {% if event.sport_type == 'volleyball' %}selected{% endif %}>Volleyball</option>
@@ -351,6 +402,43 @@
                         </select>
                     </div>
                     
+                    <!-- Event Schedules Section -->
+                    <div class="schedule-section">
+                        <h3 class="text-lg font-bold mb-3 text-gray-800">📅 Event Schedules</h3>
+                        <p class="text-sm text-gray-600 mb-4">Add or remove dates when this event will be held</p>
+                        
+                        <div id="schedules-container">
+                            {% if schedules %}
+                                {% for schedule in schedules %}
+                                <div class="schedule-item">
+                                    <input 
+                                        type="date" 
+                                        name="schedule_date[]" 
+                                        class="form-input schedule-date-input" 
+                                        value="{{ schedule.date|date:'Y-m-d' }}"
+                                        required
+                                    >
+                                    <button type="button" class="btn-remove-schedule remove-schedule">Remove</button>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="schedule-item">
+                                    <input 
+                                        type="date" 
+                                        name="schedule_date[]" 
+                                        class="form-input schedule-date-input" 
+                                        required
+                                    >
+                                    <button type="button" class="btn-remove-schedule remove-schedule" style="display:none;">Remove</button>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <button type="button" id="add-schedule" class="btn-add-schedule mt-3">
+                            + Add Another Date
+                        </button>
+                    </div>
+                    
                     <!-- Event Photo -->
                     <div class="form-group">
                         <label class="form-label">Event Photo (optional)</label>
@@ -415,11 +503,84 @@
     </div>
     
     <script>
+        // Schedule management
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Add new schedule
+            document.getElementById('add-schedule').addEventListener('click', function() {
+                const container = document.getElementById('schedules-container');
+                const newSchedule = document.createElement('div');
+                newSchedule.className = 'schedule-item';
+                newSchedule.innerHTML = `
+                    <input 
+                        type="date" 
+                        name="schedule_date[]" 
+                        class="form-input schedule-date-input" 
+                        min="${today}"
+                        required
+                    >
+                    <button type="button" class="btn-remove-schedule remove-schedule">Remove</button>
+                `;
+                container.appendChild(newSchedule);
+                updateRemoveButtons();
+            });
+            
+            // Remove schedule
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-schedule')) {
+                    const scheduleItems = document.querySelectorAll('.schedule-item');
+                    if (scheduleItems.length > 1) {
+                        e.target.closest('.schedule-item').remove();
+                        updateRemoveButtons();
+                    }
+                }
+            });
+            
+            // Update remove button visibility
+            function updateRemoveButtons() {
+                const schedules = document.querySelectorAll('.schedule-item');
+                const removeButtons = document.querySelectorAll('.remove-schedule');
+                
+                if (schedules.length === 1) {
+                    removeButtons.forEach(btn => btn.style.display = 'none');
+                } else {
+                    removeButtons.forEach(btn => btn.style.display = 'block');
+                }
+            }
+            
+            updateRemoveButtons();
+        });
+        
         // Form submission handling
         document.getElementById('eventForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            // Collect all schedule dates
+            const scheduleDates = [];
+            document.querySelectorAll('.schedule-date-input').forEach(input => {
+                if (input.value) {
+                    scheduleDates.push(input.value);
+                }
+            });
+            
+            console.log('Schedule dates being sent:', scheduleDates);
+            
+            // Validate at least one date
+            if (scheduleDates.length === 0) {
+                alert('Please add at least one event date');
+                return;
+            }
+            
             const formData = new FormData(this);
+            
+            // Remove old schedule_date[] entries
+            formData.delete('schedule_date[]');
+            
+            // Add all schedule dates
+            scheduleDates.forEach(date => {
+                formData.append('schedule_dates[]', date);
+            });
             
             fetch('/event/{{ event.id }}/edit/', {
                 method: 'POST',
@@ -450,5 +611,3 @@
             });
         });
     </script>
-</body>
-</html>
