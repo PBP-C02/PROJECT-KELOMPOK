@@ -124,7 +124,7 @@
               </div>
 
               <div id="action-section" class="space-y-3">
-                {% if post.creator.id != user_now.id %}
+                {% if post.creator.id != user.id %}
                   {% if is_participant %}
                     <button id="leave-btn" onclick="leavePost()" class="w-full rounded-2xl border border-rose-300 bg-rose-50 px-6 py-3 text-sm font-semibold uppercase tracking-[0.3em] text-rose-700 transition hover:-translate-y-0.5 hover:bg-rose-100">
                       Leave Activity

@@ -9,6 +9,7 @@ urlpatterns = [
     path('', views.show_main, name='show_main'),
     path('<int:court_id>/', views.court_detail, name='court_detail'),
     path('<int:court_id>/edit/', views.edit_court, name='edit_court'),
+    path('api/court/<int:court_id>/edit/', views.api_edit_court, name='api_edit_court'),
     
     # API Endpoints untuk AJAX
     path('api/court/', views.get_all_Court, name='get_all_Court'),
