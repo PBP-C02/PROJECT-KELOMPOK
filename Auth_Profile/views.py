@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.contrib.auth.hashers import make_password, check_password
+from django.views.decorators.csrf import csrf_exempt
 from Auth_Profile.models import User
 import json
 from datetime import datetime
@@ -79,6 +80,7 @@ def profile_edit_view(request):
     }
     return render(request, 'profile_edit.html', context)
 
+@csrf_exempt
 def login_view(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -122,6 +124,7 @@ def login_view(request):
     
     return render(request, 'login.html')
 
+@csrf_exempt
 def register_view(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -218,3 +221,10 @@ def logout_view(request):
     # Hapus session
     request.session.flush()
     return redirect('/login/')
+
+@csrf_exempt
+def check_session(request):
+    if 'user_id' in request.session:
+        return JsonResponse({'loggedIn': True, 'user': request.session['nama']})
+    else:
+        return JsonResponse({'loggedIn': False})
