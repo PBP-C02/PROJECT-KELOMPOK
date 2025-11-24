@@ -241,6 +241,75 @@ def api_add_court(request):
             return JsonResponse({"success": False, "error": str(e)}, status=400)
     return JsonResponse({"success": False, "error": "Invalid request"}, status=405)
 
+@csrf_exempt
+def api_edit_court(request, court_id):
+    """API untuk mengubah data lapangan milik user."""
+    if request.method == "POST":
+        try:
+            current_user, error_response = _require_user(request, json_mode=True)
+            if error_response:
+                return error_response
+
+            try:
+                court = Court.objects.get(id=court_id, created_by=current_user)
+            except Court.DoesNotExist:
+                return JsonResponse({
+                    "success": False,
+                    "error": "You do not have permission to manage this court"
+                }, status=403)
+
+            data = request.POST
+            image = request.FILES.get('image')
+            price_per_hour = clean_decimal(
+                data.get('price_per_hour'),
+                default=court.price_per_hour,
+                min_value=Decimal("0"),
+            )
+            rating = clean_decimal(
+                data.get('rating'),
+                default=court.rating,
+                min_value=Decimal("0"),
+                max_value=Decimal("5"),
+            )
+
+            maps_link = data.get('maps_link')
+            if maps_link:
+                link_lat, link_lng = parse_maps_link(maps_link)
+                if link_lat:
+                    parsed_lat = sanitize_coordinate(link_lat, "latitude")
+                    if parsed_lat is not None:
+                        court.latitude = parsed_lat
+                if link_lng:
+                    parsed_lng = sanitize_coordinate(link_lng, "longitude")
+                    if parsed_lng is not None:
+                        court.longitude = parsed_lng
+
+            submitted_phone = data.get('owner_phone')
+            owner_phone = sanitize_phone_input(submitted_phone) or sanitize_phone_input(_get_user_phone(current_user))
+            if not owner_phone:
+                return JsonResponse({"success": False, "error": "Nomor kontak wajib diisi."}, status=400)
+            if len(owner_phone) < 8 or len(owner_phone) > 20:
+                return JsonResponse({"success": False, "error": "Nomor kontak harus berisi 8-20 digit."}, status=400)
+
+            court.name = data.get('name', court.name)
+            court.sport_type = data.get('sport_type', court.sport_type)
+            court.location = data.get('location', court.location)
+            court.address = data.get('address', court.address)
+            court.price_per_hour = price_per_hour if price_per_hour is not None else court.price_per_hour
+            court.facilities = data.get('facilities', court.facilities) or ""
+            court.rating = rating if rating is not None else court.rating
+            court.description = data.get('description', court.description) or ""
+            court.owner_name = _get_user_name(current_user)
+            court.owner_phone = owner_phone
+            if image:
+                court.image = image
+
+            court.save()
+            return JsonResponse({"success": True})
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)}, status=400)
+    return JsonResponse({"success": False, "error": "Invalid request"}, status=405)
+
 
 
 # View untuk render halaman utama
@@ -379,6 +448,12 @@ def get_court_detail(request, court_id):
             'rating': str(court.rating),
             'image': court.image.url if court.image else None,
             'facilities': court.facilities,
+            'description': court.description,
+            'is_available': court.is_available_today(),
+            'latitude': float(court.latitude) if court.latitude is not None else None,
+            'longitude': float(court.longitude) if court.longitude is not None else None,
+            'owner_name': court.owner_name,
+            'owner_phone': court.owner_phone,
             'owned_by_user': court.created_by_id == getattr(current_user, 'id', None),
         }
         return JsonResponse({'court': data})
@@ -585,13 +660,17 @@ def get_all_Court(request):
         'name': court.name,
         'sport_type': court.sport_type,
         'location': court.location,
+        'address': court.address,
         'price': str(court.price_per_hour),
         'rating': str(court.rating),
         'image': court.image.url if court.image else None,
         'facilities': court.facilities,
+        'description': court.description,
         'is_available': court.is_available_today(),
         'latitude': float(court.latitude) if court.latitude is not None else None,
         'longitude': float(court.longitude) if court.longitude is not None else None,
+        'owner_name': court.owner_name,
+        'owner_phone': court.owner_phone,
         'owned_by_user': court.created_by_id == getattr(current_user, 'id', None),
     } for court in Court_qs]
 
