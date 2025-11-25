@@ -49,7 +49,7 @@
                   {{ coach.location }} | {{ coach.date|date:"l, d F Y" }} | {{ coach.startTime|time:"H:i" }} - {{ coach.endTime|time:"H:i" }}
                 </p>
               </div>
-              <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-600">Overview</h2>
+              <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-600">Description</h2>
               {% if coach.description %}
               <p class="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 text-sm leading-relaxed text-slate-700">
                 {{ coach.description }}
@@ -89,7 +89,6 @@
               </section>
             </div>
 
-            <h2 class="text-sm font-semibold uppercase tracking-[0.24em] text-slate-600">Coach & Schedule</h2>
             <div class="grid gap-6 md:grid-cols-2">
               <section class="space-y-3">
                 <h3 class="text-sm font-semibold uppercase tracking-[0.26em] text-slate-600">Coach Information</h3>

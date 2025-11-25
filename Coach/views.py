@@ -432,6 +432,7 @@ def delete_coach(request, pk):
             'message': str(e)
         }, status=500)
 
+@csrf_exempt
 @require_http_methods(["GET"])
 def ajax_search_coaches(request):
     """AJAX endpoint for searching and filtering coaches"""
@@ -523,7 +524,7 @@ def ajax_search_coaches(request):
             'end_time': coach.endTime.strftime('%H:%M'),
             'rating': float(coach.rating),
             'is_booked': coach.isBooked,
-            'image_url': coach.image.url if coach.image else None,
+            'image_url': request.build_absolute_uri(coach.image.url) if coach.image else None, 
             'user_name': coach.user.nama,
             'user_id': str(coach.user.id),
             'is_owner': request.user and str(request.user.id) == str(coach.user.id),
@@ -564,6 +565,9 @@ def proxy_image(request):
     
 @csrf_exempt
 def create_coach_flutter(request):
+    # Cek login
+    if 'user_id' not in request.session:
+        return JsonResponse({'success': False, 'message': 'Silakan login terlebih dahulu'}, status=401)
     if request.method == 'POST':
         data = json.loads(request.body)
 
@@ -607,7 +611,7 @@ def create_coach_flutter(request):
     else:
         return JsonResponse({"status": "error"}, status=401)
     
-
+@csrf_exempt
 def show_json(request):
     coach_list = Coach.objects.all()
     data = [

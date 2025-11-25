@@ -75,17 +75,23 @@
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
               <span>Date</span>
-              <input id="id_date" name="date" type="date" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20">
+              <div class="relative" onclick="document.getElementById('id_date').showPicker()" style="cursor: pointer;">
+                <input id="id_date" name="date" type="date" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20 w-full cursor-pointer">
+              </div>
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
               <span>Start Time</span>
-              <input id="id_startTime" name="startTime" type="time" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20">
+              <div class="relative" onclick="document.getElementById('id_startTime').showPicker()" style="cursor: pointer;">
+                <input id="id_startTime" name="startTime" type="time" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20 w-full cursor-pointer">
+              </div>
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
               <span>End Time</span>
-              <input id="id_endTime" name="endTime" type="time" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20">
+              <div class="relative" onclick="document.getElementById('id_endTime').showPicker()" style="cursor: pointer;">
+                <input id="id_endTime" name="endTime" type="time" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20 w-full cursor-pointer">
+              </div>
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
