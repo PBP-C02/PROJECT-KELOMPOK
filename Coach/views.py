@@ -626,7 +626,7 @@ def show_json(request):
             'isBooked': coach.isBooked,
             'user_id': str(coach.user_id),
             'user_name': coach.user.nama,
-            'image_url': coach.image.url if coach.image else None,
+            'image_url': request.build_absolute_uri(coach.image.url) if coach.image else None, 
             'instagram_link': coach.instagram_link,
             'mapsLink': coach.mapsLink,
         }

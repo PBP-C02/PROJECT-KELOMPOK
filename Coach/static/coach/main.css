@@ -33,3 +33,139 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Coach layout + shared utilities */
+.coach-shell {
+  position: relative;
+  min-height: 100vh;
+  padding: 2rem 0 4rem;
+  background: #f6f7fb;
+  overflow: hidden;
+}
+.coach-shell__bg,
+.coach-shell__overlay {
+  position: absolute;
+  inset: 0;
+}
+.coach-shell__bg {
+  background-image: var(--coach-bg);
+  background-size: cover;
+  background-position: center;
+}
+.coach-shell__overlay {
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(14px);
+}
+.coach-shell__inner {
+  position: relative;
+  z-index: 2;
+}
+.coach-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Shared badges and buttons */
+.coach-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: fit-content;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  border-radius: 999px;
+  padding: 0.5rem 1.4rem;
+  color: #475569;
+  background: rgba(255, 255, 255, 0.9);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.coach-back-link:hover {
+  transform: translateY(-2px);
+  border-color: #cbed98;
+}
+.coach-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.coach-badge--success {
+  background: #ecfdf5;
+  color: #047857;
+}
+.coach-badge--danger {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+.coach-badge--muted {
+  background: #e2e8f0;
+  color: #475569;
+}
+.coach-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  padding: 0.85rem 1.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+.coach-btn--primary {
+  background: #cbed98;
+  color: #2f3131;
+  box-shadow: 0 18px 40px rgba(203, 237, 152, 0.45);
+}
+.coach-btn--primary:hover {
+  transform: translateY(-2px);
+}
+.coach-btn--ghost {
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  color: #475569;
+  background: #ffffff;
+}
+.coach-btn--danger {
+  background: #f43f5e;
+  color: #ffffff;
+  box-shadow: 0 18px 40px rgba(244, 63, 94, 0.35);
+}
+.coach-btn.is-active {
+  border-color: #cbed98;
+  color: #0f172a;
+}
+
+/* Card utilities */
+.coach-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.coach-rating-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  background: #0f172a;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
