@@ -9,5 +9,6 @@ urlpatterns = [
     path('post/<uuid:post_id>/', post_detail, name='post-detail'),
     path('post/<uuid:post_id>/participants/', get_participants_json, name='get_participants'),
     path('post/<uuid:post_id>/join/', join_post, name='join_post'),
+    path('json/', show_json, name='show_json'),
     path('post/<uuid:post_id>/leave/', leave_post, name='leave_post'),
 ]
