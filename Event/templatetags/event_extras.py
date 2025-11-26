@@ -17,3 +17,13 @@ def get_sport_emoji(sport_type):
         'swimming': '🏊',
     }
     return emoji_map.get(sport_type, '🏃')
+
+@register.filter
+def rupiah(value):
+    """Format number with dot thousand separators (e.g. 2000 -> 2.000)."""
+    try:
+        amount = float(value)
+    except (TypeError, ValueError):
+        return value
+    formatted = f"{amount:,.0f}".replace(",", ".")
+    return formatted
