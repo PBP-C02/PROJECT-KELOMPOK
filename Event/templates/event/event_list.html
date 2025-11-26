@@ -154,6 +154,19 @@
     padding: 0.25rem 0.9rem;
     box-shadow: 0 10px 25px rgba(15,23,42,0.25);
   }
+  .event-date-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    border-radius: 9999px;
+    background: rgba(15,23,42,0.8);
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.9rem;
+    box-shadow: 0 12px 30px rgba(15,23,42,0.28);
+    letter-spacing: 0.08em;
+  }
 
   .event-info-card {
     border-radius: 18px;
@@ -282,9 +295,19 @@
               {% endif %}
             </div>
 
-            <div class="absolute top-3 right-3">
+            <div class="absolute top-3 right-3 flex flex-col items-end gap-2">
+              <span class="event-date-chip">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z" />
+                </svg>
+                {% if event.next_schedule_date %}
+                  {{ event.next_schedule_date|date:"d M Y" }}
+                {% else %}
+                  Jadwal belum tersedia
+                {% endif %}
+              </span>
               <span class="event-price-chip">
-                Rp {{ event.entry_price|floatformat:0 }} <span class="ml-1 text-[0.6rem] font-medium text-slate-500">/ sesi</span>
+                Rp {{ event.entry_price|rupiah }} <span class="ml-1 text-[0.6rem] font-medium text-slate-500">/ sesi</span>
               </span>
             </div>
 
@@ -389,7 +412,7 @@
 
   // Aman untuk semua kondisi (user login / tidak)
   const rawUserId = "{{ user.id|default_if_none:'' }}";
-  const currentUserId = rawUserId ? parseInt(rawUserId) : null;
+  const currentUserId = rawUserId || null; // UUID, compare as string
 
   document.addEventListener('DOMContentLoaded', function() {
     const filterChips = document.querySelectorAll('.filter-chip');
@@ -471,7 +494,7 @@
       if (currentView === 'my_bookings') {
         matchesView = isRegistered;
       } else if (currentView === 'created') {
-        matchesView = currentUserId !== null && parseInt(cardOrganizer) === currentUserId;
+        matchesView = currentUserId !== null && cardOrganizer === currentUserId;
       }
 
       if (matchesSport && matchesAvailability && matchesSearch && matchesView) {

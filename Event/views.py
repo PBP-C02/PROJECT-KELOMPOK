@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
-from django.db.models import Q
+from django.db.models import Q, Min
 from datetime import datetime
 import json
 
@@ -50,7 +50,15 @@ def event_list(request):
     except:
         request.user = None
 
-    events = Event.objects.all()
+    events = Event.objects.annotate(
+        next_schedule_date=Min(
+            'schedules__date',
+            filter=Q(
+                schedules__is_available=True,
+                schedules__date__gte=datetime.now().date()
+            )
+        )
+    )
     query = request.GET.get("q", "")
     selected_category = request.GET.get("category", "")
     available_only = request.GET.get("available_only") == "on"
