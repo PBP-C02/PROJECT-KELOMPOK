@@ -76,13 +76,21 @@ def event_list(request):
         "Futsal", "Football", "Running", "Cycling", "Swimming", "Other"
     ]
 
+    # Get list of event IDs that current user has registered for
+    user_registered_events = []
+    if request.user:
+        user_registered_events = EventRegistration.objects.filter(
+            user=request.user
+        ).values_list('event_id', flat=True).distinct()
+
     context = {
         "events": events,
         "query": query,
         "sport_choices": sport_choices,
         "selected_category": selected_category,
         "available_only": available_only,
-        "user": request.user
+        "user": request.user,
+        "user_registered_events": list(user_registered_events),
     }
 
     return render(request, "event/event_list.html", context)
@@ -152,41 +160,28 @@ def add_event(request):
             
             # Process schedule_dates
             schedule_dates_json = request.POST.get('schedule_dates', '[]')
-            print(f"DEBUG - Received schedule_dates: {schedule_dates_json}")
             
             try:
                 schedule_dates = json.loads(schedule_dates_json)
-                print(f"DEBUG - Parsed schedule_dates: {schedule_dates}")
-                print(f"DEBUG - Number of dates: {len(schedule_dates)}")
                 
                 # Create EventSchedule objects for each date
-                schedules_created = 0
                 for date_str in schedule_dates:
                     try:
                         # Parse date string (format: YYYY-MM-DD)
                         date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
-                        print(f"DEBUG - Creating schedule for date: {date_obj}")
                         
                         # Create or get schedule
-                        schedule, created = EventSchedule.objects.get_or_create(
+                        EventSchedule.objects.get_or_create(
                             event=event,
                             date=date_obj,
                             defaults={'is_available': True}
                         )
-                        if created:
-                            schedules_created += 1
-                            print(f"DEBUG - Schedule created: {schedule}")
-                        else:
-                            print(f"DEBUG - Schedule already exists: {schedule}")
                             
-                    except ValueError as e:
-                        print(f"ERROR - Error parsing date {date_str}: {e}")
+                    except ValueError:
                         continue
-                
-                print(f"DEBUG - Total schedules created: {schedules_created}")
                         
-            except json.JSONDecodeError as e:
-                print(f"ERROR - Error decoding schedule_dates JSON: {e}")
+            except json.JSONDecodeError:
+                pass
             
             if is_ajax:
                 return JsonResponse({
@@ -197,7 +192,6 @@ def add_event(request):
                 })
             return redirect(f'/event/{event.id}/')
         else:
-            print(f"ERROR - Form validation failed: {form.errors}")
             if is_ajax:
                 return JsonResponse({'success': False, 'errors': form.errors}, status=400)
     else:
@@ -213,106 +207,70 @@ def edit_event(request, pk):
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
             return JsonResponse({'success': False, 'message': 'Forbidden'}, status=403)
         return redirect('/event/')
-    
+
     if request.method == 'POST':
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-        
-        # Handle photo clearing
-        if request.POST.get('clear_photo') == 'true' and event.photo:
-            event.photo.delete()
-            event.photo = None
-        
         form = EventForm(request.POST, request.FILES if request.FILES else None, instance=event)
         
         if form.is_valid():
-            event = form.save()
-            
-            # Process schedule dates
-            schedule_dates = request.POST.getlist('schedule_dates[]')
-            print(f"DEBUG - Received schedule dates: {schedule_dates}")
-            
-            if schedule_dates:
-                # Delete old schedules
-                EventSchedule.objects.filter(event=event).delete()
-                print(f"DEBUG - Deleted old schedules")
-                
-                # Create new schedules
-                for date_str in schedule_dates:
-                    try:
-                        date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
-                        schedule, created = EventSchedule.objects.get_or_create(
-                            event=event,
-                            date=date_obj,
-                            defaults={'is_available': True}
-                        )
-                        print(f"DEBUG - Created/Updated schedule: {schedule}")
-                    except ValueError as e:
-                        print(f"ERROR - Error parsing date {date_str}: {e}")
-                        continue
+            event = form.save(commit=False)
+            event.organizer = request.user
+            event.save()
             
             if is_ajax:
                 return JsonResponse({
-                    'success': True, 
-                    'message': 'Event updated successfully!', 
+                    'success': True,
+                    'message': 'Event updated successfully!',
                     'event_id': event.id,
                     'redirect_url': f'/event/{event.id}/'
                 })
             return redirect(f'/event/{event.id}/')
         else:
-            print(f"ERROR - Form validation failed: {form.errors}")
             if is_ajax:
                 return JsonResponse({'success': False, 'errors': form.errors}, status=400)
     else:
         form = EventForm(instance=event)
     
-    # Get current schedules
-    schedules = EventSchedule.objects.filter(event=event).order_by('date')
-    
-    return render(request, 'event/edit_event.html', {
-        'form': form, 
-        'event': event,
-        'schedules': schedules
-    })
+    return render(request, 'event/edit_event.html', {'form': form, 'event': event})
 
 # ==================== DELETE EVENT ====================
 @custom_login_required
 @require_http_methods(["POST"])
 def ajax_delete_event(request, pk):
-    event = get_object_or_404(Event, pk=pk)
-    if event.organizer != request.user:
-        return JsonResponse({'success': False, 'message': 'Forbidden'}, status=403)
-    event.delete()
-    return JsonResponse({'success': True, 'message': 'Event deleted successfully'})
+    try:
+        event = get_object_or_404(Event, pk=pk)
+        
+        if event.organizer != request.user:
+            return JsonResponse({
+                'success': False, 
+                'message': 'You are not authorized to delete this event'
+            }, status=403)
+        
+        event_name = event.name
+        event.delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Event "{event_name}" deleted successfully!'
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
-# ==================== EVENT DETAIL ====================
 # ==================== EVENT DETAIL ====================
 def event_detail(request, pk):
-    # Get user from session
-    user = None
-    if 'user_id' in request.session:
-        try:
-            from Auth_Profile.models import User
-            user = User.objects.get(id=request.session['user_id'])
-            request.user = user
-            user_display = getattr(user, 'username', None) or getattr(user, 'email', None) or f"User {user.id}"
-            print(f"DEBUG - User logged in: {user_display} (ID: {user.id})")
-        except User.DoesNotExist:
-            request.user = None
-            print("DEBUG - User not found in database")
-    else:
-        request.user = None
-        print("DEBUG - No user_id in session")
-
     event = get_object_or_404(Event, pk=pk)
-    schedules = event.schedules.filter(is_available=True, date__gte=datetime.now().date()).order_by('date')
     
-    organizer_display = getattr(event.organizer, 'username', None) or getattr(event.organizer, 'email', None) or f"User {event.organizer.id}"
-    print(f"DEBUG - Event organizer: {organizer_display} (ID: {event.organizer.id})")
+    try:
+        from Auth_Profile.models import User
+        user = User.objects.get(id=request.session['user_id'])
+    except:
+        user = None
     
-    user_display = getattr(user, 'username', None) or getattr(user, 'email', None) or 'None' if user else 'None'
-    print(f"DEBUG - Current user: {user_display} (ID: {user.id if user else 'None'})")
-    print(f"DEBUG - Is organizer: {user == event.organizer if user else False}")
-    print(f"DEBUG - Found {schedules.count()} schedules")
+    schedules = EventSchedule.objects.filter(
+        event=event, 
+        is_available=True, 
+        date__gte=datetime.now().date()
+    ).order_by('date')
     
     user_registered = False
     user_registrations = []
@@ -322,14 +280,12 @@ def event_detail(request, pk):
             user=user
         ).select_related('schedule').order_by('schedule__date')
         user_registered = user_registrations.exists()
-        print(f"DEBUG - User registered: {user_registered}")
-        print(f"DEBUG - Number of registrations: {user_registrations.count()}")
     
     context = {
         'event': event,
         'schedules': schedules,
         'user_registered': user_registered,
-        'user_registrations': user_registrations,  # NEW: Send all user's registrations
+        'user_registrations': user_registrations,
         'organizer': event.organizer,
         'activities': getattr(event, 'get_activities_list', lambda: [])(),
         'user': user
@@ -524,3 +480,242 @@ def my_bookings(request):
     }
     
     return render(request, 'event/my_bookings.html', context)
+
+# ==================== JSON ENDPOINTS FOR FLUTTER ====================
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
+def json_events(request):
+    """Get all events as JSON"""
+    try:
+        from Auth_Profile.models import User
+        user = User.objects.get(id=request.session.get('user_id')) if 'user_id' in request.session else None
+    except:
+        user = None
+    
+    events = Event.objects.all()
+    
+    # Get user registered events
+    user_registered = []
+    if user:
+        user_registered = EventRegistration.objects.filter(user=user).values_list('event_id', flat=True)
+    
+    data = []
+    for event in events:
+        data.append({
+            'id': event.id,
+            'name': event.name,
+            'sport_type': event.sport_type,
+            'description': event.description or '',
+            'city': event.city,
+            'full_address': event.full_address,
+            'google_maps_link': event.google_maps_link or '',
+            'entry_price': str(event.entry_price),
+            'activities': event.activities or '',
+            'rating': str(event.rating),
+            'photo_url': event.photo.url if event.photo else '',
+            'status': event.status,
+            'category': event.category,
+            'organizer_id': event.organizer.id,
+            'organizer_name': event.organizer.nama if hasattr(event.organizer, 'nama') else event.organizer.email,
+            'created_at': event.created_at.isoformat(),
+            'is_organizer': user.id == event.organizer.id if user else False,
+            'is_registered': event.id in user_registered,
+        })
+    
+    return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def json_event_detail(request, pk):
+    """Get single event detail with schedules"""
+    try:
+        from Auth_Profile.models import User
+        user = User.objects.get(id=request.session.get('user_id')) if 'user_id' in request.session else None
+    except:
+        user = None
+    
+    try:
+        event = Event.objects.get(pk=pk)
+    except Event.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Event not found'}, status=404)
+    
+    # Get schedules
+    schedules = EventSchedule.objects.filter(
+        event=event,
+        is_available=True,
+        date__gte=datetime.now().date()
+    ).order_by('date')
+    
+    schedules_data = [{
+        'id': str(s.pk_event_sched),
+        'date': s.date.isoformat(),
+    } for s in schedules]
+    
+    # Check if user registered
+    user_schedules = []
+    if user:
+        registrations = EventRegistration.objects.filter(event=event, user=user)
+        user_schedules = [str(r.schedule.pk_event_sched) for r in registrations]
+    
+    data = {
+        'id': event.id,
+        'name': event.name,
+        'sport_type': event.sport_type,
+        'description': event.description or '',
+        'city': event.city,
+        'full_address': event.full_address,
+        'google_maps_link': event.google_maps_link or '',
+        'entry_price': str(event.entry_price),
+        'activities': event.activities or '',
+        'rating': str(event.rating),
+        'photo_url': event.photo.url if event.photo else '',
+        'status': event.status,
+        'category': event.category,
+        'organizer_id': event.organizer.id,
+        'organizer_name': event.organizer.nama if hasattr(event.organizer, 'nama') else event.organizer.email,
+        'created_at': event.created_at.isoformat(),
+        'is_organizer': user.id == event.organizer.id if user else False,
+        'schedules': schedules_data,
+        'user_schedules': user_schedules,
+    }
+    
+    return JsonResponse(data)
+
+@csrf_exempt
+@custom_login_required
+def json_create_event(request):
+    """Create event from Flutter"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        
+        # Create event
+        event = Event.objects.create(
+            name=data['name'],
+            sport_type=data['sport_type'],
+            description=data.get('description', ''),
+            city=data['city'],
+            full_address=data['full_address'],
+            entry_price=data['entry_price'],
+            activities=data.get('activities', ''),
+            rating=data.get('rating', 0),
+            google_maps_link=data.get('google_maps_link', ''),
+            category=data.get('category', 'category 1'),
+            status=data.get('status', 'available'),
+            organizer=request.user
+        )
+        
+        # Create schedules if provided
+        if 'schedule_dates' in data:
+            for date_str in data['schedule_dates']:
+                try:
+                    date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+                    EventSchedule.objects.get_or_create(
+                        event=event,
+                        date=date_obj,
+                        defaults={'is_available': True}
+                    )
+                except ValueError:
+                    continue
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Event created successfully!',
+            'event_id': event.id
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+@csrf_exempt
+@custom_login_required
+def json_join_event(request, pk):
+    """Join event from Flutter"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+    
+    try:
+        data = json.loads(request.body)
+        schedule_id = data.get('schedule_id')
+        
+        if not schedule_id:
+            return JsonResponse({'success': False, 'message': 'Please select a date'}, status=400)
+        
+        event = get_object_or_404(Event, pk=pk)
+        schedule = get_object_or_404(EventSchedule, pk_event_sched=schedule_id, event=event)
+        
+        # Check if already registered
+        if EventRegistration.objects.filter(event=event, user=request.user, schedule=schedule).exists():
+            return JsonResponse({'success': False, 'message': 'Already registered for this date'}, status=400)
+        
+        # Create registration
+        EventRegistration.objects.create(
+            event=event,
+            user=request.user,
+            schedule=schedule
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Successfully joined the event!'
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+@csrf_exempt
+@custom_login_required
+def json_cancel_event(request, pk):
+    """Cancel registration from Flutter"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+    
+    try:
+        event = get_object_or_404(Event, pk=pk)
+        registrations = EventRegistration.objects.filter(event=event, user=request.user)
+        
+        if not registrations.exists():
+            return JsonResponse({'success': False, 'message': 'No registration found'}, status=400)
+        
+        count = registrations.count()
+        registrations.delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Successfully cancelled {count} registration(s)!'
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+@csrf_exempt
+@custom_login_required
+def json_my_bookings(request):
+    """Get user's bookings"""
+    registrations = EventRegistration.objects.filter(
+        user=request.user
+    ).select_related('event', 'schedule').order_by('-registered_at')
+    
+    # Group by event
+    bookings = {}
+    for reg in registrations:
+        event_id = reg.event.id
+        if event_id not in bookings:
+            bookings[event_id] = {
+                'event': {
+                    'id': reg.event.id,
+                    'name': reg.event.name,
+                    'sport_type': reg.event.sport_type,
+                    'city': reg.event.city,
+                    'rating': str(reg.event.rating),
+                    'entry_price': str(reg.event.entry_price),
+                },
+                'schedules': []
+            }
+        bookings[event_id]['schedules'].append({
+            'id': str(reg.schedule.pk_event_sched),
+            'date': reg.schedule.date.isoformat(),
+        })
+    
+    return JsonResponse(list(bookings.values()), safe=False)

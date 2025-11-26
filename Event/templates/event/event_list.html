@@ -1,643 +1,491 @@
+{% extends 'base.html' %}
 {% load static %}
 {% load event_extras %}
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event List - Move Buddy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Background yang SANGAT subtle - hampir tidak terlihat */
-        body {
-            background-color: #f9fafb;
-            background-image: url('{% static "img/bg.png" %}');
-            background-repeat: repeat;
-            background-size: 300px 300px;
-            background-attachment: fixed;
-            position: relative;
-        }
-        
-        /* Overlay putih SANGAT kuat agar background hampir tidak terlihat */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.97);
-            z-index: 0;
-        }
-        
-        /* Container untuk konten */
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* Tab navigation */
-        .tab-nav {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 8px;
-            display: inline-flex;
-            gap: 8px;
-            margin-bottom: 32px;
-        }
-        
-        .tab-button {
-            padding: 12px 32px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 15px;
-            color: #6b7280;
-            background: transparent;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .tab-button:hover {
-            color: #374151;
-            background: #f3f4f6;
-        }
-        
-        .tab-button.active {
-            background: #a3e635;
-            color: #1a1a1a;
-        }
-        
-        /* White container box untuk semua controls */
-        .controls-box {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-        
-        /* Card styling with colorful header */
-        .event-card {
-            background: white;
-            transition: all 0.3s ease;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            border-radius: 16px;
-            overflow: hidden;
-        }
-        
-        .event-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-        
-        /* Colorful header based on sport type */
-        .sport-header {
-            padding: 32px 24px;
-            text-align: center;
-            position: relative;
-        }
-        
-        /* Sport colors */
-        .sport-tennis { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
-        .sport-basketball { background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%); }
-        .sport-soccer { background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); }
-        .sport-badminton { background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%); }
-        .sport-volleyball { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); }
-        .sport-futsal { background: linear-gradient(135deg, #facc15 0%, #eab308 100%); }
-        .sport-paddle { background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%); }
-        .sport-table_tennis { background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%); }
-        .sport-swimming { background: linear-gradient(135deg, #67e8f9 0%, #06b6d4 100%); }
-        
-        /* Sport badge */
-        .sport-badge {
-            background: rgba(255, 255, 255, 0.95);
-            color: #1a1a1a;
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            display: inline-block;
-            margin-bottom: 16px;
-        }
-        
-        /* Event title in header */
-        .event-title-header {
-            font-size: 28px;
-            font-weight: 800;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 8px;
-        }
-        
-        /* Event content */
-        .event-content {
-            padding: 24px;
-        }
-        
-        /* Date and time info */
-        .info-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-            color: #4b5563;
-            font-size: 15px;
-        }
-        
-        .info-icon {
-            width: 20px;
-            height: 20px;
-            flex-shrink: 0;
-        }
-        
-        /* Sport filter dropdown */
-        .sport-select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 500;
-            background: white;
-            color: #374151;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
-        }
-        
-        .sport-select:hover {
-            border-color: #d1d5db;
-        }
-        
-        .sport-select:focus {
-            outline: none;
-            border-color: #a3e635;
-            box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.1);
-        }
-        
-        /* Badge styling */
-        .badge-available {
-            background: #dcfce7;
-            color: #16a34a;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-        }
-        
-        .badge-unavailable {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            display: inline-block;
-        }
-        
-        /* Button styling */
-        .btn-primary {
-            background: #1a1a1a;
-            color: white;
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.2s ease;
-            text-align: center;
-            display: block;
-            text-decoration: none;
-        }
-        
-        .btn-primary:hover {
-            background: #333;
-        }
-        
-        .btn-add-event {
-            background: #a3e635;
-            color: #1a1a1a;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            display: inline-block;
-            text-decoration: none;
-        }
-        
-        .btn-add-event:hover {
-            background: #8cc520;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(163, 230, 53, 0.3);
-        }
-        
-        .btn-search {
-            background: #a3e635;
-            color: #1a1a1a;
-            padding: 12px 32px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-        
-        .btn-search:hover {
-            background: #8cc520;
-        }
-        
-        /* Search input styling */
-        .search-input {
-            padding: 14px 20px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 15px;
-            background: #f9fafb;
-        }
-        
-        .search-input:focus {
-            outline: none;
-            border-color: #a3e635;
-            background: white;
-        }
-        
-        /* Price display */
-        .price-display {
-            font-size: 28px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin: 16px 0;
-        }
-        
-        .price-unit {
-            font-size: 16px;
-            font-weight: 400;
-            color: #9ca3af;
-            margin-left: 4px;
-        }
-        
-        /* Checkbox styling */
-        .custom-checkbox {
-            width: 18px;
-            height: 18px;
-            accent-color: #a3e635;
-            cursor: pointer;
-        }
-        
-        /* Sport emoji/icon */
-        .sport-emoji {
-            font-size: 48px;
-            margin-bottom: 12px;
-        }
-    </style>
-</head>
-<body>
-    <!-- Include Navbar -->
+{% block meta %}
+<title>MoveBuddy | Events</title>
+{% endblock meta %}
+
+{% block content %}
+<style>
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .sport-header {
+    padding: 32px 24px;
+    text-align: center;
+    position: relative;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .sport-tennis { background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); }
+  .sport-basketball { background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%); }
+  .sport-soccer { background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%); }
+  .sport-badminton { background: linear-gradient(135deg, #a3e635 0%, #84cc16 100%); }
+  .sport-volleyball { background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%); }
+  .sport-futsal { background: linear-gradient(135deg, #facc15 0%, #eab308 100%); }
+  .sport-paddle { background: linear-gradient(135deg, #c084fc 0%, #a855f7 100%); }
+  .sport-table_tennis { background: linear-gradient(135deg, #f472b6 0%, #ec4899 100%); }
+  .sport-swimming { background: linear-gradient(135deg, #67e8f9 0%, #06b6d4 100%); }
+  
+  .sport-emoji {
+    font-size: 48px;
+    margin-bottom: 8px;
+  }
+  
+  .sport-badge {
+    background: rgba(255, 255, 255, 0.95);
+    color: #1a1a1a;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  
+  .event-title-header {
+    font-size: 22px;
+    font-weight: 800;
+    color: white;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .filter-chip {
+    display: inline-flex;
+    min-width: 80px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid rgb(203 213 225);
+    background-color: white;
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgb(51 65 85);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  
+  .filter-chip:hover {
+    border-color: #a3e635;
+    color: rgb(15 23 42);
+  }
+  
+  .filter-chip.active {
+    border-color: transparent;
+    background-color: #a3e635;
+    color: #1a1a1a;
+    box-shadow: 0 8px 16px rgba(203, 237, 152, 0.25);
+  }
+
+  .view-tab {
+    padding: 0.625rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #6b7280;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .view-tab:hover {
+    color: #374151;
+    background: #f3f4f6;
+  }
+  
+  .view-tab.active {
+    background: #1f2937;
+    color: white;
+  }
+  
+  .bg-event-list {
+    background-image: url('{% static "img/bg.png" %}');
+  }
+  
+  @media (min-width: 640px) {
+    .filter-chip {
+      min-width: 95px;
+      padding: 0.5rem 1rem;
+      font-size: 0.8125rem;
+    }
+  }
+
+  /* TAG + CHIP + INFO CARD */
+  .event-tag {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    padding: 0.2rem 0.75rem;
+  }
+  .event-tag-booked {
+    background: #fee2e2;
+    color: #b91c1c;
+  }
+  .event-tag-sport {
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+  .event-tag-created {
+    background: #fef3c7;
+    color: #b45309;
+  }
+
+  .event-price-chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    background: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.25rem 0.9rem;
+    box-shadow: 0 10px 25px rgba(15,23,42,0.25);
+  }
+
+  .event-info-card {
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem 0.9rem;
+    background: #f9fafb;
+  }
+
+  .event-info-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #9ca3af;
+    margin-bottom: 0.15rem;
+  }
+
+  .event-info-value {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  .event-rating-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 9999px;
+    background: #fefce8;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #92400e;
+  }
+</style>
+
+<section class="relative min-h-screen w-full overflow-hidden pb-12 sm:pb-16 pt-4 sm:pt-6">
+  <div class="absolute inset-0 bg-cover bg-center bg-event-list"></div>
+  <div class="absolute inset-0 bg-white/95"></div>
+
+  <div class="relative z-10">
     {% include 'includes/navbar.html' %}
-    
-    <div class="content-wrapper">
-        <!-- Main Container -->
-        <div class="max-w-7xl mx-auto px-4 py-8">
-            
-            <!-- Tab Navigation -->
-            <div class="flex justify-center">
-                <div class="tab-nav">
-                    <a href="{% url 'event:event_list' %}" class="tab-button active">All</a>
-                    <a href="{% url 'event:my_bookings' %}" class="tab-button">My Bookings</a>
-                </div>
+
+    <div class="mx-auto flex w-full max-w-[88rem] flex-col gap-8 sm:gap-12 px-4 sm:px-10 lg:px-16">
+      <div class="rounded-2xl sm:rounded-[32px] bg-white/95 p-4 sm:p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] backdrop-blur">
+        <div class="flex flex-col gap-4 sm:gap-6">
+          <div class="text-center">
+            <h1 class="text-xl sm:text-3xl font-bold uppercase tracking-[0.12em] sm:tracking-[0.18em] text-slate-900">Find Your Perfect Event</h1>
+            <p class="mt-1 sm:mt-2 text-xs sm:text-sm text-slate-600">Temukan event olahraga terbaik untuk kamu</p>
+          </div>
+
+          <div class="flex flex-col gap-3 sm:grid sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
+            <label class="relative flex items-center">
+              <input
+                id="searchInput"
+                type="text"
+                placeholder="Cari event atau lokasi..."
+                class="h-12 sm:h-[50px] w-full rounded-lg border border-slate-300 bg-white px-4 sm:px-5 pr-10 sm:pr-12 text-sm font-medium text-slate-900 shadow-inner outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20"
+              />
+              <svg class="absolute right-3 sm:right-4 h-4 sm:h-5 w-4 sm:w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+              </svg>
+            </label>
+            <a
+              href="{% url 'event:add_event' %}"
+              class="flex h-12 sm:h-[50px] items-center justify-center rounded-lg bg-lime px-4 sm:px-6 text-xs font-semibold uppercase tracking-[0.2em] sm:tracking-[0.3em] text-grey transition hover:-translate-y-0.5 hover:bg-dark-lime"
+            >
+              + Add Event
+            </a>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <div class="hide-scrollbar flex min-w-0 flex-nowrap gap-2 overflow-x-auto pb-1 pr-2">
+              <button class="filter-chip active" data-sport="">All</button>
+              <button class="filter-chip" data-sport="tennis">Tennis</button>
+              <button class="filter-chip" data-sport="basketball">Basketball</button>
+              <button class="filter-chip" data-sport="soccer">Soccer</button>
+              <button class="filter-chip" data-sport="badminton">Badminton</button>
+              <button class="filter-chip" data-sport="volleyball">Volleyball</button>
+              <button class="filter-chip" data-sport="futsal">Futsal</button>
+              <button class="filter-chip" data-sport="paddle">Paddle</button>
+              <button class="filter-chip" data-sport="table_tennis">Table Tennis</button>
+              <button class="filter-chip" data-sport="swimming">Swimming</button>
             </div>
-            
-            <!-- White Container Box untuk semua controls -->
-            <div class="controls-box">
-                
-                <!-- Search Bar Section -->
-                <div class="flex gap-4 mb-6">
-                    <input 
-                        type="text" 
-                        id="searchInput"
-                        placeholder="Search events..." 
-                        class="search-input flex-1"
-                        value="{{ query }}"
-                    />
-                    <button onclick="searchEvents()" class="btn-search">
-                        🔍 Search
-                    </button>
-                </div>
-                
-                <!-- Sport Filter Dropdown -->
-                <div class="mb-6">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter by Sport</label>
-                    <select id="sportFilter" class="sport-select">
-                        <option value="all" {% if not selected_category or selected_category == 'all' %}selected{% endif %}>All Sports</option>
-                        <option value="tennis" {% if selected_category == 'tennis' %}selected{% endif %}>🎾 Tennis</option>
-                        <option value="basketball" {% if selected_category == 'basketball' %}selected{% endif %}>🏀 Basketball</option>
-                        <option value="soccer" {% if selected_category == 'soccer' %}selected{% endif %}>⚽ Soccer</option>
-                        <option value="badminton" {% if selected_category == 'badminton' %}selected{% endif %}>🏸 Badminton</option>
-                        <option value="volleyball" {% if selected_category == 'volleyball' %}selected{% endif %}>🏐 Volleyball</option>
-                        <option value="paddle" {% if selected_category == 'paddle' %}selected{% endif %}>🏓 Paddle</option>
-                        <option value="futsal" {% if selected_category == 'futsal' %}selected{% endif %}>⚽ Futsal</option>
-                        <option value="table_tennis" {% if selected_category == 'table_tennis' %}selected{% endif %}>🏓 Table Tennis</option>
-                        <option value="swimming" {% if selected_category == 'swimming' %}selected{% endif %}>🏊 Swimming</option>
-                    </select>
-                </div>
-                
-                <!-- Checkbox + Add Event Button -->
-                <div class="flex items-center justify-between flex-wrap gap-3">
-                    <label class="flex items-center gap-2 cursor-pointer">
-                        <input 
-                            type="checkbox" 
-                            id="showAvailableOnly"
-                            class="custom-checkbox"
-                            {% if available_only %}checked{% endif %}
-                        />
-                        <span class="font-medium text-gray-700">Show only available events</span>
-                    </label>
-                    
-                    <!-- Add Event Button - SELALU MUNCUL -->
-                    <a href="{% url 'event:add_event' %}" class="btn-add-event">
-                        + Add Event
-                    </a>
-                </div>
-                
+
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+              <div class="inline-flex rounded-2xl bg-white/70 p-2 gap-2 shadow-inner">
+                <button class="view-tab active" data-view="all">All</button>
+                <button class="view-tab" data-view="my_bookings">My Bookings</button>
+                <button class="view-tab" data-view="created">Created Events</button>
+              </div>
+
+              <label class="flex shrink-0 items-center gap-2 rounded-xl bg-white/70 px-3 py-2 text-xs sm:text-sm font-semibold text-slate-600 shadow-inner">
+                <input
+                  id="availableOnly"
+                  type="checkbox"
+                  class="h-4 w-4 rounded border border-lime text-lime focus:ring-lime"
+                />
+                <span>Tersedia saja</span>
+              </label>
             </div>
-            
-            <!-- Event Cards Grid -->
-            <div id="eventGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Initial server-side rendered events -->
-                {% for event in events %}
-                <div class="event-card">
-                    <!-- Colorful Header with Sport Type -->
-                    <div class="sport-header sport-{{ event.sport_type }}">
-                        <div class="sport-emoji">{{ event.sport_type|get_sport_emoji }}</div>
-                        <div class="sport-badge">{{ event.get_sport_type_display }}</div>
-                        <h3 class="event-title-header">{{ event.name }}</h3>
-                    </div>
-                    
-                    <div class="event-content">
-                        <!-- Status Badge -->
-                        <div class="mb-3">
-                            <span class="badge-{{ event.status }}">
-                                {% if event.status == 'available' %}Tersedia{% else %}Tidak Tersedia{% endif %}
-                            </span>
-                        </div>
-                        
-                        <!-- Date & Time Info -->
-                        {% if event.schedules.all.first %}
-                        <div class="info-item">
-                            <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                            </svg>
-                            <span>{{ event.schedules.all.first.date|date:"d M Y" }}</span>
-                        </div>
-                        {% endif %}
-                        
-                        <!-- Location Info -->
-                        <div class="info-item">
-                            <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                            </svg>
-                            <span>{{ event.city }}</span>
-                        </div>
-                        
-                        <!-- Rating Info -->
-                        <div class="info-item">
-                            <svg class="info-icon" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                            </svg>
-                            <span>Rating: {{ event.rating|default:"0.00" }}</span>
-                        </div>
-                        
-                        <!-- Price -->
-                        <div class="price-display">
-                            Rp {{ event.entry_price|floatformat:0 }}<span class="price-unit">/jam</span>
-                        </div>
-                        
-                        <!-- Button -->
-                        <a href="{% url 'event:event_detail' pk=event.id %}" class="btn-primary">
-                            Lihat Detail & Booking
-                        </a>
-                    </div>
-                </div>
-                {% empty %}
-                <div class="col-span-full text-center py-12">
-                    <p class="text-gray-500 text-lg font-medium">No events found</p>
-                </div>
-                {% endfor %}
-            </div>
-            
-            <!-- Loading State -->
-            <div id="loadingState" class="text-center py-12 hidden">
-                <div class="inline-block w-12 h-12 border-4 border-lime-400 border-t-transparent rounded-full animate-spin"></div>
-                <p class="mt-4 text-gray-600 font-medium">Loading events...</p>
-            </div>
-            
-            <!-- Empty State -->
-            <div id="emptyState" class="text-center py-12 hidden">
-                <p class="text-gray-500 text-lg font-medium">No events found</p>
-            </div>
-            
+          </div>
         </div>
+      </div>
+
+      <div id="EventGrid" class="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 xl:grid-cols-3">
+        {% for event in events %}
+        <div class="event-card group relative flex flex-col overflow-hidden rounded-[20px] sm:rounded-[28px] bg-white shadow-[0_8px_30px_rgba(15,23,42,0.08)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] cursor-pointer" 
+             data-sport="{{ event.sport_type|lower }}"
+             data-status="{{ event.status }}"
+             data-name="{{ event.name|lower }}"
+             data-city="{{ event.city|lower }}"
+             data-organizer="{{ event.organizer.id }}"
+             data-is-registered="{% if event.id in user_registered_events %}true{% else %}false{% endif %}"
+             data-detail-url="{% url 'event:event_detail' pk=event.id %}">
+          
+          <!-- HEADER: pakai emoji sport seperti versi awal -->
+          <div class="sport-header sport-{{ event.sport_type }}">
+            <div class="absolute top-3 left-3 flex flex-wrap gap-2">
+              {% if event.id in user_registered_events %}
+              <span class="event-tag event-tag-booked">BOOKED</span>
+              {% endif %}
+              <span class="event-tag event-tag-sport">{{ event.get_sport_type_display }}</span>
+              {% if user.is_authenticated and event.organizer.id == user.id %}
+              <span class="event-tag event-tag-created">CREATED</span>
+              {% endif %}
+            </div>
+
+            <div class="absolute top-3 right-3">
+              <span class="event-price-chip">
+                Rp {{ event.entry_price|floatformat:0 }} <span class="ml-1 text-[0.6rem] font-medium text-slate-500">/ sesi</span>
+              </span>
+            </div>
+
+            <div class="sport-emoji">
+              {{ event.sport_type|get_sport_emoji }}
+            </div>
+            <div class="sport-badge">{{ event.get_sport_type_display }}</div>
+            <h3 class="event-title-header">{{ event.name }}</h3>
+          </div>
+
+          <!-- BODY -->
+          <div class="flex flex-1 flex-col gap-3 sm:gap-4 p-4 sm:p-6">
+            <div class="flex flex-col gap-1">
+              <p class="text-xs sm:text-sm uppercase tracking-[0.16em] text-slate-400">
+                {{ event.city|default:"Jakarta" }}
+              </p>
+            </div>
+
+            <div class="flex items-center justify-between flex-wrap gap-2">
+              <div class="event-rating-pill">
+                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <span>{{ event.rating|default:"5.0"|floatformat:1 }}/5</span>
+              </div>
+
+              <div>
+                {% if event.status == 'available' %}
+                <span class="inline-flex items-center rounded-full bg-emerald-50 px-3 py-1 text-[0.7rem] font-semibold text-emerald-700 uppercase tracking-[0.16em]">
+                  Tersedia
+                </span>
+                {% else %}
+                <span class="inline-flex items-center rounded-full bg-rose-50 px-3 py-1 text-[0.7rem] font-semibold text-rose-700 uppercase tracking-[0.16em]">
+                  Tidak Tersedia
+                </span>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="grid gap-3">
+              <div class="event-info-card">
+                <div class="event-info-label">Coach</div>
+                <div class="event-info-value">
+                  {% firstof event.organizer.get_full_name event.organizer.email event.organizer %}
+                </div>
+              </div>
+
+              {% if event.date or event.start_time or event.end_time %}
+              <div class="event-info-card">
+                <div class="event-info-label">Jadwal</div>
+                <div class="event-info-value">
+                  {% if event.date %}
+                    {{ event.date|date:"d M Y" }}
+                  {% endif %}
+                  {% if event.start_time or event.end_time %}
+                    <span class="text-slate-500 text-[0.8rem] ml-1">
+                      {% if event.start_time %}{{ event.start_time|time:"H:i" }}{% endif %}
+                      {% if event.start_time and event.end_time %} - {% endif %}
+                      {% if event.end_time %}{{ event.end_time|time:"H:i" }}{% endif %}
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="mt-2">
+              <button
+                class="detail-btn w-full rounded-full bg-slate-900 px-4 py-2.5 sm:py-3 text-xs sm:text-sm font-semibold text-white tracking-[0.18em] uppercase transition hover:bg-black"
+                type="button"
+              >
+                Lihat Detail & Booking
+              </button>
+            </div>
+          </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full rounded-2xl sm:rounded-[30px] bg-white/80 py-12 sm:py-16 text-center shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
+          <svg class="mx-auto h-12 w-12 sm:h-16 sm:w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <h3 class="mt-4 text-base sm:text-lg font-semibold text-slate-700">Belum ada event</h3>
+          <p class="mt-2 text-xs sm:text-sm text-slate-500">Tambahkan event pertama kamu!</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div id="noResults" class="hidden col-span-full rounded-2xl sm:rounded-[30px] bg-white/80 py-12 sm:py-16 text-center shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
+        <svg class="mx-auto h-12 w-12 sm:h-16 sm:w-16 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3 class="mt-4 text-base sm:text-lg font-semibold text-slate-700">Tidak ada event ditemukan</h3>
+        <p class="mt-2 text-xs sm:text-sm text-slate-500">Coba sesuaikan filter atau pencarian kamu</p>
+      </div>
     </div>
+  </div>
+</section>
+
+<script>
+  let selectedSport = '';
+  let currentView = 'all';
+
+  // Aman untuk semua kondisi (user login / tidak)
+  const rawUserId = "{{ user.id|default_if_none:'' }}";
+  const currentUserId = rawUserId ? parseInt(rawUserId) : null;
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterChips = document.querySelectorAll('.filter-chip');
+    filterChips.forEach(chip => {
+      chip.addEventListener('click', function() {
+        selectedSport = this.dataset.sport || '';
+        filterChips.forEach(c => c.classList.remove('active'));
+        this.classList.add('active');
+        filterEvents();
+      });
+    });
     
-    <script>
-        let currentCategory = '{{ selected_category|default:"all" }}';
-        let availableOnly = {{ available_only|yesno:"true,false" }};
-        
-        // Sport emoji mapping
-        const sportEmojis = {
-            'tennis': '🎾',
-            'basketball': '🏀',
-            'soccer': '⚽',
-            'badminton': '🏸',
-            'volleyball': '🏐',
-            'futsal': '⚽',
-            'paddle': '🏓',
-            'table_tennis': '🏓',
-            'swimming': '🏊'
-        };
-        
-        // Setup sport filter dropdown
-        const sportFilter = document.getElementById('sportFilter');
-        sportFilter.addEventListener('change', function() {
-            currentCategory = this.value;
-            loadEvents();
+    const viewTabs = document.querySelectorAll('.view-tab');
+    viewTabs.forEach(tab => {
+      tab.addEventListener('click', function() {
+        currentView = this.dataset.view || 'all';
+        viewTabs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        filterEvents();
+      });
+    });
+    
+    const availableCheckbox = document.getElementById('availableOnly');
+    if (availableCheckbox) {
+      availableCheckbox.addEventListener('change', filterEvents);
+    }
+    
+    const searchInput = document.getElementById('searchInput');
+    let searchTimeout;
+    if (searchInput) {
+      searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(filterEvents, 300);
+      });
+    }
+    
+    document.querySelectorAll('.event-card').forEach(card => {
+      const detailUrl = card.dataset.detailUrl;
+      
+      card.addEventListener('click', function(e) {
+        if (!e.target.closest('.detail-btn')) {
+          window.location.href = detailUrl;
+        }
+      });
+      
+      const detailBtn = card.querySelector('.detail-btn');
+      if (detailBtn) {
+        detailBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          window.location.href = detailUrl;
         });
-        
-        // Setup available checkbox
-        const checkbox = document.getElementById('showAvailableOnly');
-        checkbox.addEventListener('change', function() {
-            availableOnly = this.checked;
-            loadEvents();
-        });
-        
-        // Setup search with debounce
-        const searchInput = document.getElementById('searchInput');
-        let debounceTimer;
-        
-        searchInput.addEventListener('input', function() {
-            clearTimeout(debounceTimer);
-            debounceTimer = setTimeout(() => {
-                loadEvents();
-            }, 500);
-        });
-        
-        // Enter key untuk search
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                loadEvents();
-            }
-        });
-        
-        // Search button
-        function searchEvents() {
-            loadEvents();
-        }
-        
-        // Load events via AJAX
-        function loadEvents() {
-            const searchQuery = searchInput.value;
-            const eventGrid = document.getElementById('eventGrid');
-            const loadingState = document.getElementById('loadingState');
-            const emptyState = document.getElementById('emptyState');
-            
-            // Show loading
-            eventGrid.innerHTML = '';
-            loadingState.classList.remove('hidden');
-            emptyState.classList.add('hidden');
-            
-            // Build query params
-            let url = '{% url "event:ajax_search" %}?';
-            if (currentCategory !== 'all') {
-                url += `sport=${currentCategory}&`;
-            }
-            if (availableOnly) {
-                url += `available=true&`;
-            }
-            if (searchQuery) {
-                url += `search=${encodeURIComponent(searchQuery)}&`;
-            }
-            
-            // Fetch events
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    loadingState.classList.add('hidden');
-                    
-                    if (data.events && data.events.length > 0) {
-                        renderEvents(data.events);
-                    } else {
-                        emptyState.classList.remove('hidden');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading events:', error);
-                    loadingState.classList.add('hidden');
-                    emptyState.classList.remove('hidden');
-                });
-        }
-        
-        // Render events
-        function renderEvents(events) {
-            const eventGrid = document.getElementById('eventGrid');
-            eventGrid.innerHTML = '';
-            
-            events.forEach(event => {
-                const eventCard = createEventCard(event);
-                eventGrid.appendChild(eventCard);
-            });
-        }
-        
-        // Create event card
-        function createEventCard(event) {
-            const card = document.createElement('div');
-            card.className = 'event-card';
-            
-            // Badge class
-            const badgeClass = event.status === 'available' ? 'badge-available' : 'badge-unavailable';
-            const badgeText = event.status === 'available' ? 'Tersedia' : 'Tidak Tersedia';
-            
-            // Format sport type
-            const sportType = formatSportType(event.sport_type);
-            const sportEmoji = sportEmojis[event.sport_type] || '🏃';
-            
-            card.innerHTML = `
-                <!-- Colorful Header with Sport Type -->
-                <div class="sport-header sport-${event.sport_type}">
-                    <div class="sport-emoji">${sportEmoji}</div>
-                    <div class="sport-badge">${sportType}</div>
-                    <h3 class="event-title-header">${event.name}</h3>
-                </div>
-                
-                <div class="event-content">
-                    <!-- Status Badge -->
-                    <div class="mb-3">
-                        <span class="${badgeClass}">${badgeText}</span>
-                    </div>
-                    
-                    <!-- Location Info -->
-                    <div class="info-item">
-                        <svg class="info-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                        </svg>
-                        <span>${event.city || 'Jakarta'}</span>
-                    </div>
-                    
-                    <!-- Rating Info -->
-                    <div class="info-item">
-                        <svg class="info-icon" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        <span>Rating: ${event.rating || '0.00'}</span>
-                    </div>
-                    
-                    <!-- Price -->
-                    <div class="price-display">
-                        Rp ${formatPrice(event.entry_price || 100000)}<span class="price-unit">/jam</span>
-                    </div>
-                    
-                    <!-- Button -->
-                    <a href="/event/${event.id}/" class="btn-primary">
-                        Lihat Detail & Booking
-                    </a>
-                </div>
-            `;
-            
-            return card;
-        }
-        
-        // Format sport type
-        function formatSportType(sportType) {
-            const sportMap = {
-                'tennis': 'Tennis',
-                'basketball': 'Basketball',
-                'soccer': 'Soccer',
-                'badminton': 'Badminton',
-                'volleyball': 'Volleyball',
-                'futsal': 'Futsal',
-                'paddle': 'Paddle',
-                'table_tennis': 'Table Tennis',
-                'swimming': 'Swimming'
-            };
-            return sportMap[sportType] || sportType;
-        }
-        
-        // Format price
-        function formatPrice(price) {
-            return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-        }
-    </script>
-</body>
-</html>
+      }
+    });
+  });
+
+  function filterEvents() {
+    const searchQuery = document.getElementById('searchInput')?.value.toLowerCase().trim() || '';
+    const availableOnly = document.getElementById('availableOnly')?.checked || false;
+    const eventCards = document.querySelectorAll('.event-card');
+    const noResults = document.getElementById('noResults');
+    
+    let visibleCount = 0;
+
+    eventCards.forEach(card => {
+      const cardSport = card.dataset.sport || '';
+      const cardStatus = card.dataset.status || '';
+      const cardName = card.dataset.name || '';
+      const cardCity = card.dataset.city || '';
+      const cardOrganizer = card.dataset.organizer || '';
+      const isRegistered = card.dataset.isRegistered === 'true';
+
+      const matchesSport = !selectedSport || cardSport === selectedSport;
+      const matchesAvailability = !availableOnly || cardStatus === 'available';
+      const matchesSearch = !searchQuery || 
+        cardName.includes(searchQuery) || 
+        cardCity.includes(searchQuery);
+
+      let matchesView = true;
+      if (currentView === 'my_bookings') {
+        matchesView = isRegistered;
+      } else if (currentView === 'created') {
+        matchesView = currentUserId !== null && parseInt(cardOrganizer) === currentUserId;
+      }
+
+      if (matchesSport && matchesAvailability && matchesSearch && matchesView) {
+        card.style.display = '';
+        visibleCount++;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (noResults) {
+      noResults.style.display = (visibleCount === 0 && eventCards.length > 0) ? 'block' : 'none';
+    }
+  }
+</script>
+
+{% endblock content %}
