@@ -9,7 +9,7 @@ urlpatterns = [
     path('<int:pk>/', views.event_detail, name='event_detail'),
     path('add/', views.add_event, name='add_event'),
     path('<int:pk>/edit/', views.edit_event, name='edit_event'),
-    path('my-bookings/', views.my_bookings, name='my_bookings'),  # NEW
+    path('my-bookings/', views.my_bookings, name='my_bookings'),
     
     # AJAX endpoints for Search & Filter
     path('ajax/search/', views.ajax_search_events, name='ajax_search'),
@@ -26,4 +26,12 @@ urlpatterns = [
     path('<int:pk>/ajax/cancel/', views.ajax_cancel_registration, name='ajax_cancel'),
     path('<int:pk>/ajax/toggle-availability/', views.ajax_toggle_availability, name='ajax_toggle_availability'),
     path('<int:pk>/ajax/schedules/', views.ajax_get_schedules, name='ajax_schedules'),
+    
+    # JSON ENDPOINTS FOR FLUTTER 
+    path('json/', views.json_events, name='json_events'),
+    path('json/<int:pk>/', views.json_event_detail, name='json_event_detail'),
+    path('json/create/', views.json_create_event, name='json_create'),
+    path('json/<int:pk>/join/', views.json_join_event, name='json_join'),
+    path('json/<int:pk>/cancel/', views.json_cancel_event, name='json_cancel'),
+    path('json/my-bookings/', views.json_my_bookings, name='json_my_bookings'),
 ]

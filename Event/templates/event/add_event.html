@@ -2,572 +2,342 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Event - Move Buddy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Background yang SANGAT subtle - hampir tidak terlihat */
-        body {
-            background-color: #f9fafb;
-            background-image: url('{% static "img/bg.png" %}');
-            background-repeat: repeat;
-            background-size: 300px 300px;
-            background-attachment: fixed;
-            position: relative;
-        }
-        
-        /* Overlay putih SANGAT kuat agar background hampir tidak terlihat */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.97);
-            z-index: 0;
-        }
-        
-        /* Container untuk konten */
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* White container box untuk form */
-        .form-box {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        /* Form input styling */
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 15px;
-            background: white;
-            transition: all 0.2s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #a3e635;
-            box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.1);
-        }
-        
-        .form-input::placeholder {
-            color: #d1d5db;
-        }
-        
-        /* Textarea */
-        textarea.form-input {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        /* Select dropdown */
-        select.form-input {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
-        }
-        
-        /* Label styling */
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #374151;
-            font-size: 14px;
-        }
-        
-        /* Button styling */
-        .btn-save {
-            background: #a3e635;
-            color: #1a1a1a;
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        
-        .btn-save:hover {
-            background: #8cc520;
-        }
-        
-        .btn-add-date {
-            background: #3b82f6;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .btn-add-date:hover {
-            background: #2563eb;
-        }
-        
-        /* File upload styling */
-        .file-upload {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 15px;
-            background: white;
-            cursor: pointer;
-        }
-        
-        .file-upload::-webkit-file-upload-button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            background: #f3f4f6;
-            color: #374151;
-            font-weight: 500;
-            cursor: pointer;
-            margin-right: 12px;
-        }
-        
-        .file-upload::-webkit-file-upload-button:hover {
-            background: #e5e7eb;
-        }
-        
-        /* Form group spacing */
-        .form-group {
-            margin-bottom: 24px;
-        }
-        
-        /* Optional text */
-        .optional-text {
-            color: #9ca3af;
-            font-size: 13px;
-            margin-top: 4px;
-        }
-        
-        /* Page title */
-        .page-title {
-            font-size: 32px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 32px;
-            color: #1a1a1a;
-        }
-        
-        /* Schedule box styling */
-        .schedule-box {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 24px;
-        }
-        
-        .schedule-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .schedule-description {
-            color: #6b7280;
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-        
-        /* Date item styling */
-        .date-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
-            background: white;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-        
-        .date-text {
-            flex: 1;
-            color: #374151;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .btn-remove-date {
-            background: #ef4444;
-            color: white;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            font-weight: 600;
-            border: none;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-remove-date:hover {
-            background: #dc2626;
-        }
-        
-        .dates-list {
-            margin-bottom: 12px;
-        }
-        
-        .empty-dates {
-            color: #9ca3af;
-            font-size: 14px;
-            font-style: italic;
-            text-align: center;
-            padding: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Event - MoveBuddy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #f6f7fb;
+      color: #0f172a;
+    }
+    .bg-form-main {
+      background-image: url('{% static "img/bg.png" %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: repeat;
+    }
+    .content-wrapper { position: relative; z-index: 10; }
+    .glass-panel {
+      background: rgba(255,255,255,0.96);
+      box-shadow: 0 28px 70px rgba(15,23,42,0.10);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(148,163,184,0.25);
+    }
+    .input-shell {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .input-label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #475569;
+    }
+    .input-field {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      padding: 14px 16px;
+      background: #fff;
+      font-weight: 600;
+      color: #0f172a;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 1px 0 rgba(148,163,184,0.12);
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #a3e635;
+      box-shadow: 0 0 0 4px rgba(163,230,53,0.18);
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 9999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+    .section-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .schedule-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #a3e635, #65a30d);
+      color: #0f172a;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: none;
+      padding: 16px 20px;
+      border-radius: 14px;
+      width: 100%;
+      transition: all 0.2s ease;
+      box-shadow: 0 14px 40px rgba(100,149,15,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-ghost {
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      color: #0f172a;
+      transition: all 0.2s ease;
+    }
+    .btn-ghost:hover { border-color: #94a3b8; }
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #e2e8f0, transparent);
+    }
+  </style>
 </head>
 <body>
-    <!-- Include Navbar -->
-    {% include 'includes/navbar.html' %}
-    
+  {% include 'includes/navbar.html' %}
+  <section class="relative min-h-screen overflow-hidden">
+    <div class="bg-form-main absolute inset-0 bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-white/95"></div>
+
     <div class="content-wrapper">
-        <!-- Main Container -->
-        <div class="max-w-7xl mx-auto px-4 py-8">
-            
-            <!-- White Container Box untuk form -->
-            <div class="form-box">
-                
-                <h1 class="page-title">Add New Event</h1>
-                
-                <form method="POST" enctype="multipart/form-data" id="eventForm">
-                    {% csrf_token %}
-                    
-                    <!-- Event Name -->
-                    <div class="form-group">
-                        <label class="form-label">Event Name</label>
-                        <input 
-                            type="text" 
-                            name="name"
-                            class="form-input" 
-                            placeholder="Event name"
-                            required
-                        />
-                    </div>
-                    
-                    <!-- Sport Type -->
-                    <div class="form-group">
-                        <label class="form-label">Sport Type</label>
-                        <select name="sport_type" class="form-input" required>
-                            <option value="">------</option>
-                            <option value="tennis">Tennis</option>
-                            <option value="basketball">Basketball</option>
-                            <option value="soccer">Soccer</option>
-                            <option value="badminton">Badminton</option>
-                            <option value="volleyball">Volleyball</option>
-                            <option value="futsal">Futsal</option>
-                            <option value="paddle">Paddle</option>
-                            <option value="table_tennis">Table Tennis</option>
-                            <option value="swimming">Swimming</option>
-                        </select>
-                    </div>
-                    
-                    <!-- City -->
-                    <div class="form-group">
-                        <label class="form-label">City</label>
-                        <input 
-                            type="text" 
-                            name="city" 
-                            class="form-input" 
-                            placeholder="City"
-                            required
-                        />
-                    </div>
-                    
-                    <!-- Full Address -->
-                    <div class="form-group">
-                        <label class="form-label">Full Address</label>
-                        <textarea 
-                            name="full_address"
-                            class="form-input" 
-                            placeholder="Complete address"
-                            required
-                        ></textarea>
-                    </div>
-                    
-                    <!-- Entry Price -->
-                    <div class="form-group">
-                        <label class="form-label">Entry Price (IDR)</label>
-                        <input 
-                            type="number" 
-                            name="entry_price" 
-                            class="form-input" 
-                            placeholder="Entry Price (IDR)"
-                            step="0.01"
-                            required
-                        />
-                    </div>
-                    
-                    <!-- Activities -->
-                    <div class="form-group">
-                        <label class="form-label">Activities (comma separated)</label>
-                        <input 
-                            type="text" 
-                            name="activities" 
-                            class="form-input" 
-                            placeholder="Activities (comma separated)"
-                            required
-                        />
-                    </div>
-                    
-                    <!-- Rating -->
-                    <div class="form-group">
-                        <label class="form-label">Rating (optional)</label>
-                        <input 
-                            type="number" 
-                            name="rating" 
-                            class="form-input" 
-                            placeholder="0"
-                            step="0.01"
-                            min="0"
-                            max="5"
-                        />
-                    </div>
-                    
-                    <!-- Short Description -->
-                    <div class="form-group">
-                        <label class="form-label">Short description (optional)</label>
-                        <textarea 
-                            name="description" 
-                            class="form-input" 
-                            placeholder="Enter a brief description"
-                        ></textarea>
-                    </div>
-                    
-                    <!-- Google Maps Link -->
-                    <div class="form-group">
-                        <label class="form-label">Google Maps link</label>
-                        <input 
-                            type="url" 
-                            name="google_maps_link" 
-                            class="form-input" 
-                            placeholder="https://maps.google.com/?q=6.2,106.8"
-                        />
-                        <p class="optional-text">Optional: paste a Google Maps link to update coordinates automatically</p>
-                    </div>
-                    
-                    <!-- Category -->
-                    <div class="form-group">
-                        <label class="form-label">Category</label>
-                        <input 
-                            type="text" 
-                            name="category" 
-                            class="form-input" 
-                            placeholder="category 1"
-                            value="category 1"
-                        />
-                    </div>
-                    
-                    <!-- Status -->
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="form-input">
-                            <option value="available">Available</option>
-                            <option value="unavailable">Unavailable</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Event Photo -->
-                    <div class="form-group">
-                        <label class="form-label">Event Photo (optional)</label>
-                        <input 
-                            type="file" 
-                            name="photo" 
-                            class="file-upload"
-                            accept="image/*"
-                        />
-                    </div>
-                    
-                    <!-- Event Schedules Section -->
-                    <div class="schedule-box">
-                        <h3 class="schedule-title">
-                            📅 Event Schedules
-                        </h3>
-                        <p class="schedule-description">
-                            Add or remove dates when this event will be held
-                        </p>
-                        
-                        <!-- Dates List -->
-                        <div id="datesList" class="dates-list">
-                            <div class="empty-dates">No dates added yet</div>
-                        </div>
-                        
-                        <!-- Add Date Input -->
-                        <div style="display: flex; gap: 8px;">
-                            <input 
-                                type="date" 
-                                id="newDateInput"
-                                class="form-input"
-                                style="flex: 1;"
-                            />
-                            <button type="button" onclick="addDate()" class="btn-add-date">
-                                + Add Another Date
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <!-- Hidden input to store dates -->
-                    <input type="hidden" name="schedule_dates" id="scheduleDates" value="[]">
-                    
-                    <!-- Save Button -->
-                    <button type="submit" class="btn-save">
-                        Save Event
-                    </button>
-                    
-                </form>
-                
-            </div>
-            
+      <main class="mx-auto max-w-6xl px-4 sm:px-6 py-10 sm:py-12 space-y-8">
+        <div class="text-center space-y-3">
+          <div class="chip mx-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12m-6-6h12" />
+            </svg>
+            Add Event
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-black tracking-[0.18em] uppercase text-slate-900">Tambah Event Baru</h1>
+          <p class="text-slate-600 font-semibold">Bantu pengguna lain menemukan dan melakukan booking dengan cepat.</p>
         </div>
+
+        <div class="glass-panel rounded-[28px] p-6 sm:p-8">
+          <form id="eventForm" method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="input-shell">
+                <label class="input-label">Event Name</label>
+                <input type="text" name="name" class="input-field" placeholder="Nama event" required />
+              </div>
+              <div class="input-shell">
+                <label class="input-label">Sport Type</label>
+                <select name="sport_type" class="input-field" required>
+                  <option value="">Pilih jenis olahraga</option>
+                  <option value="tennis">Tennis</option>
+                  <option value="basketball">Basketball</option>
+                  <option value="soccer">Soccer</option>
+                  <option value="badminton">Badminton</option>
+                  <option value="volleyball">Volleyball</option>
+                  <option value="futsal">Futsal</option>
+                  <option value="paddle">Paddle</option>
+                  <option value="table_tennis">Table Tennis</option>
+                  <option value="swimming">Swimming</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="input-shell">
+                <label class="input-label">City</label>
+                <input type="text" name="city" class="input-field" placeholder="Kota" required />
+              </div>
+              <div class="input-shell md:col-span-1">
+                <label class="input-label">Full Address</label>
+                <textarea name="full_address" class="input-field" placeholder="Alamat lengkap" required rows="2"></textarea>
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="input-shell">
+                <label class="input-label">Entry Price (IDR)</label>
+                <input type="number" name="entry_price" class="input-field" placeholder="Contoh: 30000" step="0.01" required />
+                <p class="text-xs text-slate-500 font-semibold">Akan diformat otomatis dengan tanda titik.</p>
+              </div>
+              <div class="input-shell">
+                <label class="input-label">Rating (0-5, optional)</label>
+                <input type="number" name="rating" class="input-field" placeholder="4.5" step="0.01" min="0" max="5" />
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="input-shell">
+                <label class="input-label">Activities / Facilities</label>
+                <input type="text" name="activities" class="input-field" placeholder="Misal: Lapangan indoor, Ruang ganti, Parkir luas" />
+              </div>
+              <div class="input-shell">
+                <label class="input-label">Short Description</label>
+                <textarea name="description" class="input-field" placeholder="Deskripsi singkat, keunggulan, dsb." rows="2"></textarea>
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3">
+              <div class="input-shell md:col-span-2">
+                <label class="input-label">Google Maps Link</label>
+                <input type="url" name="google_maps_link" class="input-field" placeholder="https://maps.google.com/?q=-6.2,106.8" />
+                <p class="text-xs text-slate-500 font-semibold">Opsional: tempelkan link Google Maps untuk pembaruan koordinat.</p>
+              </div>
+              <div class="input-shell">
+                <label class="input-label">Category</label>
+                <input type="text" name="category" class="input-field" value="category 1" />
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2 md:items-start">
+              <div class="input-shell">
+                <label class="input-label">Status</label>
+                <select name="status" class="input-field">
+                  <option value="available">Available</option>
+                  <option value="unavailable">Unavailable</option>
+                </select>
+              </div>
+              <div class="grid gap-4 sm:grid-cols-2 sm:items-start">
+                <div class="input-shell sm:col-span-1">
+                  <label class="input-label">Photo URL (opsional)</label>
+                  <input id="photoUrlInput" type="url" class="input-field" placeholder="Tempel URL gambar jika ada" />
+                  <p class="text-[11px] text-slate-500 font-semibold">Jika tidak ada file, kami ambil gambar dari URL ini.</p>
+                </div>
+                <div class="input-shell sm:col-span-1">
+                  <label class="input-label">Upload Photo</label>
+                  <input type="file" name="photo" class="input-field" accept="image/*" />
+                </div>
+              </div>
+            </div>
+
+            <div class="section-card space-y-3">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Jadwal Event</p>
+                  <p class="text-sm text-slate-600 font-semibold">Tambahkan tanggal yang tersedia untuk booking.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="date" id="newDateInput" class="input-field w-44" />
+                  <button type="button" onclick="addDate()" class="btn-ghost text-sm uppercase tracking-[0.12em]">+ Tambah Tanggal</button>
+                </div>
+              </div>
+              <div id="datesList" class="flex flex-wrap gap-3">
+                <div class="text-slate-400 text-sm font-semibold italic">Belum ada tanggal.</div>
+              </div>
+            </div>
+
+            <input type="hidden" name="schedule_dates" id="scheduleDates" value="[]">
+
+            <div class="divider"></div>
+
+            <button type="submit" class="btn-primary">Simpan Event</button>
+          </form>
+        </div>
+      </main>
     </div>
-    
-    <script>
-        // Store dates array
-        let eventDates = [];
-        
-        // Add date function
-        function addDate() {
-            const dateInput = document.getElementById('newDateInput');
-            const dateValue = dateInput.value;
-            
-            if (!dateValue) {
-                alert('Please select a date');
-                return;
-            }
-            
-            // Check if date already exists
-            if (eventDates.includes(dateValue)) {
-                alert('This date has already been added');
-                return;
-            }
-            
-            // Add to array
-            eventDates.push(dateValue);
-            
-            // Update UI
-            renderDates();
-            
-            // Clear input
-            dateInput.value = '';
+  </section>
+
+  <script>
+    let eventDates = [];
+
+    function renderDates() {
+      const list = document.getElementById('datesList');
+      const hidden = document.getElementById('scheduleDates');
+      if (!eventDates.length) {
+        list.innerHTML = '<div class="text-slate-400 text-sm font-semibold italic">Belum ada tanggal.</div>';
+      } else {
+        list.innerHTML = eventDates.map(date => {
+          const readable = new Date(date + 'T00:00:00').toLocaleDateString('id-ID', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+          });
+          return `
+            <div class="schedule-pill">
+              <span>${readable}</span>
+              <button type="button" class="text-rose-600 font-bold" onclick="removeDate('${date}')">Hapus</button>
+            </div>
+          `;
+        }).join('');
+      }
+      hidden.value = JSON.stringify(eventDates);
+    }
+
+    function addDate() {
+      const input = document.getElementById('newDateInput');
+      const value = input.value;
+      if (!value) return alert('Pilih tanggal terlebih dahulu.');
+      if (eventDates.includes(value)) return alert('Tanggal sudah ditambahkan.');
+      eventDates.push(value);
+      renderDates();
+      input.value = '';
+    }
+
+    function removeDate(date) {
+      eventDates = eventDates.filter(d => d !== date);
+      renderDates();
+    }
+
+    document.addEventListener('DOMContentLoaded', renderDates);
+
+    document.getElementById('eventForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      formData.set('schedule_dates', JSON.stringify(eventDates));
+
+      const fileInput = this.querySelector('input[name="photo"]');
+      const file = fileInput?.files?.[0];
+      const photoUrl = document.getElementById('photoUrlInput')?.value.trim();
+
+      if (!file && photoUrl) {
+        try {
+          const response = await fetch(photoUrl);
+          if (!response.ok) throw new Error('Gagal mengambil gambar dari URL');
+          const blob = await response.blob();
+          const ext = (blob.type && blob.type.split('/')[1]) || 'jpg';
+          const filename = `event-photo.${ext}`;
+          formData.set('photo', new File([blob], filename, { type: blob.type || 'image/jpeg' }));
+        } catch (err) {
+          alert(err.message || 'Gagal memuat foto dari URL, coba unggah manual.');
+          return;
         }
-        
-        // Remove date function
-        function removeDate(date) {
-            eventDates = eventDates.filter(d => d !== date);
-            renderDates();
-        }
-        
-        // Render dates list
-        function renderDates() {
-            const datesList = document.getElementById('datesList');
-            const scheduleDatesInput = document.getElementById('scheduleDates');
-            
-            if (eventDates.length === 0) {
-                datesList.innerHTML = '<div class="empty-dates">No dates added yet</div>';
-            } else {
-                datesList.innerHTML = eventDates.map(date => {
-                    const formattedDate = new Date(date + 'T00:00:00').toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric'
-                    });
-                    
-                    return `
-                        <div class="date-item">
-                            <span class="date-text">${formattedDate}</span>
-                            <button type="button" onclick="removeDate('${date}')" class="btn-remove-date">
-                                Remove
-                            </button>
-                        </div>
-                    `;
-                }).join('');
+      }
+
+      fetch('{% url "event:add_event" %}', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('Event created successfully!');
+          window.location.href = data.redirect_url || '/event/';
+        } else {
+          let msg = 'Failed to create event';
+          if (data.errors) {
+            msg += ':\n';
+            for (const field in data.errors) {
+              msg += `${field}: ${data.errors[field]}\n`;
             }
-            
-            // Update hidden input with JSON
-            scheduleDatesInput.value = JSON.stringify(eventDates);
+          }
+          alert(msg);
         }
-        
-        // Form submission handling
-        document.getElementById('eventForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(this);
-            
-            // Debug: Log schedule dates
-            console.log('Schedule dates being sent:', eventDates);
-            console.log('Schedule dates JSON:', JSON.stringify(eventDates));
-            
-            // Make sure schedule_dates is set correctly
-            formData.set('schedule_dates', JSON.stringify(eventDates));
-            
-            // Debug: Log all form data
-            for (let pair of formData.entries()) {
-                console.log(pair[0] + ': ' + pair[1]);
-            }
-            
-            fetch('{% url "event:add_event" %}', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Show success message
-                    alert('Event created successfully!');
-                    // Redirect to event detail page
-                    window.location.href = data.redirect_url || '/event/';
-                } else {
-                    // Show error message
-                    let errorMsg = 'Failed to create event';
-                    if (data.errors) {
-                        errorMsg += ':\n';
-                        for (let field in data.errors) {
-                            errorMsg += `${field}: ${data.errors[field]}\n`;
-                        }
-                    }
-                    alert(errorMsg);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            });
-        });
-    </script>
+      })
+      .catch(() => alert('An error occurred. Please try again.'));
+    });
+  </script>
 </body>
 </html>
