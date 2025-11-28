@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.db.models import Q, Min
-from datetime import datetime
+from datetime import datetime, date
 import json
+import requests
+from django.core.files.base import ContentFile
+from urllib.parse import urlparse
 
 from .models import Event, EventSchedule, EventRegistration
 from .forms import EventForm
@@ -41,6 +44,22 @@ def _to_decimal(s):
         return Decimal(s)
     except:
         return Decimal('0')
+
+def _download_image_from_url(url):
+    """Download image from URL and return ContentFile or None."""
+    if not url:
+        return None
+    try:
+        resp = requests.get(url, timeout=10)
+        resp.raise_for_status()
+        file_name = urlparse(url).path.split('/')[-1] or 'image-from-url'
+        content_type = resp.headers.get('Content-Type', 'image/jpeg')
+        ext = content_type.split('/')[-1] if '/' in content_type else 'jpg'
+        if '.' not in file_name:
+            file_name = f"{file_name}.{ext}"
+        return ContentFile(resp.content, name=file_name)
+    except Exception:
+        return None
 
 # ==================== EVENT LIST ====================
 def event_list(request):
@@ -164,6 +183,14 @@ def add_event(request):
         if form.is_valid():
             event = form.save(commit=False)
             event.organizer = request.user
+            
+            # Handle photo from URL if no file uploaded
+            photo_url = request.POST.get('photo_url')
+            if not request.FILES.get('photo') and photo_url:
+                downloaded = _download_image_from_url(photo_url)
+                if downloaded:
+                    event.photo = downloaded
+
             event.save()
             
             # Process schedule_dates
@@ -216,6 +243,8 @@ def edit_event(request, pk):
             return JsonResponse({'success': False, 'message': 'Forbidden'}, status=403)
         return redirect('/event/')
 
+    schedules = EventSchedule.objects.filter(event=event).order_by('date')
+
     if request.method == 'POST':
         is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
         form = EventForm(request.POST, request.FILES if request.FILES else None, instance=event)
@@ -223,7 +252,44 @@ def edit_event(request, pk):
         if form.is_valid():
             event = form.save(commit=False)
             event.organizer = request.user
+            
+            # Handle clear photo
+            if request.POST.get('clear_photo'):
+                event.photo.delete(save=False)
+                event.photo = None
+
+            # Handle photo from URL if no new file uploaded
+            photo_url = request.POST.get('photo_url')
+            if not request.FILES.get('photo') and photo_url:
+                downloaded = _download_image_from_url(photo_url)
+                if downloaded:
+                    event.photo = downloaded
+
             event.save()
+
+            # Update schedules from JSON list
+            schedule_dates_json = request.POST.get('schedule_dates', '[]')
+            try:
+                schedule_dates = json.loads(schedule_dates_json)
+                new_dates = set()
+                for date_str in schedule_dates:
+                    try:
+                        new_dates.add(datetime.strptime(date_str, '%Y-%m-%d').date())
+                    except ValueError:
+                        continue
+
+                # Remove schedules not in new list
+                EventSchedule.objects.filter(event=event).exclude(date__in=new_dates).delete()
+
+                # Add or keep schedules in new list
+                for d in new_dates:
+                    EventSchedule.objects.get_or_create(
+                        event=event,
+                        date=d,
+                        defaults={'is_available': True}
+                    )
+            except json.JSONDecodeError:
+                pass
             
             if is_ajax:
                 return JsonResponse({
@@ -239,7 +305,11 @@ def edit_event(request, pk):
     else:
         form = EventForm(instance=event)
     
-    return render(request, 'event/edit_event.html', {'form': form, 'event': event})
+    return render(request, 'event/edit_event.html', {
+        'form': form,
+        'event': event,
+        'schedules': schedules
+    })
 
 # ==================== DELETE EVENT ====================
 @custom_login_required
