@@ -608,6 +608,7 @@ def set_availability(request, court_id):
     return JsonResponse({'success': True, 'available': slot.is_available})
 
 @require_http_methods(["POST"])
+@csrf_exempt
 def create_booking(request):
     """
     Create booking by marking a specific date as unavailable.
