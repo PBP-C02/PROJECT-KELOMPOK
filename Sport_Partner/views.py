@@ -199,7 +199,7 @@ def show_json(request):
     posts = PartnerPost.objects.select_related('creator').all()
     data = []
 
-    # Cek siapa user yang sedang request (untuk status is_participant)
+    # Cek user yang login
     current_user_id = request.session.get('user_id')
     current_user = None
     if current_user_id:
@@ -209,10 +209,26 @@ def show_json(request):
             pass
 
     for post in posts:
-        # Logika cek apakah user sudah join
         is_participant = False
+        is_creator = False
+        
+        # Default value jika creator NULL (misal data dummy lama)
+        creator_name = "Unknown"
+        creator_id = "0"
+
+        # Logika User Login
         if current_user:
             is_participant = post.is_participant(current_user)
+        
+        # --- SAFETY CHECK: Pastikan Creator TIDAK NULL sebelum akses properti ---
+        if post.creator:
+            creator_name = post.creator.nama # Pastikan model User punya field 'nama'
+            creator_id = str(post.creator.id)
+            
+            # Cek Kepemilikan (Is Creator?)
+            if current_user and post.creator.id == current_user.id:
+                is_creator = True
+        # ------------------------------------------------------------------------
 
         data.append({
             "post_id": str(post.post_id),
@@ -220,16 +236,65 @@ def show_json(request):
             "description": post.description,
             "category": post.category,
             "tanggal": str(post.tanggal),
-            "jam_mulai": post.jam_mulai.strftime("%H:%M"), # Format jam biar rapi
+            "jam_mulai": post.jam_mulai.strftime("%H:%M"),
             "jam_selesai": post.jam_selesai.strftime("%H:%M"),
             "lokasi": post.lokasi,
             
-            # INI KUNCI PERBAIKANNYA:
-            "creator_name": post.creator.nama,  # Ambil nama dari relasi creator
-            "creator_id": str(post.creator.id),
+            # Data Creator yang sudah aman
+            "creator_name": creator_name,
+            "creator_id": creator_id,
             
             "total_participants": post.total_participants,
-            "is_participant": is_participant
+            "is_participant": is_participant,
+            "is_creator": is_creator 
         })
         
     return JsonResponse(data, safe=False)
+
+@csrf_exempt
+def edit_post_json(request, post_id):
+    if 'user_id' not in request.session:
+        return JsonResponse({'success': False, 'message': 'Login required'}, status=401)
+
+    if request.method == 'POST':
+        post = get_object_or_404(PartnerPost, post_id=post_id)
+        
+        # Cek apakah yang edit adalah creator asli
+        if str(post.creator.id) != str(request.session['user_id']):
+             return JsonResponse({'success': False, 'message': 'Unauthorized'}, status=403)
+
+        data = json.loads(request.body)
+        
+        # Update field
+        post.title = data.get('title', post.title)
+        post.description = data.get('description', post.description)
+        post.category = data.get('category', post.category)
+        post.lokasi = data.get('lokasi', post.lokasi)
+        
+        # Update tanggal/waktu jika ada
+        if 'tanggal' in data:
+            post.tanggal = data['tanggal']
+        if 'jam_mulai' in data:
+            post.jam_mulai = data['jam_mulai']
+        if 'jam_selesai' in data:
+            post.jam_selesai = data['jam_selesai']
+            
+        post.save()
+        return JsonResponse({'success': True, 'message': 'Post updated successfully'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid method'}, status=405)
+
+@csrf_exempt
+def delete_post_json(request, post_id):
+    if 'user_id' not in request.session:
+        return JsonResponse({'success': False, 'message': 'Login required'}, status=401)
+
+    if request.method == 'POST':
+        post = get_object_or_404(PartnerPost, post_id=post_id)
+        
+        # Cek authorization
+        if str(post.creator.id) != str(request.session['user_id']):
+             return JsonResponse({'success': False, 'message': 'Unauthorized'}, status=403)
+             
+        post.delete()
+        return JsonResponse({'success': True, 'message': 'Post deleted successfully'})

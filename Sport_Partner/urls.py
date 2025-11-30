@@ -11,4 +11,6 @@ urlpatterns = [
     path('post/<uuid:post_id>/join/', join_post, name='join_post'),
     path('json/', show_json, name='show_json'),
     path('post/<uuid:post_id>/leave/', leave_post, name='leave_post'),
+    path('post/<uuid:post_id>/edit-json/', edit_post_json, name='edit_post_json'),
+    path('post/<uuid:post_id>/delete-json/', delete_post_json, name='delete_post_json'),
 ]
