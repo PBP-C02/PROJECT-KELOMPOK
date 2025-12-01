@@ -17,6 +17,8 @@ import os
 from django.db.models import Q
 from Auth_Profile.models import User
 import requests
+import base64
+from django.core.files.base import ContentFile
 
 # ==================== CUSTOM LOGIN DECORATOR ====================
 def custom_login_required(view_func):
@@ -565,49 +567,146 @@ def proxy_image(request):
     
 @csrf_exempt
 def create_coach_flutter(request):
+    """
+    Create coach endpoint for Flutter app.
+    Supports 2 methods for image upload:
+    1. Multipart form data (recommended) - send as FILES
+    2. Base64 encoded string in JSON - send as 'image_base64' field
+    """
     # Cek login
     if 'user_id' not in request.session:
         return JsonResponse({'success': False, 'message': 'Silakan login terlebih dahulu'}, status=401)
+    
     if request.method == 'POST':
-        data = json.loads(request.body)
+        try:
+            # Cek apakah request adalah multipart/form-data atau JSON
+            if request.content_type and 'multipart/form-data' in request.content_type:
+                # Method 1: Multipart form data (FILES)
+                data = request.POST
+                image_file = request.FILES.get('image')
+            else:
+                # Method 2: JSON with base64 image
+                data = json.loads(request.body)
+                image_file = None
+                
+                # Decode base64 image jika ada
+                image_base64 = data.get('image_base64')
+                if image_base64:
+                    try:
+                        # Remove data URL prefix if exists (e.g., "data:image/png;base64,")
+                        if ',' in image_base64:
+                            image_base64 = image_base64.split(',')[1]
+                        
+                        # Decode base64
+                        image_data = base64.b64decode(image_base64)
+                        
+                        # Create ContentFile from decoded data
+                        image_file = ContentFile(image_data, name='coach_image.jpg')
+                    except Exception as e:
+                        return JsonResponse({
+                            'success': False, 
+                            'message': f'Invalid image format: {str(e)}'
+                        }, status=400)
 
-        title = strip_tags(data.get("title", ""))
-        description = strip_tags(data.get("description", ""))
-        category = data.get("category", "")
-        location = strip_tags(data.get("location", ""))
-        address = strip_tags(data.get("address", ""))
-        price = int(data.get("price", 0))
-        date_str = data.get("date", "")
-        start_time_str = data.get("startTime", "")
-        end_time_str = data.get("endTime", "")
-        rating = data.get("rating", 0)
-        instagram_link = data.get("instagram_link", "")
-        mapsLink = data.get("mapsLink", "")
-        user = request.user
-        
-        # Parse date and time
-        event_dt = _parse_dt_local(date_str)
-        start_time = _parse_time(start_time_str)
-        end_time = _parse_time(end_time_str)
-        
-        new_coach = Coach(
-            title=title, 
-            description=description,
-            category=category,
-            location=location,
-            address=address,
-            price=price,
-            date=event_dt.date() if event_dt else None,
-            startTime=start_time,
-            endTime=end_time,
-            rating=_to_decimal(rating),
-            instagram_link=instagram_link if instagram_link else None,
-            mapsLink=mapsLink,
-            user=user
-        )
-        new_coach.save()
-        
-        return JsonResponse({"status": "success"}, status=200)
+            # Get user
+            try:
+                user = User.objects.get(id=request.session['user_id'])
+            except User.DoesNotExist:
+                return JsonResponse({
+                    'success': False, 
+                    'message': 'User not found'
+                }, status=404)
+
+            # Extract data
+            title = strip_tags(data.get("title", ""))
+            description = strip_tags(data.get("description", ""))
+            category = data.get("category", "")
+            location = strip_tags(data.get("location", ""))
+            address = strip_tags(data.get("address", ""))
+            
+            try:
+                price = int(data.get("price", 0))
+            except (ValueError, TypeError):
+                return JsonResponse({
+                    'success': False, 
+                    'message': 'Invalid price value'
+                }, status=400)
+            
+            date_str = data.get("date", "")
+            start_time_str = data.get("startTime", "")
+            end_time_str = data.get("endTime", "")
+            rating = data.get("rating", 0)
+            instagram_link = data.get("instagram_link", "")
+            mapsLink = data.get("mapsLink", "")
+            
+            # Parse date and time
+            event_dt = _parse_dt_local(date_str)
+            if not event_dt:
+                return JsonResponse({
+                    'success': False, 
+                    'message': 'Invalid date format. Use YYYY-MM-DDTHH:MM'
+                }, status=400)
+                
+            start_time = _parse_time(start_time_str)
+            end_time = _parse_time(end_time_str)
+            
+            if not start_time or not end_time:
+                return JsonResponse({
+                    'success': False, 
+                    'message': 'Invalid time format. Use HH:MM'
+                }, status=400)
+            
+            # Validate image if provided
+            if image_file:
+                try:
+                    image_file = validate_image(image_file)
+                except ValidationError as e:
+                    return JsonResponse({
+                        'success': False, 
+                        'message': str(e)
+                    }, status=400)
+            
+            # Create coach
+            new_coach = Coach(
+                title=title, 
+                description=description,
+                category=category,
+                location=location,
+                address=address,
+                price=price,
+                date=event_dt.date(),
+                startTime=start_time,
+                endTime=end_time,
+                rating=_to_decimal(rating),
+                instagram_link=instagram_link if instagram_link else None,
+                mapsLink=mapsLink,
+                user=user
+            )
+            
+            # Attach image if provided
+            if image_file:
+                new_coach.image = image_file
+            
+            new_coach.save()
+            
+            return JsonResponse({
+                "success": True,
+                "status": "success",
+                "message": "Coach created successfully",
+                "coach_id": str(new_coach.coach_id),
+                "image_url": new_coach.image.url if new_coach.image else None
+            }, status=200)
+            
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'success': False, 
+                'message': 'Invalid JSON format'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'success': False, 
+                'message': f'Error: {str(e)}'
+            }, status=500)
     else:
         return JsonResponse({"status": "error"}, status=401)
     
