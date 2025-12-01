@@ -511,6 +511,7 @@ def get_court_detail(request, court_id):
 
 
 @require_http_methods(["POST"])
+@csrf_exempt
 def delete_court(request, court_id):
     current_user, error_response = _require_user(request, json_mode=True)
     if error_response:
