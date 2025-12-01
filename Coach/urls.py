@@ -24,5 +24,12 @@ urlpatterns = [
     path('mark-unavailable/<uuid:pk>/', mark_unavailable, name='mark_unavailable'),
     path('delete-coach/<uuid:pk>/', delete_coach, name='delete_coach'),
 
+    # Flutter endpoints
+    path('create-flutter/', create_coach_flutter, name='create_coach_flutter'),
+    path('json/', show_json, name='show_json'),
+    
+    # Proxy image
+    path('proxy-image/', proxy_image, name='proxy_image'),
+
     path('<uuid:pk>/', coach_detail, name='coach_detail'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
