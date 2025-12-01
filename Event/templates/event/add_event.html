@@ -214,7 +214,7 @@
               <div class="grid gap-4 sm:grid-cols-2 sm:items-start">
                 <div class="input-shell sm:col-span-1">
                   <label class="input-label">Photo URL (opsional)</label>
-                  <input id="photoUrlInput" type="url" class="input-field" placeholder="Tempel URL gambar jika ada" />
+                  <input id="photoUrlInput" name="photo_url" type="url" class="input-field" placeholder="Tempel URL gambar jika ada" />
                   <p class="text-[11px] text-slate-500 font-semibold">Jika tidak ada file, kami ambil gambar dari URL ini.</p>
                 </div>
                 <div class="input-shell sm:col-span-1">
@@ -254,13 +254,17 @@
   <script>
     let eventDates = [];
 
+    function setHiddenDates() {
+      document.getElementById('scheduleDates').value = JSON.stringify(eventDates);
+    }
+
     function renderDates() {
       const list = document.getElementById('datesList');
-      const hidden = document.getElementById('scheduleDates');
       if (!eventDates.length) {
         list.innerHTML = '<div class="text-slate-400 text-sm font-semibold italic">Belum ada tanggal.</div>';
       } else {
-        list.innerHTML = eventDates.map(date => {
+        const sorted = [...eventDates].sort();
+        list.innerHTML = sorted.map(date => {
           const readable = new Date(date + 'T00:00:00').toLocaleDateString('id-ID', {
             weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
           });
@@ -272,7 +276,7 @@
           `;
         }).join('');
       }
-      hidden.value = JSON.stringify(eventDates);
+      setHiddenDates();
     }
 
     function addDate() {
@@ -294,10 +298,28 @@
 
     document.getElementById('eventForm').addEventListener('submit', async function(e) {
       e.preventDefault();
+
+      // Auto-capture typed date if user didn't hit the add button
+      const dateInput = document.getElementById('newDateInput');
+      const pendingDate = dateInput?.value;
+      // Only auto-capture typed date if none added yet (avoid unintended extra date)
+      if (!eventDates.length && pendingDate && !eventDates.includes(pendingDate)) {
+        eventDates.push(pendingDate);
+        renderDates();
+      }
+      if (dateInput) {
+        dateInput.value = '';
+        dateInput.blur();
+      }
+
+      if (!eventDates.length) {
+        alert('Please add at least one event date');
+        return;
+      }
       const formData = new FormData(this);
       formData.set('schedule_dates', JSON.stringify(eventDates));
 
-      const fileInput = this.querySelector('input[name="photo"]');
+      const fileInput = this.querySelector('input[name=\"photo\"]');
       const file = fileInput?.files?.[0];
       const photoUrl = document.getElementById('photoUrlInput')?.value.trim();
 

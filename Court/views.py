@@ -1,6 +1,7 @@
 from decimal import Decimal, InvalidOperation
 from datetime import datetime, time
 import json
+import math
 
 from urllib.parse import parse_qs, unquote, urlparse
 
@@ -155,6 +156,19 @@ def _get_user_phone(user):
         return ''
     return getattr(user, 'nomor_handphone', '')
 
+
+def _haversine_km(lat1, lon1, lat2, lon2):
+    """Calculate distance between two lat/lng pairs in kilometers."""
+    try:
+        R = 6371  # Earth radius
+        d_lat = math.radians(float(lat2) - float(lat1))
+        d_lon = math.radians(float(lon2) - float(lon1))
+        a = math.sin(d_lat / 2) ** 2 + math.cos(math.radians(float(lat1))) * math.cos(math.radians(float(lat2))) * math.sin(d_lon / 2) ** 2
+        c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+        return round(R * c, 2)
+    except Exception:
+        return None
+
 def add_court(request):
     """Render and process the create-court form."""
     current_user, error_response = _require_user(request)
@@ -162,7 +176,7 @@ def add_court(request):
         return error_response
 
     if request.method == 'POST':
-        form = CourtForm(request.POST, request.FILES)
+        form = CourtForm(request.POST)
         if form.is_valid():
             court = form.save(commit=False)
             court.owner_name = _get_user_name(current_user)
@@ -195,7 +209,7 @@ def api_add_court(request):
             if error_response:
                 return error_response
             data = request.POST
-            image = request.FILES.get('image')
+            image_url = data.get('image_url')
             price_per_hour = clean_decimal(
                 data.get('price_per_hour'),
                 default=Decimal("0"),
@@ -228,11 +242,11 @@ def api_add_court(request):
                 facilities=data.get('facilities') or "",
                 rating=rating,
                 description=data.get('description'),
+                image_url=image_url,
                 owner_name=_get_user_name(current_user),
                 owner_phone=owner_phone,
                 latitude=latitude,
                 longitude=longitude,
-                image=image,
                 created_by=current_user,
             )
 
@@ -259,7 +273,7 @@ def api_edit_court(request, court_id):
                 }, status=403)
 
             data = request.POST
-            image = request.FILES.get('image')
+            image_url = data.get('image_url') or court.image_url
             price_per_hour = clean_decimal(
                 data.get('price_per_hour'),
                 default=court.price_per_hour,
@@ -301,8 +315,7 @@ def api_edit_court(request, court_id):
             court.description = data.get('description', court.description) or ""
             court.owner_name = _get_user_name(current_user)
             court.owner_phone = owner_phone
-            if image:
-                court.image = image
+            court.image_url = image_url
 
             court.save()
             return JsonResponse({"success": True})
@@ -346,7 +359,7 @@ def edit_court(request, court_id):
     court = get_object_or_404(Court, id=court_id, created_by=current_user)
 
     if request.method == 'POST':
-        form = CourtForm(request.POST, request.FILES, instance=court)
+        form = CourtForm(request.POST, instance=court)
         if form.is_valid():
             court = form.save(commit=False)
             court.owner_name = _get_user_name(current_user)
@@ -390,6 +403,12 @@ def search_Court(request):
     query = request.GET.get('q', '')
     sport = request.GET.get('sport', '')
     location = request.GET.get('location', '')
+    min_price = clean_decimal(request.GET.get('min_price'), min_value=Decimal("0"))
+    max_price = clean_decimal(request.GET.get('max_price'), min_value=Decimal("0"))
+    min_rating = clean_decimal(request.GET.get('min_rating'), min_value=Decimal("0"))
+    sort = request.GET.get('sort', '')
+    user_lat = sanitize_coordinate(request.GET.get('lat'), "latitude")
+    user_lng = sanitize_coordinate(request.GET.get('lng'), "longitude")
     
     # Start with all Court
     courts_qs = Court.objects.all()
@@ -409,20 +428,50 @@ def search_Court(request):
     # Filter by location
     if location:
         courts_qs = courts_qs.filter(location__icontains=location)
-    
+
+    if min_price is not None:
+        courts_qs = courts_qs.filter(price_per_hour__gte=min_price)
+    if max_price is not None:
+        courts_qs = courts_qs.filter(price_per_hour__lte=max_price)
+    if min_rating is not None:
+        courts_qs = courts_qs.filter(rating__gte=min_rating)
+
+    sort_map = {
+        'price_asc': 'price_per_hour',
+        'price_desc': '-price_per_hour',
+        'rating_desc': '-rating',
+        'rating_asc': 'rating',
+        'name_asc': 'name',
+        'name_desc': '-name',
+    }
+    if sort in sort_map:
+        courts_qs = courts_qs.order_by(sort_map[sort])
+
+    # Distance sort: materialize queryset then sort by haversine
+    distance_enabled = (sort == 'distance' and user_lat is not None and user_lng is not None)
+    if distance_enabled:
+        courts_qs = list(courts_qs)
+        courts_qs.sort(key=lambda c: _haversine_km(user_lat, user_lng, c.latitude, c.longitude) or float('inf'))
+
     # Serialize data
-    data = [{
-        'id': court.id,
-        'name': court.name,
-        'sport_type': court.sport_type,
-        'location': court.location,
-        'address': court.address,
-        'price': str(court.price_per_hour),
-        'rating': str(court.rating),
-        'image': court.image.url if court.image else None,
-        'facilities': court.facilities,
-        'owned_by_user': court.created_by_id == getattr(current_user, 'id', None),
-    } for court in courts_qs]
+    data = []
+    for court in courts_qs:
+        dist_val = None
+        if user_lat is not None and user_lng is not None and court.latitude is not None and court.longitude is not None:
+            dist_val = _haversine_km(user_lat, user_lng, court.latitude, court.longitude)
+        data.append({
+            'id': court.id,
+            'name': court.name,
+            'sport_type': court.sport_type,
+            'location': court.location,
+            'address': court.address,
+            'price': str(court.price_per_hour),
+            'rating': str(court.rating),
+            'image': court.get_image_url(),
+            'facilities': court.facilities,
+            'owned_by_user': court.created_by_id == getattr(current_user, 'id', None),
+            'distance_km': dist_val,
+        })
     
     return JsonResponse({'Court': data})
 
@@ -446,7 +495,7 @@ def get_court_detail(request, court_id):
             'address': court.address,
             'price': str(court.price_per_hour),
             'rating': str(court.rating),
-            'image': court.image.url if court.image else None,
+            'image': court.get_image_url(),
             'facilities': court.facilities,
             'description': court.description,
             'is_available': court.is_available_today(),
@@ -462,6 +511,7 @@ def get_court_detail(request, court_id):
 
 
 @require_http_methods(["POST"])
+@csrf_exempt
 def delete_court(request, court_id):
     current_user, error_response = _require_user(request, json_mode=True)
     if error_response:
@@ -559,6 +609,7 @@ def set_availability(request, court_id):
     return JsonResponse({'success': True, 'available': slot.is_available})
 
 @require_http_methods(["POST"])
+@csrf_exempt
 def create_booking(request):
     """
     Create booking by marking a specific date as unavailable.
@@ -663,7 +714,7 @@ def get_all_Court(request):
         'address': court.address,
         'price': str(court.price_per_hour),
         'rating': str(court.rating),
-        'image': court.image.url if court.image else None,
+        'image': court.get_image_url(),
         'facilities': court.facilities,
         'description': court.description,
         'is_available': court.is_available_today(),
@@ -685,6 +736,12 @@ def api_search_court(request):
     q = request.GET.get('q', '')
     sport = request.GET.get('sport', '')
     location = request.GET.get('location', '')
+    min_price = clean_decimal(request.GET.get('min_price'), min_value=Decimal("0"))
+    max_price = clean_decimal(request.GET.get('max_price'), min_value=Decimal("0"))
+    min_rating = clean_decimal(request.GET.get('min_rating'), min_value=Decimal("0"))
+    sort = request.GET.get('sort', '')
+    user_lat = sanitize_coordinate(request.GET.get('lat'), "latitude")
+    user_lng = sanitize_coordinate(request.GET.get('lng'), "longitude")
 
     courts = Court.objects.all()
     if q:
@@ -693,9 +750,34 @@ def api_search_court(request):
         courts = courts.filter(sport_type=sport)
     if location:
         courts = courts.filter(location__icontains=location)
+    if min_price is not None:
+        courts = courts.filter(price_per_hour__gte=min_price)
+    if max_price is not None:
+        courts = courts.filter(price_per_hour__lte=max_price)
+    if min_rating is not None:
+        courts = courts.filter(rating__gte=min_rating)
+
+    sort_map = {
+        'price_asc': 'price_per_hour',
+        'price_desc': '-price_per_hour',
+        'rating_desc': '-rating',
+        'rating_asc': 'rating',
+        'name_asc': 'name',
+        'name_desc': '-name',
+    }
+    if sort in sort_map:
+        courts = courts.order_by(sort_map[sort])
+
+    distance_enabled = (sort == 'distance' and user_lat is not None and user_lng is not None)
+    if distance_enabled:
+        courts = list(courts)
+        courts.sort(key=lambda c: _haversine_km(user_lat, user_lng, c.latitude, c.longitude) or float('inf'))
 
     data = []
     for c in courts:
+        dist_val = None
+        if user_lat is not None and user_lng is not None and c.latitude is not None and c.longitude is not None:
+            dist_val = _haversine_km(user_lat, user_lng, c.latitude, c.longitude)
         data.append({
             "id": c.id,
             "name": c.name,
@@ -704,7 +786,8 @@ def api_search_court(request):
             "location": c.location,
             "price": float(c.price_per_hour),
             "is_available": c.is_available_today(),
-            "image": c.image.url if c.image else None,
+            "image": c.get_image_url(),
+            "distance_km": dist_val,
             "owned_by_user": c.created_by_id == getattr(current_user, 'id', None),
         })
     return JsonResponse({"court": data})  # ✅ Key disamakan dengan main.html

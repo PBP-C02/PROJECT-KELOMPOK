@@ -75,15 +75,17 @@
   }
   
   .filter-chip:hover {
-    border-color: #a3e635;
-    color: rgb(15 23 42);
+    border-color: #90B35B;
+    background: #CBED98;
+    color: #2F2F2F;
+    box-shadow: 0 8px 16px rgba(144, 179, 91, 0.30);
   }
   
   .filter-chip.active {
-    border-color: transparent;
-    background-color: #a3e635;
-    color: #1a1a1a;
-    box-shadow: 0 8px 16px rgba(203, 237, 152, 0.25);
+    border-color: #90B35B;
+    background-color: #CBED98;
+    color: #2F2F2F;
+    box-shadow: 0 10px 18px rgba(144, 179, 91, 0.30);
   }
 
   .view-tab {
@@ -99,13 +101,14 @@
   }
   
   .view-tab:hover {
-    color: #374151;
-    background: #f3f4f6;
+    color: #2F2F2F;
+    background: #CBED98;
   }
   
   .view-tab.active {
-    background: #1f2937;
-    color: white;
+    background: #CBED98;
+    color: #2F2F2F;
+    box-shadow: 0 10px 18px rgba(144, 179, 91, 0.30);
   }
   
   .bg-event-list {
@@ -283,8 +286,12 @@
              data-is-registered="{% if event.id in user_registered_events %}true{% else %}false{% endif %}"
              data-detail-url="{% url 'event:event_detail' pk=event.id %}">
           
-          <!-- HEADER: pakai emoji sport seperti versi awal -->
+          <!-- HEADER: pakai foto jika ada, fallback ke gradient sport -->
+          {% if event.photo %}
+          <div class="sport-header" style="background-image: linear-gradient(180deg, rgba(0,0,0,0.35), rgba(0,0,0,0.55)), url('{{ event.photo.url }}'); background-size: cover; background-position: center;">
+          {% else %}
           <div class="sport-header sport-{{ event.sport_type }}">
+          {% endif %}
             <div class="absolute top-3 left-3 flex flex-wrap gap-2">
               {% if event.id in user_registered_events %}
               <span class="event-tag event-tag-booked">BOOKED</span>

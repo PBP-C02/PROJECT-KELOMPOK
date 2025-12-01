@@ -11,12 +11,6 @@ BASE_INPUT_CLASSES = (
     "focus:ring-4 focus:ring-lime-200/60"
 )
 TEXTAREA_CLASSES = BASE_INPUT_CLASSES + " min-h-[8rem] resize-y"
-FILE_INPUT_CLASSES = (
-    "block w-full text-sm text-slate-700 file:mr-4 file:rounded-full file:border-0 "
-    "file:bg-lime-200/80 file:px-4 file:py-2 file:text-sm file:font-semibold "
-    "file:text-slate-900 hover:file:bg-lime-200"
-)
-
 
 def sanitize_phone_input(value):
     """Normalize phone number string to digits only."""
@@ -45,11 +39,8 @@ class CourtForm(forms.ModelForm):
             'rating',
             'description',
             'owner_phone',
-            'image',
+            'image_url',
         ]
-        field_classes = {
-            'image': forms.FileField,
-        }
         widgets = {
             'name': forms.TextInput(attrs={
                 'placeholder': 'Nama lapangan',
@@ -93,14 +84,15 @@ class CourtForm(forms.ModelForm):
                 'inputmode': 'numeric',
                 'class': BASE_INPUT_CLASSES,
             }),
-            'image': forms.ClearableFileInput(attrs={
-                'class': FILE_INPUT_CLASSES,
+            'image_url': forms.URLInput(attrs={
+                'placeholder': 'https://contoh.com/gambar.jpg',
+                'class': BASE_INPUT_CLASSES,
             }),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        optional_fields = ['facilities', 'rating', 'description', 'image']
+        optional_fields = ['facilities', 'rating', 'description', 'image_url']
         for field in optional_fields:
             self.fields[field].required = False
         self.fields['maps_link'].widget.attrs.update({

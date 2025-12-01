@@ -2,612 +2,387 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Event - Move Buddy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Background yang SANGAT subtle - hampir tidak terlihat */
-        body {
-            background-color: #f9fafb;
-            background-image: url('{% static "img/bg.png" %}');
-            background-repeat: repeat;
-            background-size: 300px 300px;
-            background-attachment: fixed;
-            position: relative;
-        }
-        
-        /* Overlay putih SANGAT kuat agar background hampir tidak terlihat */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255, 255, 255, 0.97);
-            z-index: 0;
-        }
-        
-        /* Container untuk konten */
-        .content-wrapper {
-            position: relative;
-            z-index: 1;
-        }
-        
-        /* White container box untuk form */
-        .form-box {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        /* Form input styling */
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 15px;
-            background: white;
-            transition: all 0.2s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #a3e635;
-            box-shadow: 0 0 0 3px rgba(163, 230, 53, 0.1);
-        }
-        
-        .form-input::placeholder {
-            color: #d1d5db;
-        }
-        
-        /* Textarea */
-        textarea.form-input {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        /* Select dropdown */
-        select.form-input {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
-        }
-        
-        /* Label styling */
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: #374151;
-            font-size: 14px;
-        }
-        
-        /* Button styling */
-        .btn-save {
-            background: #a3e635;
-            color: #1a1a1a;
-            padding: 14px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            width: 100%;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        
-        .btn-save:hover {
-            background: #8cc520;
-        }
-        
-        .btn-secondary {
-            background: #f3f4f6;
-            color: #374151;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 15px;
-            text-align: center;
-            display: inline-block;
-        }
-        
-        .btn-secondary:hover {
-            background: #e5e7eb;
-        }
-        
-        /* File upload styling */
-        .file-upload {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            font-size: 15px;
-            background: white;
-            cursor: pointer;
-        }
-        
-        .file-upload::-webkit-file-upload-button {
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            background: #f3f4f6;
-            color: #374151;
-            font-weight: 500;
-            cursor: pointer;
-            margin-right: 12px;
-        }
-        
-        .file-upload::-webkit-file-upload-button:hover {
-            background: #e5e7eb;
-        }
-        
-        /* Form group spacing */
-        .form-group {
-            margin-bottom: 24px;
-        }
-        
-        /* Optional text */
-        .optional-text {
-            color: #9ca3af;
-            font-size: 13px;
-            margin-top: 4px;
-        }
-        
-        /* Page title */
-        .page-title {
-            font-size: 32px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 32px;
-            color: #1a1a1a;
-        }
-        
-        /* Current photo link */
-        .photo-link {
-            color: #3b82f6;
-            text-decoration: none;
-            font-size: 14px;
-            word-break: break-all;
-        }
-        
-        .photo-link:hover {
-            text-decoration: underline;
-        }
-        
-        /* Checkbox styling */
-        .custom-checkbox {
-            width: 16px;
-            height: 16px;
-            accent-color: #a3e635;
-            cursor: pointer;
-        }
-        
-        /* Button group */
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 20px;
-        }
-        
-        /* Schedule section styling */
-        .schedule-section {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
-        }
-        
-        .schedule-item {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-            align-items: center;
-        }
-        
-        .btn-add-schedule {
-            background: #3b82f6;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-add-schedule:hover {
-            background: #2563eb;
-        }
-        
-        .btn-remove-schedule {
-            background: #ef4444;
-            color: white;
-            padding: 10px 16px;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-        
-        .btn-remove-schedule:hover {
-            background: #dc2626;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Event - MoveBuddy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #f6f7fb;
+      color: #0f172a;
+    }
+    .bg-form-main {
+      background-image: url('{% static "img/bg.png" %}');
+      background-size: cover;
+      background-position: center;
+      background-repeat: repeat;
+    }
+    .content-wrapper { position: relative; z-index: 10; }
+    .glass-panel {
+      background: rgba(255,255,255,0.96);
+      box-shadow: 0 28px 70px rgba(15,23,42,0.10);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(148,163,184,0.25);
+    }
+    .input-shell { display: flex; flex-direction: column; gap: 8px; }
+    .input-label {
+      font-weight: 700;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #475569;
+    }
+    .input-field {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      padding: 14px 16px;
+      background: #fff;
+      font-weight: 600;
+      color: #0f172a;
+      transition: all 0.2s ease;
+      box-shadow: inset 0 1px 0 rgba(148,163,184,0.12);
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #a3e635;
+      box-shadow: 0 0 0 4px rgba(163,230,53,0.18);
+    }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border-radius: 9999px;
+      background: #eef2ff;
+      color: #4338ca;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+    }
+    .section-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 18px;
+    }
+    .schedule-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #a3e635, #65a30d);
+      color: #0f172a;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      border: none;
+      padding: 16px 20px;
+      border-radius: 14px;
+      width: 100%;
+      transition: all 0.2s ease;
+      box-shadow: 0 14px 40px rgba(100,149,15,0.35);
+    }
+    .btn-primary:hover { transform: translateY(-2px); }
+    .btn-ghost {
+      border: 1px solid #e2e8f0;
+      background: #fff;
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-weight: 700;
+      color: #0f172a;
+      transition: all 0.2s ease;
+    }
+    .btn-ghost:hover { border-color: #94a3b8; }
+    .divider { height: 1px; background: linear-gradient(90deg, transparent, #e2e8f0, transparent); }
+  </style>
 </head>
 <body>
-    <!-- Include Navbar -->
-    {% include 'includes/navbar.html' %}
-    
+  {% include 'includes/navbar.html' %}
+  <section class="relative min-h-screen overflow-hidden">
+    <div class="bg-form-main absolute inset-0 bg-cover bg-center"></div>
+    <div class="absolute inset-0 bg-white/95"></div>
+
     <div class="content-wrapper">
-        <!-- Main Container -->
-        <div class="max-w-7xl mx-auto px-4 py-8">
-            
-            <!-- White Container Box untuk form -->
-            <div class="form-box">
-                
-                <!-- Page Title -->
-                <h1 class="page-title">Edit Event</h1>
-                
-                <!-- Event Form -->
-                <form id="eventForm" method="POST" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    
-                    <!-- Event Name -->
-                    <div class="form-group">
-                        <label class="form-label">Event Name</label>
-                        <input 
-                            type="text" 
-                            name="name" 
-                            class="form-input" 
-                            placeholder="Event name"
-                            value="{{ event.name }}"
-                            required
-                        />
-                    </div>
-                    
-                    <!-- Sport Type -->
-                    <div class="form-group">
-                        <label class="form-label">Sport Type</label>
-                        <select name="sport_type" class="form-input" required>
-                            <option value="basketball" {% if event.sport_type == 'basketball' %}selected{% endif %}>Basketball</option>
-                            <option value="tennis" {% if event.sport_type == 'tennis' %}selected{% endif %}>Tennis</option>
-                            <option value="soccer" {% if event.sport_type == 'soccer' %}selected{% endif %}>Soccer</option>
-                            <option value="badminton" {% if event.sport_type == 'badminton' %}selected{% endif %}>Badminton</option>
-                            <option value="volleyball" {% if event.sport_type == 'volleyball' %}selected{% endif %}>Volleyball</option>
-                            <option value="futsal" {% if event.sport_type == 'futsal' %}selected{% endif %}>Futsal</option>
-                            <option value="paddle" {% if event.sport_type == 'paddle' %}selected{% endif %}>Paddle</option>
-                            <option value="table_tennis" {% if event.sport_type == 'table_tennis' %}selected{% endif %}>Table Tennis</option>
-                            <option value="swimming" {% if event.sport_type == 'swimming' %}selected{% endif %}>Swimming</option>
-                        </select>
-                    </div>
-                    
-                    <!-- City -->
-                    <div class="form-group">
-                        <label class="form-label">City</label>
-                        <input 
-                            type="text" 
-                            name="city" 
-                            class="form-input" 
-                            value="{{ event.city }}"
-                            required
-                        />
-                    </div>
-                    
-                    <!-- Full Address -->
-                    <div class="form-group">
-                        <label class="form-label">Full Address</label>
-                        <textarea 
-                            name="full_address" 
-                            class="form-input" 
-                            required
-                        >{{ event.full_address }}</textarea>
-                    </div>
-                    
-                    <!-- Entry Price -->
-                    <div class="form-group">
-                        <label class="form-label">Entry Price (IDR)</label>
-                        <input 
-                            type="number" 
-                            name="entry_price" 
-                            class="form-input" 
-                            value="{{ event.entry_price }}"
-                            step="0.01"
-                            required
-                        />
-                    </div>
-                    
-                    <!-- Activities -->
-                    <div class="form-group">
-                        <label class="form-label">Activities (comma separated)</label>
-                        <input 
-                            type="text" 
-                            name="activities" 
-                            class="form-input" 
-                            placeholder="Facilities (comma separated)"
-                            value="{{ event.activities }}"
-                        />
-                    </div>
-                    
-                    <!-- Rating -->
-                    <div class="form-group">
-                        <label class="form-label">Rating (optional)</label>
-                        <input 
-                            type="number" 
-                            name="rating" 
-                            class="form-input" 
-                            value="{{ event.rating|default:'0.00' }}"
-                            step="0.01"
-                            min="0"
-                            max="5"
-                        />
-                    </div>
-                    
-                    <!-- Description -->
-                    <div class="form-group">
-                        <label class="form-label">Description (optional)</label>
-                        <textarea 
-                            name="description" 
-                            class="form-input"
-                        >{{ event.description }}</textarea>
-                    </div>
-                    
-                    <!-- Google Maps Link -->
-                    <div class="form-group">
-                        <label class="form-label">Google Maps link</label>
-                        <input 
-                            type="url" 
-                            name="google_maps_link" 
-                            class="form-input" 
-                            placeholder="https://maps.google.com/?q=-6.2,106.8"
-                            value="{{ event.google_maps_link }}"
-                        />
-                        <p class="optional-text">Leave empty to keep the current location</p>
-                    </div>
-                    
-                    <!-- Category -->
-                    <div class="form-group">
-                        <label class="form-label">Category</label>
-                        <input 
-                            type="text" 
-                            name="category" 
-                            class="form-input" 
-                            placeholder="category 1"
-                            value="{{ event.category }}"
-                        />
-                    </div>
-                    
-                    <!-- Status -->
-                    <div class="form-group">
-                        <label class="form-label">Status</label>
-                        <select name="status" class="form-input">
-                            <option value="available" {% if event.status == 'available' %}selected{% endif %}>Available</option>
-                            <option value="unavailable" {% if event.status == 'unavailable' %}selected{% endif %}>Unavailable</option>
-                        </select>
-                    </div>
-                    
-                    <!-- Event Schedules Section -->
-                    <div class="schedule-section">
-                        <h3 class="text-lg font-bold mb-3 text-gray-800">📅 Event Schedules</h3>
-                        <p class="text-sm text-gray-600 mb-4">Add or remove dates when this event will be held</p>
-                        
-                        <div id="schedules-container">
-                            {% if schedules %}
-                                {% for schedule in schedules %}
-                                <div class="schedule-item">
-                                    <input 
-                                        type="date" 
-                                        name="schedule_date[]" 
-                                        class="form-input schedule-date-input" 
-                                        value="{{ schedule.date|date:'Y-m-d' }}"
-                                        required
-                                    >
-                                    <button type="button" class="btn-remove-schedule remove-schedule">Remove</button>
-                                </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="schedule-item">
-                                    <input 
-                                        type="date" 
-                                        name="schedule_date[]" 
-                                        class="form-input schedule-date-input" 
-                                        required
-                                    >
-                                    <button type="button" class="btn-remove-schedule remove-schedule" style="display:none;">Remove</button>
-                                </div>
-                            {% endif %}
-                        </div>
-                        
-                        <button type="button" id="add-schedule" class="btn-add-schedule mt-3">
-                            + Add Another Date
-                        </button>
-                    </div>
-                    
-                    <!-- Event Photo -->
-                    <div class="form-group">
-                        <label class="form-label">Event Photo (optional)</label>
-                        {% if event.photo %}
-                            <p class="text-sm text-gray-600 mb-2">Currently: 
-                                <a href="{{ event.photo.url }}" target="_blank" class="photo-link">
-                                    {{ event.photo.name }}
-                                </a>
-                            </p>
-                            
-                            <div class="flex items-center gap-2 mb-3">
-                                <input 
-                                    type="checkbox" 
-                                    name="clear_photo" 
-                                    id="clearPhoto"
-                                    class="custom-checkbox"
-                                />
-                                <label for="clearPhoto" class="text-sm text-gray-600 cursor-pointer">Clear current photo</label>
-                            </div>
-                        {% else %}
-                            <p class="text-sm text-gray-500 mb-3">No photo uploaded</p>
-                        {% endif %}
-                        
-                        <label class="form-label mt-2">Change photo:</label>
-                        <input 
-                            type="file" 
-                            name="photo" 
-                            class="file-upload"
-                            accept="image/*"
-                        />
-                        <p class="optional-text">Upload to replace the current photo. Leave empty to keep it.</p>
-                    </div>
-                    
-                    {% if event.photo %}
-                    <!-- Current Photo Display -->
-                    <div class="form-group">
-                        <label class="form-label">Current photo preview:</label>
-                        <img src="{{ event.photo.url }}" alt="{{ event.name }}" class="w-full rounded-lg mt-2" style="max-height: 300px; object-fit: cover;">
-                    </div>
-                    {% endif %}
-                    
-                    <!-- Save Button -->
-                    <button type="submit" class="btn-save">
-                        Save Changes
-                    </button>
-                    
-                    <!-- Back Buttons -->
-                    <div class="button-group">
-                        <a href="{% url 'event:event_detail' event.id %}" class="btn-secondary">
-                            Back to Detail
-                        </a>
-                        <a href="{% url 'event:event_list' %}" class="btn-secondary">
-                            All Events
-                        </a>
-                    </div>
-                    
-                </form>
-                
-            </div>
-            
+      <main class="mx-auto max-w-6xl px-4 sm:px-6 py-10 sm:py-12 space-y-8">
+        <div class="text-center space-y-3">
+          <div class="chip mx-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v12m-6-6h12" />
+            </svg>
+            Edit Event
+          </div>
+          <h1 class="text-3xl sm:text-4xl font-black tracking-[0.18em] uppercase text-slate-900">Perbarui Event</h1>
+          <p class="text-slate-600 font-semibold">Sesuaikan detail agar peserta menemukan event kamu dengan mudah.</p>
         </div>
+
+        <div class="glass-panel rounded-[28px] p-6 sm:p-8">
+          <form id="eventForm" method="POST" enctype="multipart/form-data" class="space-y-6">
+            {% csrf_token %}
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="input-shell">
+                <label class="input-label">Event Name</label>
+                <input type="text" name="name" class="input-field" placeholder="Nama event" value="{{ event.name }}" required />
+              </div>
+              <div class="input-shell">
+                <label class="input-label">Sport Type</label>
+                <select name="sport_type" class="input-field" required>
+                  <option value="">Pilih jenis olahraga</option>
+                  <option value="tennis" {% if event.sport_type == 'tennis' %}selected{% endif %}>Tennis</option>
+                  <option value="basketball" {% if event.sport_type == 'basketball' %}selected{% endif %}>Basketball</option>
+                  <option value="soccer" {% if event.sport_type == 'soccer' %}selected{% endif %}>Soccer</option>
+                  <option value="badminton" {% if event.sport_type == 'badminton' %}selected{% endif %}>Badminton</option>
+                  <option value="volleyball" {% if event.sport_type == 'volleyball' %}selected{% endif %}>Volleyball</option>
+                  <option value="futsal" {% if event.sport_type == 'futsal' %}selected{% endif %}>Futsal</option>
+                  <option value="paddle" {% if event.sport_type == 'paddle' %}selected{% endif %}>Paddle</option>
+                  <option value="table_tennis" {% if event.sport_type == 'table_tennis' %}selected{% endif %}>Table Tennis</option>
+                  <option value="swimming" {% if event.sport_type == 'swimming' %}selected{% endif %}>Swimming</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="input-shell">
+                <label class="input-label">City</label>
+                <input type="text" name="city" class="input-field" placeholder="Kota" value="{{ event.city }}" required />
+              </div>
+              <div class="input-shell md:col-span-1">
+                <label class="input-label">Full Address</label>
+                <textarea name="full_address" class="input-field" placeholder="Alamat lengkap" required rows="2">{{ event.full_address }}</textarea>
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="input-shell">
+                <label class="input-label">Entry Price (IDR)</label>
+                <input type="number" name="entry_price" class="input-field" placeholder="Contoh: 30000" step="0.01" value="{{ event.entry_price }}" required />
+                <p class="text-xs text-slate-500 font-semibold">Akan diformat otomatis dengan tanda titik.</p>
+              </div>
+              <div class="input-shell">
+                <label class="input-label">Rating (0-5, optional)</label>
+                <input type="number" name="rating" class="input-field" placeholder="4.5" step="0.01" min="0" max="5" value="{{ event.rating|default:'0.00' }}" />
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2">
+              <div class="input-shell">
+                <label class="input-label">Activities / Facilities</label>
+                <input type="text" name="activities" class="input-field" placeholder="Misal: Lapangan indoor, Ruang ganti, Parkir luas" value="{{ event.activities }}" />
+              </div>
+              <div class="input-shell">
+                <label class="input-label">Short Description</label>
+                <textarea name="description" class="input-field" placeholder="Deskripsi singkat, keunggulan, dsb." rows="2">{{ event.description }}</textarea>
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-3">
+              <div class="input-shell md:col-span-2">
+                <label class="input-label">Google Maps Link</label>
+                <input type="url" name="google_maps_link" class="input-field" placeholder="https://maps.google.com/?q=-6.2,106.8" value="{{ event.google_maps_link }}" />
+                <p class="text-xs text-slate-500 font-semibold">Opsional: tempelkan link Google Maps untuk pembaruan koordinat.</p>
+              </div>
+              <div class="input-shell">
+                <label class="input-label">Category</label>
+                <input type="text" name="category" class="input-field" value="{{ event.category }}" />
+              </div>
+            </div>
+
+            <div class="grid gap-6 md:grid-cols-2 md:items-start">
+              <div class="input-shell">
+                <label class="input-label">Status</label>
+                <select name="status" class="input-field">
+                  <option value="available" {% if event.status == 'available' %}selected{% endif %}>Available</option>
+                  <option value="unavailable" {% if event.status == 'unavailable' %}selected{% endif %}>Unavailable</option>
+                </select>
+              </div>
+              <div class="grid gap-4 sm:grid-cols-2 sm:items-start">
+                <div class="input-shell sm:col-span-1">
+                  <label class="input-label">Photo URL (opsional)</label>
+                  <input id="photoUrlInput" name="photo_url" type="url" class="input-field" placeholder="Tempel URL gambar jika ada" />
+                  <p class="text-[11px] text-slate-500 font-semibold">Jika tidak ada file, kami ambil gambar dari URL ini.</p>
+                </div>
+                <div class="input-shell sm:col-span-1">
+                  <label class="input-label">Upload Photo</label>
+                  <input type="file" name="photo" class="input-field" accept="image/*" />
+                  <p class="text-[11px] text-slate-500 font-semibold">Biarkan kosong untuk mempertahankan foto sekarang.</p>
+                </div>
+              </div>
+            </div>
+
+            {% if event.photo %}
+            <div class="section-card space-y-3">
+              <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Current Photo</p>
+              {% if event.photo %}
+              <img src="{{ event.photo.url }}" alt="{{ event.name }}" class="w-full rounded-xl object-cover" style="max-height: 280px;">
+              {% else %}
+              <div class="w-full rounded-xl bg-slate-100 text-center text-sm text-slate-500 py-12">Belum ada foto</div>
+              {% endif %}
+              <label class="inline-flex items-center gap-2 text-sm font-semibold text-slate-600">
+                <input type="checkbox" name="clear_photo" class="h-4 w-4 rounded border-slate-300 text-lime focus:ring-lime">
+                Hapus foto saat ini
+              </label>
+            </div>
+            {% endif %}
+
+            <div class="section-card space-y-3">
+              <div class="flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <p class="text-xs font-black uppercase tracking-[0.2em] text-slate-500">Jadwal Event</p>
+                  <p class="text-sm text-slate-600 font-semibold">Tambahkan tanggal yang tersedia untuk booking.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="date" id="newDateInput" class="input-field w-44" />
+                  <button type="button" onclick="addDate()" class="btn-ghost text-sm uppercase tracking-[0.12em]">+ Tambah Tanggal</button>
+                </div>
+              </div>
+              <div id="datesList" class="flex flex-wrap gap-3">
+                {% if schedules %}
+                  {% for schedule in schedules %}
+                    <div class="schedule-pill" data-date="{{ schedule.date|date:'Y-m-d' }}">
+                      <span>{{ schedule.date|date:"l, d F Y" }}</span>
+                      <button type="button" class="text-rose-600 font-bold" onclick="removeDate('{{ schedule.date|date:'Y-m-d' }}')">Hapus</button>
+                    </div>
+                  {% endfor %}
+                {% else %}
+                  <div class="text-slate-400 text-sm font-semibold italic">Belum ada tanggal.</div>
+                {% endif %}
+              </div>
+            </div>
+
+            <input type="hidden" name="schedule_dates" id="scheduleDates" value="[]">
+
+            <div class="divider"></div>
+
+            <div class="grid gap-4 sm:grid-cols-2">
+              <button type="submit" class="btn-primary sm:col-span-2">Simpan Perubahan</button>
+              <a href="{% url 'event:event_detail' event.id %}" class="btn-ghost text-center">Kembali ke Detail</a>
+              <a href="{% url 'event:event_list' %}" class="btn-ghost text-center">All Events</a>
+            </div>
+          </form>
+        </div>
+      </main>
     </div>
-    
-    <script>
-        // Schedule management
-        document.addEventListener('DOMContentLoaded', function() {
-            const today = new Date().toISOString().split('T')[0];
-            
-            // Add new schedule
-            document.getElementById('add-schedule').addEventListener('click', function() {
-                const container = document.getElementById('schedules-container');
-                const newSchedule = document.createElement('div');
-                newSchedule.className = 'schedule-item';
-                newSchedule.innerHTML = `
-                    <input 
-                        type="date" 
-                        name="schedule_date[]" 
-                        class="form-input schedule-date-input" 
-                        min="${today}"
-                        required
-                    >
-                    <button type="button" class="btn-remove-schedule remove-schedule">Remove</button>
-                `;
-                container.appendChild(newSchedule);
-                updateRemoveButtons();
-            });
-            
-            // Remove schedule
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('remove-schedule')) {
-                    const scheduleItems = document.querySelectorAll('.schedule-item');
-                    if (scheduleItems.length > 1) {
-                        e.target.closest('.schedule-item').remove();
-                        updateRemoveButtons();
-                    }
-                }
-            });
-            
-            // Update remove button visibility
-            function updateRemoveButtons() {
-                const schedules = document.querySelectorAll('.schedule-item');
-                const removeButtons = document.querySelectorAll('.remove-schedule');
-                
-                if (schedules.length === 1) {
-                    removeButtons.forEach(btn => btn.style.display = 'none');
-                } else {
-                    removeButtons.forEach(btn => btn.style.display = 'block');
-                }
+  </section>
+
+  <script>
+    let eventDates = [{% for schedule in schedules %}'{{ schedule.date|date:"Y-m-d" }}'{% if not forloop.last %},{% endif %}{% endfor %}];
+
+    function setHiddenDates() {
+      document.getElementById('scheduleDates').value = JSON.stringify(eventDates);
+    }
+
+    function renderDates() {
+      const list = document.getElementById('datesList');
+      if (!eventDates.length) {
+        list.innerHTML = '<div class="text-slate-400 text-sm font-semibold italic">Belum ada tanggal.</div>';
+      } else {
+        const sorted = [...eventDates].sort();
+        list.innerHTML = sorted.map(date => {
+          const readable = new Date(date + 'T00:00:00').toLocaleDateString('id-ID', {
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+          });
+          return `
+            <div class="schedule-pill">
+              <span>${readable}</span>
+              <button type="button" class="text-rose-600 font-bold" onclick="removeDate('${date}')">Hapus</button>
+            </div>
+          `;
+        }).join('');
+      }
+      setHiddenDates();
+    }
+
+    function addDate() {
+      const input = document.getElementById('newDateInput');
+      const value = input.value;
+      if (!value) return alert('Pilih tanggal terlebih dahulu.');
+      if (eventDates.includes(value)) return alert('Tanggal sudah ditambahkan.');
+      eventDates.push(value);
+      renderDates();
+      input.value = '';
+    }
+
+    function removeDate(date) {
+      eventDates = eventDates.filter(d => d !== date);
+      renderDates();
+    }
+
+    document.addEventListener('DOMContentLoaded', renderDates);
+
+    document.getElementById('eventForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      // Auto-capture date typed in the input if user forgot to press tambah
+      const dateInput = document.getElementById('newDateInput');
+      const pendingDate = dateInput?.value;
+      // Only auto-capture typed date when there are no dates yet (avoid duplicating saved dates)
+      if (!eventDates.length && pendingDate && !eventDates.includes(pendingDate)) {
+        eventDates.push(pendingDate);
+        renderDates();
+      }
+      if (dateInput) {
+        dateInput.value = '';
+        dateInput.blur();
+      }
+
+      if (!eventDates.length) {
+        alert('Please add at least one event date');
+        return;
+      }
+
+      const formData = new FormData(this);
+      formData.set('schedule_dates', JSON.stringify(eventDates));
+
+      const fileInput = this.querySelector('input[name=\"photo\"]');
+      const file = fileInput?.files?.[0];
+      const photoUrl = document.getElementById('photoUrlInput')?.value.trim();
+
+      if (!file && photoUrl) {
+        try {
+          const response = await fetch(photoUrl);
+          if (!response.ok) throw new Error('Gagal mengambil gambar dari URL');
+          const blob = await response.blob();
+          const ext = (blob.type && blob.type.split('/')[1]) || 'jpg';
+          const filename = `event-photo.${ext}`;
+          formData.set('photo', new File([blob], filename, { type: blob.type || 'image/jpeg' }));
+        } catch (err) {
+          alert(err.message || 'Gagal memuat foto dari URL, coba unggah manual.');
+          return;
+        }
+      }
+
+      fetch('/event/{{ event.id }}/edit/', {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          alert('Event updated successfully!');
+          window.location.href = data.redirect_url || '/event/{{ event.id }}/';
+        } else {
+          let msg = 'Failed to update event';
+          if (data.errors) {
+            msg += ':\n';
+            for (const field in data.errors) {
+              msg += `${field}: ${data.errors[field]}\n`;
             }
-            
-            updateRemoveButtons();
-        });
-        
-        // Form submission handling
-        document.getElementById('eventForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Collect all schedule dates
-            const scheduleDates = [];
-            document.querySelectorAll('.schedule-date-input').forEach(input => {
-                if (input.value) {
-                    scheduleDates.push(input.value);
-                }
-            });
-            
-            console.log('Schedule dates being sent:', scheduleDates);
-            
-            // Validate at least one date
-            if (scheduleDates.length === 0) {
-                alert('Please add at least one event date');
-                return;
-            }
-            
-            const formData = new FormData(this);
-            
-            // Remove old schedule_date[] entries
-            formData.delete('schedule_date[]');
-            
-            // Add all schedule dates
-            scheduleDates.forEach(date => {
-                formData.append('schedule_dates[]', date);
-            });
-            
-            fetch('/event/{{ event.id }}/edit/', {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    alert('Event updated successfully!');
-                    window.location.href = data.redirect_url || '/event/{{ event.id }}/';
-                } else {
-                    let errorMsg = 'Failed to update event';
-                    if (data.errors) {
-                        errorMsg += ':\n';
-                        for (let field in data.errors) {
-                            errorMsg += `${field}: ${data.errors[field]}\n`;
-                        }
-                    }
-                    alert(errorMsg);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            });
-        });
-    </script>
+          }
+          alert(msg);
+        }
+      })
+      .catch(() => alert('An error occurred. Please try again.'));
+    });
+  </script>
+</body>
+</html>
