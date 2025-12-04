@@ -21,7 +21,7 @@ class Court(models.Model):
     location = models.CharField(max_length=200)
     address = models.TextField()
     price_per_hour = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to='Court/', blank=True, null=True)
+    image_url = models.URLField(blank=True, null=True)
     facilities = models.TextField()
     rating = models.DecimalField(max_digits=3, decimal_places=2, default=0)
     description = models.TextField(blank=True)
@@ -50,6 +50,10 @@ class Court(models.Model):
     def get_facilities_list(self):
         """Return facilities as list"""
         return [f.strip() for f in self.facilities.split(',') if f.strip()]
+
+    def get_image_url(self):
+        """Return hosted image url or external link."""
+        return self.image_url
     
     def is_available(self):
         """Backward-compatible availability check (any upcoming date)."""
