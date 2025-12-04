@@ -107,6 +107,7 @@ def login_view(request):
                 request.session['nomor_handphone'] = user.nomor_handphone
                 
                 return JsonResponse({
+                    'username': user.nama,
                     'success': True,
                     'message': 'Login berhasil',
                     'redirect_url': '/'
@@ -228,3 +229,5 @@ def check_session(request):
         return JsonResponse({'loggedIn': True, 'user': request.session['nama']})
     else:
         return JsonResponse({'loggedIn': False})
+
+
