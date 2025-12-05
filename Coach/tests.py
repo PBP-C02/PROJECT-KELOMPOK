@@ -1,24 +1,28 @@
+import base64
 import json
 import uuid
 import datetime as dt
 from decimal import Decimal
 from io import BytesIO
 
-from django.test import TestCase, override_settings
+from django.test import TestCase, override_settings, RequestFactory
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.contrib.auth import get_user_model
 from django.contrib.auth.signals import user_logged_in
+from django.contrib.sessions.middleware import SessionMiddleware
 from django.db import models as djm
 from django.contrib.auth.hashers import make_password
+from unittest.mock import patch, MagicMock
+import requests
 
 from PIL import Image
 
 from Coach.models import Coach
 from Coach.forms import CoachForm
-from Coach.views import _to_int, _parse_time, _parse_dt_local, _to_decimal, validate_image
+from Coach.views import _to_int, _parse_time, _parse_dt_local, _to_decimal, validate_image, _get_current_user, _require_user
 
 
 # ---------- Helpers ----------
@@ -105,6 +109,57 @@ class HelperFunctionTests(TestCase):
         self.assertEqual(_to_decimal("4.5"), Decimal("4.5"))
         self.assertEqual(_to_decimal("not_a_number"), Decimal("0"))
         self.assertEqual(_to_decimal(None), Decimal("0"))
+
+
+class SessionHelperTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = make_user(nama="Helper", phone="08100000000")
+        self.session_middleware = SessionMiddleware(lambda req: None)
+
+    def _attach_session(self):
+        request = self.factory.get("/")
+        self.session_middleware.process_request(request)
+        request.session.save()
+        return request
+
+    def test_get_current_user_returns_user_when_session_set(self):
+        request = self._attach_session()
+        request.session["user_id"] = str(self.user.id)
+        request.session.save()
+
+        self.assertEqual(_get_current_user(request), self.user)
+
+    def test_get_current_user_returns_none_without_user(self):
+        request = self._attach_session()
+        self.assertIsNone(_get_current_user(request))
+
+    def test_require_user_json_mode_returns_error_response(self):
+        request = self._attach_session()
+        user, response = _require_user(request, json_mode=True)
+
+        self.assertIsNone(user)
+        self.assertEqual(response.status_code, 401)
+        data = json.loads(response.content)
+        self.assertFalse(data["success"])
+        self.assertEqual(data["error"], "Authentication required")
+
+    def test_require_user_redirects_when_not_logged_in(self):
+        request = self._attach_session()
+        user, response = _require_user(request)
+
+        self.assertIsNone(user)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/login/", response.url)
+
+    def test_require_user_returns_user_when_authenticated(self):
+        request = self._attach_session()
+        request.session["user_id"] = str(self.user.id)
+        request.session.save()
+
+        user, response = _require_user(request)
+        self.assertEqual(user, self.user)
+        self.assertIsNone(response)
 
 
 class ImageValidationTests(TestCase):
@@ -792,6 +847,209 @@ class AjaxSearchCoachesTests(TestCase):
         ]
         for field in required_fields:
             self.assertIn(field, coach)
+
+
+# ==================== ADDITIONAL VIEW TESTS (Proxy, Flutter, JSON feed) ====================
+
+
+class ProxyImageViewTests(TestCase):
+    def test_proxy_image_requires_url_parameter(self):
+        resp = self.client.get(reverse("coach:proxy_image"))
+        self.assertEqual(resp.status_code, 400)
+
+    @patch("Coach.views.requests.get")
+    def test_proxy_image_returns_remote_content(self, mock_get):
+        mock_resp = MagicMock()
+        mock_resp.content = b"imgbytes"
+        mock_resp.headers = {"Content-Type": "image/png"}
+        mock_resp.raise_for_status = MagicMock()
+        mock_get.return_value = mock_resp
+
+        resp = self.client.get(reverse("coach:proxy_image"), {"url": "http://example.com/image.png"})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content, b"imgbytes")
+        self.assertEqual(resp["Content-Type"], "image/png")
+        mock_get.assert_called_once()
+
+    @patch("Coach.views.requests.get")
+    def test_proxy_image_handles_request_exception(self, mock_get):
+        mock_resp = MagicMock()
+        mock_resp.content = b""
+        mock_resp.headers = {}
+        mock_resp.raise_for_status.side_effect = requests.RequestException("boom")
+        mock_get.return_value = mock_resp
+
+        resp = self.client.get(reverse("coach:proxy_image"), {"url": "http://bad.example.com"})
+        self.assertEqual(resp.status_code, 404)
+
+
+@override_settings(
+    AUTHENTICATION_BACKENDS=['django.contrib.auth.backends.ModelBackend'],
+    MIDDLEWARE=[m for m in __import__('django.conf', fromlist=['settings']).settings.MIDDLEWARE 
+                if 'SessionMiddleware' in m or 'AuthenticationMiddleware' in m]
+)
+class FlutterCoachEndpointTests(TestCase):
+    def setUp(self):
+        self.owner = make_user(nama="Owner Flutter", phone="08122223333", email="owner.flutter@test.com")
+        self.other = make_user(nama="Other Flutter", phone="08133334444", email="other.flutter@test.com")
+        self.future_dt = make_future_datetime(days=3, hour=8)
+        self.future_dt_str = self.future_dt.strftime("%Y-%m-%dT%H:%M")
+        self.create_payload = {
+            "title": "Flutter Coach",
+            "description": "Created via flutter API",
+            "category": "tennis",
+            "location": "Jakarta",
+            "address": "Jl. Flutter",
+            "price": 120000,
+            "date": self.future_dt_str,
+            "startTime": "08:00",
+            "endTime": "09:00",
+            "rating": "4.5",
+            "instagram_link": "",
+            "mapsLink": "https://maps.google.com/?q=1,1",
+        }
+        self.coach = Coach.objects.create(
+            user=self.owner,
+            title="Existing Coach",
+            description="Desc",
+            price=60000,
+            category="tennis",
+            location="Jakarta",
+            address="Jl. Update",
+            mapsLink="https://maps.google.com/?q=1,1",
+            date=self.future_dt.date(),
+            startTime=dt.time(8, 0),
+            endTime=dt.time(9, 0),
+            rating=Decimal("4.00"),
+        )
+
+    def test_create_coach_flutter_multipart_success(self):
+        manual_login(self.client, self.owner)
+        payload = dict(self.create_payload)
+        payload["image"] = make_png_file()
+
+        resp = self.client.post(reverse("coach:create_coach_flutter"), data=payload)
+        self.assertEqual(resp.status_code, 200, resp.content)
+        data = resp.json()
+        self.assertTrue(data["success"])
+        self.assertTrue(Coach.objects.filter(coach_id=data["coach_id"]).exists())
+
+    def test_create_coach_flutter_accepts_base64_json(self):
+        manual_login(self.client, self.owner)
+        payload = dict(self.create_payload)
+        image_bytes = make_png_file().read()
+        payload["image_base64"] = base64.b64encode(image_bytes).decode()
+
+        resp = self.client.post(
+            reverse("coach:create_coach_flutter"),
+            data=json.dumps(payload),
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, 200, resp.content)
+        self.assertTrue(resp.json()["success"])
+
+    def test_create_coach_flutter_requires_login(self):
+        resp = self.client.post(reverse("coach:create_coach_flutter"), data=self.create_payload)
+        self.assertEqual(resp.status_code, 401)
+
+    def test_create_coach_flutter_rejects_invalid_time(self):
+        manual_login(self.client, self.owner)
+        payload = dict(self.create_payload)
+        payload["startTime"] = "xx"
+        payload["endTime"] = "yy"
+
+        resp = self.client.post(reverse("coach:create_coach_flutter"), data=payload)
+        self.assertEqual(resp.status_code, 400)
+
+    def test_update_coach_flutter_updates_owned_coach(self):
+        manual_login(self.client, self.owner)
+        payload = {
+            "title": "Updated Flutter",
+            "price": 90000,
+            "rating": "4.9",
+            "startTime": "10:00",
+            "endTime": "11:00",
+            "instagram_link": "https://instagram.com/newcoach",
+            "image_base64": base64.b64encode(make_png_file().read()).decode(),
+        }
+
+        resp = self.client.post(
+            reverse("coach:update_coach_flutter", kwargs={"pk": self.coach.pk}),
+            data=json.dumps(payload),
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, 200, resp.content)
+
+        self.coach.refresh_from_db()
+        self.assertEqual(self.coach.title, "Updated Flutter")
+        self.assertEqual(self.coach.price, 90000)
+        self.assertEqual(self.coach.instagram_link, "https://instagram.com/newcoach")
+        self.assertEqual(self.coach.startTime, dt.time(10, 0))
+        self.assertEqual(self.coach.endTime, dt.time(11, 0))
+        self.assertEqual(self.coach.rating, Decimal("4.9"))
+
+    def test_update_coach_flutter_rejects_invalid_price(self):
+        manual_login(self.client, self.owner)
+        resp = self.client.post(
+            reverse("coach:update_coach_flutter", kwargs={"pk": self.coach.pk}),
+            data=json.dumps({"price": "invalid"}),
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, 400)
+
+    def test_update_coach_flutter_requires_owner(self):
+        manual_login(self.client, self.other)
+        resp = self.client.post(
+            reverse("coach:update_coach_flutter", kwargs={"pk": self.coach.pk}),
+            data=json.dumps({"title": "Hack"}),
+            content_type="application/json",
+        )
+        self.assertEqual(resp.status_code, 403)
+
+    def test_update_coach_flutter_requires_login(self):
+        resp = self.client.post(
+            reverse("coach:update_coach_flutter", kwargs={"pk": self.coach.pk}),
+            data={"title": "No login"},
+        )
+        self.assertEqual(resp.status_code, 401)
+
+
+class ShowJSONTests(TestCase):
+    def setUp(self):
+        self.user = make_user(nama="JSONUser", phone="081122334455")
+        fut = make_future_datetime(days=2, hour=7)
+        self.coach = Coach.objects.create(
+            user=self.user,
+            title="Listed Coach",
+            description="Json desc",
+            price=150000,
+            category="tennis",
+            location="Jakarta",
+            address="Jl. JSON",
+            mapsLink="https://maps.google.com/?q=2,2",
+            date=fut.date(),
+            startTime=dt.time(7, 0),
+            endTime=dt.time(8, 0),
+            rating=Decimal("4.25"),
+            instagram_link=None,
+        )
+
+    def test_show_json_returns_coach_list(self):
+        resp = self.client.get(reverse("coach:show_json"))
+        self.assertEqual(resp.status_code, 200)
+        data = resp.json()
+
+        self.assertIsInstance(data, list)
+        self.assertEqual(len(data), 1)
+
+        entry = data[0]
+        self.assertEqual(entry["id"], str(self.coach.coach_id))
+        self.assertEqual(entry["title"], self.coach.title)
+        self.assertEqual(entry["user_name"], self.user.nama)
+        self.assertEqual(entry["price"], self.coach.price)
+        self.assertEqual(entry["rating"], float(self.coach.rating))
+        self.assertIn("whatsapp_link", entry)
+        self.assertEqual(entry["mapsLink"], self.coach.mapsLink)
 
 
 # ==================== URL RESOLUTION TESTS ====================

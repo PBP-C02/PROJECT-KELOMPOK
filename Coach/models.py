@@ -116,7 +116,7 @@ class Coach(models.Model):
  Date: {self.date.strftime('%A, %d %B %Y')}
  Time: {self.startTime.strftime('%H:%M')} - {self.endTime.strftime('%H:%M')}
 
-Please confirm my booking. Thank you!"""
+Please confirm my booking. Thank you!"""    
         
         # URL encode message
         encoded_message = quote(message, safe='*\n')

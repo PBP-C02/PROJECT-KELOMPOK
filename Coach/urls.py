@@ -26,6 +26,7 @@ urlpatterns = [
 
     # Flutter endpoints
     path('create-flutter/', create_coach_flutter, name='create_coach_flutter'),
+    path('update-flutter/<uuid:pk>/', update_coach_flutter, name='update_coach_flutter'),
     path('json/', show_json, name='show_json'),
     
     # Proxy image
