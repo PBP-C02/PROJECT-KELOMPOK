@@ -529,6 +529,11 @@ def ajax_search_coaches(request):
             'image_url': request.build_absolute_uri(coach.image.url) if coach.image else None, 
             'user_name': coach.user.nama,
             'user_id': str(coach.user.id),
+            'user_phone': getattr(coach.user, 'nomor_handphone', '') if coach.user else '',
+            'formatted_phone': coach.get_formatted_phone() or "",
+            'whatsapp_link': coach.get_whatsapp_link() or "",
+            'instagram_link': coach.instagram_link or "",
+            'mapsLink': coach.mapsLink or "",
             'is_owner': request.user and str(request.user.id) == str(coach.user.id),
             'detail_url': f'/coach/{coach.pk}/',
             'edit_url': f'/coach/edit-coach/{coach.pk}/',
@@ -547,60 +552,43 @@ def proxy_image(request):
         return HttpResponse('No URL provided', status=400)
     
     try:
-        # Add headers to mimic browser request
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
         }
         
-        # Fetch image from external source
         response = requests.get(image_url, headers=headers, timeout=10)
         response.raise_for_status()
         
-        # Return the image with proper content type
         return HttpResponse(
             response.content,
             content_type=response.headers.get('Content-Type', 'image/jpeg')
         )
     except requests.RequestException as e:
-        # Return proper error instead of HTML
-        return HttpResponse(status=404)  # Return 404 instead of 500 with HTML
+        return HttpResponse(status=404) 
     
 @csrf_exempt
 def create_coach_flutter(request):
-    """
-    Create coach endpoint for Flutter app.
-    Supports 2 methods for image upload:
-    1. Multipart form data (recommended) - send as FILES
-    2. Base64 encoded string in JSON - send as 'image_base64' field
-    """
-    # Cek login
+
     if 'user_id' not in request.session:
         return JsonResponse({'success': False, 'message': 'Silakan login terlebih dahulu'}, status=401)
     
     if request.method == 'POST':
         try:
-            # Cek apakah request adalah multipart/form-data atau JSON
             if request.content_type and 'multipart/form-data' in request.content_type:
-                # Method 1: Multipart form data (FILES)
                 data = request.POST
                 image_file = request.FILES.get('image')
             else:
-                # Method 2: JSON with base64 image
                 data = json.loads(request.body)
                 image_file = None
                 
-                # Decode base64 image jika ada
                 image_base64 = data.get('image_base64')
                 if image_base64:
                     try:
-                        # Remove data URL prefix if exists (e.g., "data:image/png;base64,")
                         if ',' in image_base64:
                             image_base64 = image_base64.split(',')[1]
                         
-                        # Decode base64
                         image_data = base64.b64decode(image_base64)
                         
-                        # Create ContentFile from decoded data
                         image_file = ContentFile(image_data, name='coach_image.jpg')
                     except Exception as e:
                         return JsonResponse({
@@ -608,7 +596,6 @@ def create_coach_flutter(request):
                             'message': f'Invalid image format: {str(e)}'
                         }, status=400)
 
-            # Get user
             try:
                 user = User.objects.get(id=request.session['user_id'])
             except User.DoesNotExist:
@@ -617,7 +604,6 @@ def create_coach_flutter(request):
                     'message': 'User not found'
                 }, status=404)
 
-            # Extract data
             title = strip_tags(data.get("title", ""))
             description = strip_tags(data.get("description", ""))
             category = data.get("category", "")
@@ -639,7 +625,6 @@ def create_coach_flutter(request):
             instagram_link = data.get("instagram_link", "")
             mapsLink = data.get("mapsLink", "")
             
-            # Parse date and time
             event_dt = _parse_dt_local(date_str)
             if not event_dt:
                 return JsonResponse({
@@ -656,7 +641,6 @@ def create_coach_flutter(request):
                     'message': 'Invalid time format. Use HH:MM'
                 }, status=400)
             
-            # Validate image if provided
             if image_file:
                 try:
                     image_file = validate_image(image_file)
@@ -666,7 +650,6 @@ def create_coach_flutter(request):
                         'message': str(e)
                     }, status=400)
             
-            # Create coach
             new_coach = Coach(
                 title=title, 
                 description=description,
@@ -683,7 +666,6 @@ def create_coach_flutter(request):
                 user=user
             )
             
-            # Attach image if provided
             if image_file:
                 new_coach.image = image_file
             
@@ -709,6 +691,153 @@ def create_coach_flutter(request):
             }, status=500)
     else:
         return JsonResponse({"status": "error"}, status=401)
+
+@csrf_exempt
+def update_coach_flutter(request, pk):
+    if 'user_id' not in request.session:
+        return JsonResponse({'success': False, 'message': 'Silakan login terlebih dahulu'}, status=401)
+    
+    if request.method == 'POST':
+        try:
+            try:
+                coach = Coach.objects.get(coach_id=pk)
+            except Coach.DoesNotExist:
+                return JsonResponse({
+                    'success': False, 
+                    'message': 'Coach not found'
+                }, status=404)
+            
+            try:
+                user = User.objects.get(id=request.session['user_id'])
+            except User.DoesNotExist:
+                return JsonResponse({
+                    'success': False, 
+                    'message': 'User not found'
+                }, status=404)
+            
+            if coach.user_id != user.id:
+                return JsonResponse({
+                    'success': False, 
+                    'message': 'You do not have permission to edit this coach'
+                }, status=403)
+            
+            if request.content_type and 'multipart/form-data' in request.content_type:
+                data = request.POST
+                image_file = request.FILES.get('image')
+            else:
+                data = json.loads(request.body)
+                image_file = None
+                
+                image_base64 = data.get('image_base64')
+                if image_base64:
+                    try:
+                        if ',' in image_base64:
+                            image_base64 = image_base64.split(',')[1]
+                        
+                        image_data = base64.b64decode(image_base64)
+                        
+                        image_file = ContentFile(image_data, name='coach_image.jpg')
+                    except Exception as e:
+                        return JsonResponse({
+                            'success': False, 
+                            'message': f'Invalid image format: {str(e)}'
+                        }, status=400)
+
+            if 'title' in data and data.get('title'):
+                coach.title = strip_tags(data.get("title"))
+            
+            if 'description' in data:
+                coach.description = strip_tags(data.get("description", ""))
+            
+            if 'category' in data and data.get('category'):
+                coach.category = data.get("category")
+            
+            if 'location' in data and data.get('location'):
+                coach.location = strip_tags(data.get("location"))
+            
+            if 'address' in data and data.get('address'):
+                coach.address = strip_tags(data.get("address"))
+            
+            if 'price' in data:
+                try:
+                    coach.price = int(data.get("price"))
+                except (ValueError, TypeError):
+                    return JsonResponse({
+                        'success': False, 
+                        'message': 'Invalid price value'
+                    }, status=400)
+            
+            if 'date' in data and data.get('date'):
+                date_str = data.get("date")
+                event_dt = _parse_dt_local(date_str)
+                if not event_dt:
+                    return JsonResponse({
+                        'success': False, 
+                        'message': 'Invalid date format. Use YYYY-MM-DDTHH:MM'
+                    }, status=400)
+                coach.date = event_dt.date()
+            
+            if 'startTime' in data and data.get('startTime'):
+                start_time_str = data.get("startTime")
+                start_time = _parse_time(start_time_str)
+                if not start_time:
+                    return JsonResponse({
+                        'success': False, 
+                        'message': 'Invalid start time format. Use HH:MM'
+                    }, status=400)
+                coach.startTime = start_time
+            
+            if 'endTime' in data and data.get('endTime'):
+                end_time_str = data.get("endTime")
+                end_time = _parse_time(end_time_str)
+                if not end_time:
+                    return JsonResponse({
+                        'success': False, 
+                        'message': 'Invalid end time format. Use HH:MM'
+                    }, status=400)
+                coach.endTime = end_time
+            
+            if 'rating' in data:
+                coach.rating = _to_decimal(data.get("rating"))
+            
+            if 'instagram_link' in data:
+                coach.instagram_link = data.get("instagram_link") if data.get("instagram_link") else None
+            
+            if 'mapsLink' in data and data.get('mapsLink'):
+                coach.mapsLink = data.get("mapsLink")
+            
+            if image_file:
+                try:
+                    image_file = validate_image(image_file)
+                    coach.image = image_file
+                except ValidationError as e:
+                    return JsonResponse({
+                        'success': False, 
+                        'message': str(e)
+                    }, status=400)
+            
+            coach.save()
+            
+            return JsonResponse({
+                "success": True,
+                "status": "success",
+                "message": "Coach updated successfully",
+                "coach_id": str(coach.coach_id),
+                "image_url": request.build_absolute_uri(coach.image.url) if coach.image else None
+            }, status=200)
+            
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'success': False, 
+                'message': 'Invalid JSON format'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'success': False, 
+                'message': f'Error: {str(e)}'
+            }, status=500)
+    else:
+        return JsonResponse({"status": "error", "message": "Only POST method allowed"}, status=405)
     
 @csrf_exempt
 def show_json(request):
@@ -729,6 +858,9 @@ def show_json(request):
             'isBooked': coach.isBooked,
             'user_id': str(coach.user_id),
             'user_name': coach.user.nama,
+            'user_phone': coach.user.nomor_handphone if hasattr(coach.user, 'nomor_handphone') else None,
+            'whatsapp_link': coach.get_whatsapp_link(),
+            'formatted_phone': coach.get_formatted_phone(),
             'image_url': request.build_absolute_uri(coach.image.url) if coach.image else None, 
             'instagram_link': coach.instagram_link,
             'mapsLink': coach.mapsLink,
