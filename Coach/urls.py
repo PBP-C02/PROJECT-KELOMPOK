@@ -33,4 +33,4 @@ urlpatterns = [
     path('proxy-image/', proxy_image, name='proxy_image'),
 
     path('<uuid:pk>/', coach_detail, name='coach_detail'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]

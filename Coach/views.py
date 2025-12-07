@@ -161,6 +161,7 @@ def coach_detail(request, pk):
 def create_coach_page(request):
     return render(request, 'create_coach.html')
 
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def add_coach(request):
@@ -227,6 +228,7 @@ def add_coach(request):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
+@csrf_exempt
 @custom_login_required
 def edit_coach_page(request, pk):
     coach = get_object_or_404(Coach, pk=pk)
@@ -234,6 +236,7 @@ def edit_coach_page(request, pk):
         return HttpResponseForbidden(b"FORBIDDEN: not the owner")
     return render(request, "edit_coach.html", {"coach": coach})
 
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def update_coach(request, pk):
@@ -299,6 +302,7 @@ def update_coach(request, pk):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def book_coach(request, pk):
@@ -326,7 +330,8 @@ def book_coach(request, pk):
         return JsonResponse({'success': False, 'message': str(e)}, status=400)
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
-
+    
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def cancel_booking(request, pk):
@@ -346,7 +351,8 @@ def cancel_booking(request, pk):
         })
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
-
+    
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def mark_available(request, pk):
@@ -377,6 +383,7 @@ def mark_available(request, pk):
             'message': str(e)
         }, status=500)
 
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def mark_unavailable(request, pk):
@@ -405,7 +412,8 @@ def mark_unavailable(request, pk):
             'success': False,
             'message': str(e)
         }, status=500)
-
+    
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def delete_coach(request, pk):
