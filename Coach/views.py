@@ -543,6 +543,13 @@ def ajax_search_coaches(request):
             'instagram_link': coach.instagram_link or "",
             'mapsLink': coach.mapsLink or "",
             'is_owner': request.user and str(request.user.id) == str(coach.user.id),
+            'peserta_id': str(coach.peserta_id) if coach.peserta_id else None,
+            'peserta_name': coach.peserta.nama if coach.peserta else None,
+            'booked_by_me': bool(
+                request.user
+                and coach.peserta_id
+                and str(coach.peserta_id) == str(request.user.id)
+            ),
             'detail_url': f'/coach/{coach.pk}/',
             'edit_url': f'/coach/edit-coach/{coach.pk}/',
         })
@@ -872,6 +879,10 @@ def show_json(request):
             'image_url': request.build_absolute_uri(coach.image.url) if coach.image else None, 
             'instagram_link': coach.instagram_link,
             'mapsLink': coach.mapsLink,
+            'peserta_id': str(coach.peserta_id) if coach.peserta_id else None,
+            'peserta_name': coach.peserta.nama if coach.peserta else None,
+            'booked_by_me': request.user.is_authenticated and coach.peserta_id == request.user.id,
+            'is_owner': request.user.is_authenticated and coach.user_id == request.user.id,
         }
         for coach in coach_list
     ]
