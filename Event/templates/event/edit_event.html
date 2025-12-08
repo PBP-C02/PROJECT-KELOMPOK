@@ -204,18 +204,16 @@
                   <option value="unavailable" {% if event.status == 'unavailable' %}selected{% endif %}>Unavailable</option>
                 </select>
               </div>
-              <div class="grid gap-4 sm:grid-cols-2 sm:items-start">
-                <div class="input-shell sm:col-span-1">
-                  <label class="input-label">Photo URL (opsional)</label>
-                  <input id="photoUrlInput" name="photo_url" type="url" class="input-field" placeholder="Tempel URL gambar jika ada" />
-                  <p class="text-[11px] text-slate-500 font-semibold">Jika tidak ada file, kami ambil gambar dari URL ini.</p>
-                </div>
-                <div class="input-shell sm:col-span-1">
-                  <label class="input-label">Upload Photo</label>
-                  <input type="file" name="photo" class="input-field" accept="image/*" />
-                  <p class="text-[11px] text-slate-500 font-semibold">Biarkan kosong untuk mempertahankan foto sekarang.</p>
-                </div>
-              </div>
+              <label class="input-shell">
+                <span class="input-label">Upload Photo (optional)</span>
+                <input
+                  type="file"
+                  name="photo"
+                  accept="image/*"
+                  class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-grey file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.16em] file:text-white hover:border-lime"
+                />
+                <span class="text-[11px] text-slate-500 font-semibold">Unggah foto seperti form Coach. Kosongkan untuk mempertahankan foto sekarang.</span>
+              </label>
             </div>
 
             {% if event.photo %}
@@ -341,24 +339,6 @@
 
       const formData = new FormData(this);
       formData.set('schedule_dates', JSON.stringify(eventDates));
-
-      const fileInput = this.querySelector('input[name=\"photo\"]');
-      const file = fileInput?.files?.[0];
-      const photoUrl = document.getElementById('photoUrlInput')?.value.trim();
-
-      if (!file && photoUrl) {
-        try {
-          const response = await fetch(photoUrl);
-          if (!response.ok) throw new Error('Gagal mengambil gambar dari URL');
-          const blob = await response.blob();
-          const ext = (blob.type && blob.type.split('/')[1]) || 'jpg';
-          const filename = `event-photo.${ext}`;
-          formData.set('photo', new File([blob], filename, { type: blob.type || 'image/jpeg' }));
-        } catch (err) {
-          alert(err.message || 'Gagal memuat foto dari URL, coba unggah manual.');
-          return;
-        }
-      }
 
       fetch('/event/{{ event.id }}/edit/', {
         method: 'POST',

@@ -4,9 +4,6 @@ from django.views.decorators.http import require_http_methods
 from django.db.models import Q, Min
 from datetime import datetime, date
 import json
-import requests
-from django.core.files.base import ContentFile
-from urllib.parse import urlparse
 
 from .models import Event, EventSchedule, EventRegistration
 from .forms import EventForm
@@ -17,8 +14,11 @@ def custom_login_required(view_func):
     from Auth_Profile.models import User
 
     def wrapper(request, *args, **kwargs):
+        # Check if this is a JSON endpoint (for Flutter)
+        is_json_endpoint = '/json/' in request.path or request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+        
         if 'user_id' not in request.session:
-            if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            if is_json_endpoint:
                 return JsonResponse({
                     'success': False,
                     'message': 'Please login first',
@@ -30,6 +30,12 @@ def custom_login_required(view_func):
             request.user = User.objects.get(id=request.session['user_id'])
         except User.DoesNotExist:
             request.session.flush()
+            if is_json_endpoint:
+                return JsonResponse({
+                    'success': False,
+                    'message': 'Session expired. Please login again',
+                    'redirect_url': '/login/'
+                }, status=401)
             return redirect('/login/')
         
         return view_func(request, *args, **kwargs)
@@ -44,22 +50,6 @@ def _to_decimal(s):
         return Decimal(s)
     except:
         return Decimal('0')
-
-def _download_image_from_url(url):
-    """Download image from URL and return ContentFile or None."""
-    if not url:
-        return None
-    try:
-        resp = requests.get(url, timeout=10)
-        resp.raise_for_status()
-        file_name = urlparse(url).path.split('/')[-1] or 'image-from-url'
-        content_type = resp.headers.get('Content-Type', 'image/jpeg')
-        ext = content_type.split('/')[-1] if '/' in content_type else 'jpg'
-        if '.' not in file_name:
-            file_name = f"{file_name}.{ext}"
-        return ContentFile(resp.content, name=file_name)
-    except Exception:
-        return None
 
 # ==================== EVENT LIST ====================
 def event_list(request):
@@ -126,52 +116,59 @@ def event_list(request):
 @require_http_methods(["GET"])
 def ajax_search_events(request):
     try:
-        from Auth_Profile.models import User
-        request.user = User.objects.get(id=request.session['user_id'])
-    except:
-        request.user = None
+        try:
+            from Auth_Profile.models import User
+            request.user = User.objects.get(id=request.session['user_id'])
+        except:
+            request.user = None
 
-    search_query = request.GET.get('search', '')
-    sport_filter = request.GET.get('sport', 'All')
-    show_available = request.GET.get('available', 'false') == 'true'
-    
-    events = Event.objects.all()
-    
-    if sport_filter != 'All':
-        events = events.filter(sport_type=sport_filter)
-    
-    if search_query:
-        events = events.filter(
-            Q(name__icontains=search_query) |
-            Q(city__icontains=search_query) |
-            Q(description__icontains=search_query)
-        )
-    
-    if show_available:
-        events = events.filter(status='available')
-    
-    events_data = []
-    for event in events:
-        organizer_name = getattr(event.organizer, 'username', None) or getattr(event.organizer, 'email', 'Unknown')
-        events_data.append({
-            'id': event.id,
-            'name': event.name,
-            'sport_type': event.sport_type,
-            'city': event.city,
-            'rating': str(event.rating),
-            'entry_price': str(event.entry_price),
-            'status': event.status,
-            'photo_url': event.photo.url if event.photo else '/static/images/default-event.jpg',
-            'organizer': organizer_name,
-            'full_address': event.full_address,
-            'is_organizer': request.user and request.user.id == event.organizer.id if request.user else False,
+        search_query = request.GET.get('search', '')
+        sport_filter = request.GET.get('sport', 'All')
+        show_available = request.GET.get('available', 'false') == 'true'
+        
+        events = Event.objects.all()
+        
+        if sport_filter != 'All':
+            events = events.filter(sport_type=sport_filter)
+        
+        if search_query:
+            events = events.filter(
+                Q(name__icontains=search_query) |
+                Q(city__icontains=search_query) |
+                Q(description__icontains=search_query)
+            )
+        
+        if show_available:
+            events = events.filter(status='available')
+        
+        events_data = []
+        for event in events:
+            organizer_name = getattr(event.organizer, 'username', None) or getattr(event.organizer, 'email', 'Unknown')
+            events_data.append({
+                'id': event.id,
+                'name': event.name,
+                'sport_type': event.sport_type,
+                'city': event.city,
+                'rating': str(event.rating),
+                'entry_price': str(event.entry_price),
+                'status': event.status,
+                'photo_url': event.photo.url if event.photo else '/static/images/default-event.jpg',
+                'organizer': organizer_name,
+                'full_address': event.full_address,
+                'is_organizer': request.user and request.user.id == event.organizer.id if request.user else False,
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'events': events_data,
+            'count': len(events_data)
         })
-    
-    return JsonResponse({
-        'success': True,
-        'events': events_data,
-        'count': len(events_data)
-    })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error loading events: {str(e)}',
+            'events': []
+        }, status=500)
 
 # ==================== ADD EVENT ====================
 @custom_login_required
@@ -183,13 +180,6 @@ def add_event(request):
         if form.is_valid():
             event = form.save(commit=False)
             event.organizer = request.user
-            
-            # Handle photo from URL if no file uploaded
-            photo_url = request.POST.get('photo_url')
-            if not request.FILES.get('photo') and photo_url:
-                downloaded = _download_image_from_url(photo_url)
-                if downloaded:
-                    event.photo = downloaded
 
             event.save()
             
@@ -257,13 +247,6 @@ def edit_event(request, pk):
             if request.POST.get('clear_photo'):
                 event.photo.delete(save=False)
                 event.photo = None
-
-            # Handle photo from URL if no new file uploaded
-            photo_url = request.POST.get('photo_url')
-            if not request.FILES.get('photo') and photo_url:
-                downloaded = _download_image_from_url(photo_url)
-                if downloaded:
-                    event.photo = downloaded
 
             event.save()
 
@@ -568,21 +551,83 @@ import json
 def json_events(request):
     """Get all events as JSON"""
     try:
-        from Auth_Profile.models import User
-        user = User.objects.get(id=request.session.get('user_id')) if 'user_id' in request.session else None
-    except:
-        user = None
-    
-    events = Event.objects.all()
-    
-    # Get user registered events
-    user_registered = []
-    if user:
-        user_registered = EventRegistration.objects.filter(user=user).values_list('event_id', flat=True)
-    
-    data = []
-    for event in events:
-        data.append({
+        try:
+            from Auth_Profile.models import User
+            user = User.objects.get(id=request.session.get('user_id')) if 'user_id' in request.session else None
+        except:
+            user = None
+        
+        events = Event.objects.all()
+        
+        # Get user registered events
+        user_registered = []
+        if user:
+            user_registered = EventRegistration.objects.filter(user=user).values_list('event_id', flat=True)
+        
+        data = []
+        for event in events:
+            data.append({
+                'id': event.id,
+                'name': event.name,
+                'sport_type': event.sport_type,
+                'description': event.description or '',
+                'city': event.city,
+                'full_address': event.full_address,
+                'google_maps_link': event.google_maps_link or '',
+                'entry_price': str(event.entry_price),
+                'activities': event.activities or '',
+                'rating': str(event.rating),
+                'photo_url': event.photo.url if event.photo else '',
+                'status': event.status,
+                'category': event.category,
+                'organizer_id': event.organizer.id,
+                'organizer_name': event.organizer.nama if hasattr(event.organizer, 'nama') else event.organizer.email,
+                'created_at': event.created_at.isoformat(),
+                'is_organizer': user.id == event.organizer.id if user else False,
+                'is_registered': event.id in user_registered,
+            })
+        
+        return JsonResponse(data, safe=False)
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error loading events: {str(e)}'
+        }, status=500)
+
+@csrf_exempt
+def json_event_detail(request, pk):
+    """Get single event detail with schedules"""
+    try:
+        try:
+            from Auth_Profile.models import User
+            user = User.objects.get(id=request.session.get('user_id')) if 'user_id' in request.session else None
+        except:
+            user = None
+        
+        try:
+            event = Event.objects.get(pk=pk)
+        except Event.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Event not found'}, status=404)
+        
+        # Get schedules
+        schedules = EventSchedule.objects.filter(
+            event=event,
+            is_available=True,
+            date__gte=datetime.now().date()
+        ).order_by('date')
+        
+        schedules_data = [{
+            'id': str(s.pk_event_sched),
+            'date': s.date.isoformat(),
+        } for s in schedules]
+        
+        # Check if user registered
+        user_schedules = []
+        if user:
+            registrations = EventRegistration.objects.filter(event=event, user=user)
+            user_schedules = [str(r.schedule.pk_event_sched) for r in registrations]
+        
+        data = {
             'id': event.id,
             'name': event.name,
             'sport_type': event.sport_type,
@@ -600,66 +645,16 @@ def json_events(request):
             'organizer_name': event.organizer.nama if hasattr(event.organizer, 'nama') else event.organizer.email,
             'created_at': event.created_at.isoformat(),
             'is_organizer': user.id == event.organizer.id if user else False,
-            'is_registered': event.id in user_registered,
-        })
-    
-    return JsonResponse(data, safe=False)
-
-@csrf_exempt
-def json_event_detail(request, pk):
-    """Get single event detail with schedules"""
-    try:
-        from Auth_Profile.models import User
-        user = User.objects.get(id=request.session.get('user_id')) if 'user_id' in request.session else None
-    except:
-        user = None
-    
-    try:
-        event = Event.objects.get(pk=pk)
-    except Event.DoesNotExist:
-        return JsonResponse({'success': False, 'message': 'Event not found'}, status=404)
-    
-    # Get schedules
-    schedules = EventSchedule.objects.filter(
-        event=event,
-        is_available=True,
-        date__gte=datetime.now().date()
-    ).order_by('date')
-    
-    schedules_data = [{
-        'id': str(s.pk_event_sched),
-        'date': s.date.isoformat(),
-    } for s in schedules]
-    
-    # Check if user registered
-    user_schedules = []
-    if user:
-        registrations = EventRegistration.objects.filter(event=event, user=user)
-        user_schedules = [str(r.schedule.pk_event_sched) for r in registrations]
-    
-    data = {
-        'id': event.id,
-        'name': event.name,
-        'sport_type': event.sport_type,
-        'description': event.description or '',
-        'city': event.city,
-        'full_address': event.full_address,
-        'google_maps_link': event.google_maps_link or '',
-        'entry_price': str(event.entry_price),
-        'activities': event.activities or '',
-        'rating': str(event.rating),
-        'photo_url': event.photo.url if event.photo else '',
-        'status': event.status,
-        'category': event.category,
-        'organizer_id': event.organizer.id,
-        'organizer_name': event.organizer.nama if hasattr(event.organizer, 'nama') else event.organizer.email,
-        'created_at': event.created_at.isoformat(),
-        'is_organizer': user.id == event.organizer.id if user else False,
-        'schedules': schedules_data,
-        'user_schedules': user_schedules,
-    }
-    
-    return JsonResponse(data)
+            'schedules': schedules_data,
+            'user_schedules': user_schedules,
+        }
+        
+        return JsonResponse(data)
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'message': f'Error loading event: {str(e)}'
+        }, status=500)
 
 @csrf_exempt
 @custom_login_required
@@ -797,3 +792,121 @@ def json_my_bookings(request):
         })
     
     return JsonResponse(list(bookings.values()), safe=False)
+
+@csrf_exempt
+@custom_login_required
+def json_toggle_availability(request, pk):
+    """Toggle event availability from Flutter"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+    
+    try:
+        event = get_object_or_404(Event, pk=pk)
+        
+        # Check if user is the organizer
+        if event.organizer.id != request.user.id:
+            return JsonResponse({'success': False, 'message': 'You are not authorized'}, status=403)
+        
+        data = json.loads(request.body)
+        is_available = data.get('is_available')
+        
+        if type(is_available) is not bool:
+            return JsonResponse({'success': False, 'message': 'Invalid status'}, status=400)
+        
+        # Update event status
+        event.status = 'available' if is_available else 'unavailable'
+        event.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Event marked as {"available" if is_available else "unavailable"}',
+            'status': event.status
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+@csrf_exempt
+@custom_login_required
+def json_edit_event(request, pk):
+    """Edit event from Flutter"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+    
+    try:
+        event = get_object_or_404(Event, pk=pk)
+        
+        # Check if user is the organizer
+        if event.organizer.id != request.user.id:
+            return JsonResponse({'success': False, 'message': 'You are not authorized'}, status=403)
+        
+        data = json.loads(request.body)
+        
+        # Update event fields
+        event.name = data.get('name', event.name)
+        event.sport_type = data.get('sport_type', event.sport_type)
+        event.description = data.get('description', event.description)
+        event.city = data.get('city', event.city)
+        event.full_address = data.get('full_address', event.full_address)
+        event.entry_price = data.get('entry_price', event.entry_price)
+        event.activities = data.get('activities', event.activities)
+        event.rating = data.get('rating', event.rating)
+        event.google_maps_link = data.get('google_maps_link', event.google_maps_link)
+        event.category = data.get('category', event.category)
+        event.status = data.get('status', event.status)
+        
+        event.save()
+        
+        # Update schedules if provided
+        if 'schedule_dates' in data:
+            schedule_dates = data['schedule_dates']
+            new_dates = set()
+            
+            for date_str in schedule_dates:
+                try:
+                    date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+                    new_dates.add(date_obj)
+                except ValueError:
+                    continue
+            
+            # Remove schedules not in new list
+            EventSchedule.objects.filter(event=event).exclude(date__in=new_dates).delete()
+            
+            # Add or keep schedules in new list
+            for d in new_dates:
+                EventSchedule.objects.get_or_create(
+                    event=event,
+                    date=d,
+                    defaults={'is_available': True}
+                )
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Event updated successfully!',
+            'event_id': event.id
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
+
+@csrf_exempt
+@custom_login_required
+def json_delete_event(request, pk):
+    """Delete event from Flutter"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+    
+    try:
+        event = get_object_or_404(Event, pk=pk)
+        
+        # Check if user is the organizer
+        if event.organizer.id != request.user.id:
+            return JsonResponse({'success': False, 'message': 'You are not authorized'}, status=403)
+        
+        event_name = event.name
+        event.delete()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Event "{event_name}" deleted successfully!'
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)

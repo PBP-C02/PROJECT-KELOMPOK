@@ -34,4 +34,7 @@ urlpatterns = [
     path('json/<int:pk>/join/', views.json_join_event, name='json_join'),
     path('json/<int:pk>/cancel/', views.json_cancel_event, name='json_cancel'),
     path('json/my-bookings/', views.json_my_bookings, name='json_my_bookings'),
+    path('json/<int:pk>/toggle-availability/', views.json_toggle_availability, name='json_toggle_availability'),
+    path('json/<int:pk>/edit/', views.json_edit_event, name='json_edit'),
+    path('json/<int:pk>/delete/', views.json_delete_event, name='json_delete'),
 ]
