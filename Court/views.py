@@ -214,6 +214,7 @@ def api_add_court(request):
                 data.get('price_per_hour'),
                 default=Decimal("0"),
                 min_value=Decimal("0"),
+                max_value=Decimal("999999999"),
             )
             rating = clean_decimal(
                 data.get('rating'),
