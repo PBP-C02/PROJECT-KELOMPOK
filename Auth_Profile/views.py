@@ -231,3 +231,100 @@ def check_session(request):
         return JsonResponse({'loggedIn': False})
 
 
+@csrf_exempt
+def profile_api_view(request):
+    """
+    JSON API to fetch and update the authenticated user's profile.
+    """
+    if 'user_id' not in request.session:
+        return JsonResponse(
+            {'success': False, 'message': 'Not authenticated'},
+            status=401
+        )
+
+    try:
+        user = User.objects.get(id=request.session['user_id'])
+    except User.DoesNotExist:
+        request.session.flush()
+        return JsonResponse(
+            {'success': False, 'message': 'User not found'},
+            status=401
+        )
+
+    if request.method == 'GET':
+        return JsonResponse(
+            {
+                'success': True,
+                'data': {
+                    'nama': user.nama,
+                    'email': user.email,
+                    'kelamin': user.kelamin,
+                    'tanggal_lahir': str(user.tanggal_lahir),
+                    'nomor_handphone': user.nomor_handphone,
+                },
+            }
+        )
+
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {'success': False, 'message': 'Invalid JSON body'},
+                status=400
+            )
+
+        nama = data.get('nama')
+        kelamin = data.get('kelamin')
+        tanggal_lahir = data.get('tanggal_lahir')
+        nomor_handphone = data.get('nomor_handphone')
+
+        if not all([nama, kelamin, tanggal_lahir, nomor_handphone]):
+            return JsonResponse(
+                {'success': False, 'message': 'Semua field harus diisi'},
+                status=400
+            )
+
+        if kelamin not in ['L', 'P']:
+            return JsonResponse(
+                {'success': False, 'message': 'Kelamin harus L atau P'},
+                status=400
+            )
+
+        try:
+            datetime.strptime(tanggal_lahir, '%Y-%m-%d')
+        except ValueError:
+            return JsonResponse(
+                {
+                    'success': False,
+                    'message': 'Format tanggal lahir tidak valid (YYYY-MM-DD)',
+                },
+                status=400
+            )
+
+        if not nomor_handphone.replace('+', '').replace('-', '').isdigit():
+            return JsonResponse(
+                {'success': False, 'message': 'Nomor handphone hanya boleh berisi angka'},
+                status=400
+            )
+
+        # Update allowed fields only (email remains unchanged)
+        user.nama = nama
+        user.kelamin = kelamin
+        user.tanggal_lahir = tanggal_lahir
+        user.nomor_handphone = nomor_handphone
+        user.save()
+
+        request.session['nama'] = user.nama
+        request.session['kelamin'] = user.kelamin
+        request.session['tanggal_lahir'] = str(user.tanggal_lahir)
+        request.session['nomor_handphone'] = user.nomor_handphone
+
+        return JsonResponse({'success': True, 'message': 'Profil berhasil diperbarui'})
+
+    return JsonResponse(
+        {'success': False, 'message': 'Method not allowed'},
+        status=405
+    )
+
+
