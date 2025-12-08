@@ -161,6 +161,7 @@ def coach_detail(request, pk):
 def create_coach_page(request):
     return render(request, 'create_coach.html')
 
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def add_coach(request):
@@ -227,6 +228,7 @@ def add_coach(request):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
+@csrf_exempt
 @custom_login_required
 def edit_coach_page(request, pk):
     coach = get_object_or_404(Coach, pk=pk)
@@ -234,6 +236,7 @@ def edit_coach_page(request, pk):
         return HttpResponseForbidden(b"FORBIDDEN: not the owner")
     return render(request, "edit_coach.html", {"coach": coach})
 
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def update_coach(request, pk):
@@ -299,6 +302,7 @@ def update_coach(request, pk):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)}, status=500)
 
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def book_coach(request, pk):
@@ -326,7 +330,8 @@ def book_coach(request, pk):
         return JsonResponse({'success': False, 'message': str(e)}, status=400)
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
-
+    
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def cancel_booking(request, pk):
@@ -346,7 +351,8 @@ def cancel_booking(request, pk):
         })
     except Exception as e:
         return JsonResponse({'success': False, 'message': f'Error: {str(e)}'}, status=500)
-
+    
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def mark_available(request, pk):
@@ -377,6 +383,7 @@ def mark_available(request, pk):
             'message': str(e)
         }, status=500)
 
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def mark_unavailable(request, pk):
@@ -405,7 +412,8 @@ def mark_unavailable(request, pk):
             'success': False,
             'message': str(e)
         }, status=500)
-
+    
+@csrf_exempt
 @custom_login_required
 @require_http_methods(["POST"])
 def delete_coach(request, pk):
@@ -535,6 +543,13 @@ def ajax_search_coaches(request):
             'instagram_link': coach.instagram_link or "",
             'mapsLink': coach.mapsLink or "",
             'is_owner': request.user and str(request.user.id) == str(coach.user.id),
+            'peserta_id': str(coach.peserta_id) if coach.peserta_id else None,
+            'peserta_name': coach.peserta.nama if coach.peserta else None,
+            'booked_by_me': bool(
+                request.user
+                and coach.peserta_id
+                and str(coach.peserta_id) == str(request.user.id)
+            ),
             'detail_url': f'/coach/{coach.pk}/',
             'edit_url': f'/coach/edit-coach/{coach.pk}/',
         })
@@ -864,6 +879,10 @@ def show_json(request):
             'image_url': request.build_absolute_uri(coach.image.url) if coach.image else None, 
             'instagram_link': coach.instagram_link,
             'mapsLink': coach.mapsLink,
+            'peserta_id': str(coach.peserta_id) if coach.peserta_id else None,
+            'peserta_name': coach.peserta.nama if coach.peserta else None,
+            'booked_by_me': request.user.is_authenticated and coach.peserta_id == request.user.id,
+            'is_owner': request.user.is_authenticated and coach.user_id == request.user.id,
         }
         for coach in coach_list
     ]
