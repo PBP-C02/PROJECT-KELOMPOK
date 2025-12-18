@@ -197,84 +197,74 @@ def leave_post(request, post_id):
 
 @csrf_exempt
 def show_json(request):
-    # 1. Mulai dengan mengambil semua data (QuerySet dasar)
+    # 1. Ambil data dengan select_related untuk optimasi query (mengurangi hit database)
     posts = PartnerPost.objects.select_related('creator')
 
-    # 2. FILTERING: Kategori Olahraga (Sport)
-    # Analogi: Memilih lorong rak spesifik di gudang
-    selected_sport = request.GET.get('sport') # Mengambil param ?sport=...
+    # 2. FILTERING
+    selected_sport = request.GET.get('sport')
     if selected_sport and selected_sport != "":
-        # iexact: Case-insensitive (Tennis sama dengan tennis)
         posts = posts.filter(category__iexact=selected_sport)
 
-    # 3. SEARCHING: Pencarian Teks (Judul atau Lokasi)
-    # Analogi: Membaca label barang satu per satu
-    search_query = request.GET.get('q') # Mengambil param ?q=...
+    # 3. SEARCHING
+    search_query = request.GET.get('q')
     if search_query:
-        # Gunakan Q untuk logika OR. Mencari di title ATAU lokasi
         posts = posts.filter(
             Q(title__icontains=search_query) | 
             Q(lokasi__icontains=search_query)
         )
 
-    # 4. SORTING: Pengurutan
-    # Analogi: Menyusun barang di rak agar mudah diambil
+    # 4. SORTING
     sort_option = request.GET.get('sort')
-    
-    # Kita perlu anotasi jumlah partisipan jika ingin sorting berdasarkan slot/popularitas
     if sort_option == 'slots_desc':
         posts = posts.annotate(num_participants=Count('postparticipants')).order_by('-num_participants')
-    elif sort_option == 'date_desc': # Terbaru
+    elif sort_option == 'date_desc':
         posts = posts.order_by('-tanggal', '-jam_mulai')
-    elif sort_option == 'date_asc': # Terlama (atau jadwal terdekat dari sekarang)
+    elif sort_option == 'date_asc':
         posts = posts.order_by('tanggal', 'jam_mulai')
-    elif sort_option == 'name_asc': # Abjad A-Z
+    elif sort_option == 'name_asc':
         posts = posts.order_by('title')
-    elif sort_option == 'name_desc': # Abjad Z-A
+    elif sort_option == 'name_desc':
         posts = posts.order_by('-title')
     else:
-        # Default sorting: Paling baru dibuat atau jadwal terdekat
         posts = posts.order_by('-tanggal')
 
-    # --- Eksekusi Query (Looping Data) ---
-    # Django baru benar-benar memanggil database di sini (Lazy Loading)
-    
     data = []
-
-    # Cek user yang login untuk status partisipan
+    
+    # Ambil user yang sedang login dengan aman
     current_user_id = request.session.get('user_id')
     current_user = None
     if current_user_id:
         try:
             current_user = User.objects.get(id=current_user_id)
         except User.DoesNotExist:
-            pass
+            current_user = None
 
     for post in posts:
         is_participant = False
         is_creator = False
         
+        # Default value jika creator null (akun terhapus)
         creator_name = "Unknown"
         creator_id = "0"
 
-        # Logika User Login
-        if current_user:
-            is_participant = post.is_participant(current_user)
-        
         if post.creator:
-            creator_name = post.creator.nama 
+            # Pastikan field 'nama' ada di model User kamu. Jika error, ganti ke 'username'
+            creator_name = getattr(post.creator, 'nama', post.creator.username)
             creator_id = str(post.creator.id)
             
             if current_user and post.creator.id == current_user.id:
                 is_creator = True
 
+        if current_user:
+            is_participant = post.is_participant(current_user)
+
         data.append({
-            "post_id": str(post.post_id),
+            "post_id": str(post.post_id), # Konversi UUID ke String
             "title": post.title,
             "description": post.description,
             "category": post.category,
-            "tanggal": str(post.tanggal),
-            "jam_mulai": post.jam_mulai.strftime("%H:%M"),
+            "tanggal": str(post.tanggal), # Format YYYY-MM-DD
+            "jam_mulai": post.jam_mulai.strftime("%H:%M"), # Format HH:MM
             "jam_selesai": post.jam_selesai.strftime("%H:%M"),
             "lokasi": post.lokasi,
             "creator_name": creator_name,
