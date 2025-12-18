@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET
 from django.db.models import Q, Min
 from datetime import datetime, date
 import json
 
 from .models import Event, EventSchedule, EventRegistration
-from .forms import EventForm
+from .forms import EventForm, CITY_CHOICES, canonical_city
 
 # ==================== CUSTOM LOGIN DECORATOR ====================
 def custom_login_required(view_func):
@@ -106,6 +107,7 @@ def event_list(request):
         "sport_choices": sport_choices,
         "selected_category": selected_category,
         "available_only": available_only,
+        "city_choices": CITY_CHOICES,
         "user": request.user,
         "user_registered_events": list(user_registered_events),
     }
@@ -222,7 +224,10 @@ def add_event(request):
     else:
         form = EventForm()
     
-    return render(request, 'event/add_event.html', {'form': form})
+    return render(request, 'event/add_event.html', {
+        'form': form,
+        'city_choices': CITY_CHOICES,
+    })
 
 # ==================== EDIT EVENT ====================
 @custom_login_required
@@ -291,7 +296,9 @@ def edit_event(request, pk):
     return render(request, 'event/edit_event.html', {
         'form': form,
         'event': event,
-        'schedules': schedules
+        'schedules': schedules,
+        'city_choices': CITY_CHOICES,
+        'event_city_valid': canonical_city(getattr(event, 'city', None)) is not None,
     })
 
 # ==================== DELETE EVENT ====================
@@ -547,6 +554,14 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+@require_GET
+def json_event_cities(request):
+    """
+    Return unique city options (deduped case-insensitively) to avoid duplicate
+    DropdownMenuItem values in Flutter.
+    """
+    return JsonResponse({"success": True, "cities": CITY_CHOICES})
+
 @csrf_exempt
 def json_events(request):
     """Get all events as JSON"""
@@ -665,13 +680,17 @@ def json_create_event(request):
     
     try:
         data = json.loads(request.body)
+
+        city = canonical_city(data.get('city'))
+        if not city:
+            return JsonResponse({'success': False, 'message': 'Invalid city'}, status=400)
         
         # Create event
         event = Event.objects.create(
             name=data['name'],
             sport_type=data['sport_type'],
             description=data.get('description', ''),
-            city=data['city'],
+            city=city,
             full_address=data['full_address'],
             entry_price=data['entry_price'],
             activities=data.get('activities', ''),
@@ -840,12 +859,17 @@ def json_edit_event(request, pk):
             return JsonResponse({'success': False, 'message': 'You are not authorized'}, status=403)
         
         data = json.loads(request.body)
+
+        if 'city' in data:
+            city = canonical_city(data.get('city'))
+            if not city:
+                return JsonResponse({'success': False, 'message': 'Invalid city'}, status=400)
+            event.city = city
         
         # Update event fields
         event.name = data.get('name', event.name)
         event.sport_type = data.get('sport_type', event.sport_type)
         event.description = data.get('description', event.description)
-        event.city = data.get('city', event.city)
         event.full_address = data.get('full_address', event.full_address)
         event.entry_price = data.get('entry_price', event.entry_price)
         event.activities = data.get('activities', event.activities)

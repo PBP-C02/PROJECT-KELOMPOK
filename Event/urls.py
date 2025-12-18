@@ -28,6 +28,7 @@ urlpatterns = [
     path('<int:pk>/ajax/schedules/', views.ajax_get_schedules, name='ajax_schedules'),
     
     # JSON ENDPOINTS FOR FLUTTER 
+    path('json/cities/', views.json_event_cities, name='json_event_cities'),
     path('json/', views.json_events, name='json_events'),
     path('json/<int:pk>/', views.json_event_detail, name='json_event_detail'),
     path('json/create/', views.json_create_event, name='json_create'),
