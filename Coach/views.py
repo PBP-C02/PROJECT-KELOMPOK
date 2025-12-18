@@ -415,7 +415,7 @@ def mark_unavailable(request, pk):
     
 @csrf_exempt
 @custom_login_required
-@require_http_methods(["POST"])
+@require_http_methods(["DELETE"])
 def delete_coach(request, pk):
     """Delete coach"""
     try:
@@ -560,26 +560,69 @@ def ajax_search_coaches(request):
         'count': len(coaches_data)
     })
 
-
+@csrf_exempt
 def proxy_image(request):
-    image_url = request.GET.get('url')
-    if not image_url:
-        return HttpResponse('No URL provided', status=400)
+    from django.conf import settings
+    from pathlib import Path
+    import mimetypes
     
-    try:
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-        }
-        
-        response = requests.get(image_url, headers=headers, timeout=10)
-        response.raise_for_status()
-        
-        return HttpResponse(
-            response.content,
-            content_type=response.headers.get('Content-Type', 'image/jpeg')
-        )
-    except requests.RequestException as e:
-        return HttpResponse(status=404) 
+    # Get path parameter (for local media files) or url parameter (for external URLs)
+    file_path = request.GET.get('path')
+    image_url = request.GET.get('url')
+    
+    # Handle local media files
+    if file_path:
+        try:
+            # Construct full file path
+            full_path = Path(settings.MEDIA_ROOT) / file_path
+            
+            # Security check: ensure file is within MEDIA_ROOT
+            if not str(full_path.resolve()).startswith(str(settings.MEDIA_ROOT)):
+                return HttpResponse('Invalid file path', status=403)
+            
+            # Check if file exists
+            if not full_path.exists() or not full_path.is_file():
+                return HttpResponse('File not found', status=404)
+            
+            # Get mimetype
+            content_type, _ = mimetypes.guess_type(str(full_path))
+            if not content_type:
+                content_type = 'application/octet-stream'
+            
+            # Read and serve file with CORS headers
+            with open(full_path, 'rb') as f:
+                response = HttpResponse(f.read(), content_type=content_type)
+                response['Access-Control-Allow-Origin'] = '*'
+                response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+                response['Access-Control-Allow-Headers'] = 'Content-Type'
+                return response
+                
+        except Exception as e:
+            return HttpResponse(f'Error: {str(e)}', status=500)
+    
+    # Handle external URLs (original functionality)
+    if image_url:
+        try:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+            }
+            
+            response = requests.get(image_url, headers=headers, timeout=10)
+            response.raise_for_status()
+            
+            http_response = HttpResponse(
+                response.content,
+                content_type=response.headers.get('Content-Type', 'image/jpeg')
+            )
+            # Add CORS headers
+            http_response['Access-Control-Allow-Origin'] = '*'
+            http_response['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+            http_response['Access-Control-Allow-Headers'] = 'Content-Type'
+            return http_response
+        except requests.RequestException as e:
+            return HttpResponse(status=404)
+    
+    return HttpResponse('No path or url provided', status=400) 
     
 @csrf_exempt
 def create_coach_flutter(request):
@@ -876,7 +919,7 @@ def show_json(request):
             'user_phone': coach.user.nomor_handphone if hasattr(coach.user, 'nomor_handphone') else None,
             'whatsapp_link': coach.get_whatsapp_link(),
             'formatted_phone': coach.get_formatted_phone(),
-            'image_url': request.build_absolute_uri(coach.image.url) if coach.image else None, 
+            'image_url': f"{request.scheme}://{request.get_host()}/coach/proxy-image/?path={coach.image.name}" if coach.image else None, 
             'instagram_link': coach.instagram_link,
             'mapsLink': coach.mapsLink,
             'peserta_id': str(coach.peserta_id) if coach.peserta_id else None,
