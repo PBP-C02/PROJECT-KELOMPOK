@@ -43,12 +43,12 @@
           {% csrf_token %}
           <div class="grid gap-5 md:grid-cols-2">
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>Coach Name</span>
+              <span>Judul</span>
               <input id="id_title" name="title" type="text" placeholder="Coach name" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>Sport Type</span>
+              <span>Kategori</span>
               <select id="id_category" name="category" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20">
                 <option value="">------</option>
                 <option value="tennis">Tennis</option>
@@ -64,63 +64,75 @@
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>City</span>
-              <input id="id_location" name="location" type="text" placeholder="City" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
+              <span>Kota</span>
+              <select id="id_location" name="location" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20">
+                <option value="">Pilih kota</option>
+                <option value="Jakarta">Jakarta</option>
+                <option value="Bandung">Bandung</option>
+                <option value="Surabaya">Surabaya</option>
+                <option value="Depok">Depok</option>
+                <option value="Tangerang">Tangerang</option>
+                <option value="Bekasi">Bekasi</option>
+                <option value="Yogyakarta">Yogyakarta</option>
+                <option value="Medan">Medan</option>
+                <option value="Bogor">Bogor</option>
+                <option value="Denpasar">Denpasar</option>
+              </select>
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
-              <span>Full Address</span>
-              <textarea id="id_address" name="address" rows="3" placeholder="Complete address" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20"></textarea>
+              <span>Alamat lengkap</span>
+              <textarea id="id_address" name="address" rows="3" placeholder="Alamat Lengkap" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20"></textarea>
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>Date</span>
+              <span>Tanggal</span>
               <div class="relative" onclick="document.getElementById('id_date').showPicker()" style="cursor: pointer;">
                 <input id="id_date" name="date" type="date" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20 w-full cursor-pointer">
               </div>
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>Start Time</span>
+              <span>Waktu mulai</span>
               <div class="relative" onclick="document.getElementById('id_startTime').showPicker()" style="cursor: pointer;">
                 <input id="id_startTime" name="startTime" type="time" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20 w-full cursor-pointer">
               </div>
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>End Time</span>
+              <span>Waktu selesai</span>
               <div class="relative" onclick="document.getElementById('id_endTime').showPicker()" style="cursor: pointer;">
                 <input id="id_endTime" name="endTime" type="time" required class="rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:ring-4 focus:ring-lime/20 w-full cursor-pointer">
               </div>
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>Price (Rp)</span>
+              <span>Harga per sesi(Rp)</span>
               <input id="id_price" name="price" type="number" min="0" step="1" placeholder="0" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>Rating (optional)</span>
+              <span>Rating (0-5)</span>
               <input id="id_rating" name="rating" type="number" min="0" max="5" step="0.1" placeholder="0" value="0" class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700 md:col-span-2">
-              <span>Short description (optional)</span>
+              <span>Deskripsi</span>
               <textarea id="id_description" name="description" rows="4" placeholder="Description about the coach" class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20"></textarea>
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>Google Maps link</span>
+              <span>Link Google Maps</span>
               <input id="id_mapsLink" name="mapsLink" type="url" placeholder="https://maps.google.com/?q=-6.2,106.8" required class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
             </label>
 
             <label class="flex flex-col gap-2 text-sm font-semibold text-slate-700">
-              <span>Instagram Link (optional)</span>
+              <span>Link Instagram (opsional)</span>
               <input id="id_instagram_link" name="instagram_link" type="url" placeholder="https://instagram.com/username" class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-lime focus:bg-white focus:ring-4 focus:ring-lime/20">
             </label>
 
             <label class="flex flex-col gap-3 text-sm font-semibold text-slate-700 md:col-span-2">
-              <span>Coach Photo (optional)</span>
+              <span>Foto Coach</span>
               <input id="id_image" name="image" type="file" accept="image/*" class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-grey file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.16em] file:text-white hover:border-lime">
               <span class="text-xs font-medium text-slate-500">Upload foto untuk membuat profil coach lebih menarik.</span>
             </label>
