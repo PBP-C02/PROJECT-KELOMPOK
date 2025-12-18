@@ -7,7 +7,7 @@ from datetime import datetime, date
 import json
 
 from .models import Event, EventSchedule, EventRegistration
-from .forms import EventForm
+from .forms import EventForm, CITY_CHOICES, canonical_city
 
 # ==================== CUSTOM LOGIN DECORATOR ====================
 def custom_login_required(view_func):
@@ -51,34 +51,6 @@ def _to_decimal(s):
         return Decimal(s)
     except:
         return Decimal('0')
-
-def _normalize_choice_text(value: str) -> str:
-    if value is None:
-        return ""
-    # Collapse multiple spaces + trim
-    return " ".join(str(value).split()).strip()
-
-def _unique_case_insensitive(values):
-    """
-    Return unique string values in original casing, deduped case-insensitively
-    while also trimming/collapsing whitespace.
-    """
-    seen = set()
-    result = []
-    for v in values:
-        cleaned = _normalize_choice_text(v)
-        if not cleaned:
-            continue
-        key = cleaned.casefold()
-        if key in seen:
-            continue
-        seen.add(key)
-        result.append(cleaned)
-    result.sort(key=lambda s: s.casefold())
-    return result
-
-def _get_city_choices_queryset():
-    return Event.objects.values_list("city", flat=True)
 
 # ==================== EVENT LIST ====================
 def event_list(request):
@@ -135,7 +107,7 @@ def event_list(request):
         "sport_choices": sport_choices,
         "selected_category": selected_category,
         "available_only": available_only,
-        "city_choices": _unique_case_insensitive(_get_city_choices_queryset()),
+        "city_choices": CITY_CHOICES,
         "user": request.user,
         "user_registered_events": list(user_registered_events),
     }
@@ -254,7 +226,7 @@ def add_event(request):
     
     return render(request, 'event/add_event.html', {
         'form': form,
-        'city_choices': _unique_case_insensitive(_get_city_choices_queryset()),
+        'city_choices': CITY_CHOICES,
     })
 
 # ==================== EDIT EVENT ====================
@@ -325,7 +297,8 @@ def edit_event(request, pk):
         'form': form,
         'event': event,
         'schedules': schedules,
-        'city_choices': _unique_case_insensitive(_get_city_choices_queryset()),
+        'city_choices': CITY_CHOICES,
+        'event_city_valid': canonical_city(getattr(event, 'city', None)) is not None,
     })
 
 # ==================== DELETE EVENT ====================
@@ -587,8 +560,7 @@ def json_event_cities(request):
     Return unique city options (deduped case-insensitively) to avoid duplicate
     DropdownMenuItem values in Flutter.
     """
-    cities = _unique_case_insensitive(_get_city_choices_queryset())
-    return JsonResponse({"success": True, "cities": cities})
+    return JsonResponse({"success": True, "cities": CITY_CHOICES})
 
 @csrf_exempt
 def json_events(request):
@@ -708,13 +680,17 @@ def json_create_event(request):
     
     try:
         data = json.loads(request.body)
+
+        city = canonical_city(data.get('city'))
+        if not city:
+            return JsonResponse({'success': False, 'message': 'Invalid city'}, status=400)
         
         # Create event
         event = Event.objects.create(
             name=data['name'],
             sport_type=data['sport_type'],
             description=data.get('description', ''),
-            city=data['city'],
+            city=city,
             full_address=data['full_address'],
             entry_price=data['entry_price'],
             activities=data.get('activities', ''),
@@ -883,12 +859,17 @@ def json_edit_event(request, pk):
             return JsonResponse({'success': False, 'message': 'You are not authorized'}, status=403)
         
         data = json.loads(request.body)
+
+        if 'city' in data:
+            city = canonical_city(data.get('city'))
+            if not city:
+                return JsonResponse({'success': False, 'message': 'Invalid city'}, status=400)
+            event.city = city
         
         # Update event fields
         event.name = data.get('name', event.name)
         event.sport_type = data.get('sport_type', event.sport_type)
         event.description = data.get('description', event.description)
-        event.city = data.get('city', event.city)
         event.full_address = data.get('full_address', event.full_address)
         event.entry_price = data.get('entry_price', event.entry_price)
         event.activities = data.get('activities', event.activities)

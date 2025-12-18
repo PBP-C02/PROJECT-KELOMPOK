@@ -1,7 +1,30 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from .models import Event, EventSchedule
 
+CITY_CHOICES = [
+    'Jakarta', 'Surabaya', 'Bandung', 'Medan', 'Bekasi',
+    'Semarang', 'Tangerang', 'Depok', 'Palembang', 'Makassar',
+    'Denpasar', 'Yogyakarta', 'Balikpapan', 'Malang', 'Batam',
+]
+
+_CITY_CANONICAL = {c.casefold(): c for c in CITY_CHOICES}
+
+def canonical_city(value):
+    if value is None:
+        return None
+    cleaned = " ".join(str(value).split()).strip()
+    if not cleaned:
+        return None
+    return _CITY_CANONICAL.get(cleaned.casefold())
+
 class EventForm(forms.ModelForm):
+    city = forms.ChoiceField(
+        choices=[(c, c) for c in CITY_CHOICES],
+        required=True,
+        widget=forms.Select(attrs={'class': 'form-select'}),
+    )
+
     class Meta:
         model = Event
         fields = [
@@ -26,10 +49,6 @@ class EventForm(forms.ModelForm):
             }),
             'sport_type': forms.Select(attrs={
                 'class': 'form-select'
-            }),
-            'city': forms.TextInput(attrs={
-                'class': 'form-input',
-                'placeholder': 'City'
             }),
             'full_address': forms.Textarea(attrs={
                 'class': 'form-textarea',
@@ -88,6 +107,13 @@ class EventForm(forms.ModelForm):
             'category': 'Category',
             'status': 'Status'
         }
+
+    def clean_city(self):
+        value = self.cleaned_data.get('city')
+        city = canonical_city(value)
+        if not city:
+            raise ValidationError('Please select a valid city.')
+        return city
 
 
 class EventScheduleForm(forms.ModelForm):
