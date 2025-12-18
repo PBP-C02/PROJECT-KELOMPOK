@@ -415,7 +415,7 @@ def mark_unavailable(request, pk):
     
 @csrf_exempt
 @custom_login_required
-@require_http_methods(["DELETE"])
+@require_http_methods(["POST"])
 def delete_coach(request, pk):
     """Delete coach"""
     try:
@@ -534,7 +534,7 @@ def ajax_search_coaches(request):
             'end_time': coach.endTime.strftime('%H:%M'),
             'rating': float(coach.rating),
             'is_booked': coach.isBooked,
-            'image_url': request.build_absolute_uri(coach.image.url) if coach.image else None, 
+            'image_url': f"{request.scheme}://{request.get_host()}/coach/proxy-image/?path={coach.image.name}" if coach.image else None, 
             'user_name': coach.user.nama,
             'user_id': str(coach.user.id),
             'user_phone': getattr(coach.user, 'nomor_handphone', '') if coach.user else '',
@@ -734,7 +734,7 @@ def create_coach_flutter(request):
                 "status": "success",
                 "message": "Coach created successfully",
                 "coach_id": str(new_coach.coach_id),
-                "image_url": new_coach.image.url if new_coach.image else None
+                "image_url": f"{request.scheme}://{request.get_host()}/coach/proxy-image/?path={new_coach.image.name}" if new_coach.image else None
             }, status=200)
             
         except json.JSONDecodeError:
@@ -881,7 +881,7 @@ def update_coach_flutter(request, pk):
                 "status": "success",
                 "message": "Coach updated successfully",
                 "coach_id": str(coach.coach_id),
-                "image_url": request.build_absolute_uri(coach.image.url) if coach.image else None
+                "image_url": f"{request.scheme}://{request.get_host()}/coach/proxy-image/?path={coach.image.name}" if coach.image else None
             }, status=200)
             
         except json.JSONDecodeError:

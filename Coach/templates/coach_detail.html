@@ -234,7 +234,7 @@
     if (!confirm('Are you sure you want to delete this coach?')) return;
 
     fetch('/coach/delete-coach/{{ coach.pk }}/', {
-      method: 'DELETE',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': getCookie('csrftoken')
