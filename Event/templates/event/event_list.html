@@ -262,14 +262,29 @@
                 <button class="view-tab" data-view="created">Created Events</button>
               </div>
 
-              <label class="flex shrink-0 items-center gap-2 rounded-xl bg-white/70 px-3 py-2 text-xs sm:text-sm font-semibold text-slate-600 shadow-inner">
-                <input
-                  id="availableOnly"
-                  type="checkbox"
-                  class="h-4 w-4 rounded border border-lime text-lime focus:ring-lime"
-                />
-                <span>Tersedia saja</span>
-              </label>
+              <div class="flex items-center gap-3 flex-wrap">
+                <label class="flex shrink-0 items-center gap-2 rounded-xl bg-white/70 px-3 py-2 text-xs sm:text-sm font-semibold text-slate-600 shadow-inner">
+                  <span class="whitespace-nowrap">Kota</span>
+                  <select
+                    id="cityFilter"
+                    class="h-8 rounded-lg border border-slate-200 bg-white px-2 text-xs sm:text-sm font-semibold text-slate-700 outline-none focus:border-lime focus:ring-2 focus:ring-lime/20"
+                  >
+                    <option value="">Semua kota</option>
+                    {% for city in city_choices %}
+                      <option value="{{ city|lower }}">{{ city }}</option>
+                    {% endfor %}
+                  </select>
+                </label>
+
+                <label class="flex shrink-0 items-center gap-2 rounded-xl bg-white/70 px-3 py-2 text-xs sm:text-sm font-semibold text-slate-600 shadow-inner">
+                  <input
+                    id="availableOnly"
+                    type="checkbox"
+                    class="h-4 w-4 rounded border border-lime text-lime focus:ring-lime"
+                  />
+                  <span>Tersedia saja</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
@@ -415,6 +430,7 @@
 
 <script>
   let selectedSport = '';
+  let selectedCity = '';
   let currentView = 'all';
 
   // Aman untuk semua kondisi (user login / tidak)
@@ -445,6 +461,14 @@
     const availableCheckbox = document.getElementById('availableOnly');
     if (availableCheckbox) {
       availableCheckbox.addEventListener('change', filterEvents);
+    }
+
+    const citySelect = document.getElementById('cityFilter');
+    if (citySelect) {
+      citySelect.addEventListener('change', function() {
+        selectedCity = this.value || '';
+        filterEvents();
+      });
     }
     
     const searchInput = document.getElementById('searchInput');
@@ -492,6 +516,7 @@
       const isRegistered = card.dataset.isRegistered === 'true';
 
       const matchesSport = !selectedSport || cardSport === selectedSport;
+      const matchesCity = !selectedCity || cardCity === selectedCity;
       const matchesAvailability = !availableOnly || cardStatus === 'available';
       const matchesSearch = !searchQuery || 
         cardName.includes(searchQuery) || 
@@ -504,7 +529,7 @@
         matchesView = currentUserId !== null && cardOrganizer === currentUserId;
       }
 
-      if (matchesSport && matchesAvailability && matchesSearch && matchesView) {
+      if (matchesSport && matchesCity && matchesAvailability && matchesSearch && matchesView) {
         card.style.display = '';
         visibleCount++;
       } else {

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.http import require_GET
 from django.db.models import Q, Min
 from datetime import datetime, date
 import json
@@ -50,6 +51,34 @@ def _to_decimal(s):
         return Decimal(s)
     except:
         return Decimal('0')
+
+def _normalize_choice_text(value: str) -> str:
+    if value is None:
+        return ""
+    # Collapse multiple spaces + trim
+    return " ".join(str(value).split()).strip()
+
+def _unique_case_insensitive(values):
+    """
+    Return unique string values in original casing, deduped case-insensitively
+    while also trimming/collapsing whitespace.
+    """
+    seen = set()
+    result = []
+    for v in values:
+        cleaned = _normalize_choice_text(v)
+        if not cleaned:
+            continue
+        key = cleaned.casefold()
+        if key in seen:
+            continue
+        seen.add(key)
+        result.append(cleaned)
+    result.sort(key=lambda s: s.casefold())
+    return result
+
+def _get_city_choices_queryset():
+    return Event.objects.values_list("city", flat=True)
 
 # ==================== EVENT LIST ====================
 def event_list(request):
@@ -106,6 +135,7 @@ def event_list(request):
         "sport_choices": sport_choices,
         "selected_category": selected_category,
         "available_only": available_only,
+        "city_choices": _unique_case_insensitive(_get_city_choices_queryset()),
         "user": request.user,
         "user_registered_events": list(user_registered_events),
     }
@@ -222,7 +252,10 @@ def add_event(request):
     else:
         form = EventForm()
     
-    return render(request, 'event/add_event.html', {'form': form})
+    return render(request, 'event/add_event.html', {
+        'form': form,
+        'city_choices': _unique_case_insensitive(_get_city_choices_queryset()),
+    })
 
 # ==================== EDIT EVENT ====================
 @custom_login_required
@@ -291,7 +324,8 @@ def edit_event(request, pk):
     return render(request, 'event/edit_event.html', {
         'form': form,
         'event': event,
-        'schedules': schedules
+        'schedules': schedules,
+        'city_choices': _unique_case_insensitive(_get_city_choices_queryset()),
     })
 
 # ==================== DELETE EVENT ====================
@@ -546,6 +580,15 @@ def my_bookings(request):
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+
+@require_GET
+def json_event_cities(request):
+    """
+    Return unique city options (deduped case-insensitively) to avoid duplicate
+    DropdownMenuItem values in Flutter.
+    """
+    cities = _unique_case_insensitive(_get_city_choices_queryset())
+    return JsonResponse({"success": True, "cities": cities})
 
 @csrf_exempt
 def json_events(request):

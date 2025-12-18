@@ -153,7 +153,12 @@
             <div class="grid gap-6 md:grid-cols-2">
               <div class="input-shell">
                 <label class="input-label">City</label>
-                <input type="text" name="city" class="input-field" placeholder="Kota" value="{{ event.city }}" required />
+                <input type="text" name="city" class="input-field" placeholder="Kota" value="{{ event.city }}" list="cityOptions" required />
+                <datalist id="cityOptions">
+                  {% for city in city_choices %}
+                    <option value="{{ city }}"></option>
+                  {% endfor %}
+                </datalist>
               </div>
               <div class="input-shell md:col-span-1">
                 <label class="input-label">Full Address</label>
@@ -212,7 +217,7 @@
                   accept="image/*"
                   class="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition file:mr-4 file:rounded-lg file:border-0 file:bg-grey file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-[0.16em] file:text-white hover:border-lime"
                 />
-                <span class="text-[11px] text-slate-500 font-semibold">Unggah foto seperti form Coach. Kosongkan untuk mempertahankan foto sekarang.</span>
+                <span class="text-[11px] text-slate-500 font-semibold">Unggah foto. Kosongkan untuk mempertahankan foto sekarang.</span>
               </label>
             </div>
 
