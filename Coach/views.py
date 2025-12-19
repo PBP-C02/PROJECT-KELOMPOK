@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from Coach.models import Coach
 from django.http import HttpResponse, HttpResponseForbidden, JsonResponse
 from django.utils.html import strip_tags
+from django.conf import settings
 from functools import wraps
 import re
 import datetime as dt
@@ -446,6 +447,9 @@ def delete_coach(request, pk):
 @require_http_methods(["GET"])
 def ajax_search_coaches(request):
     """AJAX endpoint for searching and filtering coaches"""
+    # Determine scheme: local uses request.scheme, production uses X-Forwarded-Proto or defaults to https
+    scheme = request.scheme if settings.DEBUG else request.META.get('HTTP_X_FORWARDED_PROTO', 'https')
+    
     try:
         from Auth_Profile.models import User
         if 'user_id' in request.session:
@@ -534,7 +538,7 @@ def ajax_search_coaches(request):
             'end_time': coach.endTime.strftime('%H:%M'),
             'rating': float(coach.rating),
             'is_booked': coach.isBooked,
-            'image_url': f"{request.scheme}://{request.get_host()}/coach/proxy-image/?path={coach.image.name}" if coach.image else None, 
+            'image_url': f"{scheme}://{request.get_host()}/coach/proxy-image/?path={coach.image.name}" if coach.image else None, 
             'user_name': coach.user.nama,
             'user_id': str(coach.user.id),
             'user_phone': getattr(coach.user, 'nomor_handphone', '') if coach.user else '',
@@ -729,12 +733,15 @@ def create_coach_flutter(request):
             
             new_coach.save()
             
+            # Determine scheme for image URL
+            scheme = request.scheme if settings.DEBUG else request.META.get('HTTP_X_FORWARDED_PROTO', 'https')
+            
             return JsonResponse({
                 "success": True,
                 "status": "success",
                 "message": "Coach created successfully",
                 "coach_id": str(new_coach.coach_id),
-                "image_url": f"{request.scheme}://{request.get_host()}/coach/proxy-image/?path={new_coach.image.name}" if new_coach.image else None
+                "image_url": f"{scheme}://{request.get_host()}/coach/proxy-image/?path={new_coach.image.name}" if new_coach.image else None
             }, status=200)
             
         except json.JSONDecodeError:
@@ -876,12 +883,15 @@ def update_coach_flutter(request, pk):
             
             coach.save()
             
+            # Determine scheme for image URL
+            scheme = request.scheme if settings.DEBUG else request.META.get('HTTP_X_FORWARDED_PROTO', 'https')
+            
             return JsonResponse({
                 "success": True,
                 "status": "success",
                 "message": "Coach updated successfully",
                 "coach_id": str(coach.coach_id),
-                "image_url": f"{request.scheme}://{request.get_host()}/coach/proxy-image/?path={coach.image.name}" if coach.image else None
+                "image_url": f"{scheme}://{request.get_host()}/coach/proxy-image/?path={coach.image.name}" if coach.image else None
             }, status=200)
             
         except json.JSONDecodeError:
@@ -899,6 +909,9 @@ def update_coach_flutter(request, pk):
     
 @csrf_exempt
 def show_json(request):
+    # Determine scheme: local uses request.scheme, production uses X-Forwarded-Proto or defaults to https
+    scheme = request.scheme if settings.DEBUG else request.META.get('HTTP_X_FORWARDED_PROTO', 'https')
+    
     coach_list = Coach.objects.all()
     data = [
         {
@@ -919,7 +932,7 @@ def show_json(request):
             'user_phone': coach.user.nomor_handphone if hasattr(coach.user, 'nomor_handphone') else None,
             'whatsapp_link': coach.get_whatsapp_link(),
             'formatted_phone': coach.get_formatted_phone(),
-            'image_url': f"{request.scheme}://{request.get_host()}/coach/proxy-image/?path={coach.image.name}" if coach.image else None, 
+            'image_url': f"{scheme}://{request.get_host()}/coach/proxy-image/?path={coach.image.name}" if coach.image else None, 
             'instagram_link': coach.instagram_link,
             'mapsLink': coach.mapsLink,
             'peserta_id': str(coach.peserta_id) if coach.peserta_id else None,
