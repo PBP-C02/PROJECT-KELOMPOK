@@ -57,9 +57,7 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1", "ari-darrell-movebuddy.pbp.cs.ui.ac.i
 CSRF_TRUSTED_ORIGINS = [
     "https://ari-darrell-movebuddy.pbp.cs.ui.ac.id"
 ]
-# Push pws
-# Application definition
-#test push
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
