@@ -447,8 +447,8 @@ def delete_coach(request, pk):
 @require_http_methods(["GET"])
 def ajax_search_coaches(request):
     """AJAX endpoint for searching and filtering coaches"""
-    # Determine scheme: local uses request.scheme, production uses X-Forwarded-Proto or defaults to https
-    scheme = request.scheme if settings.DEBUG else request.META.get('HTTP_X_FORWARDED_PROTO', 'https')
+    # Force HTTPS for all requests
+    scheme = 'https'
     
     try:
         from Auth_Profile.models import User
@@ -733,8 +733,8 @@ def create_coach_flutter(request):
             
             new_coach.save()
             
-            # Determine scheme for image URL
-            scheme = request.scheme if settings.DEBUG else request.META.get('HTTP_X_FORWARDED_PROTO', 'https')
+            # Force HTTPS for all requests
+            scheme = 'https'
             
             return JsonResponse({
                 "success": True,
@@ -883,8 +883,8 @@ def update_coach_flutter(request, pk):
             
             coach.save()
             
-            # Determine scheme for image URL
-            scheme = request.scheme if settings.DEBUG else request.META.get('HTTP_X_FORWARDED_PROTO', 'https')
+            # Force HTTPS for all requests
+            scheme = 'https'
             
             return JsonResponse({
                 "success": True,
@@ -909,8 +909,8 @@ def update_coach_flutter(request, pk):
     
 @csrf_exempt
 def show_json(request):
-    # Determine scheme: local uses request.scheme, production uses X-Forwarded-Proto or defaults to https
-    scheme = request.scheme if settings.DEBUG else request.META.get('HTTP_X_FORWARDED_PROTO', 'https')
+    # Force HTTPS for all requests
+    scheme = 'https'
     
     coach_list = Coach.objects.all()
     data = [
